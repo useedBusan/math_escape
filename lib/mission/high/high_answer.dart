@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:math_escape/models/high_mission_answer.dart';
-import 'package:math_escape/models/high_mission_question.dart';
+import 'package:math_escape/models/high/high_mission_answer.dart';
+import 'package:math_escape/models/high/high_mission_question.dart';
 import 'package:math_escape/mission/high/high_mission.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:math_escape/mission/high/high_answer_constants.dart';

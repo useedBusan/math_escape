@@ -3,9 +3,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:math_escape/models/high_mission_question.dart';
+import 'package:math_escape/models/high/high_mission_question.dart';
 import 'dart:async';
-import 'package:math_escape/models/high_mission_answer.dart';
+import 'package:math_escape/models/high/high_mission_answer.dart';
 import 'package:math_escape/mission/high/high_answer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:math_escape/screens/qr_scan_screen.dart';

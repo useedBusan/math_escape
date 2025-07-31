@@ -69,8 +69,8 @@ flutter:
     - assets/images/visual03.png
     - assets/images/introduce_program.png
     - assets/images/logo_icon.png
-    - lib/data/high_level_question.json
-    - lib/data/high_level_answer.json
+    - lib/data/high/high_level_question.json
+    - lib/data/high/high_level_answer.json
     - assets/images/pitagoras1.png
     - assets/images/pitagoras2.png
     - assets/images/pitagoras3.png
