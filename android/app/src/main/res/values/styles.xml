@@ -1,0 +1,12 @@
+<resources>
+    <!-- ✅ 앱 전체에 적용되는 테마 -->
+    <style name="NormalTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- 앱 배경색 -->
+        <item name="android:windowBackground">@android:color/white</item>
+        <!-- 상태바 투명, 시스템 UI 표시를 위해 사용 -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!-- 필요 시 추가 가능 -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+</resources>
