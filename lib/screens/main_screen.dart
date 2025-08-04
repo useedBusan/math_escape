@@ -4,7 +4,7 @@ import 'package:math_escape/constants/app_constants.dart';
 import 'package:math_escape/models/content_item.dart';
 import 'package:math_escape/widgets/school_level_card.dart';
 import 'package:math_escape/widgets/content_card.dart';
-import 'package:math_escape/screens/high_intro_screen.dart';
+import 'package:math_escape/screens/intro_screen/high_intro_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
-import '../mission/high/high_mission.dart';
-import '../models/high/high_mission_question.dart';
+import '../../mission/high/high_mission.dart';
+import '../../models/high/high_mission_question.dart';
 
 Future<List<MissionQuestion>> loadQuestionList() async {
   final String jsonString = await rootBundle.loadString('lib/data/high_level_question.json');
