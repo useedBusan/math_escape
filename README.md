@@ -98,7 +98,7 @@ math_escape/
 - 색상/폰트/패딩 등은 상수 파일(`constants/`, `mission/high/high_mission_constants.dart`, `mission/high/high_answer_constants.dart`)에서 일괄 관리
 - 반복되는 UI는 공통 위젯(`widgets/`, `mission/high/widgets.dart`, `mission/high/answer_widgets.dart`)에서 관리
 - 기능별 폴더 분리, 상수/공통 위젯 적극 활용
-- 새로운 기능/화면/위젯/상수/모델/데이터는 각 폴더에 추가
+- 새로운 기능/화면(screen)/위젯(widgets)/상수(constants)/모델(model)/데이터(data)는 각 폴더에 추가
 
 ## 📝 라이선스
 
