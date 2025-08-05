@@ -64,11 +64,13 @@ flutter:
 
   assets:
     - assets/images/introduce.png
+    - assets/images/bsbackground.png
     - assets/images/logo.png
     - assets/images/insta_logo.png
     - assets/images/visual03.png
     - assets/images/introduce_program.png
     - assets/images/logo_icon.png
+    - assets/images/puri_stand.png
     - lib/data/high/high_level_question.json
     - lib/data/high/high_level_answer.json
     - lib/data/elementary_high/elementary_high_question.json

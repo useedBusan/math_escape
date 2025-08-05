@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_escape/mission/elementary_high/elementary_high_talk.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:math_escape/constants/app_constants.dart';
 import 'package:math_escape/models/content_item.dart';
@@ -61,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
     } else if (level == '초등학교 고학년') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const ElementaryHighMission()),
+        MaterialPageRoute(builder: (_) => const ElementaryHighTalkScreen()),
       );
     }
   }
