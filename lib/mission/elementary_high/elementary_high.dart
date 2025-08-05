@@ -35,7 +35,7 @@ class _ElementaryHighMissionState extends State<ElementaryHighMission> {
 
   Future<void> _loadQuestions() async {
     try {
-      final String jsonString = await rootBundle.loadString('lib/data/elementary_high/high_elementary_question.json');
+      final String jsonString = await rootBundle.loadString('lib/data/elementary_high/elementary_high_question.json');
       final List<dynamic> jsonList = json.decode(jsonString);
       setState(() {
         questionList = jsonList.map((e) => ElementaryHighMissionQuestion.fromJson(e)).toList();
@@ -63,7 +63,7 @@ class _ElementaryHighMissionState extends State<ElementaryHighMission> {
   }
 
   Future<ElementaryHighMissionAnswer> loadAnswerById(int id) async {
-    final String jsonString = await rootBundle.loadString('lib/data/elementary_high/high_elementary_answer.json');
+    final String jsonString = await rootBundle.loadString('lib/data/elementary_high/elementary_high_context.json');
     final List<dynamic> jsonData = json.decode(jsonString);
     return jsonData
         .map((e) => ElementaryHighMissionAnswer.fromJson(e))
