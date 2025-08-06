@@ -65,6 +65,8 @@ flutter:
   assets:
     - assets/images/introduce.png
     - assets/images/bsbackground.png
+    - assets/images/puri_manse.png
+    - assets/images/puri_invite.png
     - assets/images/logo.png
     - assets/images/insta_logo.png
     - assets/images/visual03.png

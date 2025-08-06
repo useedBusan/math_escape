@@ -6,7 +6,7 @@ import '../../mission/high/high_mission.dart';
 import '../../models/high/high_mission_question.dart';
 
 Future<List<MissionQuestion>> loadQuestionList() async {
-  final String jsonString = await rootBundle.loadString('lib/data/high_level_question.json');
+  final String jsonString = await rootBundle.loadString('lib/data/high/high_level_question.json');
   final List<dynamic> jsonList = json.decode(jsonString);
   return jsonList.map((e) => MissionQuestion.fromJson(e)).toList();
 }

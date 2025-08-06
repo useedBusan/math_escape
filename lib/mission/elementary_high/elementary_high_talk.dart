@@ -69,14 +69,38 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: const Text('푸리와 매매의 수학 보물 대탐험'),
-        backgroundColor: Colors.white,
-        foregroundColor: const Color(0xffed668a),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xffed668a)),
-          onPressed: () => Navigator.of(context).pop(),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60),
+        child: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          automaticallyImplyLeading: false, // 기본 back 버튼 제거
+          flexibleSpace: SafeArea(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // 제목을 정확히 가운데 배치
+                const Center(
+                  child: Text(
+                    '미션! 수사모의 수학 유산을 찾아서',
+                    style: TextStyle(
+                      color: Color(0xffed668a),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                // 왼쪽 뒤로 가기 버튼
+                Positioned(
+                  left: 0,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Color(0xffed668a)),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
       backgroundColor: Colors.white,
@@ -128,7 +152,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> {
                     children: [
                       // 대화 박스
                       Container(
-                        width: double.infinity,
+                        width: MediaQuery.of(context).size.width * 0.93,
                         height: 200, // 더 길게
                         margin: const EdgeInsets.only(top: 12),
                         padding: const EdgeInsets.fromLTRB(20, 22, 20, 20),
@@ -136,10 +160,10 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> {
                           color: Colors.white,
                           border: Border.all(color: const Color(0xffed668a), width: 1.5),
                           borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(20),
+                            topLeft: Radius.circular(16),
+                            topRight: Radius.circular(16),
+                            bottomLeft: Radius.circular(16),
+                            bottomRight: Radius.circular(16),
                           ),
                           boxShadow: [],
                         ),
@@ -159,10 +183,10 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> {
                           decoration: BoxDecoration(
                             color: const Color(0xffb73d5d),
                             borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(14),
-                              topRight: Radius.circular(14),
-                              bottomLeft: Radius.circular(14),
-                              bottomRight: Radius.circular(14),
+                              topLeft: Radius.circular(40),
+                              topRight: Radius.circular(40),
+                              bottomLeft: Radius.circular(40),
+                              bottomRight: Radius.circular(40),
                             ),
                           ),
                           child: const Text(
@@ -174,17 +198,17 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 24), // 아래 여백 추가
+                const SizedBox(height: 16), // 아래 여백 추가
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: SizedBox(
-                    width: double.infinity,
+                    width: MediaQuery.of(context).size.width * 0.93,
                     height: 52,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xffed668a),
                         foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       ),
                       onPressed: goToNext,
                       child: Text(
