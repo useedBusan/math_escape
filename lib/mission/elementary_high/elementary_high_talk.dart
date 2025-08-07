@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'elementary_high_mission.dart';
 
 // 대화 모델
 class TalkItem {
@@ -59,8 +60,11 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> {
         currentIndex++;
       });
     } else {
-      // 마지막 대화 이후의 처리 (예: 다음 화면으로 이동)
-      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const ElementaryHighMission()));
+      // 마지막 대화면 → 문제 페이지로 이동
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const ElementaryHighMissionScreen()),
+      );
     }
   }
 
