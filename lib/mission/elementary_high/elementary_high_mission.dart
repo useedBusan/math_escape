@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
+import 'package:math_escape/widgets/elementary_high_hint_popup.dart';
 
 // MissionItem class as provided in the original code
 class MissionItem {
@@ -56,6 +57,7 @@ class _ElementaryHighMissionScreenState
   final TextEditingController _answerController = TextEditingController();
   int currentQuestionIndex = 0;
   final int totalQuestions = 10;
+  int hintCounter = 0; // 힌트 버튼 클릭 횟수를 추적하는 변수
 
   @override
   void initState() {
@@ -81,20 +83,32 @@ class _ElementaryHighMissionScreenState
     }
   }
 
-  void _showHintDialog(String title, String content) {
+  void _showHintDialog() {
+    final MissionItem currentMission = missionList[currentQuestionIndex];
+    setState(() {
+      hintCounter++;
+    });
+
+    String title;
+    String content;
+
+    if (hintCounter == 1) {
+      title = '첫 번째 힌트';
+      content = currentMission.hint1;
+    } else if (hintCounter == 2) {
+      title = '마지막 힌트';
+      content = currentMission.hint2;
+    } else {
+      // 힌트를 2번 이상 누른 경우, 마지막 힌트를 계속 보여줍니다.
+      title = '마지막 힌트';
+      content = currentMission.hint2;
+    }
+
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text(title,
-            style: const TextStyle(fontWeight: FontWeight.bold)),
-        content: Text(content),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('닫기',
-                style: TextStyle(color: Color(0xffed668a))),
-          ),
-        ],
+      builder: (_) => HintDialog(
+        hintTitle: title,
+        hintContent: content,
       ),
     );
   }
@@ -116,6 +130,7 @@ class _ElementaryHighMissionScreenState
                   if (currentQuestionIndex < missionList.length - 1) {
                     currentQuestionIndex++;
                     _answerController.clear();
+                    hintCounter = 0; // 다음 문제로 넘어가면 힌트 카운터 초기화
                   } else {
                     // 모든 미션 완료
                     Navigator.pop(context);
@@ -184,7 +199,6 @@ class _ElementaryHighMissionScreenState
       ),
       body: Stack(
         children: [
-          // 스크롤 가능한 메인 콘텐츠 영역
           SingleChildScrollView(
             child: Column(
               children: [
@@ -197,15 +211,16 @@ class _ElementaryHighMissionScreenState
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [ClipRRect(
-                      borderRadius: BorderRadius.circular(5.0),
-                      child: LinearProgressIndicator(
-                        value: (currentQuestionIndex + 1) / totalQuestions,
-                        backgroundColor: const Color(0xffe0e0e0),
-                        valueColor: AlwaysStoppedAnimation<Color>(mainColor),
-                        minHeight: 10,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(5.0),
+                        child: LinearProgressIndicator(
+                          value: (currentQuestionIndex + 1) / totalQuestions,
+                          backgroundColor: const Color(0xffe0e0e0),
+                          valueColor: AlwaysStoppedAnimation<Color>(mainColor),
+                          minHeight: 10,
+                        ),
                       ),
-                    ),
                       const SizedBox(height: 16),
                       Container(
                         padding: const EdgeInsets.all(24.0),
@@ -232,10 +247,10 @@ class _ElementaryHighMissionScreenState
                             const SizedBox(height: 16),
                             Container(
                               decoration: BoxDecoration(
-                                color: const Color(0xFFFFFFFF),
-                                borderRadius: BorderRadius.circular(8.0),
-                                border: Border.all(
-                                  color: const Color(0xffdcdcdc))
+                                  color: const Color(0xFFFFFFFF),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  border: Border.all(
+                                      color: const Color(0xffdcdcdc))
                               ),
                               child: TextField(
                                 controller: _answerController,
@@ -261,14 +276,13 @@ class _ElementaryHighMissionScreenState
                           ],
                         ),
                       ),
-                      const SizedBox(height: 50), // 하단 버튼과의 여백
+                      const SizedBox(height: 50),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-          // 하단에 고정된 버튼 영역
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -287,7 +301,7 @@ class _ElementaryHighMissionScreenState
                             side: BorderSide(color: mainColor, width: 2),
                           ),
                         ),
-                        onPressed: () => _showHintDialog('힌트 보기', mission.hint1),
+                        onPressed: _showHintDialog,
                         child: Text(
                           '힌트보기',
                           style: TextStyle(
