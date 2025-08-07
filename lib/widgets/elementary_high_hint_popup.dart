@@ -18,6 +18,10 @@ class HintDialog extends StatelessWidget {
       ),
       child: Container(
         padding: const EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          color: const Color(0xffffffff), // 원하는 색상으로 변경 (예: 연한 파랑)
+          borderRadius: BorderRadius.circular(16.0),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
