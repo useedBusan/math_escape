@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'elementary_high_mission.dart';
 
-// 대화 모델
 class TalkItem {
   final int id;
   final String talk;
@@ -27,6 +27,61 @@ class TalkItem {
   }
 }
 
+// ✅ GIF를 확실히 재생시키는 이미지 위젯
+class PuriImage extends StatefulWidget {
+  final String imagePath;
+  final Key imageKey;
+
+  const PuriImage({
+    required this.imagePath,
+    required this.imageKey,
+    super.key,
+  });
+
+  @override
+  State<PuriImage> createState() => _PuriImageState();
+}
+
+class _PuriImageState extends State<PuriImage> {
+  late Future<Uint8List> _imageBytes;
+
+  @override
+  void initState() {
+    super.initState();
+    _imageBytes = _loadImageBytes();
+  }
+
+  Future<Uint8List> _loadImageBytes() async {
+    final byteData = await rootBundle.load(widget.imagePath);
+    return byteData.buffer.asUint8List();
+  }
+
+  @override
+  void didUpdateWidget(covariant PuriImage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.imageKey != widget.imageKey || oldWidget.imagePath != widget.imagePath) {
+      _imageBytes = _loadImageBytes();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Uint8List>(
+      future: _imageBytes,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const SizedBox(height: 280);
+        }
+        return Image.memory(
+          snapshot.data!,
+          key: widget.imageKey,
+          height: 280,
+        );
+      },
+    );
+  }
+}
+
 class ElementaryHighTalkScreen extends StatefulWidget {
   const ElementaryHighTalkScreen({super.key});
 
@@ -34,15 +89,33 @@ class ElementaryHighTalkScreen extends StatefulWidget {
   State<ElementaryHighTalkScreen> createState() => _ElementaryHighTalkScreenState();
 }
 
-class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> {
+class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> with WidgetsBindingObserver {
   List<TalkItem> talkList = [];
   int currentIndex = 0;
   bool isLoading = true;
 
+  Key imageKey = UniqueKey();
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     loadTalks();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      setState(() {
+        imageKey = UniqueKey();
+      });
+    }
   }
 
   Future<void> loadTalks() async {
@@ -58,13 +131,24 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> {
     if (currentIndex < talkList.length - 1) {
       setState(() {
         currentIndex++;
+        imageKey = UniqueKey();
       });
     } else {
-      // 마지막 대화면 → 문제 페이지로 이동
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const ElementaryHighMissionScreen()),
       );
+    }
+  }
+
+  void goToPrevious() {
+    if (currentIndex > 0) {
+      setState(() {
+        currentIndex--;
+        imageKey = UniqueKey();
+      });
+    } else {
+      Navigator.of(context).pop();
     }
   }
 
@@ -81,13 +165,10 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> {
     return WillPopScope(
       onWillPop: () async {
         if (currentIndex > 0) {
-          setState(() {
-            currentIndex--;
-          });
-          return false; // 기본 뒤로가기 동작 막기
-        } else {
-          return true; // 첫 대화면일 때는 기본 동작 (이전 화면으로 이동)
+          goToPrevious();
+          return false;
         }
+        return true;
       },
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -117,9 +198,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> {
                       icon: const Icon(Icons.arrow_back, color: Color(0xffed668a)),
                       onPressed: () {
                         if (currentIndex > 0) {
-                          setState(() {
-                            currentIndex--;
-                          });
+                          goToPrevious();
                         } else {
                           Navigator.of(context).pop();
                         }
@@ -163,9 +242,9 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> {
                   Flexible(
                     flex: 6,
                     child: Center(
-                      child: Image.asset(
-                        talk.puri_image,
-                        height: 280,
+                      child: PuriImage(
+                        imagePath: talk.puri_image,
+                        imageKey: imageKey,
                       ),
                     ),
                   ),
