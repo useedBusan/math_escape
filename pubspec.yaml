@@ -121,5 +121,10 @@ flutter:
             weight: 800
           - asset: assets/fonts/Pretendard-Black.ttf
             weight: 900
+    - family: SBAggro
+      fonts:
+          - asset: assets/fonts/SB 어그로 B.ttf
+          - asset: assets/fonts/SB 어그로 L.ttf
+          - asset: assets/fonts/SB 어그로 M.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

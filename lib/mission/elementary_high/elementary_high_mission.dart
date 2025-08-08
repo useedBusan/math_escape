@@ -270,7 +270,7 @@ class _ElementaryHighMissionScreenState
                               ],
                             ),
                           ),
-                          const SizedBox(height: 50),
+                          const SizedBox(height: 20),
                         ],
                       ),
                     ),
@@ -285,7 +285,7 @@ class _ElementaryHighMissionScreenState
       // 하단 버튼 고정
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: Row(
             children: [
               Expanded(
