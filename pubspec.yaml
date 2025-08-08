@@ -124,7 +124,10 @@ flutter:
     - family: SBAggro
       fonts:
           - asset: assets/fonts/SB 어그로 B.ttf
+            weight: 700
           - asset: assets/fonts/SB 어그로 L.ttf
+            weight: 600
           - asset: assets/fonts/SB 어그로 M.ttf
+            weight: 400
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

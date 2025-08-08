@@ -34,8 +34,9 @@ class HintDialog extends StatelessWidget {
             Text(
               hintTitle,
               style: const TextStyle(
+                fontFamily: "SBAggro",
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w400,
                 color: Color(0xff000000),
               ),
             ),

@@ -220,9 +220,10 @@ class _ElementaryHighMissionScreenState
                                   '문제 ${currentQuestionIndex +
                                       1} / $totalQuestions',
                                   style: const TextStyle(
+                                    fontFamily: "SBAggro",
                                     fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xffb73d5d),
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xff202020),
                                   ),
                                 ),
                                 const SizedBox(height: 8),
