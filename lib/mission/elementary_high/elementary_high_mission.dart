@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:math_escape/widgets/elementary_high_hint_popup.dart';
+import 'package:math_escape/widgets/elementary_high_answer_popup.dart';
 
 // MissionItem class as provided in the original code
 class MissionItem {
@@ -106,59 +107,40 @@ class _ElementaryHighMissionScreenState
 
     showDialog(
       context: context,
-      builder: (_) => HintDialog(
-        hintTitle: title,
-        hintContent: content,
-      ),
+      builder: (_) =>
+          HintDialog(
+            hintTitle: title,
+            hintContent: content,
+          ),
     );
   }
 
   void _submitAnswer() {
     final MissionItem currentMission = missionList[currentQuestionIndex];
     final String userAnswer = _answerController.text.trim();
-    if (currentMission.answer.contains(userAnswer)) {
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: const Text('정답!'),
-          content: const Text('정답입니다! 다음 문제로 넘어갑니다.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                setState(() {
-                  if (currentQuestionIndex < missionList.length - 1) {
-                    currentQuestionIndex++;
-                    _answerController.clear();
-                    hintCounter = 0; // 다음 문제로 넘어가면 힌트 카운터 초기화
-                  } else {
-                    // 모든 미션 완료
-                    Navigator.pop(context);
-                  }
-                });
-              },
-              child: const Text('다음',
-                  style: TextStyle(color: Color(0xffed668a))),
-            ),
-          ],
-        ),
-      );
-    } else {
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: const Text('오답'),
-          content: const Text('다시 한번 생각해보세요!'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('확인',
-                  style: TextStyle(color: Color(0xffed668a))),
-            ),
-          ],
-        ),
-      );
-    }
+
+    final bool correct = currentMission.answer.contains(userAnswer);
+
+    showDialog(
+      context: context,
+      builder: (_) => AnswerPopup(
+        isCorrect: correct,
+        onNext: () {
+          Navigator.pop(context); // 팝업 닫기
+          if (correct) {
+            setState(() {
+              if (currentQuestionIndex < missionList.length - 1) {
+                currentQuestionIndex++;
+                _answerController.clear();
+                hintCounter = 0;
+              } else {
+                Navigator.pop(context); // 마지막 문제면 화면 종료
+              }
+            });
+          }
+        },
+      ),
+    );
   }
 
   @override
@@ -180,6 +162,8 @@ class _ElementaryHighMissionScreenState
 
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
+      // 키보드 올라와도 레이아웃 안 밀림
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -197,158 +181,174 @@ class _ElementaryHighMissionScreenState
         ),
         centerTitle: true,
       ),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Image.asset(
-                  'assets/images/banner.png',
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(5.0),
-                        child: LinearProgressIndicator(
-                          value: (currentQuestionIndex + 1) / totalQuestions,
-                          backgroundColor: const Color(0xffe0e0e0),
-                          valueColor: AlwaysStoppedAnimation<Color>(mainColor),
-                          minHeight: 10,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Container(
-                        padding: const EdgeInsets.all(24.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '문제 ${currentQuestionIndex + 1} / $totalQuestions',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xffb73d5d),
-                              ),
+      // 본문
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/images/banner.png',
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(5.0),
+                            child: LinearProgressIndicator(
+                              value: (currentQuestionIndex + 1) /
+                                  totalQuestions,
+                              backgroundColor: const Color(0xffe0e0e0),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  mainColor),
+                              minHeight: 10,
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              mission.question,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xff333333),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: const Color(0xFFFFFFFF),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  border: Border.all(
-                                      color: const Color(0xffdcdcdc))
-                              ),
-                              child: TextField(
-                                controller: _answerController,
-                                decoration: InputDecoration(
-                                  hintText: '정답을 입력해 주세요.',
-                                  hintStyle: const TextStyle(color: Color(0xffaaaaaa)),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0, vertical: 12.0),
-                                  border: InputBorder.none,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    borderSide:
-                                    BorderSide(color: mainColor, width: 2.0),
+                          ),
+                          const SizedBox(height: 16),
+                          Container(
+                            padding: const EdgeInsets.all(24.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '문제 ${currentQuestionIndex +
+                                      1} / $totalQuestions',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xffb73d5d),
                                   ),
                                 ),
-                              ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  mission.question,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xff333333),
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFFFFF),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(
+                                        color: const Color(0xffdcdcdc)),
+                                  ),
+                                  child: TextField(
+                                    controller: _answerController,
+                                    decoration: InputDecoration(
+                                      hintText: '정답을 입력해 주세요.',
+                                      hintStyle: const TextStyle(
+                                          color: Color(0xffaaaaaa)),
+                                      contentPadding: const EdgeInsets
+                                          .symmetric(
+                                          horizontal: 16.0, vertical: 12.0),
+                                      border: InputBorder.none,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            8.0),
+                                        borderSide: const BorderSide(
+                                            color: Colors.transparent),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            8.0),
+                                        borderSide: BorderSide(
+                                            color: mainColor, width: 2.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 50),
+                        ],
                       ),
-                      const SizedBox(height: 50),
-                    ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      // 하단 버튼 고정
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 56,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      elevation: 1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        side: BorderSide(color: mainColor, width: 2),
+                      ),
+                    ),
+                    onPressed: _showHintDialog,
+                    child: Text(
+                      '힌트보기',
+                      style: TextStyle(
+                          color: mainColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 100.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 56,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          elevation: 1,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                            side: BorderSide(color: mainColor, width: 2),
-                          ),
-                        ),
-                        onPressed: _showHintDialog,
-                        child: Text(
-                          '힌트보기',
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: SizedBox(
+                  height: 56,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: mainColor,
+                      elevation: 1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                    ),
+                    onPressed: _submitAnswer,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        const Text(
+                          '정답제출',
                           style: TextStyle(
-                              color: mainColor,
+                              color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.bold),
                         ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: SizedBox(
-                      height: 56,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: mainColor,
-                          elevation: 1,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
+                        Positioned(
+                          right: 0,
+                          child: Image.asset(
+                            'assets/images/treasure_chest.png',
+                            height: 40,
                           ),
                         ),
-                        onPressed: _submitAnswer,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            const Text(
-                              '정답제출',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Positioned(
-                              right: 0,
-                              child: Image.asset('assets/images/treasure_chest.png', height: 40),
-                            ),
-                          ],
-                        ),
-                      ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

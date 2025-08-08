@@ -27,7 +27,6 @@ class TalkItem {
   }
 }
 
-// ✅ GIF를 확실히 재생시키는 이미지 위젯
 class PuriImage extends StatefulWidget {
   final String imagePath;
   final Key imageKey;
