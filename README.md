@@ -23,9 +23,12 @@ math_escape/
 │   │   ├── high/
 │   │   │   ├── high_mission_answer.dart
 │   │   │   └── high_mission_question.dart
-│   │   └── middle/
-│   │       ├── middle_mission_answer.dart
-│   │       └── middle_mission_question.dart
+│   │   ├── middle/
+│   │   │   ├── middle_mission_answer.dart
+│   │   │   └── middle_mission_question.dart
+│   │   └── elementary_high/
+│   │       ├── elementary_high_mission_answer.dart
+│   │       └── elementary_high_mission_question.dart
 │   ├── screens/
 │   │   ├── splash_screen.dart
 │   │   ├── main_screen.dart
@@ -43,30 +46,51 @@ math_escape/
 │   │   │   └── answer_widgets.dart
 │   │   ├── middle/
 │   │   ├── elementary_high/
+│   │   │   ├── elementary_high_mission.dart
+│   │   │   └── elementary_high_talk.dart
 │   │   └── elementary_low/
 │   ├── data/
 │   │   ├── high/
 │   │   │   ├── high_level_question.json
 │   │   │   └── high_level_answer.json
-│   │   └── middle/
-│   │       ├── middle_question.json
-│   │       └── middle_answer.json
+│   │   ├── middle/
+│   │   │   ├── middle_question.json
+│   │   │   └── middle_talk.json
+│   │   └── elementary_high/
+│   │       ├── elementary_high_question.json
+│   │       └── elementary_high_context.json
 │   ├── utils/
 │   └── widgets/
 │       ├── school_level_card.dart
 │       ├── content_card.dart
-│       └── answer_popup.dart
+│       ├── answer_popup.dart
+│       ├── elementary_high_hint_popup.dart
+│       └── elementary_high_answer_popup.dart
 ├── assets/
 │   ├── images/
 │   │   ├── logo.png
+│   │   ├── logo_icon.png
 │   │   ├── introduce.png
+│   │   ├── introduce_program.png
+│   │   ├── insta_logo.png
+│   │   ├── visual03.png
+│   │   ├── banner.png
+│   │   ├── bsbackground.png
+│   │   ├── hint_puri.png
+│   │   ├── puri_appear.gif
+│   │   ├── puri_manse.png
+│   │   ├── puri_stand.png
 │   │   ├── correct.png
 │   │   ├── wrong.png
-│   │   └── pitagoras1-4.png
+│   │   ├── pitagoras1.png
+│   │   ├── pitagoras2.png
+│   │   ├── pitagoras3.png
+│   │   └── pitagoras4.png
 │   ├── audio/
 │   │   └── high_intro_sound.mp3
 │   └── fonts/
-│       └── Pretendard (9 weights)
+│       ├── Pretendard (9 weights)
+│       └── SBAggro (B, M, L)
 └── android/ ios/ web/ windows/ linux/ macos/
 ```
 
@@ -78,17 +102,20 @@ math_escape/
 - **HighIntroScreen**: 고등 미션 소개, 규칙, QR 안내, 오디오 재생
 - **MiddleIntroScreen**: 중등 미션 소개 (구현 예정)
 - **QRScanScreen**: 카메라 권한, QR 인식
+- **ElementaryHighTalkScreen**: 초등 고학년 도입 대화(스토리) 진행
+- **ElementaryHighMissionScreen**: 초등 고학년 미션(문제/정답/힌트)
 
 ### 미션 (Missions)
 - **HighMission**: 문제/타이머/정답입력/힌트, 공통 위젯(`DescriptionLevelBox`, `QuestionBalloon`, `TimerInfoBox`)
 - **HighAnswer**: 해설/정답/다음문제, 공통 위젯(`DescriptionLevelBox`, `ExplanationBox`, `ClueBox`, `TimerInfoBox`)
 - **MiddleMission**: 중등 미션 (구현 예정)
-- **ElementaryMission**: 초등 미션 (구현 예정)
+- **ElementaryHigh**: 초등 고학년 대화 → 미션 흐름 구현 완료
 
 ### 공통 위젯 (Widgets)
 - **SchoolLevelCard**: 학년별 선택 카드
 - **ContentCard**: 기타 콘텐츠 카드
 - **AnswerPopup**: 정답/오답 피드백 팝업
+- **ElementaryHighHintPopup / ElementaryHighAnswerPopup**: 초등 고학년 전용 팝업
 - **DescriptionLevelBox**: 설명+레벨 박스
 - **QuestionBalloon**: 문제 말풍선
 - **TimerInfoBox**: 하단 타이머 박스
@@ -130,6 +157,10 @@ math_escape/
 - **MiddleMissionQuestion**: 중등 문제 데이터 모델
 - **MiddleMissionAnswer**: 중등 정답 데이터 모델
 
+### 초등(고학년) 데이터
+- **ElementaryHighMissionQuestion**: `answer`는 문자열 배열, `hint1`, `hint2` 제공
+- **ElementaryHighMissionAnswer**: 정답/해설, `answerImage` 선택
+
 ### 콘텐츠 데이터
 - **ContentItem**
 ```dart
@@ -164,6 +195,9 @@ math_escape/
 - **url_launcher**: 외부 링크 열기
 - **flutter_math_fork**: 수학 공식 렌더링
 - **audioplayers**: 오디오 재생
+- **gif**: GIF 이미지 표시
+- **material_symbols_icons**: 머티리얼 심볼 아이콘
+- **cupertino_icons**: iOS 스타일 아이콘
 
 ## 🎵 오디오 및 폰트
 
@@ -172,11 +206,12 @@ math_escape/
 
 ### 폰트
 - **Pretendard**: 9가지 굵기 (Thin ~ Black)
+- **SBAggro**: B/M/L 굵기
 
 ## 📝 라이선스
 
 이 프로젝트는 부산수학문화관의 교육용 앱입니다.
 
-**버전**: 0.1.1  
+**버전**: 1.0.0+1  
 **최종 업데이트**: 2025년  
 **개발 환경**: Flutter 3.8.1, Dart 3.8.1

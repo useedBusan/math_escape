@@ -22,6 +22,10 @@
 - **MiddleMissionQuestion**: 중등 문제 데이터 모델
 - **MiddleMissionAnswer**: 중등 정답/해설 데이터 모델
 
+### 초등(고학년) 모델
+- **ElementaryHighMissionQuestion**: 정답 배열(`answer`), 힌트(`hint1`, `hint2`), 이미지(optional)
+- **ElementaryHighMissionAnswer**: 정답/해설, 이미지(optional)
+
 ### 공통 모델
 - **ContentItem**: 콘텐츠 카드 데이터 모델
 
@@ -42,6 +46,8 @@
 - **QRScanScreen**: 카메라 권한, QR 인식
 - **HighMission**: 문제/타이머/정답입력/힌트, 공통 위젯(`DescriptionLevelBox`, `QuestionBalloon`, `TimerInfoBox`), 스타일 상수(`high_mission_constants.dart`)
 - **HighAnswer**: 해설/정답/다음문제, 공통 위젯(`DescriptionLevelBox`, `ExplanationBox`, `ClueBox`, `TimerInfoBox`), 스타일 상수(`high_answer_constants.dart`)
+ - **ElementaryHighTalkScreen**: 초등 고학년 도입 대화(스토리) 진행
+ - **ElementaryHighMissionScreen**: 초등 고학년 미션 화면
 
 ---
 
@@ -94,7 +100,9 @@
 - **high_level_question.json**: 고등 문제 데이터
 - **high_level_answer.json**: 고등 정답 데이터
 - **middle_question.json**: 중등 문제 데이터
-- **middle_answer.json**: 중등 정답 데이터
+- (예정) middle_talk.json: 중등 대화 데이터
+- **elementary_high_question.json**: 초등 고학년 문제 데이터
+- **elementary_high_context.json**: 초등 고학년 대화 데이터
 
 ### 데이터 로딩
 - JSON 파일에서 문제/정답 데이터 로딩
@@ -127,9 +135,11 @@
 ### UI/UX 패키지
 - **flutter_spinkit**: ^5.2.1 - 로딩 애니메이션
 - **flutter_math_fork**: 0.7.4 - 수학 공식 렌더링
+ - **material_symbols_icons**: 4.2858.1 - 머티리얼 심볼 아이콘
 
 ### 미디어 패키지
 - **audioplayers**: ^5.2.1 - 오디오 재생
+ - **gif**: ^2.3.0 - GIF 표시
 
 ### 기본 패키지
 - **cupertino_icons**: ^1.0.8 - iOS 스타일 아이콘
@@ -147,5 +157,5 @@
 
 ---
 
-**문서 버전**: 0.1.0
+**문서 버전**: 1.0.0
 **최종 업데이트**: 2025년

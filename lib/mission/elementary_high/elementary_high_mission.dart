@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:math_escape/widgets/elementary_high_hint_popup.dart';
 import 'package:math_escape/widgets/elementary_high_answer_popup.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 // MissionItem class as provided in the original code
 class MissionItem {
@@ -86,32 +87,30 @@ class _ElementaryHighMissionScreenState
 
   void _showHintDialog() {
     final MissionItem currentMission = missionList[currentQuestionIndex];
+
+    int newHintCounter = (hintCounter % 2) + 1;
+
     setState(() {
-      hintCounter++;
+      hintCounter = newHintCounter;
     });
 
     String title;
     String content;
 
-    if (hintCounter == 1) {
-      title = '첫 번째 힌트';
+    if (newHintCounter == 1) {
+      title = '푸리 힌트 1 / 2';
       content = currentMission.hint1;
-    } else if (hintCounter == 2) {
-      title = '마지막 힌트';
-      content = currentMission.hint2;
     } else {
-      // 힌트를 2번 이상 누른 경우, 마지막 힌트를 계속 보여줍니다.
-      title = '마지막 힌트';
+      title = '푸리 힌트 2 / 2';
       content = currentMission.hint2;
     }
 
     showDialog(
       context: context,
-      builder: (_) =>
-          HintDialog(
-            hintTitle: title,
-            hintContent: content,
-          ),
+      builder: (_) => HintDialog(
+        hintTitle: title,
+        hintContent: content,
+      ),
     );
   }
 
@@ -194,8 +193,9 @@ class _ElementaryHighMissionScreenState
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),
+                    const SizedBox(height: 24),
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -257,7 +257,7 @@ class _ElementaryHighMissionScreenState
                                         borderRadius: BorderRadius.circular(
                                             8.0),
                                         borderSide: const BorderSide(
-                                            color: Colors.transparent),
+                                            color: const Color(0xffaaaaaa)),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(
@@ -294,7 +294,7 @@ class _ElementaryHighMissionScreenState
                   height: 56,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
+                      backgroundColor: const Color(0xffffedfa),
                       elevation: 1,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.0),
@@ -302,15 +302,23 @@ class _ElementaryHighMissionScreenState
                       ),
                     ),
                     onPressed: _showHintDialog,
-                    child: Text(
-                      '힌트보기',
-                      style: TextStyle(
-                          color: mainColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min, // 버튼 크기를 내용에 맞춤
+                        children: [
+                          Icon(Symbols.tooltip_2, color: mainColor, size: 18), // 아이콘
+                          SizedBox(width: 4), // 간격
+                          Text(
+                            '힌트',
+                            style: TextStyle(
+                              color: mainColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                   ),
-                ),
+                )
               ),
               const SizedBox(width: 16),
               Expanded(
