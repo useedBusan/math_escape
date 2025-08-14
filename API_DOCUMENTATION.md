@@ -128,7 +128,7 @@
 ## 의존성 패키지 (Dependencies)
 
 ### 핵심 패키지
-- **permission_handler**: ^12.0.0+1 - 카메라 권한 처리
+- **permission_handler**: ^12.0.0+1 - 카메**라 권한 처리**
 - **qr_code_scanner**: 1.0.1 - QR 코드 스캔
 - **url_launcher**: 6.2.5 - 외부 링크 열기
 
