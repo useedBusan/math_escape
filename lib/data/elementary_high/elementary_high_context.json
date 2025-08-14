@@ -22,5 +22,11 @@
     "talk" : "좋아! 그럼 우리 같이 보물을 찾아보자.\n내가 듣기로는 처음 보물에 대한 힌트를\n수학문화관의 수학 상가에서 17.5미터 거리에\n떨어진 곳에 힌트를 숨겨놓았다고 했어.",
     "answer" : "17.5미터? 어딜까? 찾아보자!",
     "puri_image" : "assets/images/puri_manse.png"
+  },
+  {
+    "id" : 5,
+    "talk" : "우와 정말 대단해! 그럼 이제 피자 가게에 가서\n 보물에 대한 다음 힌트를 얻으러 가보자!",
+    "answer" : "좋아! 당장 가보자!",
+    "puri_image" : "assets/images/puri_good.png"
   }
 ]
