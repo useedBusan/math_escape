@@ -338,7 +338,6 @@ class _ElementaryHighMissionScreenState
   }
 
   void _showCorrectAnswerDialog() {
-    // 디버깅을 위한 로그
     print("talkList length: ${talkList.length}");
     print("talkList ids: ${talkList.map((talk) => talk.id).toList()}");
     
@@ -435,65 +434,62 @@ class _ElementaryHighMissionScreenState
                             ),
                           ),
                           const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.all(24.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '문제 ${currentQuestionIndex +
-                                      1} / $totalQuestions',
-                                  style: const TextStyle(
-                                    fontFamily: "SBAggro",
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff202020),
-                                  ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '문제 ${currentQuestionIndex +
+                                    1} / $totalQuestions',
+                                style: const TextStyle(
+                                  fontFamily: "SBAggro",
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0xff202020),
                                 ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  mission.question,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xff333333),
-                                  ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                mission.question,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xff333333),
                                 ),
-                                const SizedBox(height: 16),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFFFFFF),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    border: Border.all(
-                                        color: const Color(0xffdcdcdc)),
-                                  ),
-                                  child: TextField(
-                                    controller: _answerController,
-                                    decoration: InputDecoration(
-                                      hintText: '정답을 입력해 주세요.',
-                                      hintStyle: const TextStyle(
-                                          color: Color(0xffaaaaaa)),
-                                      contentPadding: const EdgeInsets
-                                          .symmetric(
-                                          horizontal: 16.0, vertical: 12.0),
-                                      border: InputBorder.none,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            8.0),
-                                        borderSide: const BorderSide(
-                                            color: const Color(0xffaaaaaa)),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            8.0),
-                                        borderSide: BorderSide(
-                                            color: mainColor, width: 2.0),
-                                      ),
+                              ),
+                              const SizedBox(height: 16),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFFFFF),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  border: Border.all(
+                                      color: const Color(0xffdcdcdc)),
+                                ),
+                                child: TextField(
+                                  controller: _answerController,
+                                  decoration: InputDecoration(
+                                    hintText: '정답을 입력해 주세요.',
+                                    hintStyle: const TextStyle(
+                                        color: Color(0xffaaaaaa)),
+                                    contentPadding: const EdgeInsets
+                                        .symmetric(
+                                        horizontal: 16.0, vertical: 12.0),
+                                    border: InputBorder.none,
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          8.0),
+                                      borderSide: const BorderSide(
+                                          color: const Color(0xffaaaaaa)),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          8.0),
+                                      borderSide: BorderSide(
+                                          color: mainColor, width: 2.0),
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 20),
                         ],
