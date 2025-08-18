@@ -340,7 +340,7 @@ class _ElementaryHighMissionScreenState
   void _showCorrectAnswerDialog() {
     print("talkList length: ${talkList.length}");
     print("talkList ids: ${talkList.map((talk) => talk.id).toList()}");
-    
+
     // id 5번 대화 (정답일 때 나오는 대화)
     try {
       final TalkItem correctTalk = talkList.firstWhere((talk) => talk.id == 5);
@@ -380,7 +380,7 @@ class _ElementaryHighMissionScreenState
     }
 
     final MissionItem mission = missionList[currentQuestionIndex];
-    final Color mainColor = const Color(0xffD95276);
+    final Color mainColor = const Color(0xffed668a);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -390,13 +390,13 @@ class _ElementaryHighMissionScreenState
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xffD95276)),
+          icon: const Icon(Icons.arrow_back, color: Color(0xffed668a)),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
           '미션! 수사모의 수학 유산을 찾아서',
           style: TextStyle(
-            color: Color(0xffD95276),
+            color: Color(0xffed668a),
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -434,62 +434,6 @@ class _ElementaryHighMissionScreenState
                             ),
                           ),
                           const SizedBox(height: 16),
-<<<<<<< HEAD
-                          Container(
-                            padding: const EdgeInsets.all(24.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '문제 ${currentQuestionIndex +
-                                      1} / $totalQuestions',
-                                  style: const TextStyle(
-                                    fontFamily: "SBAggro",
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff202020),
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  mission.question,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xff333333),
-                                  ),
-                                ),
-                                const SizedBox(height: 16),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFFFFFF),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    border: Border.all(
-                                        color: const Color(0xffdcdcdc)),
-                                  ),
-                                  child: TextField(
-                                    controller: _answerController,
-                                    decoration: InputDecoration(
-                                      hintText: '정답을 입력해 주세요.',
-                                      hintStyle: const TextStyle(
-                                          color: Color(0xffaaaaaa)),
-                                      contentPadding: const EdgeInsets
-                                          .symmetric(
-                                          horizontal: 16.0, vertical: 12.0),
-                                      border: InputBorder.none,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            4.0),
-                                        borderSide: const BorderSide(
-                                            color: const Color(0xffaaaaaa)),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            8.0),
-                                        borderSide: BorderSide(
-                                            color: mainColor, width: 2.0),
-                                      ),
-=======
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -541,7 +485,6 @@ class _ElementaryHighMissionScreenState
                                           8.0),
                                       borderSide: BorderSide(
                                           color: mainColor, width: 2.0),
->>>>>>> b2bd5e7dbe5f1f18a8522c67872bbce44ce91bf5
                                     ),
                                   ),
                                 ),
@@ -563,39 +506,39 @@ class _ElementaryHighMissionScreenState
       // 하단 버튼 고정
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: Row(
             children: [
               Expanded(
-                child: SizedBox(
-                  height: 56,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xffffedfa),
-                      elevation: 1,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        side: BorderSide(color: mainColor, width: 2),
+                  child: SizedBox(
+                    height: 56,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xffffedfa),
+                        elevation: 1,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          side: BorderSide(color: mainColor, width: 2),
+                        ),
                       ),
-                    ),
-                    onPressed: _showHintDialog,
+                      onPressed: _showHintDialog,
                       child: Row(
                         mainAxisSize: MainAxisSize.min, // 버튼 크기를 내용에 맞춤
                         children: [
-                          Icon(Symbols.tooltip_2, color: mainColor, size: 20), // 아이콘
+                          Icon(Symbols.tooltip_2, color: mainColor, size: 18), // 아이콘
                           SizedBox(width: 4), // 간격
                           Text(
                             '힌트',
                             style: TextStyle(
                               color: mainColor,
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
-                  ),
-                )
+                    ),
+                  )
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -606,7 +549,7 @@ class _ElementaryHighMissionScreenState
                       backgroundColor: mainColor,
                       elevation: 1,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
                     onPressed: _submitAnswer,
@@ -617,7 +560,7 @@ class _ElementaryHighMissionScreenState
                           '정답제출',
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold),
                         ),
                       ],
