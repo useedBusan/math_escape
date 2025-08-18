@@ -185,7 +185,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                     child: Text(
                       '미션! 수사모의 수학 유산을 찾아서',
                       style: TextStyle(
-                        color: Color(0xffed668a),
+                        color: Color(0xffD95276),
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -194,7 +194,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                   Positioned(
                     left: 0,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Color(0xffed668a)),
+                      icon: const Icon(Icons.arrow_back, color: Color(0xffD95276)),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ),
@@ -217,7 +217,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Color(0x99ED668A),
+                      Color(0x99D95276),
                       Color(0x99FFFFFF),
                     ],
                     begin: Alignment.topCenter,
@@ -251,16 +251,16 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                           width: MediaQuery.of(context).size.width * 0.93,
                           height: 200,
                           margin: const EdgeInsets.only(top: 12),
-                          padding: const EdgeInsets.fromLTRB(20, 22, 20, 20),
+                          padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            border: Border.all(color: const Color(0xffed668a), width: 1.5),
-                            borderRadius: const BorderRadius.all(Radius.circular(16)),
+                            border: Border.all(color: const Color(0xff952B47), width: 1.5),
+                            borderRadius: const BorderRadius.all(Radius.circular(12)),
                           ),
                           child: SingleChildScrollView(
                             child: Text(
                               talk.talk,
-                              style: const TextStyle(fontSize: 17, color: Colors.black87, height: 1.5),
+                              style: const TextStyle(fontSize: 15, color: Colors.black87, height: 1.5),
                             ),
                           ),
                         ),
@@ -268,21 +268,22 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                           top: 0,
                           left: 20,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                             decoration: BoxDecoration(
-                              color: const Color(0xffb73d5d),
+                              color: const Color(0xffB73D5D),
+                              border: Border.all(color: const Color(0xffffffff), width: 1.5),
                               borderRadius: BorderRadius.circular(40),
                             ),
                             child: const Text(
                               '푸리',
-                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: SizedBox(
@@ -290,7 +291,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                       height: 52,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xffed668a),
+                          backgroundColor: const Color(0xffD95276),
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
