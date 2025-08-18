@@ -416,9 +416,8 @@ class _ElementaryHighMissionScreenState
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),
-                    const SizedBox(height: 24),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(24.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -433,7 +432,7 @@ class _ElementaryHighMissionScreenState
                               minHeight: 10,
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 24),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -447,7 +446,7 @@ class _ElementaryHighMissionScreenState
                                   color: Color(0xff202020),
                                 ),
                               ),
-                              const SizedBox(height: 8),
+                              const SizedBox(height: 4),
                               Text(
                                 mission.question,
                                 style: const TextStyle(
@@ -460,7 +459,7 @@ class _ElementaryHighMissionScreenState
                               Container(
                                 decoration: BoxDecoration(
                                   color: const Color(0xFFFFFFFF),
-                                  borderRadius: BorderRadius.circular(8.0),
+                                  borderRadius: BorderRadius.circular(4.0),
                                   border: Border.all(
                                       color: const Color(0xffdcdcdc)),
                                 ),
@@ -506,7 +505,7 @@ class _ElementaryHighMissionScreenState
       // 하단 버튼 고정
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 40.0),
           child: Row(
             children: [
               Expanded(
@@ -517,7 +516,7 @@ class _ElementaryHighMissionScreenState
                         backgroundColor: const Color(0xffffedfa),
                         elevation: 1,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
+                          borderRadius: BorderRadius.circular(8.0),
                           side: BorderSide(color: mainColor, width: 2),
                         ),
                       ),
@@ -525,13 +524,13 @@ class _ElementaryHighMissionScreenState
                       child: Row(
                         mainAxisSize: MainAxisSize.min, // 버튼 크기를 내용에 맞춤
                         children: [
-                          Icon(Symbols.tooltip_2, color: mainColor, size: 18), // 아이콘
+                          Icon(Symbols.tooltip_2, color: mainColor, size: 20), // 아이콘
                           SizedBox(width: 4), // 간격
                           Text(
                             '힌트',
                             style: TextStyle(
                               color: mainColor,
-                              fontSize: 16,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -549,7 +548,7 @@ class _ElementaryHighMissionScreenState
                       backgroundColor: mainColor,
                       elevation: 1,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
                     onPressed: _submitAnswer,
@@ -560,7 +559,7 @@ class _ElementaryHighMissionScreenState
                           '정답제출',
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold),
                         ),
                       ],
