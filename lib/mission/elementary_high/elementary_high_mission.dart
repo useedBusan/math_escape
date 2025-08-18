@@ -340,7 +340,7 @@ class _ElementaryHighMissionScreenState
   void _showCorrectAnswerDialog() {
     print("talkList length: ${talkList.length}");
     print("talkList ids: ${talkList.map((talk) => talk.id).toList()}");
-    
+
     // id 5번 대화 (정답일 때 나오는 대화)
     try {
       final TalkItem correctTalk = talkList.firstWhere((talk) => talk.id == 5);
@@ -510,18 +510,18 @@ class _ElementaryHighMissionScreenState
           child: Row(
             children: [
               Expanded(
-                child: SizedBox(
-                  height: 56,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xffffedfa),
-                      elevation: 1,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        side: BorderSide(color: mainColor, width: 2),
+                  child: SizedBox(
+                    height: 56,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xffffedfa),
+                        elevation: 1,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          side: BorderSide(color: mainColor, width: 2),
+                        ),
                       ),
-                    ),
-                    onPressed: _showHintDialog,
+                      onPressed: _showHintDialog,
                       child: Row(
                         mainAxisSize: MainAxisSize.min, // 버튼 크기를 내용에 맞춤
                         children: [
@@ -537,8 +537,8 @@ class _ElementaryHighMissionScreenState
                           ),
                         ],
                       ),
-                  ),
-                )
+                    ),
+                  )
               ),
               const SizedBox(width: 16),
               Expanded(
