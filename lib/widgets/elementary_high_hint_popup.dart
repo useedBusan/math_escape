@@ -20,7 +20,7 @@ class HintDialog extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
           color: const Color(0xffffffff), // 원하는 색상으로 변경 (예: 연한 파랑)
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(8.0),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -30,17 +30,17 @@ class HintDialog extends StatelessWidget {
               width: 100,
               height: 100,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
             Text(
               hintTitle,
               style: const TextStyle(
                 fontFamily: "SBAggro",
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.w400,
-                color: Color(0xff000000),
+                color: Color(0xff202020),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 2),
             Text(
               hintContent,
               textAlign: TextAlign.center,
@@ -51,7 +51,7 @@ class HintDialog extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xffed668a),
+                  backgroundColor: const Color(0xffD95276),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),

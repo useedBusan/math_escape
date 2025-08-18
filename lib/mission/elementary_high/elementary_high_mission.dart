@@ -97,7 +97,7 @@ class TalkScreen extends StatelessWidget {
                   child: Text(
                     '미션! 수사모의 수학 유산을 찾아서',
                     style: TextStyle(
-                      color: Color(0xffed668a),
+                      color: Color(0xffD95276),
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -106,7 +106,7 @@ class TalkScreen extends StatelessWidget {
                 Positioned(
                   left: 0,
                   child: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Color(0xffed668a)),
+                    icon: const Icon(Icons.arrow_back, color: Color(0xffD95276)),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
@@ -167,7 +167,7 @@ class TalkScreen extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(20, 22, 20, 20),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          border: Border.all(color: const Color(0xffed668a), width: 1.5),
+                          border: Border.all(color: const Color(0xffD95276), width: 1.5),
                           borderRadius: const BorderRadius.all(Radius.circular(16)),
                         ),
                         child: SingleChildScrollView(
@@ -203,7 +203,7 @@ class TalkScreen extends StatelessWidget {
                     height: 52,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xffed668a),
+                        backgroundColor: const Color(0xffD95276),
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       ),
@@ -380,7 +380,7 @@ class _ElementaryHighMissionScreenState
     }
 
     final MissionItem mission = missionList[currentQuestionIndex];
-    final Color mainColor = const Color(0xffed668a);
+    final Color mainColor = const Color(0xffD95276);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -390,13 +390,13 @@ class _ElementaryHighMissionScreenState
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xffed668a)),
+          icon: const Icon(Icons.arrow_back, color: Color(0xffD95276)),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
           '미션! 수사모의 수학 유산을 찾아서',
           style: TextStyle(
-            color: Color(0xffed668a),
+            color: Color(0xffD95276),
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -441,7 +441,7 @@ class _ElementaryHighMissionScreenState
                                     1} / $totalQuestions',
                                 style: const TextStyle(
                                   fontFamily: "SBAggro",
-                                  fontSize: 20,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.w400,
                                   color: Color(0xff202020),
                                 ),
@@ -450,7 +450,7 @@ class _ElementaryHighMissionScreenState
                               Text(
                                 mission.question,
                                 style: const TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   color: Color(0xff333333),
                                 ),
