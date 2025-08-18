@@ -416,7 +416,6 @@ class _ElementaryHighMissionScreenState
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),
-                    const SizedBox(height: 24),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -465,10 +464,12 @@ class _ElementaryHighMissionScreenState
                                       color: const Color(0xffdcdcdc)),
                                 ),
                                 child: TextField(
+                                  style: const TextStyle(fontSize:14),
                                   controller: _answerController,
                                   decoration: InputDecoration(
                                     hintText: '정답을 입력해 주세요.',
                                     hintStyle: const TextStyle(
+                                        fontSize: 14,
                                         color: Color(0xffaaaaaa)),
                                     contentPadding: const EdgeInsets
                                         .symmetric(
