@@ -18,7 +18,6 @@ class HintDialog extends StatelessWidget {
       ),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.93,
-        padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
           color: const Color(0xffffffff), // 원하는 색상으로 변경 (예: 연한 파랑)
           borderRadius: BorderRadius.circular(8.0),
@@ -26,38 +25,54 @@ class HintDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(
-              'assets/images/hint_puri.png',
-              width: 100,
-              height: 100,
-            ),
-            const SizedBox(height: 18),
-            Text(
-              hintTitle,
-              style: const TextStyle(
-                fontFamily: "SBAggro",
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                color: Color(0xff202020),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 24.0),
+              child: Column(
+                children: [
+                  Image.asset(
+                    'assets/images/hint_puri.png',
+                    width: 100,
+                    height: 100,
+                  ),
+                  const SizedBox(height: 18),
+                  Text(
+                    hintTitle,
+                    style: const TextStyle(
+                      fontFamily: "SBAggro",
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xff202020),
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    hintContent,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 2),
-            Text(
-              hintContent,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 24),
-            SizedBox(
+            Container(
               width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xffD95276),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+               decoration: const BoxDecoration(
+                color: Color(0xFFD95276),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(8.0),
+                  bottomRight: Radius.circular(8.0),
+                ),
+              ),
+              child: TextButton(
+                onPressed: () => Navigator.pop(context),
+                 style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(8.0),
+                      bottomRight: Radius.circular(8.0),
+                    ),
                   ),
                 ),
-                onPressed: () => Navigator.pop(context),
                 child: const Text(
                   '확인',
                   style: TextStyle(
