@@ -157,7 +157,7 @@ class _ElementaryHighMissionScreenState
     }
 
     final MissionItem mission = missionList[currentQuestionIndex];
-    final Color mainColor = const Color(0xffed668a);
+    final Color mainColor = const Color(0xffD95276);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -167,13 +167,13 @@ class _ElementaryHighMissionScreenState
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xffed668a)),
+          icon: const Icon(Icons.arrow_back, color: Color(0xffD95276)),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
           '미션! 수사모의 수학 유산을 찾아서',
           style: TextStyle(
-            color: Color(0xffed668a),
+            color: Color(0xffD95276),
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -221,16 +221,16 @@ class _ElementaryHighMissionScreenState
                                       1} / $totalQuestions',
                                   style: const TextStyle(
                                     fontFamily: "SBAggro",
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w400,
                                     color: Color(0xff202020),
                                   ),
                                 ),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 4),
                                 Text(
                                   mission.question,
                                   style: const TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                     color: Color(0xff333333),
                                   ),
@@ -255,7 +255,7 @@ class _ElementaryHighMissionScreenState
                                       border: InputBorder.none,
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(
-                                            8.0),
+                                            4.0),
                                         borderSide: const BorderSide(
                                             color: const Color(0xffaaaaaa)),
                                       ),
@@ -286,7 +286,7 @@ class _ElementaryHighMissionScreenState
       // 하단 버튼 고정
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
           child: Row(
             children: [
               Expanded(
@@ -297,7 +297,7 @@ class _ElementaryHighMissionScreenState
                       backgroundColor: const Color(0xffffedfa),
                       elevation: 1,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
+                        borderRadius: BorderRadius.circular(8.0),
                         side: BorderSide(color: mainColor, width: 2),
                       ),
                     ),
@@ -305,13 +305,13 @@ class _ElementaryHighMissionScreenState
                       child: Row(
                         mainAxisSize: MainAxisSize.min, // 버튼 크기를 내용에 맞춤
                         children: [
-                          Icon(Symbols.tooltip_2, color: mainColor, size: 18), // 아이콘
+                          Icon(Symbols.tooltip_2, color: mainColor, size: 20), // 아이콘
                           SizedBox(width: 4), // 간격
                           Text(
                             '힌트',
                             style: TextStyle(
                               color: mainColor,
-                              fontSize: 16,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -329,7 +329,7 @@ class _ElementaryHighMissionScreenState
                       backgroundColor: mainColor,
                       elevation: 1,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
                     onPressed: _submitAnswer,
@@ -340,7 +340,7 @@ class _ElementaryHighMissionScreenState
                           '정답제출',
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold),
                         ),
                         Positioned(
