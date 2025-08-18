@@ -426,7 +426,7 @@ class _ElementaryHighMissionScreenState
                             child: LinearProgressIndicator(
                               value: (currentQuestionIndex + 1) /
                                   totalQuestions,
-                              backgroundColor: const Color(0xffe0e0e0),
+                              backgroundColor: const Color(0xffebebeb),
                               valueColor: AlwaysStoppedAnimation<Color>(
                                   mainColor),
                               minHeight: 10,

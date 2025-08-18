@@ -17,6 +17,7 @@ class HintDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Container(
+        width: MediaQuery.of(context).size.width * 0.93,
         padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
           color: const Color(0xffffffff), // 원하는 색상으로 변경 (예: 연한 파랑)
