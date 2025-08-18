@@ -127,12 +127,12 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
   }
 
   void goToNext() {
-    if (currentIndex < talkList.length - 1) {
+    if (currentIndex < 3) { // id 1, 2, 3번 대화까지만 다음 대화로
       setState(() {
         currentIndex++;
         imageKey = UniqueKey();
       });
-    } else {
+    } else if (currentIndex == 3) { // id 4번 대화에서 문제 화면으로
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const ElementaryHighMissionScreen()),
