@@ -44,6 +44,187 @@ class MissionItem {
   }
 }
 
+// TalkItem class for conversation data
+class TalkItem {
+  final int id;
+  final String talk;
+  final String answer;
+  final String puri_image;
+
+  TalkItem({
+    required this.id,
+    required this.talk,
+    required this.answer,
+    required this.puri_image,
+  });
+
+  factory TalkItem.fromJson(Map<String, dynamic> json) {
+    return TalkItem(
+      id: json['id'],
+      talk: json['talk'],
+      answer: json['answer'],
+      puri_image: json['puri_image'],
+    );
+  }
+}
+
+// TalkScreen 위젯
+class TalkScreen extends StatelessWidget {
+  final TalkItem talk;
+  final VoidCallback onNext;
+
+  const TalkScreen({
+    Key? key,
+    required this.talk,
+    required this.onNext,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60),
+        child: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          flexibleSpace: SafeArea(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                const Center(
+                  child: Text(
+                    '미션! 수사모의 수학 유산을 찾아서',
+                    style: TextStyle(
+                      color: Color(0xffed668a),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 0,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Color(0xffed668a)),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/bsbackground.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned.fill(
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0x99ED668A),
+                    Color(0x99FFFFFF),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+            ),
+          ),
+          SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 24),
+                Flexible(
+                  flex: 6,
+                  child: Center(
+                    child: Image.asset(
+                      talk.puri_image,
+                      height: 280,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.93,
+                        height: 200,
+                        margin: const EdgeInsets.only(top: 12),
+                        padding: const EdgeInsets.fromLTRB(20, 22, 20, 20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: const Color(0xffed668a), width: 1.5),
+                          borderRadius: const BorderRadius.all(Radius.circular(16)),
+                        ),
+                        child: SingleChildScrollView(
+                          child: Text(
+                            talk.talk,
+                            style: const TextStyle(fontSize: 17, color: Colors.black87, height: 1.5),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        left: 20,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: const Color(0xffb73d5d),
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                          child: const Text(
+                            '푸리',
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.93,
+                    height: 52,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xffed668a),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      ),
+                      onPressed: onNext,
+                      child: Text(
+                        talk.answer,
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class ElementaryHighMissionScreen extends StatefulWidget {
   const ElementaryHighMissionScreen({super.key});
 
@@ -55,6 +236,7 @@ class ElementaryHighMissionScreen extends StatefulWidget {
 class _ElementaryHighMissionScreenState
     extends State<ElementaryHighMissionScreen> {
   List<MissionItem> missionList = [];
+  List<TalkItem> talkList = [];
   bool isLoading = true;
   final TextEditingController _answerController = TextEditingController();
   int currentQuestionIndex = 0;
@@ -69,12 +251,19 @@ class _ElementaryHighMissionScreenState
 
   Future<void> loadMissionData() async {
     try {
-      final String jsonString = await rootBundle
+      // 미션 데이터 로드
+      final String missionJsonString = await rootBundle
           .loadString('lib/data/elementary_high/elementary_high_question.json');
-      final List<dynamic> jsonList = json.decode(jsonString);
+      final List<dynamic> missionJsonList = json.decode(missionJsonString);
+
+      // 대화 데이터 로드
+      final String talkJsonString = await rootBundle
+          .loadString('lib/data/elementary_high/elementary_high_context.json');
+      final List<dynamic> talkJsonList = json.decode(talkJsonString);
 
       setState(() {
-        missionList = jsonList.map((e) => MissionItem.fromJson(e)).toList();
+        missionList = missionJsonList.map((e) => MissionItem.fromJson(e)).toList();
+        talkList = talkJsonList.map((e) => TalkItem.fromJson(e)).toList();
         isLoading = false;
       });
     } catch (e) {
@@ -125,21 +314,55 @@ class _ElementaryHighMissionScreenState
       builder: (_) => AnswerPopup(
         isCorrect: correct,
         onNext: () {
-          Navigator.pop(context); // 팝업 닫기
+          Navigator.pop(context); // 정답 팝업 닫기
           if (correct) {
-            setState(() {
-              if (currentQuestionIndex < missionList.length - 1) {
-                currentQuestionIndex++;
-                _answerController.clear();
-                hintCounter = 0;
-              } else {
-                Navigator.pop(context); // 마지막 문제면 화면 종료
-              }
-            });
+            // 정답일 때만 id 5번 대화 화면으로 이동
+            _showCorrectAnswerDialog();
           }
+          // 오답일 때는 아무것도 하지 않음 (현재 문제 유지)
         },
       ),
     );
+  }
+
+  void _goToNextQuestion() {
+    setState(() {
+      if (currentQuestionIndex < missionList.length - 1) {
+        currentQuestionIndex++;
+        _answerController.clear();
+        hintCounter = 0;
+      } else {
+        Navigator.pop(context); // 마지막 문제면 화면 종료
+      }
+    });
+  }
+
+  void _showCorrectAnswerDialog() {
+    print("talkList length: ${talkList.length}");
+    print("talkList ids: ${talkList.map((talk) => talk.id).toList()}");
+    
+    // id 5번 대화 (정답일 때 나오는 대화)
+    try {
+      final TalkItem correctTalk = talkList.firstWhere((talk) => talk.id == 5);
+      print("Found talk with id 5: ${correctTalk.talk}");
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => TalkScreen(
+            talk: correctTalk,
+            onNext: () {
+              Navigator.pop(context); // 대화 화면 닫기
+              // 다음 문제로 넘어가기
+              _goToNextQuestion();
+            },
+          ),
+        ),
+      );
+    } catch (e) {
+      print("Error finding talk with id 5: $e");
+      _goToNextQuestion();
+    }
   }
 
   @override
@@ -211,6 +434,7 @@ class _ElementaryHighMissionScreenState
                             ),
                           ),
                           const SizedBox(height: 16),
+<<<<<<< HEAD
                           Container(
                             padding: const EdgeInsets.all(24.0),
                             child: Column(
@@ -265,11 +489,64 @@ class _ElementaryHighMissionScreenState
                                         borderSide: BorderSide(
                                             color: mainColor, width: 2.0),
                                       ),
+=======
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '문제 ${currentQuestionIndex +
+                                    1} / $totalQuestions',
+                                style: const TextStyle(
+                                  fontFamily: "SBAggro",
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0xff202020),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                mission.question,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xff333333),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFFFFF),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  border: Border.all(
+                                      color: const Color(0xffdcdcdc)),
+                                ),
+                                child: TextField(
+                                  controller: _answerController,
+                                  decoration: InputDecoration(
+                                    hintText: '정답을 입력해 주세요.',
+                                    hintStyle: const TextStyle(
+                                        color: Color(0xffaaaaaa)),
+                                    contentPadding: const EdgeInsets
+                                        .symmetric(
+                                        horizontal: 16.0, vertical: 12.0),
+                                    border: InputBorder.none,
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          8.0),
+                                      borderSide: const BorderSide(
+                                          color: const Color(0xffaaaaaa)),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          8.0),
+                                      borderSide: BorderSide(
+                                          color: mainColor, width: 2.0),
+>>>>>>> b2bd5e7dbe5f1f18a8522c67872bbce44ce91bf5
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 20),
                         ],
@@ -342,13 +619,6 @@ class _ElementaryHighMissionScreenState
                               color: Colors.white,
                               fontSize: 18,
                               fontWeight: FontWeight.bold),
-                        ),
-                        Positioned(
-                          right: 0,
-                          child: Image.asset(
-                            'assets/images/treasure_chest.png',
-                            height: 40,
-                          ),
                         ),
                       ],
                     ),
