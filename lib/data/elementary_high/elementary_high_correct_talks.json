@@ -52,14 +52,14 @@
     "id" : 8,
     "talk" : "와! 그림자 극장 매표소도 찾아냈네! 이제 거의 다 왔어.\n다음 문제는 수수께끼야.\n\"이 글을 읽는 내가 주인공이 되는 책\"을 찾아서 열어보자!",
     "answer" : "좋아! 당장 가보자!",
-    "puri_image" : "assets/images/puri_good.png",
+    "puri_image" : "assets/images/puri_surprised.png",
     "back_image" : "assets/images/elementary_high_2F.png"
   },
   {
     "id" : 9,
     "talk" : " 이야 정말 환상적이야! 조금 어려운 문제를 내볼까?\n너 혹시 자이언츠 판다라고 들어봤니?\n중국에 서식하는 자이언츠 판다의 무게를 쌀로 재려면 쌀이 몇 개가 필요할까?",
     "answer" : "좋아! 당장 가보자!",
-    "puri_image" : "assets/images/puri_good.png",
+    "puri_image" : "assets/images/puri+panda.png",
     "back_image" : "assets/images/elementary_high_3F.png"
   },
   {
@@ -73,6 +73,6 @@
     "id" : 11,
     "talk" : "축하해! 모든 문제를 다 풀었어. 정말 대단해.\n보물은 지하 1층 안내 데스크에서 선생님께 달라고 하면 받을 수 있어.\n지금까지 문제 푸느라 고생했어. 안녕~",
     "puri_image" : "assets/images/puri_good.png",
-    "back_image" : "assets/images/assets/images/elementary_high_B1.png"
+    "back_image" : "assets/images/elementary_high_B1.png"
   }
 ]

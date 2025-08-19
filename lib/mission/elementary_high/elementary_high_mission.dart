@@ -97,12 +97,12 @@ class TalkScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          Positioned.fill(
-            child: Image.asset(
-              'assets/images/bsbackground.png',
-              fit: BoxFit.cover,
-            ),
-          ),
+                     Positioned.fill(
+             child: Image.asset(
+               talk.back_image.isNotEmpty ? talk.back_image : 'assets/images/bsbackground.png',
+               fit: BoxFit.cover,
+             ),
+           ),
           Positioned.fill(
             child: Container(
               decoration: const BoxDecoration(
