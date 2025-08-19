@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:math_escape/widgets/elementary_high_hint_popup.dart';
 import 'package:math_escape/widgets/elementary_high_answer_popup.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import '../../models/elementary_high/elementary_high_correct_talk.dart';
 
 // MissionItem class as provided in the original code
 class MissionItem {
@@ -44,33 +45,11 @@ class MissionItem {
   }
 }
 
-// TalkItem class for conversation data
-class TalkItem {
-  final int id;
-  final String talk;
-  final String answer;
-  final String puri_image;
 
-  TalkItem({
-    required this.id,
-    required this.talk,
-    required this.answer,
-    required this.puri_image,
-  });
-
-  factory TalkItem.fromJson(Map<String, dynamic> json) {
-    return TalkItem(
-      id: json['id'],
-      talk: json['talk'],
-      answer: json['answer'],
-      puri_image: json['puri_image'],
-    );
-  }
-}
 
 // TalkScreen 위젯
 class TalkScreen extends StatelessWidget {
-  final TalkItem talk;
+  final CorrectTalkItem talk;
   final VoidCallback onNext;
 
   const TalkScreen({
@@ -236,7 +215,7 @@ class ElementaryHighMissionScreen extends StatefulWidget {
 class _ElementaryHighMissionScreenState
     extends State<ElementaryHighMissionScreen> {
   List<MissionItem> missionList = [];
-  List<TalkItem> talkList = [];
+  List<CorrectTalkItem> talkList = [];
   bool isLoading = true;
   final TextEditingController _answerController = TextEditingController();
   int currentQuestionIndex = 0;
@@ -263,7 +242,7 @@ class _ElementaryHighMissionScreenState
 
       setState(() {
         missionList = missionJsonList.map((e) => MissionItem.fromJson(e)).toList();
-        talkList = talkJsonList.map((e) => TalkItem.fromJson(e)).toList();
+        talkList = talkJsonList.map((e) => CorrectTalkItem.fromJson(e)).toList();
         isLoading = false;
       });
     } catch (e) {
@@ -343,7 +322,7 @@ class _ElementaryHighMissionScreenState
 
     // 현재 문제 인덱스에 해당하는 대화 찾기 (1부터 시작)
     try {
-      final TalkItem correctTalk = talkList.firstWhere((talk) => talk.id == currentQuestionIndex + 1);
+      final CorrectTalkItem correctTalk = talkList.firstWhere((talk) => talk.id == currentQuestionIndex + 1);
       print("Found talk with id ${currentQuestionIndex + 1}: ${correctTalk.talk}");
 
       Navigator.push(

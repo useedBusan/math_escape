@@ -3,29 +3,9 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'elementary_high_mission.dart';
+import '../../models/elementary_high/elementary_high_intro_talk.dart';
 
-class TalkItem {
-  final int id;
-  final String talk;
-  final String answer;
-  final String puri_image;
 
-  TalkItem({
-    required this.id,
-    required this.talk,
-    required this.answer,
-    required this.puri_image,
-  });
-
-  factory TalkItem.fromJson(Map<String, dynamic> json) {
-    return TalkItem(
-      id: json['id'],
-      talk: json['talk'],
-      answer: json['answer'],
-      puri_image: json['puri_image'],
-    );
-  }
-}
 
 class PuriImage extends StatefulWidget {
   final String imagePath;
@@ -89,7 +69,7 @@ class ElementaryHighTalkScreen extends StatefulWidget {
 }
 
 class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> with WidgetsBindingObserver {
-  List<TalkItem> talkList = [];
+  List<IntroTalkItem> talkList = [];
   int currentIndex = 0;
   bool isLoading = true;
 
@@ -121,7 +101,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
     final String jsonString = await rootBundle.loadString('lib/data/elementary_high/elementary_high_intro.json');
     final List<dynamic> jsonList = json.decode(jsonString);
     setState(() {
-      talkList = jsonList.map((e) => TalkItem.fromJson(e)).toList();
+      talkList = jsonList.map((e) => IntroTalkItem.fromJson(e)).toList();
       isLoading = false;
     });
   }

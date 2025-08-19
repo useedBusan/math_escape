@@ -71,6 +71,9 @@ flutter:
     - assets/images/puri_invite.png
     - assets/images/puri_appear.gif
     - assets/images/puri_good.png
+    - assets/images/puri_clapping.gif
+    - assets/images/puri_surprised.png
+    - assets/images/puri+panda.png
     - assets/images/logo.png
     - assets/images/insta_logo.png
     - assets/images/visual03.png
@@ -80,7 +83,8 @@ flutter:
     - lib/data/high/high_level_question.json
     - lib/data/high/high_level_answer.json
     - lib/data/elementary_high/elementary_high_question.json
-    - lib/data/elementary_high/elementary_high_context.json
+    - lib/data/elementary_high/elementary_high_intro.json
+    - lib/data/elementary_high/elementary_high_correct_talks.json
     - assets/images/pitagoras1.png
     - assets/images/pitagoras2.png
     - assets/images/pitagoras3.png
