@@ -4,6 +4,7 @@ class CorrectTalkItem {
   final String answer;
   final String puri_image;
   final String back_image;
+  final int? nextId;
 
   CorrectTalkItem({
     required this.id,
@@ -11,6 +12,7 @@ class CorrectTalkItem {
     required this.answer,
     required this.puri_image,
     required this.back_image,
+    this.nextId
   });
 
   factory CorrectTalkItem.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class CorrectTalkItem {
       answer: json['answer'] ?? '',
       puri_image: json['puri_image'],
       back_image: json['back_image'] ?? '',
+      nextId: json['next_id'],
     );
   }
 }

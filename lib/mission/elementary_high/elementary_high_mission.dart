@@ -318,32 +318,54 @@ class _ElementaryHighMissionScreenState
   }
 
   void _showCorrectAnswerDialog() {
-    print("talkList length: ${talkList.length}");
-    print("talkList ids: ${talkList.map((talk) => talk.id).toList()}");
-
-    // 현재 문제 인덱스에 해당하는 대화 찾기 (1부터 시작)
     try {
-      final CorrectTalkItem correctTalk = talkList.firstWhere((talk) => talk.id == currentQuestionIndex + 1);
-      print("Found talk with id ${currentQuestionIndex + 1}: ${correctTalk.talk}");
+      final int currentQuestionId = currentQuestionIndex + 1;
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => TalkScreen(
-            talk: correctTalk,
-            onNext: () {
-              Navigator.pop(context); // 대화 화면 닫기
-              // 다음 문제로 넘어가기
-              _goToNextQuestion();
-            },
+      int firstTalkId;
+
+      if (currentQuestionId <= 4) {
+        // 문제 1~4 → 대화 1~4
+        firstTalkId = currentQuestionId;
+      } else if (currentQuestionId == 5) {
+        // 문제 5 → 대화 5 → next_id=6
+        firstTalkId = 5;
+      } else {
+        // 문제 6~10 → 대화 (문제번호 + 1)
+        firstTalkId = currentQuestionId + 1;
+      }
+
+      final CorrectTalkItem firstTalk =
+      talkList.firstWhere((talk) => talk.id == firstTalkId);
+
+      void showTalk(CorrectTalkItem talk) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => TalkScreen(
+              talk: talk,
+              onNext: () {
+                Navigator.pop(context);
+
+                if (talk.nextId != null) {
+                  final nextTalk =
+                  talkList.firstWhere((t) => t.id == talk.nextId);
+                  showTalk(nextTalk);
+                } else {
+                  _goToNextQuestion();
+                }
+              },
+            ),
           ),
-        ),
-      );
+        );
+      }
+
+      showTalk(firstTalk);
     } catch (e) {
-      print("Error finding talk with id ${currentQuestionIndex + 1}: $e");
+      print("Error finding talk for question ${currentQuestionIndex + 1}: $e");
       _goToNextQuestion();
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
