@@ -152,7 +152,7 @@ class TalkScreen extends StatelessWidget {
                         child: SingleChildScrollView(
                           child: Text(
                             talk.talk,
-                            style: const TextStyle(fontSize: 17, color: Colors.black87, height: 1.5),
+                            style: const TextStyle(fontSize: 15, color: Colors.black87, height: 1.5),
                           ),
                         ),
                       ),

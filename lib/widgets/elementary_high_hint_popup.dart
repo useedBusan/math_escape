@@ -14,7 +14,7 @@ class HintDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(8.0),
       ),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.93,

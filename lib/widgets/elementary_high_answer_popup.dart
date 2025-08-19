@@ -1,4 +1,3 @@
-// lib/widgets/elementary_high_answer_popup.dart
 import 'package:flutter/material.dart';
 
 class AnswerPopup extends StatelessWidget {
@@ -28,14 +27,14 @@ class AnswerPopup extends StatelessWidget {
                 children: [
                   Icon(
                     isCorrect ? Icons.check_circle : Icons.cancel,
-                    size: 72,
+                    size: 80,
                     color: isCorrect ? Colors.cyan : Colors.red,
                   ),
                   const SizedBox(height: 16),
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      style: const TextStyle(fontSize: 18, color: Colors.black),
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
                       children: [
                         TextSpan(
                           text: isCorrect ? '정답' : '오답',
@@ -52,7 +51,7 @@ class AnswerPopup extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 4),
                   Text(
                     isCorrect
                         ? '보물에 한 걸음 더 가까워졌어!'
@@ -64,7 +63,7 @@ class AnswerPopup extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            const Divider(height: 1, thickness: 3, color: Color(0xFFDDDDDD)),
+            const Divider(height: 1, thickness: 1, color: Color(0xFFDDDDDD)),
             SizedBox(
               width: double.infinity,
               child: TextButton(
@@ -73,7 +72,7 @@ class AnswerPopup extends StatelessWidget {
                   foregroundColor: const Color(0xffed668a),
                   textStyle: const TextStyle(fontWeight: FontWeight.bold),
                   padding: const EdgeInsets.symmetric(vertical: 12),
-                  minimumSize: const Size.fromHeight(44),
+                  minimumSize: const Size.fromHeight(52),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 child: Text(isCorrect ? '다음' : '확인'),
