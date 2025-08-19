@@ -31,8 +31,8 @@ class HintDialog extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/images/hint_puri.png',
-                    width: 100,
-                    height: 100,
+                    width: 88,
+                    height: 88,
                   ),
                   const SizedBox(height: 18),
                   Text(

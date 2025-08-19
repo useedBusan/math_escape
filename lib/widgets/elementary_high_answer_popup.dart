@@ -17,7 +17,7 @@ class AnswerPopup extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.93,
-        padding: const EdgeInsets.only(top: 32),
+        padding: const EdgeInsets.only(top: 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -27,10 +27,10 @@ class AnswerPopup extends StatelessWidget {
                 children: [
                   Icon(
                     isCorrect ? Icons.check_circle : Icons.cancel,
-                    size: 80,
+                    size: 92,
                     color: isCorrect ? const Color(0xff08BBAC) : const Color(0xffD95252),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 6),
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
@@ -75,7 +75,9 @@ class AnswerPopup extends StatelessWidget {
                   minimumSize: const Size.fromHeight(52),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                child: Text(isCorrect ? '다음' : '확인'),
+                child: Text(isCorrect ? '다음' : '확인',
+                style: const TextStyle(fontSize: 16),
+                ),
               ),
             ),
           ],
