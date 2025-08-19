@@ -28,7 +28,7 @@ class AnswerPopup extends StatelessWidget {
                   Icon(
                     isCorrect ? Icons.check_circle : Icons.cancel,
                     size: 80,
-                    color: isCorrect ? Colors.cyan : Colors.red,
+                    color: isCorrect ? const Color(0xff08BBAC) : const Color(0xffD95252),
                   ),
                   const SizedBox(height: 16),
                   RichText(
@@ -40,7 +40,7 @@ class AnswerPopup extends StatelessWidget {
                           text: isCorrect ? '정답' : '오답',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: isCorrect ? Colors.cyan : Colors.red,
+                            color: isCorrect ? const Color(0xff08BBAC) : const Color(0xffD95252),
                           ),
                         ),
                         TextSpan(
