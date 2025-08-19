@@ -258,7 +258,7 @@ class _ElementaryHighMissionScreenState
 
       // 대화 데이터 로드
       final String talkJsonString = await rootBundle
-          .loadString('lib/data/elementary_high/elementary_high_context.json');
+          .loadString('lib/data/elementary_high/elementary_high_correct_talks.json');
       final List<dynamic> talkJsonList = json.decode(talkJsonString);
 
       setState(() {
@@ -341,10 +341,10 @@ class _ElementaryHighMissionScreenState
     print("talkList length: ${talkList.length}");
     print("talkList ids: ${talkList.map((talk) => talk.id).toList()}");
 
-    // id 5번 대화 (정답일 때 나오는 대화)
+    // 현재 문제 인덱스에 해당하는 대화 찾기 (1부터 시작)
     try {
-      final TalkItem correctTalk = talkList.firstWhere((talk) => talk.id == 5);
-      print("Found talk with id 5: ${correctTalk.talk}");
+      final TalkItem correctTalk = talkList.firstWhere((talk) => talk.id == currentQuestionIndex + 1);
+      print("Found talk with id ${currentQuestionIndex + 1}: ${correctTalk.talk}");
 
       Navigator.push(
         context,
@@ -360,7 +360,7 @@ class _ElementaryHighMissionScreenState
         ),
       );
     } catch (e) {
-      print("Error finding talk with id 5: $e");
+      print("Error finding talk with id ${currentQuestionIndex + 1}: $e");
       _goToNextQuestion();
     }
   }

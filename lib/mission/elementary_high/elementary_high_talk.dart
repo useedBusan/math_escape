@@ -118,7 +118,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
   }
 
   Future<void> loadTalks() async {
-    final String jsonString = await rootBundle.loadString('lib/data/elementary_high/elementary_high_context.json');
+    final String jsonString = await rootBundle.loadString('lib/data/elementary_high/elementary_high_intro.json');
     final List<dynamic> jsonList = json.decode(jsonString);
     setState(() {
       talkList = jsonList.map((e) => TalkItem.fromJson(e)).toList();

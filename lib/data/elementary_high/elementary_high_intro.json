@@ -1,0 +1,30 @@
+[
+  {
+    "id" : 1,
+    "talk" : "안녕? 수학문화관 방문을 환영해!\n나는 수학문화관의 마스코트 푸리라고 해.\n너 혹시 수학문화관에 전해 내려오는\n전설에 대해 알고 있니?",
+    "answer" : "궁금해! 알려줘 푸리!",
+    "puri_image": "assets/images/puri_appear.gif",
+    "back_image" : ""
+  },
+  {
+    "id" : 2,
+    "talk" : "옛날 수학문화관이 처음 지어질 때,\n수학을 사랑하는 모임 일명 '수사모' 단체에서\n수학을 사랑하고 좋아하는 친구들을 위해\n보물을 숨겨놓았다고 해.",
+    "answer" : "그 보물 내가 꼭 찾을래!",
+    "puri_image": "assets/images/puri_stand.png",
+    "back_image" : ""
+  },
+  {
+    "id" : 3,
+    "talk" : "보물은 수학문화관에 전해 내려오는 여러 단계의\n퀴즈를 다 해결하면 마지막에 얻을 수 있다고 해.\n혹시 우리 함께 보물을 찾으러 가지 않을래?",
+    "answer" : "좋아! 당장 가보자!",
+    "puri_image" : "assets/images/puri_invite.png",
+    "back_image" : ""
+  },
+  {
+    "id" : 4,
+    "talk" : "좋아! 그럼 우리 같이 보물을 찾아보자.\n내가 듣기로는 처음 보물에 대한 힌트를\n수학문화관의 수학 상가에서 17.5미터 거리에\n떨어진 곳에 힌트를 숨겨놓았다고 했어.",
+    "answer" : "17.5미터? 어딜까? 찾아보자!",
+    "puri_image" : "assets/images/puri_manse.png",
+    "back_image" : ""
+  }
+]
