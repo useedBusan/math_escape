@@ -66,6 +66,7 @@ class HintDialog extends StatelessWidget {
                 onPressed: () => Navigator.pop(context),
                  style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  minimumSize: const Size.fromHeight(52),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8.0),

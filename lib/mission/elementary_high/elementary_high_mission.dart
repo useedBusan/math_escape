@@ -97,18 +97,18 @@ class TalkScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-                     Positioned.fill(
-             child: Image.asset(
-               talk.back_image.isNotEmpty ? talk.back_image : 'assets/images/bsbackground.png',
-               fit: BoxFit.cover,
-             ),
-           ),
+          Positioned.fill(
+            child: Image.asset(
+              talk.back_image.isNotEmpty ? talk.back_image : 'assets/images/bsbackground.png',
+              fit: BoxFit.cover,
+            ),
+          ),
           Positioned.fill(
             child: Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Color(0x99ED668A),
+                    Color(0x99D95276),
                     Color(0x99FFFFFF),
                   ],
                   begin: Alignment.topCenter,
@@ -139,16 +139,16 @@ class TalkScreen extends StatelessWidget {
                   child: Stack(
                     clipBehavior: Clip.none,
                     children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.93,
-                        height: 200,
-                        margin: const EdgeInsets.only(top: 12),
-                        padding: const EdgeInsets.fromLTRB(20, 22, 20, 20),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: const Color(0xffD95276), width: 1.5),
-                          borderRadius: const BorderRadius.all(Radius.circular(16)),
-                        ),
+                                              Container(
+                          width: MediaQuery.of(context).size.width * 0.93,
+                          height: 200,
+                          margin: const EdgeInsets.only(top: 12),
+                          padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: const Color(0xff952B47), width: 1.5),
+                            borderRadius: const BorderRadius.all(Radius.circular(12)),
+                          ),
                         child: SingleChildScrollView(
                           child: Text(
                             talk.talk,
@@ -156,25 +156,26 @@ class TalkScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Positioned(
-                        top: 0,
-                        left: 20,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: const Color(0xffb73d5d),
-                            borderRadius: BorderRadius.circular(40),
-                          ),
-                          child: const Text(
-                            '푸리',
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+                                              Positioned(
+                          top: 0,
+                          left: 20,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: const Color(0xffB73D5D),
+                              border: Border.all(color: const Color(0xffffffff), width: 1.5),
+                              borderRadius: BorderRadius.circular(40),
+                            ),
+                            child: const Text(
+                              '푸리',
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: SizedBox(

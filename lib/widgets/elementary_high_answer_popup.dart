@@ -34,7 +34,7 @@ class AnswerPopup extends StatelessWidget {
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                      style: const TextStyle(fontSize: 16, color: const Color(0xff202020)),
                       children: [
                         TextSpan(
                           text: isCorrect ? '정답' : '오답',
