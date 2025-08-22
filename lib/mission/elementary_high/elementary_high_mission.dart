@@ -472,7 +472,7 @@ class _ElementaryHighMissionScreenState
                                   decoration: InputDecoration(
                                     hintText: '정답을 입력해 주세요.',
                                     hintStyle: const TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 15,
                                         color: Color(0xffaaaaaa)),
                                     contentPadding: const EdgeInsets
                                         .symmetric(

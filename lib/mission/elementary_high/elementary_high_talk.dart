@@ -238,7 +238,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                           child: SingleChildScrollView(
                             child: Text(
                               talk.talk,
-                              style: const TextStyle(fontSize: 15, color: Colors.black87, height: 1.5),
+                              style: const TextStyle(fontSize: 16, color: Colors.black87, height: 1.5),
                             ),
                           ),
                         ),
