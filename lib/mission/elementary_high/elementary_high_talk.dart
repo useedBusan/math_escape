@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'elementary_high_mission.dart';
 import '../../models/elementary_high/elementary_high_intro_talk.dart';
-
+//intro page
 class PuriImage extends StatefulWidget {
   final String imagePath;
   final Key imageKey;
