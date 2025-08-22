@@ -47,12 +47,12 @@ class _PuriImageState extends State<PuriImage> {
       future: _imageBytes,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          return const SizedBox(height: 280);
+          return const SizedBox(height: 240);
         }
         return Image.memory(
           snapshot.data!,
           key: widget.imageKey,
-          height: 280,
+          height: 240,
         );
       },
     );
@@ -227,7 +227,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width * 0.93,
-                          height: 200,
+                          height: 220,
                           margin: const EdgeInsets.only(top: 12),
                           padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
                           decoration: BoxDecoration(
@@ -238,6 +238,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                           child: SingleChildScrollView(
                             child: Text(
                               talk.talk,
+                              textAlign: TextAlign.justify,
                               style: const TextStyle(fontSize: 16, color: Colors.black87, height: 1.5),
                             ),
                           ),
