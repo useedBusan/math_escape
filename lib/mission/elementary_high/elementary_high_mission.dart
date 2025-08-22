@@ -128,7 +128,7 @@ class TalkScreen extends StatelessWidget {
                   child: Center(
                     child: Image.asset(
                       talk.puri_image,
-                      height: 240,
+                      height: 220,
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -141,7 +141,7 @@ class TalkScreen extends StatelessWidget {
                     children: [
                                               Container(
                           width: MediaQuery.of(context).size.width * 0.93,
-                          height: 220,
+                          height: 260,
                           margin: const EdgeInsets.only(top: 12),
                           padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
                           decoration: BoxDecoration(
@@ -153,7 +153,7 @@ class TalkScreen extends StatelessWidget {
                           child: Text(
                             talk.talk,
                             textAlign: TextAlign.justify,
-                            style: const TextStyle(fontSize: 16, color: Colors.black87, height: 1.5),
+                            style: const TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.w500, height: 1.5),
                           ),
                         ),
                       ),
