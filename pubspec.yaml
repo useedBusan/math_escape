@@ -93,6 +93,9 @@ flutter:
     - lib/data/elementary_high/elementary_high_question.json
     - lib/data/elementary_high/elementary_high_intro.json
     - lib/data/elementary_high/elementary_high_correct_talks.json
+    - lib/data/middle/middle_question.json
+    - lib/data/middle/middle_intro.json
+    - lib/data/middle/middle_correct_talks.json
     - assets/images/pitagoras1.png
     - assets/images/pitagoras2.png
     - assets/images/pitagoras3.png
