@@ -128,7 +128,7 @@ class TalkScreen extends StatelessWidget {
                   child: Center(
                     child: Image.asset(
                       talk.puri_image,
-                      height: 280,
+                      height: 220,
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -141,7 +141,7 @@ class TalkScreen extends StatelessWidget {
                     children: [
                                               Container(
                           width: MediaQuery.of(context).size.width * 0.93,
-                          height: 200,
+                          height: 260,
                           margin: const EdgeInsets.only(top: 12),
                           padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
                           decoration: BoxDecoration(
@@ -152,7 +152,8 @@ class TalkScreen extends StatelessWidget {
                         child: SingleChildScrollView(
                           child: Text(
                             talk.talk,
-                            style: const TextStyle(fontSize: 15, color: Colors.black87, height: 1.5),
+                            textAlign: TextAlign.justify,
+                            style: const TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.w500, height: 1.5),
                           ),
                         ),
                       ),
@@ -451,9 +452,10 @@ class _ElementaryHighMissionScreenState
                               const SizedBox(height: 4),
                               Text(
                                 mission.question,
+                                textAlign: TextAlign.justify,
                                 style: const TextStyle(
                                   height : 1.5,
-                                  fontSize: 16,
+                                  fontSize: 17,
                                   fontWeight: FontWeight.w500,
                                   color: Color(0xff333333),
                                 ),
