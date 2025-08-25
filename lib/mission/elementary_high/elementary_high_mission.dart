@@ -158,7 +158,7 @@ class TalkScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                                              Positioned(
+                      Positioned(
                           top: 0,
                           left: 20,
                           child: Container(

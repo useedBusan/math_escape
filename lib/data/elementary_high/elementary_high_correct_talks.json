@@ -1,7 +1,7 @@
 [
   {
     "id" : 1,
-    "talk" : "우와! 정말 대단해! 그럼 이제 피자 가게에서 보물에 대한 다음 힌트를 얻자! 반달 모양을 잘 관찰하면 다음 문제 힌트가 열릴 거야!",
+    "talk" : "우와! 정말 대단해! 그럼 이제 피자 가게🍕에서 보물에 대한 다음 힌트를 얻자! 반달 모양을 잘 관찰하면 다음 문제 힌트가 열릴 거야!",
     "answer" : "반달? 피자 모양인가?",
     "puri_image": "assets/images/puri_good.png",
     "back_image" : "assets/images/elementary_high_2F_1.png"
@@ -45,7 +45,7 @@
   },
   {
     "id" : 7,
-    "talk" : "다음으로 그림자 극장 매표소 시간을 알아내야 해. 그림자 극장은 수학놀이관 안에서 본 것 같은데, 그쪽으로 가서 답을 생각해보자.",
+    "talk" : "다음으로 그림자 극장 매표소 시간을 알아내야 해. 그림자 극장🎞은 수학놀이관 안에서 본 것 같은데, 그쪽으로 가서 답을 생각해보자.",
     "answer" : "그림자 극장? 뭔가 신비한데!",
     "puri_image" : "assets/images/puri_good.png",
     "back_image" : "assets/images/elementary_high_2F.png"
@@ -59,7 +59,7 @@
   },
   {
     "id" : 9,
-    "talk" : "이야 정말 환상적이야! 조금 어려운 문제를 내볼까? 너 혹시 자이언트 판다라고 들어봤니? 중국에 서식하는 자이언트 판다의 무게를 쌀로 재려면 쌀이 몇 개가 필요할까?",
+    "talk" : "이야 정말 환상적이야! 조금 어려운 문제를 내볼까? 너 혹시 자이언트 판다🐼라고 들어봤니? 중국에 서식하는 자이언트 판다의 무게를 쌀로 재려면 쌀이 몇 개가 필요할까?",
     "answer" : "엄청 많이 필요할 것 같다!",
     "puri_image" : "assets/images/puri+panda.png",
     "back_image" : "assets/images/elementary_high_2F.png"
