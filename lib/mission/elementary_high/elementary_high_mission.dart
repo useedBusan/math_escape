@@ -129,7 +129,7 @@ class TalkScreen extends StatelessWidget {
                   child: Center(
                     child: Image.asset(
                       talk.puri_image,
-                      height: MediaQuery.of(context).size.height * 0.24,
+                      height: 220,
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -142,7 +142,7 @@ class TalkScreen extends StatelessWidget {
                     children: [
                                               Container(
                           width: MediaQuery.of(context).size.width * 0.93,
-                          height: MediaQuery.of(context).size.height * 0.28,
+                          height: 260,
                           margin: const EdgeInsets.only(top: 12),
                           padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
                           decoration: BoxDecoration(

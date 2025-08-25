@@ -13,7 +13,6 @@ class HintDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
       ),
@@ -45,11 +44,11 @@ class HintDialog extends StatelessWidget {
                       color: Color(0xff202020),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 2),
                   Text(
                     hintContent,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360), height: 1.2),
+                    style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360)),
                   ),
                 ],
               ),
