@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import '../../models/middle/middle_intro_talk.dart';
 import 'dart:convert';
 import 'package:math_escape/mission/middle/middle_mission.dart';
+import 'package:math_escape/widgets/middle_talk_popup.dart';
 //intro page
 class PuriImage extends StatefulWidget {
   final String imagePath;
@@ -106,12 +107,34 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindi
   }
 
   void goToNext() {
-    if (currentIndex < 3) { // id 1, 2, 3번 대화까지만 다음 대화로
+    // 현재 인덱스가 0 또는 1일 때 다음 대화로 넘어갑니다.
+    if (currentIndex < 2) {
       setState(() {
         currentIndex++;
         imageKey = UniqueKey();
       });
-    } else if (currentIndex == 3) { // id 4번 대화에서 문제 화면으로
+    }
+    // currentIndex가 2일 때 (즉, id 3번 대화일 때)
+    else if (currentIndex == 2) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const MiddleTalkDialog();
+            },
+          ).then((_) {
+            // 다이얼로그가 닫히면 인덱스를 3으로 업데이트하여 다음 대화로 넘어갑니다.
+            setState(() {
+              currentIndex++;
+              imageKey = UniqueKey();
+            });
+          });
+        }
+      });
+    }
+    // currentIndex가 3 이상일 때 (즉, id 4번 이후 대화)
+    else if (currentIndex >= 3) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const MiddleMissionScreen()),
