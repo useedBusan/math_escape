@@ -173,7 +173,13 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                     left: 0,
                     child: IconButton(
                       icon: const Icon(Icons.arrow_back, color: Color(0xffD95276)),
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () {
+                        if (currentIndex > 0) {
+                          goToPrevious();
+                        } else {
+                          Navigator.of(context).pop();
+                        }
+                      },
                     ),
                   ),
                 ],

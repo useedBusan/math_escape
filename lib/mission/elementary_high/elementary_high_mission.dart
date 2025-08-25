@@ -5,6 +5,7 @@ import 'package:math_escape/widgets/elementary_high_hint_popup.dart';
 import 'package:math_escape/widgets/elementary_high_answer_popup.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import '../../models/elementary_high/elementary_high_correct_talk.dart';
+import 'package:math_escape/screens/qr_scan_screen.dart';
 
 // MissionItem class as provided in the original code
 class MissionItem {
