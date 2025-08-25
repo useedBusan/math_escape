@@ -17,7 +17,7 @@ class AnswerPopup extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.93,
-        padding: const EdgeInsets.only(top: 20),
+        padding: const EdgeInsets.only(top: 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -27,14 +27,14 @@ class AnswerPopup extends StatelessWidget {
                 children: [
                   Icon(
                     isCorrect ? Icons.check_circle : Icons.cancel,
-                    size: 92,
+                    size: 80,
                     color: isCorrect ? const Color(0xff08BBAC) : const Color(0xffD95252),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 12),
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      style: const TextStyle(fontSize: 16, color: const Color(0xff202020)),
+                      style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360), color: const Color(0xff202020)),
                       children: [
                         TextSpan(
                           text: isCorrect ? '정답' : '오답',
@@ -51,32 +51,31 @@ class AnswerPopup extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 2),
                   Text(
                     isCorrect
                         ? '보물에 한 걸음 더 가까워졌어!'
                         : '다시 한 번 생각해볼까?',
-                    style: const TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360)),
                     textAlign: TextAlign.center,
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 28),
             const Divider(height: 1, thickness: 1, color: Color(0xFFDDDDDD)),
             SizedBox(
               width: double.infinity,
+              height: 56,
               child: TextButton(
                 onPressed: onNext,
                 style: TextButton.styleFrom(
                   foregroundColor: const Color(0xffed668a),
                   textStyle: const TextStyle(fontWeight: FontWeight.bold),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  minimumSize: const Size.fromHeight(52),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 child: Text(isCorrect ? '다음' : '확인',
-                style: const TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360)),
                 ),
               ),
             ),

@@ -31,15 +31,15 @@ class HintDialog extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/images/hint_puri.png',
-                    width: 88,
-                    height: 88,
+                    width: 80,
+                    height: 80,
                   ),
                   const SizedBox(height: 18),
                   Text(
                     hintTitle,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: "SBAggro",
-                      fontSize: 18,
+                      fontSize: MediaQuery.of(context).size.width * (16 / 360),
                       fontWeight: FontWeight.w400,
                       color: Color(0xff202020),
                     ),
@@ -48,13 +48,14 @@ class HintDialog extends StatelessWidget {
                   Text(
                     hintContent,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360)),
                   ),
                 ],
               ),
             ),
             Container(
               width: double.infinity,
+              height: 56,
                decoration: const BoxDecoration(
                 color: Color(0xFFD95276),
                 borderRadius: BorderRadius.only(
@@ -65,8 +66,6 @@ class HintDialog extends StatelessWidget {
               child: TextButton(
                 onPressed: () => Navigator.pop(context),
                  style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  minimumSize: const Size.fromHeight(52),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8.0),
@@ -74,11 +73,11 @@ class HintDialog extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   '확인',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: MediaQuery.of(context).size.width * (16 / 360),
                   ),
                 ),
               ),

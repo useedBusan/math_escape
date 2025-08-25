@@ -159,12 +159,12 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  const Center(
+                  Center(
                     child: Text(
-                      '미션! 수사모의 수학 유산을 찾아서',
+                      '미션! 수사모의 수학 보물을 찾아서',
                       style: TextStyle(
                         color: Color(0xffD95276),
-                        fontSize: 18,
+                        fontSize: MediaQuery.of(context).size.width * (16 / 360),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -235,7 +235,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                           width: MediaQuery.of(context).size.width * 0.93,
                           height: 260,
                           margin: const EdgeInsets.only(top: 12),
-                          padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
+                          padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             border: Border.all(color: const Color(0xff952B47), width: 1.5),
@@ -245,7 +245,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                             child: Text(
                               talk.talk,
                               textAlign: TextAlign.justify,
-                              style: const TextStyle(fontSize: 16, color: Colors.black87, height: 1.5),
+                              style: TextStyle(fontSize: MediaQuery.of(context).size.width * (15 / 360), color: Colors.black87, height: 1.5),
                             ),
                           ),
                         ),
@@ -259,9 +259,9 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                               border: Border.all(color: const Color(0xffffffff), width: 1.5),
                               borderRadius: BorderRadius.circular(40),
                             ),
-                            child: const Text(
+                            child: Text(
                               '푸리',
-                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                              style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360), color: Colors.white, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -273,7 +273,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.93,
-                      height: 52,
+                      height: 56,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xffD95276),
@@ -283,7 +283,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                         onPressed: goToNext,
                         child: Text(
                           talk.answer,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360), fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
