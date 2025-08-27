@@ -256,7 +256,7 @@ class MiddleMissionScreen extends StatefulWidget {
   State<MiddleMissionScreen> createState() => _MiddleMissionScreenState();
 }
 
-class _MiddleMissionScreenState extends State<MiddleMissionScreen> {
+class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerProviderStateMixin {
   List<MissionItem> missionList = [];
   List<CorrectTalkItem> talkList = [];
   bool isLoading = true;
@@ -264,11 +264,28 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> {
   int currentQuestionIndex = 0;
   final int totalQuestions = 10;
   int hintCounter = 0;
+  late AnimationController _hintColorController;
+  late Animation<double> _hintColorAnimation;
 
   @override
   void initState() {
     super.initState();
     loadMissionData();
+    
+    _hintColorController = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+    
+    _hintColorAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _hintColorController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _hintColorController.repeat(reverse: true);
   }
 
   Future<void> loadMissionData() async {
@@ -341,6 +358,12 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _hintColorController.dispose();
+    super.dispose();
   }
 
   void _goToNextQuestion() {
@@ -557,7 +580,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> {
                           ],
                         ),
                       ),
-                                             Container(
+                      Container(
                          width: MediaQuery.of(context).size.width - 20,
                          height: 450,
                          padding: const EdgeInsets.all(20),
@@ -594,30 +617,51 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> {
                                Column(
                                  mainAxisSize: MainAxisSize.min,
                                  children: [
-                                   IconButton(
-                                     icon: Icon(
-                                       Icons.help_outline,
-                                       color: mainColor,
-                                     ),
-                                     onPressed: _showHintDialog,
-                                     padding: EdgeInsets.zero,
-                                     constraints: const BoxConstraints(),
-                                     iconSize: 20,
-                                   ),
-                                   Transform.translate(
-                                     offset: const Offset(0, -15),
-                                     child: Text(
-                                       '힌트',
-                                       style: TextStyle(
-                                         color: mainColor,
-                                         fontSize: MediaQuery.of(context)
-                                             .size
-                                             .width *
-                                             (12 / 360),
-                                         fontWeight: FontWeight.w500,
-                                       ),
-                                     ),
-                                   ),
+                                   AnimatedBuilder(
+                                      animation: _hintColorAnimation,
+                                      builder: (context, child) {
+                                        final color = Color.lerp(
+                                          const Color(0xFF3F55A7),
+                                          const Color(0xFFB2BBDC),
+                                          _hintColorAnimation.value,
+                                        )!;
+                                        
+                                        return IconButton(
+                                          icon: Icon(
+                                            Icons.help_outline,
+                                            color: color,
+                                          ),
+                                          onPressed: _showHintDialog,
+                                          padding: EdgeInsets.zero,
+                                          constraints: const BoxConstraints(),
+                                          iconSize: 20,
+                                        );
+                                      },
+                                    ),
+                                   AnimatedBuilder(
+                                      animation: _hintColorAnimation,
+                                      builder: (context, child) {
+                                        final color = Color.lerp(
+                                          const Color(0xFF3F55A7),
+                                          const Color(0xFFB2BBDC),
+                                          _hintColorAnimation.value,
+                                        )!;
+                                        return Transform.translate(
+                                          offset: const Offset(0, -15),
+                                          child: Text(
+                                            '힌트',
+                                            style: TextStyle(
+                                              color: color,
+                                              fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                                  (12 / 360),
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                  ],
                                ),
                              ],
