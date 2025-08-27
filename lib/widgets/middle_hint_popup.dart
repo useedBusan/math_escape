@@ -57,7 +57,7 @@ class HintDialog extends StatelessWidget {
               width: double.infinity,
               height: 56,
               decoration: const BoxDecoration(
-                color: Color(0xFFD95276),
+                color: Color(0xFF3F55A7),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(8.0),
                   bottomRight: Radius.circular(8.0),

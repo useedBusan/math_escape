@@ -7,6 +7,46 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 import '../../models/elementary_high/elementary_high_correct_talk.dart';
 import 'package:math_escape/screens/qr_scan_screen.dart';
 
+// 새로운 모델 클래스 추가
+class CorrectTalkItem {
+  final int id;
+  final List<TalkItem> talks;
+
+  CorrectTalkItem({
+    required this.id,
+    required this.talks,
+  });
+
+  factory CorrectTalkItem.fromJson(Map<String, dynamic> json) {
+    return CorrectTalkItem(
+      id: json['id'],
+      talks: (json['talks'] as List)
+          .map((talk) => TalkItem.fromJson(talk))
+          .toList(),
+    );
+  }
+}
+
+class TalkItem {
+  final String talk;
+  final String puri_image;
+  final String back_image;
+
+  TalkItem({
+    required this.talk,
+    required this.puri_image,
+    required this.back_image,
+  });
+
+  factory TalkItem.fromJson(Map<String, dynamic> json) {
+    return TalkItem(
+      talk: json['talk'],
+      puri_image: json['puri_image'],
+      back_image: json['back_image'],
+    );
+  }
+}
+
 class MissionItem {
   final int id;
   final String title;
@@ -53,14 +93,14 @@ class MissionItem {
 
 // TalkScreen 위젯
 class TalkScreen extends StatelessWidget {
-  final CorrectTalkItem talk;
+  final TalkItem talk;
   final VoidCallback onNext;
 
   const TalkScreen({
-    Key? key,
+    super.key,
     required this.talk,
     required this.onNext,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -76,12 +116,12 @@ class TalkScreen extends StatelessWidget {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                const Center(
+                Center(
                   child: Text(
                     '수학자의 비밀 노트를 찾아라!',
                     style: TextStyle(
-                      color: Color(0xFF3F55A7),
-                      fontSize: 18,
+                      color: Color(0xff3F55A7),
+                      fontSize: MediaQuery.of(context).size.width * (16 / 360),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -113,18 +153,19 @@ class TalkScreen extends StatelessWidget {
             child: Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Color(0x99D95276),
-                    Color(0x99FFFFFF),
-                  ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
+                  colors: [
+                    Color.fromRGBO(0, 0, 0, 0.36), // 위쪽 (36%)
+                    Color.fromRGBO(0, 0, 0, 0.20), // 아래쪽 (20%)
+                  ],
                 ),
               ),
             ),
           ),
           SafeArea(
             child: Column(
+              mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 24),
@@ -151,20 +192,15 @@ class TalkScreen extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          border: Border.all(
-                            color: const Color(0xff952B47),
-                            width: 1.5,
-                          ),
-                          borderRadius:
-                          const BorderRadius.all(Radius.circular(12)),
+                          border: Border.all(color: const Color(0xff172D7F), width: 1.5),
+                          borderRadius: const BorderRadius.all(Radius.circular(12)),
                         ),
                         child: SingleChildScrollView(
                           child: Text(
                             talk.talk,
                             textAlign: TextAlign.justify,
                             style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width *
-                                  (15 / 360),
+                              fontSize: MediaQuery.of(context).size.width * (15 / 360),
                               color: Colors.black87,
                               height: 1.5,
                             ),
@@ -175,59 +211,34 @@ class TalkScreen extends StatelessWidget {
                         top: 0,
                         left: 20,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 4,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                           decoration: BoxDecoration(
-                            color: const Color(0xffB73D5D),
-                            border: Border.all(
-                              color: const Color(0xffffffff),
-                              width: 1.5,
-                            ),
+                            color: const Color(0xff2B4193),
+                            border: Border.all(color: const Color(0xffffffff), width: 1.5),
                             borderRadius: BorderRadius.circular(40),
                           ),
                           child: Text(
                             '푸리',
                             style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width *
-                                  (16 / 360),
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                                fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
                             ),
                           ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        right: 10,
+                        child: IconButton(
+                          icon: const Icon(Icons.play_circle, color: Color(0xFF101351), size: 32),
+                          onPressed: onNext,
                         ),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 12),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.93,
-                    height: 56,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xffD95276),
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: onNext,
-                      child: Text(
-                        talk.answer,
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width *
-                              (16 / 360),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
               ],
             ),
           ),
@@ -267,7 +278,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> {
       final List<dynamic> missionJsonList = json.decode(missionJsonString);
 
       final String talkJsonString = await rootBundle
-          .loadString('lib/data/middle/middle_question.json');
+          .loadString('lib/data/middle/middle_correct_talks.json');
       final List<dynamic> talkJsonList = json.decode(talkJsonString);
 
       setState(() {
@@ -347,44 +358,94 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> {
   void _showCorrectAnswerDialog() {
     try {
       final int currentQuestionId = currentQuestionIndex + 1;
-      int firstTalkId;
+      final CorrectTalkItem correctTalk =
+          talkList.firstWhere((talk) => talk.id == currentQuestionId);
 
-      if (currentQuestionId <= 4) {
-        firstTalkId = currentQuestionId;
-      } else if (currentQuestionId == 5) {
-        firstTalkId = 5;
-      } else {
-        firstTalkId = currentQuestionId + 1;
-      }
+      int currentTalkIndex = 0;
 
-      final CorrectTalkItem firstTalk =
-      talkList.firstWhere((talk) => talk.id == firstTalkId);
-
-      void showTalk(CorrectTalkItem talk) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => TalkScreen(
-              talk: talk,
-              onNext: () {
-                Navigator.pop(context);
-                if (talk.nextId != null) {
-                  final nextTalk =
-                  talkList.firstWhere((t) => t.id == talk.nextId);
-                  showTalk(nextTalk);
-                } else {
-                  _goToNextQuestion();
-                }
-              },
+      void showNextTalk() {
+        if (currentTalkIndex < correctTalk.talks.length) {
+          final TalkItem talk = correctTalk.talks[currentTalkIndex];
+          
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => TalkScreen(
+                talk: talk,
+                onNext: () {
+                  Navigator.pop(context);
+                  currentTalkIndex++;
+                  if (currentTalkIndex < correctTalk.talks.length) {
+                    // 아직 더 표시할 대화가 있음
+                    showNextTalk();
+                  } else {
+                    // 모든 대화를 다 표시했음
+                    if (currentQuestionId == 10) {
+                      // 10번 문제를 맞췄다면 11번 대화도 보여줌
+                      _show11thTalk();
+                    } else {
+                      // 다른 문제라면 다음 문제로
+                      _goToNextQuestion();
+                    }
+                  }
+                },
+              ),
             ),
-          ),
-        );
+          );
+        } else {
+          // 대화가 없는 경우 (10번 문제)
+          if (currentQuestionId == 10) {
+            // 10번 문제를 맞췄다면 11번 대화도 보여줌
+            _show11thTalk();
+          } else {
+            // 다른 문제라면 다음 문제로
+            _goToNextQuestion();
+          }
+        }
       }
 
-      showTalk(firstTalk);
+      showNextTalk();
     } catch (e) {
       print("Error finding talk for question ${currentQuestionIndex + 1}: $e");
       _goToNextQuestion();
+    }
+  }
+
+  void _show11thTalk() {
+    try {
+      final CorrectTalkItem talk11 = talkList.firstWhere((talk) => talk.id == 11);
+      int currentTalkIndex = 0;
+
+      void showNextTalk() {
+        if (currentTalkIndex < talk11.talks.length) {
+          final TalkItem talk = talk11.talks[currentTalkIndex];
+          
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => TalkScreen(
+                talk: talk,
+                onNext: () {
+                  Navigator.pop(context);
+                  currentTalkIndex++;
+                  if (currentTalkIndex < talk11.talks.length) {
+                    // 아직 더 표시할 대화가 있음
+                    showNextTalk();
+                  } else {
+                    // 모든 대화를 다 표시했음, 메인화면으로
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+            ),
+          );
+        }
+      }
+
+      showNextTalk();
+    } catch (e) {
+      print("Error showing 11th talk: $e");
+      Navigator.of(context).pop();
     }
   }
 
@@ -614,13 +675,33 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> {
                           ),
                           const SizedBox(height: 16),
                           if (mission.questionImage.isNotEmpty)
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.asset(
-                                mission.questionImage,
-                                fit: BoxFit.contain,
+                            if (mission.questionImage.startsWith('assets/'))
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.asset(
+                                  mission.questionImage,
+                                  fit: BoxFit.contain,
+                                ),
+                              )
+                            else
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFFFFF),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(color: const Color(0xFFFFFFFF)),
+                                ),
+                                child: Text(
+                                  mission.questionImage,
+                                  style: TextStyle(
+                                    fontFeatures: [FontFeature.fractions()],
+                                    fontSize: MediaQuery.of(context).size.width * (14 / 360),
+                                    color: Colors.black87,
+                                    height: 1.4,
+                                  ),
+                                ),
                               ),
-                            ),
                           const SizedBox(height: 20),
                           Container(
                             decoration: BoxDecoration(

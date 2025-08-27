@@ -107,6 +107,7 @@ flutter:
     - assets/images/banner.png
     - assets/audio/
     - assets/images/middle_Q1.png
+    - assets/images/middle_Q9.png
     - assets/images/bulb.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
