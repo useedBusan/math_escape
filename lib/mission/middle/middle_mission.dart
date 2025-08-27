@@ -174,7 +174,7 @@ class TalkScreen extends StatelessWidget {
                   child: Center(
                     child: Image.asset(
                       talk.puri_image,
-                      height: 220,
+                      height: MediaQuery.of(context).size.height * 0.24,
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -187,7 +187,7 @@ class TalkScreen extends StatelessWidget {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width * 0.93,
-                        height: 260,
+                        height: MediaQuery.of(context).size.height * 0.32,
                         margin: const EdgeInsets.only(top: 12),
                         padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
                         decoration: BoxDecoration(
@@ -496,7 +496,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(14.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
                 const SizedBox(height: 14),
@@ -509,18 +509,11 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                         fontFamily: "SBAggro",
                         fontSize:
                         MediaQuery.of(context).size.width * (14 / 360),
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(0, 1),
-                            blurRadius: 3,
-                            color: Colors.black.withOpacity(0.5),
-                          ),
-                        ],
+                        fontWeight: FontWeight.w300,
+                        color: const Color(0xFFF2F2F2),
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     Text(
                       '2개의 힌트를 활용해 수학자의 비밀 노트를 찾아내자!',
                       textAlign: TextAlign.center,
@@ -528,32 +521,25 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                         fontFamily: "SBAggro",
                         fontSize:
                         MediaQuery.of(context).size.width * (14 / 360),
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(0, 1),
-                            blurRadius: 3,
-                            color: Colors.black.withOpacity(0.5),
-                          ),
-                        ],
+                        fontWeight: FontWeight.w300,
+                        color: const Color(0xFFF2F2F2),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 60),
+                const SizedBox(height: 20),
                 Center(
                   child: Stack(
                     alignment: Alignment.topCenter,
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width - 60,
-                        height: 400,
-                        margin: const EdgeInsets.only(top: 8),
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        margin: const EdgeInsets.only(top: 5),
                         decoration: BoxDecoration(
                           color: const Color(0xFF192243),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.black, width: 1),
+                          border: Border.all(color: const Color(0xFF192243), width: 1),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.3),
@@ -565,12 +551,12 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width - 40,
-                        height: 420,
-                        margin: const EdgeInsets.only(top: 16),
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        margin: const EdgeInsets.only(top: 15),
                         decoration: BoxDecoration(
                           color: const Color(0xFF3F55A7),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.black, width: 1),
+                          border: Border.all(color: const Color(0xFF192243), width: 1),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.2),
@@ -582,13 +568,13 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                       ),
                       Container(
                          width: MediaQuery.of(context).size.width - 20,
-                         height: 450,
-                         padding: const EdgeInsets.all(20),
-                         margin: const EdgeInsets.only(top: 24),
+                         height: MediaQuery.of(context).size.height * 0.5,
+                         padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
+                         margin: const EdgeInsets.only(top: 25),
                        decoration: BoxDecoration(
                          color: Colors.white,
                          borderRadius: BorderRadius.circular(12),
-                         border: Border.all(color: Colors.black, width: 1),
+                         border: Border.all(color: const Color(0xFF192243), width: 1),
                          boxShadow: [
                            BoxShadow(
                              color: Colors.black.withOpacity(0.15),
@@ -634,10 +620,11 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                           onPressed: _showHintDialog,
                                           padding: EdgeInsets.zero,
                                           constraints: const BoxConstraints(),
-                                          iconSize: 20,
+                                          iconSize: 28,
                                         );
                                       },
                                     ),
+                                   const SizedBox(height: 4),
                                    AnimatedBuilder(
                                       animation: _hintColorAnimation,
                                       builder: (context, child) {
@@ -666,7 +653,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                ),
                              ],
                            ),
-                           const SizedBox(height: 16),
                            Text(
                              mission.question,
                              textAlign: TextAlign.justify,
@@ -732,7 +718,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                        ),
                                        contentPadding:
                                        const EdgeInsets.symmetric(
-                                         horizontal: 16.0,
+                                         horizontal: 12.0,
                                          vertical: 12.0,
                                        ),
                                        border: InputBorder.none,
@@ -741,13 +727,9 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                      ),
                                    ),
                                  ),
-                                 Container(
-                                   width: 1,
-                                   height: 40,
-                                   color: const Color(0xffdcdcdc),
-                                 ),
                                  SizedBox(
                                    width: 60,
+                                   height: 52,
                                    child: ElevatedButton(
                                      onPressed: _submitAnswer,
                                      style: ElevatedButton.styleFrom(

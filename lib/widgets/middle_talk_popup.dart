@@ -19,7 +19,7 @@ class MiddleTalkDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 24.0),
+              padding: const EdgeInsets.fromLTRB(20.0, 24.0, 20.0, 24.0),
               child: Column(
                 children: [
                   Image.asset(
@@ -32,7 +32,7 @@ class MiddleTalkDialog extends StatelessWidget {
                     "수학자의 비밀 노트를 찾는 여정을\n시작하시겠습니까?",
                     style: TextStyle(
                       fontFamily: "Pretendard",
-                      fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                      fontSize: MediaQuery.of(context).size.width * (15 / 360),
                       fontWeight: FontWeight.w400,
                       color: const Color(0xff202020),
                     ),

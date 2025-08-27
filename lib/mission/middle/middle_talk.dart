@@ -257,7 +257,7 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindi
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width * 0.93,
-                          height: 260,
+                          height: MediaQuery.of(context).size.height * 0.32,
                           margin: const EdgeInsets.only(top: 12),
                           padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
                           decoration: BoxDecoration(
