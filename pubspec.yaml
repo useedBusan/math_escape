@@ -88,6 +88,7 @@ flutter:
     - assets/images/logo_icon.png
     - assets/images/puri_stand.png
     - assets/images/puri_clear.gif
+    - assets/images/puri_stand_normal.png
     - assets/images/diary.png
     - lib/data/high/high_level_question.json
     - lib/data/high/high_level_answer.json
