@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:math_escape/widgets/middle_hint_popup.dart';
-import 'package:math_escape/widgets/elementary_high_answer_popup.dart';
+import 'package:math_escape/widgets/middle_answer_popup.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import '../../models/elementary_high/elementary_high_correct_talk.dart';
 import 'package:math_escape/screens/qr_scan_screen.dart';
@@ -381,8 +381,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> {
                   } else {
                     // 모든 대화를 다 표시했음
                     if (currentQuestionId == 10) {
-                      // 10번 문제를 맞췄다면 11번 대화도 보여줌
-                      _show11thTalk();
+                      // 10번 문제를 맞췄다면 메인화면으로
+                      Navigator.of(context).pop();
                     } else {
                       // 다른 문제라면 다음 문제로
                       _goToNextQuestion();
@@ -395,8 +395,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> {
         } else {
           // 대화가 없는 경우 (10번 문제)
           if (currentQuestionId == 10) {
-            // 10번 문제를 맞췄다면 11번 대화도 보여줌
-            _show11thTalk();
+            // 10번 문제를 맞췄다면 메인화면으로
+            Navigator.of(context).pop();
           } else {
             // 다른 문제라면 다음 문제로
             _goToNextQuestion();
@@ -408,44 +408,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> {
     } catch (e) {
       print("Error finding talk for question ${currentQuestionIndex + 1}: $e");
       _goToNextQuestion();
-    }
-  }
-
-  void _show11thTalk() {
-    try {
-      final CorrectTalkItem talk11 = talkList.firstWhere((talk) => talk.id == 11);
-      int currentTalkIndex = 0;
-
-      void showNextTalk() {
-        if (currentTalkIndex < talk11.talks.length) {
-          final TalkItem talk = talk11.talks[currentTalkIndex];
-          
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => TalkScreen(
-                talk: talk,
-                onNext: () {
-                  Navigator.pop(context);
-                  currentTalkIndex++;
-                  if (currentTalkIndex < talk11.talks.length) {
-                    // 아직 더 표시할 대화가 있음
-                    showNextTalk();
-                  } else {
-                    // 모든 대화를 다 표시했음, 메인화면으로
-                    Navigator.of(context).pop();
-                  }
-                },
-              ),
-            ),
-          );
-        }
-      }
-
-      showNextTalk();
-    } catch (e) {
-      print("Error showing 11th talk: $e");
-      Navigator.of(context).pop();
     }
   }
 
@@ -521,7 +483,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> {
                       '각 문제마다 2개의 힌트가 있어.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: "SBAgrro",
+                        fontFamily: "SBAggro",
                         fontSize:
                         MediaQuery.of(context).size.width * (14 / 360),
                         fontWeight: FontWeight.w400,
@@ -540,7 +502,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> {
                       '2개의 힌트를 활용해 수학자의 비밀 노트를 찾아내자!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: "SBAgrro",
+                        fontFamily: "SBAggro",
                         fontSize:
                         MediaQuery.of(context).size.width * (14 / 360),
                         fontWeight: FontWeight.w400,
@@ -595,192 +557,188 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> {
                           ],
                         ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width - 20,
-                        height: 450,
-                        padding: const EdgeInsets.all(20),
-                        margin: const EdgeInsets.only(top: 24),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.black, width: 1),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // 문제 번호 + 힌트 버튼
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '문제 ${currentQuestionIndex + 1} / $totalQuestions',
-                                style: TextStyle(
-                                  fontFamily: "SBAggro",
-                                  fontSize: MediaQuery.of(context).size.width *
-                                      (18 / 360),
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xff202020),
-                                ),
-                              ),
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.help_outline,
-                                      color: mainColor,
-                                    ),
-                                    onPressed: _showHintDialog,
-                                    padding: EdgeInsets.zero,
-                                    constraints: const BoxConstraints(),
-                                    iconSize: 20,
+                                             Container(
+                         width: MediaQuery.of(context).size.width - 20,
+                         height: 450,
+                         padding: const EdgeInsets.all(20),
+                         margin: const EdgeInsets.only(top: 24),
+                       decoration: BoxDecoration(
+                         color: Colors.white,
+                         borderRadius: BorderRadius.circular(12),
+                         border: Border.all(color: Colors.black, width: 1),
+                         boxShadow: [
+                           BoxShadow(
+                             color: Colors.black.withOpacity(0.15),
+                             blurRadius: 4,
+                             offset: const Offset(0, 2),
+                           ),
+                         ],
+                       ),
+                       child: Column(
+                         crossAxisAlignment: CrossAxisAlignment.start,
+                         children: [
+                           // 문제 번호 + 힌트 버튼
+                           Row(
+                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                             children: [
+                               Text(
+                                 '문제 ${currentQuestionIndex + 1} / $totalQuestions',
+                                 style: TextStyle(
+                                   fontFamily: "SBAggro",
+                                   fontSize: MediaQuery.of(context).size.width *
+                                       (18 / 360),
+                                   fontWeight: FontWeight.w400,
+                                   color: Color(0xff202020),
+                                 ),
+                               ),
+                               Column(
+                                 mainAxisSize: MainAxisSize.min,
+                                 children: [
+                                   IconButton(
+                                     icon: Icon(
+                                       Icons.help_outline,
+                                       color: mainColor,
+                                     ),
+                                     onPressed: _showHintDialog,
+                                     padding: EdgeInsets.zero,
+                                     constraints: const BoxConstraints(),
+                                     iconSize: 20,
+                                   ),
+                                   Transform.translate(
+                                     offset: const Offset(0, -15),
+                                     child: Text(
+                                       '힌트',
+                                       style: TextStyle(
+                                         color: mainColor,
+                                         fontSize: MediaQuery.of(context)
+                                             .size
+                                             .width *
+                                             (12 / 360),
+                                         fontWeight: FontWeight.w500,
+                                       ),
+                                     ),
+                                   ),
+                                 ],
+                               ),
+                             ],
+                           ),
+                           const SizedBox(height: 16),
+                           Text(
+                             mission.question,
+                             textAlign: TextAlign.justify,
+                             style: TextStyle(
+                               fontFamily: "Pretendard",
+                               fontWeight: FontWeight.w400,
+                               fontSize:
+                               MediaQuery.of(context).size.width * (16 / 360),
+                               height: 1.4,
+                               color: Colors.black87,
+                             ),
+                           ),
+                           const SizedBox(height: 16),
+                            if (mission.questionImage.isNotEmpty)
+                              if (mission.questionImage.startsWith('assets/'))
+                                ClipRRect(
+                                  child: Image.asset(
+                                    mission.questionImage,
+                                    fit: BoxFit.contain,
                                   ),
-                                  Transform.translate(
-                                    offset: const Offset(0, -15),
-                                    child: Text(
-                                      '힌트',
-                                      style: TextStyle(
-                                        color: mainColor,
-                                        fontSize: MediaQuery.of(context)
-                                            .size
-                                            .width *
-                                            (12 / 360),
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            mission.question,
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(
-                              fontFamily: "Pretendard",
-                              fontWeight: FontWeight.w400,
-                              fontSize:
-                              MediaQuery.of(context).size.width * (16 / 360),
-                              height: 1.4,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          if (mission.questionImage.isNotEmpty)
-                            if (mission.questionImage.startsWith('assets/'))
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.asset(
-                                  mission.questionImage,
-                                  fit: BoxFit.contain,
-                                ),
-                              )
-                            else
-                              Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFFFFF),
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(color: const Color(0xFFFFFFFF)),
-                                ),
-                                child: Text(
-                                  mission.questionImage,
-                                  style: TextStyle(
-                                    fontFeatures: [FontFeature.fractions()],
-                                    fontSize: MediaQuery.of(context).size.width * (14 / 360),
-                                    color: Colors.black87,
-                                    height: 1.4,
-                                  ),
-                                ),
-                              ),
-                          const SizedBox(height: 20),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFFFFF),
-                              borderRadius: BorderRadius.circular(8.0),
-                              border: Border.all(color: const Color(0xffdcdcdc)),
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: TextField(
-                                    style: TextStyle(
-                                      fontSize: MediaQuery.of(context).size.width *
-                                          (15 / 360),
-                                    ),
-                                    controller: _answerController,
-                                    decoration: InputDecoration(
-                                      hintText: '정답을 입력해 주세요.',
-                                      hintStyle: TextStyle(
-                                        fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            (14 / 360),
-                                        color: const Color(0xffaaaaaa),
-                                      ),
-                                      contentPadding:
-                                      const EdgeInsets.symmetric(
-                                        horizontal: 16.0,
-                                        vertical: 12.0,
-                                      ),
-                                      border: InputBorder.none,
-                                      enabledBorder: InputBorder.none,
-                                      focusedBorder: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
+                                )
+                              else
                                 Container(
-                                  width: 1,
-                                  height: 40,
-                                  color: const Color(0xffdcdcdc),
-                                ),
-                                SizedBox(
-                                  width: 60,
-                                  child: ElevatedButton(
-                                    onPressed: _submitAnswer,
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: mainColor,
-                                      foregroundColor: Colors.white,
-                                      elevation: 0,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 12),
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(8),
-                                          bottomRight: Radius.circular(8),
-                                        ),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      '확인',
-                                      style: TextStyle(
-                                        fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            (14 / 360),
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFFFFF),
+                                    border: Border.all(color: const Color(0xFFFFFFFF)),
+                                  ),
+                                  child: Text(
+                                    mission.questionImage,
+                                    style: TextStyle(
+                                      fontFeatures: [FontFeature.fractions()],
+                                      fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                                      color: Colors.black87,
+                                      height: 1.4,
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-                const SizedBox(height: 20),
+                           const Spacer(),
+                           Container(
+                             decoration: BoxDecoration(
+                               color: const Color(0xFFFFFFFF),
+                               borderRadius: BorderRadius.circular(8.0),
+                               border: Border.all(color: const Color(0xffdcdcdc)),
+                             ),
+                             child: Row(
+                               children: [
+                                 Expanded(
+                                   flex: 2,
+                                   child: TextField(
+                                     style: TextStyle(
+                                       fontSize: MediaQuery.of(context).size.width *
+                                           (15 / 360),
+                                     ),
+                                     controller: _answerController,
+                                     decoration: InputDecoration(
+                                       hintText: '정답을 입력해 주세요.',
+                                       hintStyle: TextStyle(
+                                         fontSize:
+                                         MediaQuery.of(context).size.width *
+                                             (14 / 360),
+                                         color: const Color(0xffaaaaaa),
+                                       ),
+                                       contentPadding:
+                                       const EdgeInsets.symmetric(
+                                         horizontal: 16.0,
+                                         vertical: 12.0,
+                                       ),
+                                       border: InputBorder.none,
+                                       enabledBorder: InputBorder.none,
+                                       focusedBorder: InputBorder.none,
+                                     ),
+                                   ),
+                                 ),
+                                 Container(
+                                   width: 1,
+                                   height: 40,
+                                   color: const Color(0xffdcdcdc),
+                                 ),
+                                 SizedBox(
+                                   width: 60,
+                                   child: ElevatedButton(
+                                     onPressed: _submitAnswer,
+                                     style: ElevatedButton.styleFrom(
+                                       backgroundColor: mainColor,
+                                       foregroundColor: Colors.white,
+                                       elevation: 0,
+                                       padding: const EdgeInsets.symmetric(
+                                           vertical: 12),
+                                       shape: const RoundedRectangleBorder(
+                                         borderRadius: BorderRadius.only(
+                                           topRight: Radius.circular(8),
+                                           bottomRight: Radius.circular(8),
+                                         ),
+                                       ),
+                                     ),
+                                     child: Text(
+                                       '확인',
+                                       style: TextStyle(
+                                         fontSize:
+                                         MediaQuery.of(context).size.width *
+                                             (14 / 360),
+                                         fontWeight: FontWeight.bold,
+                                       ),
+                                     ),
+                                   ),
+                                 ),
+                               ],
+                             ),
+                           ),
+                         ],
+                       ),
+                     ),
+                   ],
+                 ),
+               ),
               ],
             ),
           ),

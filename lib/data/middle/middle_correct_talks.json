@@ -138,16 +138,6 @@
     "id": 10,
     "talks": [
       {
-        "talk": "진자의 길이가 길어질수록 진동수는 작아지고, 진자의 길이가 짧아질수록 진동수는 커져.",
-        "puri_image": "assets/images/puri_good.png",
-        "back_image": "assets/images/elementary_high_3F.png"
-      }
-    ]
-  },
-  {
-    "id": 11,
-    "talks": [
-      {
         "talk": "우와! 정말 대단해! 모든 미션을 해결하여 수학자의 비밀 노트를 찾았어, 축하해!",
         "puri_image": "assets/images/puri_clear.gif",
         "back_image": "assets/images/elementary_high_B1.png"
