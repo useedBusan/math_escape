@@ -156,8 +156,8 @@ class TalkScreen extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Color.fromRGBO(0, 0, 0, 0.36), // 위쪽 (36%)
-                    Color.fromRGBO(0, 0, 0, 0.20), // 아래쪽 (20%)
+                    Color.fromRGBO(0, 0, 0, 0.75), // 위쪽 (36%)
+                    Color.fromRGBO(0, 0, 0, 0.50), // 아래쪽 (20%)
                   ],
                 ),
               ),
@@ -463,8 +463,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> {
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Color.fromRGBO(0, 0, 0, 0.36),
-                    Color.fromRGBO(0, 0, 0, 0.20),
+                    Color.fromRGBO(0, 0, 0, 0.75),
+                    Color.fromRGBO(0, 0, 0, 0.50),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,

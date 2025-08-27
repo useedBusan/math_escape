@@ -70,7 +70,7 @@ class AnswerPopup extends StatelessWidget {
               child: TextButton(
                 onPressed: onNext,
                 style: TextButton.styleFrom(
-                  foregroundColor: const Color(0xffed668a),
+                  foregroundColor: const Color(0xFF3F55A7),
                   textStyle: const TextStyle(fontWeight: FontWeight.bold),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),

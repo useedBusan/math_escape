@@ -227,8 +227,8 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindi
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Color.fromRGBO(0, 0, 0, 0.36), // 위쪽 (36%)
-                      Color.fromRGBO(0, 0, 0, 0.20), // 아래쪽 (20%)
+                      Color.fromRGBO(0, 0, 0, 0.75), // 위쪽 (36%)
+                      Color.fromRGBO(0, 0, 0, 0.50), // 아래쪽 (20%)
                     ],
                   ),
                 ),
