@@ -2,7 +2,9 @@
   {
     "id": 1,
     "question": "소마큐브 조각 중 옆모습, 앞모습, 윗모습에서 보여지는 조각의 개수가 모두 같은 조각은 무엇일까?",
-    "questionImage": "assets/images/pitagoras1.png",
+    "title" : "문제 1 / 10",
+    "back_image" : "assets/images/elementary_high_2F.png",
+    "questionImage": "assets/images/middle_Q1.png",
     "answer": ["1", "①"],
     "hint1": "2층 수학놀이관을 살펴보자",
     "hint2": "소마큐브로 모양을 만들어 옆모습, 앞모습, 윗모습을 살펴보자"
@@ -10,6 +12,8 @@
   {
     "id": 2,
     "question": "다빈치 돔에서 찾을 수 없는 도형은 무엇일까?",
+    "title" : "문제 2 / 10",
+    "back_image" : "assets/images/elementary_high_2F.png",
     "questionImage": "",
     "answer": ["3", "③", "팔각형", "팔각형 패턴"],
     "hint1": "2층 수학놀이관을 살펴보자",
@@ -18,6 +22,8 @@
   {
     "id": 3,
     "question": "무게를 쌀 1톨로 표현했을 때, 피사의 사탑의 무게는 얼마일까? (~톨)",
+    "title" : "문제 3 / 10",
+    "back_image" : "assets/images/elementary_high_2F.png",
     "questionImage": "",
     "answer": ["549755813888톨", "549,755,813,888톨", "549755813888", "549,755,813,888"],
     "hint1": "수학문화관의 2층 구석구석을 살펴보자",
@@ -26,6 +32,8 @@
   {
     "id": 4,
     "question": "한글 표기 가능한 글자 수는 얼마나 있을까?",
+    "title" : "문제 4 / 10",
+    "back_image" : "assets/images/elementary_high_2F.png",
     "questionImage": "",
     "answer": ["11172", "11,172", "11172개","11,172개"],
     "hint1": "수학문화관의 3층 구석구석을 살펴보자",
@@ -34,6 +42,8 @@
   {
     "id": 5,
     "question": "<우표로 보는 수학의 역사> 중 황금나선과 관련된 우표를 찾아서 QR코드를 찍어 제출해 줘.",
+    "title" : "문제 5 / 10",
+    "back_image" : "assets/images/elementary_high_2F.png",
     "questionImage": "assets/images/golden_spiral_stamp.png",
     "answer": "",
     "hint1": "3층 연결 복도를 살펴보자",
@@ -42,6 +52,8 @@
   {
     "id": 6,
     "question": "지문 분류법으로 사망자를 조사할 경우 열 손가락을 활용하면 모두 몇 가지 종류로 분류할 수 있을까?",
+    "title" : "문제 6 / 10",
+    "back_image" : "assets/images/elementary_high_2F.png",
     "questionImage": "",
     "answer": ["1024", "1024가지", "1,024가지","1,024"],
     "hint1": "3층 진로탐색관을 살펴보자",
@@ -50,6 +62,8 @@
   {
     "id": 7,
     "question": "원뿔, 구, 원기둥의 단면을 잘라보자. 원, 삼각형, 타원이 동시에 나올 수 있는 도형은 무엇일까?",
+    "title" : "문제 7 / 10",
+    "back_image" : "assets/images/elementary_high_2F.png",
     "questionImage": "",
     "answer": ["1", "①"],
     "hint1": "4층 교과체험관을 살펴보자",
@@ -58,6 +72,8 @@
   {
     "id": 8,
     "question": "플라톤의 다면체 → 정팔면체 중점 절단을 누르면 생기는 입체도형의 면의 모양이 아닌 것은?",
+    "title" : "문제 8 / 10",
+    "back_image" : "assets/images/elementary_high_2F.png",
     "questionImage": "",
     "answer": ["3", "③"],
     "hint1": "4층 교과체험관을 살펴보자",
@@ -66,6 +82,8 @@
   {
     "id": 9,
     "question": "아래의 전시물을 찾아 공을 굴려봐. 어떤 레일의 공이 제일 먼저 도착할까?",
+    "title" : "문제 9 / 10",
+    "back_image" : "assets/images/elementary_high_2F.png",
     "questionImage": "assets/images/brachistochrone_exhibit.png",
     "answer": ["2","②"],
     "hint1": "4층 교과체험관을 살펴보자",
@@ -74,6 +92,8 @@
   {
     "id": 10,
     "question": "하모노 그래프에서 단진자의 진동수는 길이의 제곱근에 반비례하기 때문에 한 옥타브를 높이려면 길이를 얼마나 줄이면 될까?",
+    "title" : "문제 10 / 10",
+    "back_image" : "assets/images/elementary_high_2F.png",
     "questionImage": "",
     "answer": ["2", "②"],
     "hint1": "4층 역사지혜관을 살펴보자",
