@@ -13,7 +13,7 @@
     </queries>
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CAMERA" />    //카메라 권한 설정
 
     <application
         android:label="부산수학문화관 방탈출"

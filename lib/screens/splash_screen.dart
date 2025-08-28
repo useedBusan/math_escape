@@ -15,12 +15,12 @@ class _SplashScreenState extends State<SplashScreen> {
   double opacity = 0.0;
 
   @override
-  void initState() {
+  void initState() {  //_SplashScreenState 클래스가 생성시 initState() 메서드가 자동 호출
     super.initState();
     // 1초 후 페이드 인
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () { //앱 시작후 1초 뒤 setState()실행
       setState(() {
-        opacity = 1.0;
+        opacity = 1.0;  //opacity변수 값 변경
       });
       // 2초 후(페이드 인 끝) → 페이드 아웃 시작
       Future.delayed(const Duration(seconds: 3), () {
