@@ -841,108 +841,116 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                     ],
                   ),
                 ),
-                // 힌트 카드
-                if (showHint1 || showHint2) ...[
-                  const SizedBox(height: 20),
-                  if (showHint1)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFEBEBEB),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: const Color(0xFFEBEBEB),
-                          width: 1,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '단서#1 : 목적지의 비밀',
-                            style: TextStyle(
-                              fontSize: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width *
-                                  (14 / 360),
-                              fontFamily:"SBAggro",
-                              fontWeight: FontWeight.w400,
-                              color: const Color(0xFF101351),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            mission.hint1,
-                            style: TextStyle(
-                              fontFamily: "Pretendard",
-                              fontWeight: FontWeight.w400,
-                              fontSize: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width *
-                                  (13 / 360),
-                              color: Colors.black87,
-                              height: 1.4,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  if (showHint1 && showHint2) const SizedBox(height: 12),
-                  if (showHint2)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFEBEBEB),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: const Color(0xFFEBEBEB),
-                          width: 1,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '단서#2 : 마지막 열쇠',
-                            style: TextStyle(
-                              fontSize: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width *
-                                  (14 / 360),
-                              fontFamily:"SBAggro",
-                              fontWeight: FontWeight.w400,
-                              color: const Color(0xFF101351),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            mission.hint2,
-                            style: TextStyle(
-                              fontFamily: "Pretendard",
-                              fontWeight: FontWeight.w400,
-                              fontSize: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width *
-                                  (13 / 360),
-                              color: Colors.black87,
-                              height: 1.4,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-  }
+                                 // 힌트 카드
+                 if (showHint1 || showHint2) ...[
+                   const SizedBox(height: 20),
+                   Flexible(
+                     child: SingleChildScrollView(
+                       child: Column(
+                         children: [
+                           if (showHint1)
+                             Container(
+                               width: double.infinity,
+                               padding: EdgeInsets.all(MediaQuery.of(context).size.width * (16 / 360)),
+                               decoration: BoxDecoration(
+                                 color: const Color(0xFFEBEBEB),
+                                 borderRadius: BorderRadius.circular(8),
+                                 border: Border.all(
+                                   color: const Color(0xFFEBEBEB),
+                                   width: 1,
+                                 ),
+                               ),
+                               child: Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                 children: [
+                                   Text(
+                                     '단서#1 : 목적지의 비밀',
+                                     style: TextStyle(
+                                       fontSize: MediaQuery
+                                           .of(context)
+                                           .size
+                                           .width *
+                                           (14 / 360),
+                                       fontFamily:"SBAggro",
+                                       fontWeight: FontWeight.w400,
+                                       color: const Color(0xFF101351),
+                                     ),
+                                   ),
+                                   SizedBox(height: MediaQuery.of(context).size.width * (8 / 360)),
+                                   Text(
+                                     mission.hint1,
+                                     style: TextStyle(
+                                       fontFamily: "Pretendard",
+                                       fontWeight: FontWeight.w400,
+                                       fontSize: MediaQuery
+                                           .of(context)
+                                           .size
+                                           .width *
+                                           (13 / 360),
+                                       color: Colors.black87,
+                                       height: 1.4,
+                                     ),
+                                   ),
+                                 ],
+                               ),
+                             ),
+                           if (showHint1 && showHint2) SizedBox(height: MediaQuery.of(context).size.width * (12 / 360)),
+                           if (showHint2)
+                             Container(
+                               width: double.infinity,
+                               padding: EdgeInsets.all(MediaQuery.of(context).size.width * (16 / 360)),
+                               decoration: BoxDecoration(
+                                 color: const Color(0xFFEBEBEB),
+                                 borderRadius: BorderRadius.circular(8),
+                                 border: Border.all(
+                                   color: const Color(0xFFEBEBEB),
+                                   width: 1,
+                                 ),
+                               ),
+                               child: Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                 children: [
+                                   Text(
+                                     '단서#2 : 마지막 열쇠',
+                                     style: TextStyle(
+                                       fontSize: MediaQuery
+                                           .of(context)
+                                           .size
+                                           .width *
+                                           (14 / 360),
+                                       fontFamily:"SBAggro",
+                                       fontWeight: FontWeight.w400,
+                                       color: const Color(0xFF101351),
+                                     ),
+                                   ),
+                                   SizedBox(height: MediaQuery.of(context).size.width * (8 / 360)),
+                                   Text(
+                                     mission.hint2,
+                                     style: TextStyle(
+                                       fontFamily: "Pretendard",
+                                       fontWeight: FontWeight.w400,
+                                       fontSize: MediaQuery
+                                           .of(context)
+                                           .size
+                                           .width *
+                                           (13 / 360),
+                                       color: Colors.black87,
+                                       height: 1.4,
+                                     ),
+                                   ),
+                                 ],
+                               ),
+                             ),
+                         ],
+                       ),
+                     ),
+                   ),
+                 ],
+                ]
+               ),
+             ),
+           ],
+         ),
+       );
+     }
+   }
