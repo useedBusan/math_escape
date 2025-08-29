@@ -266,6 +266,10 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
   int hintCounter = 0;
   late AnimationController _hintColorController;
   late Animation<double> _hintColorAnimation;
+  
+  // 힌트 카드 표시 상태 추가
+  bool showHint1 = false;
+  bool showHint2 = false;
 
   @override
   void initState() {
@@ -319,6 +323,12 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
 
     setState(() {
       hintCounter = newHintCounter;
+      // 힌트를 확인했을 때 해당 힌트 카드를 표시
+      if (newHintCounter == 1) {
+        showHint1 = true;
+      } else {
+        showHint2 = true;
+      }
     });
 
     String title;
@@ -372,6 +382,9 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
         currentQuestionIndex++;
         _answerController.clear();
         hintCounter = 0;
+        // 다음 문제로 넘어갈 때 힌트 카드 상태 초기화
+        showHint1 = false;
+        showHint2 = false;
       } else {
         Navigator.pop(context);
       }
@@ -464,8 +477,11 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
         title: Text(
           '수학자의 비밀 노트를 찾아라!',
           style: TextStyle(
-            color: Color(0xFF3F55A7),
-            fontSize: MediaQuery.of(context).size.width * (16 / 360),
+            color: const Color(0xFF3F55A7),
+            fontSize: MediaQuery
+                .of(context)
+                .size
+                .width * (16 / 360),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -507,8 +523,10 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: "SBAggro",
-                        fontSize:
-                        MediaQuery.of(context).size.width * (14 / 360),
+                        fontSize: MediaQuery
+                            .of(context)
+                            .size
+                            .width * (14 / 360),
                         fontWeight: FontWeight.w300,
                         color: const Color(0xFFF2F2F2),
                       ),
@@ -519,8 +537,10 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: "SBAggro",
-                        fontSize:
-                        MediaQuery.of(context).size.width * (14 / 360),
+                        fontSize: MediaQuery
+                            .of(context)
+                            .size
+                            .width * (14 / 360),
                         fontWeight: FontWeight.w300,
                         color: const Color(0xFFF2F2F2),
                       ),
@@ -532,15 +552,24 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                   child: Stack(
                     alignment: Alignment.topCenter,
                     children: [
-                      //첫번째 레이어
+                      // 첫번째 레이어
                       Container(
-                        width: MediaQuery.of(context).size.width - 60,
-                        height: MediaQuery.of(context).size.height * 0.5,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width - 60,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.5,
                         margin: const EdgeInsets.only(top: 5),
                         decoration: BoxDecoration(
                           color: const Color(0xFF192243),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFF192243), width: 1),
+                          border: Border.all(
+                            color: const Color(0xFF192243),
+                            width: 1,
+                          ),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.3),
@@ -550,15 +579,24 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                           ],
                         ),
                       ),
-                      //두번째 레이어
+                      // 두번째 레이어
                       Container(
-                        width: MediaQuery.of(context).size.width - 40,
-                        height: MediaQuery.of(context).size.height * 0.5,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width - 40,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.5,
                         margin: const EdgeInsets.only(top: 15),
                         decoration: BoxDecoration(
                           color: const Color(0xFF3F55A7),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFF192243), width: 1),
+                          border: Border.all(
+                            color: const Color(0xFF192243),
+                            width: 1,
+                          ),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.2),
@@ -568,44 +606,58 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                           ],
                         ),
                       ),
-                      Container( //세 번째 레이어 (가장 앞, 흰색 - 실제 콘텐츠)
-                         width: MediaQuery.of(context).size.width - 20,
-                         height: MediaQuery.of(context).size.height * 0.5,
-                         padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
-                         margin: const EdgeInsets.only(top: 25),
-                       decoration: BoxDecoration(
-                         color: Colors.white,
-                         borderRadius: BorderRadius.circular(12),
-                         border: Border.all(color: const Color(0xFF192243), width: 1),
-                         boxShadow: [
-                           BoxShadow(
-                             color: Colors.black.withOpacity(0.15),
-                             blurRadius: 4,
-                             offset: const Offset(0, 2),
-                           ),
-                         ],
-                       ),
-                       child: Column(
-                         crossAxisAlignment: CrossAxisAlignment.start,
-                         children: [
-                           // 문제 번호 + 힌트 버튼
-                           Row(
-                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                             children: [
-                               Text(
-                                 '문제 ${currentQuestionIndex + 1} / $totalQuestions',
-                                 style: TextStyle(
-                                   fontFamily: "SBAggro",
-                                   fontSize: MediaQuery.of(context).size.width *
-                                       (18 / 360),
-                                   fontWeight: FontWeight.w400,
-                                   color: Color(0xff202020),
-                                 ),
-                               ),
-                               Column(
-                                 mainAxisSize: MainAxisSize.min,
-                                 children: [
-                                   AnimatedBuilder(
+                      // 세번째 레이어 (실제 콘텐츠 카드)
+                      Container(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width - 20,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.5,
+                        padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
+                        margin: const EdgeInsets.only(top: 25),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color(0xFF192243),
+                            width: 1,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // 문제 번호 + 힌트 버튼
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '문제 ${currentQuestionIndex +
+                                      1} / $totalQuestions',
+                                  style: TextStyle(
+                                    fontFamily: "SBAggro",
+                                    fontSize: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width *
+                                        (18 / 360),
+                                    fontWeight: FontWeight.w400,
+                                    color: const Color(0xff202020),
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    AnimatedBuilder(
                                       animation: _hintColorAnimation,
                                       builder: (context, child) {
                                         final color = Color.lerp(
@@ -613,7 +665,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                           const Color(0xFFB2BBDC),
                                           _hintColorAnimation.value,
                                         )!;
-                                        
                                         return IconButton(
                                           icon: Icon(
                                             Icons.help_outline,
@@ -626,8 +677,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                         );
                                       },
                                     ),
-                                   const SizedBox(height: 4),
-                                   AnimatedBuilder(
+                                    const SizedBox(height: 4),
+                                    AnimatedBuilder(
                                       animation: _hintColorAnimation,
                                       builder: (context, child) {
                                         final color = Color.lerp(
@@ -641,7 +692,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                             '힌트',
                                             style: TextStyle(
                                               color: color,
-                                              fontSize: MediaQuery.of(context)
+                                              fontSize: MediaQuery
+                                                  .of(context)
                                                   .size
                                                   .width *
                                                   (12 / 360),
@@ -651,23 +703,27 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                         );
                                       },
                                     ),
-                                 ],
-                               ),
-                             ],
-                           ),
-                           Text(
-                             mission.question,
-                             textAlign: TextAlign.justify,
-                             style: TextStyle(
-                               fontFamily: "Pretendard",
-                               fontWeight: FontWeight.w400,
-                               fontSize:
-                               MediaQuery.of(context).size.width * (16 / 360),
-                               height: 1.4,
-                               color: Colors.black87,
-                             ),
-                           ),
-                           const SizedBox(height: 16),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              mission.question,
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(
+                                fontFamily: "Pretendard",
+                                fontWeight: FontWeight.w400,
+                                fontSize: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width *
+                                    (16 / 360),
+                                height: 1.4,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
                             if (mission.questionImage.isNotEmpty)
                               if (mission.questionImage.startsWith('assets/'))
                                 ClipRRect(
@@ -681,97 +737,212 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                     color: const Color(0xFFFFFFFF),
-                                    border: Border.all(color: const Color(0xFFFFFFFF)),
+                                    border: Border.all(
+                                      color: const Color(0xFFFFFFFF),
+                                    ),
                                   ),
                                   child: Text(
                                     mission.questionImage,
                                     style: TextStyle(
                                       fontFeatures: [FontFeature.fractions()],
-                                      fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                                      fontSize:
+                                      MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width *
+                                          (16 / 360),
                                       color: Colors.black87,
                                       height: 1.4,
                                     ),
                                   ),
                                 ),
-                           const Spacer(),
-                           Container(
-                             decoration: BoxDecoration(
-                               color: const Color(0xFFFFFFFF),
-                               borderRadius: BorderRadius.circular(8.0),
-                               border: Border.all(color: const Color(0xffdcdcdc)),
-                             ),
-                             child: Row(
-                               children: [
-                                 Expanded(
-                                   flex: 2,
-                                   child: TextField(
-                                     style: TextStyle(
-                                       fontSize: MediaQuery.of(context).size.width *
-                                           (15 / 360),
-                                     ),
-                                     controller: _answerController,
-                                     decoration: InputDecoration(
-                                       hintText: '정답을 입력해 주세요.',
-                                       hintStyle: TextStyle(
-                                         fontSize:
-                                         MediaQuery.of(context).size.width *
-                                             (14 / 360),
-                                         color: const Color(0xffaaaaaa),
-                                       ),
-                                       contentPadding:
-                                       const EdgeInsets.symmetric(
-                                         horizontal: 12.0,
-                                         vertical: 12.0,
-                                       ),
-                                       border: InputBorder.none,
-                                       enabledBorder: InputBorder.none,
-                                       focusedBorder: InputBorder.none,
-                                     ),
-                                   ),
-                                 ),
-                                 SizedBox(
-                                   width: 60,
-                                   height: 52,
-                                   child: ElevatedButton(
-                                     onPressed: _submitAnswer,
-                                     style: ElevatedButton.styleFrom(
-                                       backgroundColor: mainColor,
-                                       foregroundColor: Colors.white,
-                                       elevation: 0,
-                                       padding: const EdgeInsets.symmetric(
-                                           vertical: 12),
-                                       shape: const RoundedRectangleBorder(
-                                         borderRadius: BorderRadius.only(
-                                           topRight: Radius.circular(8),
-                                           bottomRight: Radius.circular(8),
-                                         ),
-                                       ),
-                                     ),
-                                     child: Text(
-                                       '확인',
-                                       style: TextStyle(
-                                         fontSize:
-                                         MediaQuery.of(context).size.width *
-                                             (14 / 360),
-                                         fontWeight: FontWeight.bold,
-                                       ),
-                                     ),
-                                   ),
-                                 ),
-                               ],
-                             ),
-                           ),
-                         ],
-                       ),
-                     ),
-                   ],
-                 ),
-               ),
-              ],
+                            const SizedBox(height: 16),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFFFFF),
+                                borderRadius: BorderRadius.circular(8.0),
+                                border:
+                                Border.all(color: const Color(0xffdcdcdc)),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: TextField(
+                                      style: TextStyle(
+                                        fontSize:
+                                        MediaQuery
+                                            .of(context)
+                                            .size
+                                            .width *
+                                            (15 / 360),
+                                      ),
+                                      controller: _answerController,
+                                      decoration: InputDecoration(
+                                        hintText: '정답을 입력해 주세요.',
+                                        hintStyle: TextStyle(
+                                          fontSize:
+                                          MediaQuery
+                                              .of(context)
+                                              .size
+                                              .width *
+                                              (14 / 360),
+                                          color: const Color(0xffaaaaaa),
+                                        ),
+                                        contentPadding:
+                                        const EdgeInsets.symmetric(
+                                          horizontal: 12.0,
+                                          vertical: 12.0,
+                                        ),
+                                        border: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 60,
+                                    height: 52,
+                                    child: ElevatedButton(
+                                      onPressed: _submitAnswer,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: mainColor,
+                                        foregroundColor: Colors.white,
+                                        elevation: 0,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12),
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(8),
+                                            bottomRight: Radius.circular(8),
+                                          ),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        '확인',
+                                        style: TextStyle(
+                                          fontSize:
+                                          MediaQuery
+                                              .of(context)
+                                              .size
+                                              .width *
+                                              (14 / 360),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // 힌트 카드
+                if (showHint1 || showHint2) ...[
+                  const SizedBox(height: 20),
+                  if (showHint1)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFEBEBEB),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: const Color(0xFFEBEBEB),
+                          width: 1,
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '단서#1 : 목적지의 비밀',
+                            style: TextStyle(
+                              fontSize: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width *
+                                  (14 / 360),
+                              fontFamily:"SBAggro",
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xFF101351),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            mission.hint1,
+                            style: TextStyle(
+                              fontFamily: "Pretendard",
+                              fontWeight: FontWeight.w400,
+                              fontSize: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width *
+                                  (13 / 360),
+                              color: Colors.black87,
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (showHint1 && showHint2) const SizedBox(height: 12),
+                  if (showHint2)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFEBEBEB),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: const Color(0xFFEBEBEB),
+                          width: 1,
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '단서#2 : 마지막 열쇠',
+                            style: TextStyle(
+                              fontSize: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width *
+                                  (14 / 360),
+                              fontFamily:"SBAggro",
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xFF101351),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            mission.hint2,
+                            style: TextStyle(
+                              fontFamily: "Pretendard",
+                              fontWeight: FontWeight.w400,
+                              fontSize: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width *
+                                  (13 / 360),
+                              color: Colors.black87,
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    }
   }
-}
