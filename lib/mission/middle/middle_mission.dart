@@ -532,6 +532,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                   child: Stack(
                     alignment: Alignment.topCenter,
                     children: [
+                      //첫번째 레이어
                       Container(
                         width: MediaQuery.of(context).size.width - 60,
                         height: MediaQuery.of(context).size.height * 0.5,
@@ -549,6 +550,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                           ],
                         ),
                       ),
+                      //두번째 레이어
                       Container(
                         width: MediaQuery.of(context).size.width - 40,
                         height: MediaQuery.of(context).size.height * 0.5,
@@ -566,7 +568,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                           ],
                         ),
                       ),
-                      Container(
+                      Container( //세 번째 레이어 (가장 앞, 흰색 - 실제 콘텐츠)
                          width: MediaQuery.of(context).size.width - 20,
                          height: MediaQuery.of(context).size.height * 0.5,
                          padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
