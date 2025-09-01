@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'elementary_high_mission.dart';
-import '../../models/elementary_high/elementary_high_intro_talk.dart';
+import '../../models/middle/middle_intro_talk.dart';
+import 'dart:convert';
+import 'package:math_escape/mission/middle/middle_mission.dart';
+import 'package:math_escape/widgets/middle_talk_popup.dart';
 //intro page
 class PuriImage extends StatefulWidget {
   final String imagePath;
@@ -47,26 +49,26 @@ class _PuriImageState extends State<PuriImage> {
       future: _imageBytes,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          return SizedBox(height: MediaQuery.of(context).size.height * 0.24);
+          return const SizedBox(height: 220);
         }
         return Image.memory(
           snapshot.data!,
           key: widget.imageKey,
-          height: MediaQuery.of(context).size.height * 0.24,
+          height: 220,
         );
       },
     );
   }
 }
 
-class ElementaryHighTalkScreen extends StatefulWidget {
-  const ElementaryHighTalkScreen({super.key});
+class MiddleIntroScreen extends StatefulWidget {
+  const MiddleIntroScreen({super.key});
 
   @override
-  State<ElementaryHighTalkScreen> createState() => _ElementaryHighTalkScreenState();
+  State<MiddleIntroScreen> createState() => _MiddleIntroScreenState();
 }
 
-class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> with WidgetsBindingObserver {  // 앱 생명주기 이벤트를 감지하기 위한 인터페이스
+class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindingObserver {
   List<IntroTalkItem> talkList = [];
   int currentIndex = 0;
   bool isLoading = true;
@@ -96,24 +98,46 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
   }
 
   Future<void> loadTalks() async {
-    final String jsonString = await rootBundle.loadString('lib/data/elementary_high/elementary_high_intro.json');
+    final String jsonString = await rootBundle.loadString('lib/data/middle/middle_intro.json');
     final List<dynamic> jsonList = json.decode(jsonString);
     setState(() {
-      talkList = jsonList.map((e) => IntroTalkItem.fromJson(e)).toList(); //asset내의 json파일 읽어옴
+      talkList = jsonList.map((e) => IntroTalkItem.fromJson(e)).toList();
       isLoading = false;
     });
   }
 
   void goToNext() {
-    if (currentIndex < 3) { // id 1, 2, 3번 대화까지만 다음 대화로
+    // 현재 인덱스가 0 또는 1일 때 다음 대화로 넘어갑니다.
+    if (currentIndex < 2) {
       setState(() {
         currentIndex++;
         imageKey = UniqueKey();
       });
-    } else if (currentIndex == 3) { // id 4번 대화에서 문제 화면으로
+    }
+    // currentIndex가 2일 때 (즉, id 3번 대화일 때)
+    else if (currentIndex == 2) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const MiddleTalkDialog();
+            },
+          ).then((_) {
+            // 다이얼로그가 닫히면 인덱스를 3으로 업데이트하여 다음 대화로 넘어갑니다.
+            setState(() {
+              currentIndex++;
+              imageKey = UniqueKey();
+            });
+          });
+        }
+      });
+    }
+    // currentIndex가 3 이상일 때 (즉, id 4번 이후 대화)
+    else if (currentIndex >= 3) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const ElementaryHighMissionScreen()),
+        MaterialPageRoute(builder: (_) => const MiddleMissionScreen()),
       );
     }
   }
@@ -148,7 +172,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
         return true;
       },
       child: Scaffold(
-        extendBodyBehindAppBar: true, //투명 앱 바
+        extendBodyBehindAppBar: true,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: AppBar(
@@ -161,25 +185,18 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                 children: [
                   Center(
                     child: Text(
-                      '미션! 수사모의 수학 보물을 찾아서',
+                      '수학자의 비밀 노트를 찾아라!',
                       style: TextStyle(
-                        color: Color(0xffD95276),
+                        color: Color(0xff3F55A7),
                         fontSize: MediaQuery.of(context).size.width * (16 / 360),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-<<<<<<< HEAD
-                  Positioned( //좌측상단 뒤로가기 버튼
-                    left: 0, //자식 위젯을 부모 위젯의 왼쪽 가장자리에 붙임
-                    child: IconButton(    //IconButton: 사용자가 탭할 수 있는 버튼
-                      icon: const Icon(Icons.arrow_back, color: Color(0xffD95276)), //아이콘 모양은 뒤로가기(arrow_back), 색깔은 분홍
-                      onPressed: () => Navigator.of(context).pop(), //버튼눌렀을때 현재화면을 스택에서 제거
-=======
                   Positioned(
                     left: 0,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Color(0xffD95276)),
+                      icon: const Icon(Icons.arrow_back, color: Color(0xFF3F55A7)),
                       onPressed: () {
                         if (currentIndex > 0) {
                           goToPrevious();
@@ -187,7 +204,6 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                           Navigator.of(context).pop();
                         }
                       },
->>>>>>> 8a5f21e6b14a8c36708dab9d204ee0ffb987dcaa
                     ),
                   ),
                 ],
@@ -198,22 +214,22 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
         backgroundColor: Colors.white,
         body: Stack(
           children: [
-            Positioned.fill(  //[배경화면] 부모 위젯이 차지하는 공간에 자식 위젯을 채운다.
+            Positioned.fill(
               child: Image.asset(
                 'assets/images/bsbackground.png',
-                fit: BoxFit.cover,  //전체공간 채우기
+                fit: BoxFit.cover,
               ),
             ),
             Positioned.fill(
               child: Container(
                 decoration: const BoxDecoration(
-                  gradient: LinearGradient( //그라데이션 효과
-                    colors: [
-                      Color(0x99D95276),
-                      Color(0x99FFFFFF),
-                    ],
+                  gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
+                    colors: [
+                      Color.fromRGBO(0, 0, 0, 0.75), // 위쪽 (36%)
+                      Color.fromRGBO(0, 0, 0, 0.50), // 아래쪽 (20%)
+                    ],
                   ),
                 ),
               ),
@@ -239,14 +255,14 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
-                        Container(  //테두리 있는 흰색 박스상자
+                        Container(
                           width: MediaQuery.of(context).size.width * 0.93,
-                          height: MediaQuery.of(context).size.height * 0.28,
+                          height: MediaQuery.of(context).size.height * 0.32,
                           margin: const EdgeInsets.only(top: 12),
                           padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            border: Border.all(color: const Color(0xff952B47), width: 1.5),
+                            border: Border.all(color: const Color(0xff172D7F), width: 1.5),
                             borderRadius: const BorderRadius.all(Radius.circular(12)),
                           ),
                           child: SingleChildScrollView(
@@ -257,51 +273,38 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                             ),
                           ),
                         ),
-                        Positioned( //대화상자 왼쪽 위 '푸리'
+                        Positioned(
                           top: 0,
                           left: 20,
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                             decoration: BoxDecoration(
-                              color: const Color(0xffB73D5D),
+                              color: const Color(0xff2B4193),
                               border: Border.all(color: const Color(0xffffffff), width: 1.5),
                               borderRadius: BorderRadius.circular(40),
                             ),
                             child: Text(
                               '푸리',
-                              style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360), color: Colors.white, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold
+                              ),
                             ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 10,
+                          right: 10,
+                          child: IconButton(
+                            icon: const Icon(Icons.play_circle, color: Color(0xFF101351), size: 32),
+                            onPressed: goToNext,
                           ),
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Padding(  //다음 버튼
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.93,
-                      height: 56,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xffD95276),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                        ),
-                        onPressed: goToNext,
-                        child: Text(
-<<<<<<< HEAD
-                          talk.answer,  //하단 버튼 텍스트
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-=======
-                          talk.answer,
-                          style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360), fontWeight: FontWeight.bold),
->>>>>>> 8a5f21e6b14a8c36708dab9d204ee0ffb987dcaa
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
                 ],
               ),
             ),

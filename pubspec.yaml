@@ -87,11 +87,17 @@ flutter:
     - assets/images/introduce_program.png
     - assets/images/logo_icon.png
     - assets/images/puri_stand.png
+    - assets/images/puri_clear.gif
+    - assets/images/puri_stand_normal.png
+    - assets/images/diary.png
     - lib/data/high/high_level_question.json
     - lib/data/high/high_level_answer.json
     - lib/data/elementary_high/elementary_high_question.json
     - lib/data/elementary_high/elementary_high_intro.json
     - lib/data/elementary_high/elementary_high_correct_talks.json
+    - lib/data/middle/middle_question.json
+    - lib/data/middle/middle_intro.json
+    - lib/data/middle/middle_correct_talks.json
     - assets/images/pitagoras1.png
     - assets/images/pitagoras2.png
     - assets/images/pitagoras3.png
@@ -101,6 +107,9 @@ flutter:
     - assets/images/hint_puri.png
     - assets/images/banner.png
     - assets/audio/
+    - assets/images/middle_Q1.png
+    - assets/images/middle_Q9.png
+    - assets/images/bulb.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

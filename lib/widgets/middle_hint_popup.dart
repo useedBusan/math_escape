@@ -30,7 +30,7 @@ class HintDialog extends StatelessWidget {
               child: Column(
                 children: [
                   Image.asset(
-                    'assets/images/hint_puri.png',
+                    'assets/images/bulb.png',
                     width: 80,
                     height: 80,
                   ),
@@ -56,8 +56,8 @@ class HintDialog extends StatelessWidget {
             Container(
               width: double.infinity,
               height: 56,
-               decoration: const BoxDecoration(
-                color: Color(0xFFD95276),
+              decoration: const BoxDecoration(
+                color: Color(0xFF3F55A7),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(8.0),
                   bottomRight: Radius.circular(8.0),
@@ -65,7 +65,7 @@ class HintDialog extends StatelessWidget {
               ),
               child: TextButton(
                 onPressed: () => Navigator.pop(context),
-                 style: TextButton.styleFrom(
+                style: TextButton.styleFrom(
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8.0),

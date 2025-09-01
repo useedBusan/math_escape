@@ -45,8 +45,8 @@ class AnswerPopup extends StatelessWidget {
                         ),
                         TextSpan(
                           text: isCorrect
-                              ? '이야! 수학 천재 등장!'
-                              : '이야. 조금 헷갈렸지?',
+                              ? '입니다!'
+                              : '입니다.',
                         ),
                       ],
                     ),
@@ -54,8 +54,8 @@ class AnswerPopup extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     isCorrect
-                        ? '보물에 한 걸음 더 가까워졌어!'
-                        : '다시 한 번 생각해볼까?',
+                        ? '조금만 더 풀면 탈출할 수 있어요!'
+                        : '다시 한번 생각해 볼까요?',
                     style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360)),
                     textAlign: TextAlign.center,
                   ),
@@ -70,12 +70,12 @@ class AnswerPopup extends StatelessWidget {
               child: TextButton(
                 onPressed: onNext,
                 style: TextButton.styleFrom(
-                  foregroundColor: const Color(0xffed668a),
+                  foregroundColor: const Color(0xFF3F55A7),
                   textStyle: const TextStyle(fontWeight: FontWeight.bold),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 child: Text(isCorrect ? '다음' : '확인',
-                style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360)),
+                  style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360)),
                 ),
               ),
             ),

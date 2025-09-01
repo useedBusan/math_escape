@@ -5,6 +5,7 @@ import 'package:math_escape/widgets/elementary_high_hint_popup.dart';
 import 'package:math_escape/widgets/elementary_high_answer_popup.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import '../../models/elementary_high/elementary_high_correct_talk.dart';
+import 'package:math_escape/screens/qr_scan_screen.dart';
 
 // MissionItem class as provided in the original code
 class MissionItem {
@@ -128,7 +129,7 @@ class TalkScreen extends StatelessWidget {
                   child: Center(
                     child: Image.asset(
                       talk.puri_image,
-                      height: 280,
+                      height: MediaQuery.of(context).size.height * 0.24,
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -141,9 +142,9 @@ class TalkScreen extends StatelessWidget {
                     children: [
                                               Container(
                           width: MediaQuery.of(context).size.width * 0.93,
-                          height: 200,
+                          height: MediaQuery.of(context).size.height * 0.28,
                           margin: const EdgeInsets.only(top: 12),
-                          padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
+                          padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             border: Border.all(color: const Color(0xff952B47), width: 1.5),
@@ -152,11 +153,12 @@ class TalkScreen extends StatelessWidget {
                         child: SingleChildScrollView(
                           child: Text(
                             talk.talk,
-                            style: const TextStyle(fontSize: 15, color: Colors.black87, height: 1.5),
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(fontSize: MediaQuery.of(context).size.width * (15 / 360), color: Colors.black87, height: 1.5),
                           ),
                         ),
                       ),
-                                              Positioned(
+                      Positioned(
                           top: 0,
                           left: 20,
                           child: Container(
@@ -166,9 +168,9 @@ class TalkScreen extends StatelessWidget {
                               border: Border.all(color: const Color(0xffffffff), width: 1.5),
                               borderRadius: BorderRadius.circular(40),
                             ),
-                            child: const Text(
+                            child: Text(
                               '푸리',
-                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                              style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360), color: Colors.white, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -180,7 +182,7 @@ class TalkScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.93,
-                    height: 52,
+                    height: 56,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xffD95276),
@@ -190,7 +192,7 @@ class TalkScreen extends StatelessWidget {
                       onPressed: onNext,
                       child: Text(
                         talk.answer,
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360), fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -395,11 +397,11 @@ class _ElementaryHighMissionScreenState
           icon: const Icon(Icons.arrow_back, color: Color(0xffD95276)),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
-          '미션! 수사모의 수학 유산을 찾아서',
+        title: Text(
+          '미션! 수사모의 수학 보물을 찾아서',
           style: TextStyle(
             color: Color(0xffD95276),
-            fontSize: 18,
+            fontSize: MediaQuery.of(context).size.width * (16 / 360),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -441,9 +443,9 @@ class _ElementaryHighMissionScreenState
                               Text(
                                 '문제 ${currentQuestionIndex +
                                     1} / $totalQuestions',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontFamily: "SBAggro",
-                                  fontSize: 18,
+                                  fontSize: MediaQuery.of(context).size.width * (18 / 360),
                                   fontWeight: FontWeight.w400,
                                   color: Color(0xff202020),
                                 ),
@@ -451,10 +453,10 @@ class _ElementaryHighMissionScreenState
                               const SizedBox(height: 4),
                               Text(
                                 mission.question,
-                                style: const TextStyle(
-                                  height : 1.5,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
+                                textAlign: TextAlign.justify,
+                                style: TextStyle(
+                                  height : 1.4,
+                                  fontSize: MediaQuery.of(context).size.width * (16 / 360),
                                   color: Color(0xff333333),
                                 ),
                               ),
@@ -467,12 +469,12 @@ class _ElementaryHighMissionScreenState
                                       color: const Color(0xffdcdcdc)),
                                 ),
                                 child: TextField(
-                                  style: const TextStyle(fontSize:14),
+                                  style: TextStyle(fontSize: MediaQuery.of(context).size.width * (15 / 360)),
                                   controller: _answerController,
                                   decoration: InputDecoration(
                                     hintText: '정답을 입력해 주세요.',
-                                    hintStyle: const TextStyle(
-                                        fontSize: 14,
+                                    hintStyle: TextStyle(
+                                        fontSize: MediaQuery.of(context).size.width * (14 / 360),
                                         color: Color(0xffaaaaaa)),
                                     contentPadding: const EdgeInsets
                                         .symmetric(
@@ -480,13 +482,13 @@ class _ElementaryHighMissionScreenState
                                     border: InputBorder.none,
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(
-                                          8.0),
+                                          4.0),
                                       borderSide: const BorderSide(
                                           color: const Color(0xffaaaaaa)),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(
-                                          8.0),
+                                          4.0),
                                       borderSide: BorderSide(
                                           color: mainColor, width: 2.0),
                                     ),
@@ -529,13 +531,13 @@ class _ElementaryHighMissionScreenState
                       child: Row(
                         mainAxisSize: MainAxisSize.min, // 버튼 크기를 내용에 맞춤
                         children: [
-                          Icon(Symbols.tooltip_2, color: mainColor, size: 20), // 아이콘
-                          SizedBox(width: 4), // 간격
+                          Icon(Symbols.tooltip_2, color: mainColor, size: 24), // 아이콘
+                          SizedBox(width: 6), // 간격
                           Text(
                             '힌트',
                             style: TextStyle(
                               color: mainColor,
-                              fontSize: 18,
+                              fontSize: MediaQuery.of(context).size.width * (16 / 360),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -560,11 +562,11 @@ class _ElementaryHighMissionScreenState
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        const Text(
+                        Text(
                           '정답제출',
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 18,
+                              fontSize: MediaQuery.of(context).size.width * (16 / 360),
                               fontWeight: FontWeight.bold),
                         ),
                       ],
