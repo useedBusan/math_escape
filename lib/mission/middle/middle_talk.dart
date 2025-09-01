@@ -49,12 +49,12 @@ class _PuriImageState extends State<PuriImage> {
       future: _imageBytes,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          return const SizedBox(height: 220);
+          return SizedBox(height: MediaQuery.of(context).size.height * 0.24);
         }
         return Image.memory(
           snapshot.data!,
           key: widget.imageKey,
-          height: 220,
+          height: MediaQuery.of(context).size.height * 0.24,
         );
       },
     );

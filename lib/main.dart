@@ -18,8 +18,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: AppConstants.appTitle,
       theme: AppTheme.lightTheme,
+      // 키보드 포커싱 해제 메서드
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
+      builder: (context,child) {
+        return GestureDetector(
+          behavior: HitTestBehavior.deferToChild,
+          onTap: () {
+            final scope = FocusScope.of(context);
+            if (!scope.hasPrimaryFocus && scope.focusedChild != null) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            }
+          },
+          child: child!,
+        );
+      },
     );
   }
 }
