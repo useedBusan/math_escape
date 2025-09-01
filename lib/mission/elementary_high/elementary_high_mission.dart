@@ -278,6 +278,7 @@ class _ElementaryHighMissionScreenState
 
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (_) => HintDialog(
         hintTitle: title,
         hintContent: content,
@@ -293,6 +294,7 @@ class _ElementaryHighMissionScreenState
 
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (_) => AnswerPopup(
         isCorrect: correct,
         onNext: () {

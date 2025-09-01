@@ -120,6 +120,7 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindi
         if (mounted) {
           showDialog(
             context: context,
+            barrierDismissible: false,
             builder: (BuildContext context) {
               return const MiddleTalkDialog();
             },

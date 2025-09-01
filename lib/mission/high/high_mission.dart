@@ -254,6 +254,7 @@ class _HighMissionState extends State<HighMission> {
                     } else {
                       showDialog(
                         context: context,
+                        barrierDismissible: false,
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: const Text('힌트'),

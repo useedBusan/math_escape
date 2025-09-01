@@ -344,6 +344,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
 
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (_) => HintDialog(
         hintTitle: title,
         hintContent: content,
@@ -358,6 +359,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
 
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (_) => AnswerPopup(
         isCorrect: correct,
         onNext: () {
