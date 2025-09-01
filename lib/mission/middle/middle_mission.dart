@@ -710,6 +710,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                               ],
                             ),
                             const SizedBox(height: 8),
+                            // 문제 영역
                             Text(
                               mission.question,
                               textAlign: TextAlign.justify,
@@ -726,6 +727,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                               ),
                             ),
                             const SizedBox(height: 16),
+                            // 이미지 영역 (이미지가 있을때만)
                             if (mission.questionImage.isNotEmpty)
                               if (mission.questionImage.startsWith('assets/'))
                                 ClipRRect(
@@ -758,7 +760,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                     ),
                                   ),
                                 ),
-                            const SizedBox(height: 16),
+                            const Expanded(child: SizedBox()),
+                            // 텍스트필드
                             Container(
                               decoration: BoxDecoration(
                                 color: const Color(0xFFFFFFFF),
