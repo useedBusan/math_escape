@@ -12,10 +12,7 @@ class CorrectTalkItem {
   final int id;
   final List<TalkItem> talks;
 
-  CorrectTalkItem({
-    required this.id,
-    required this.talks,
-  });
+  CorrectTalkItem({required this.id, required this.talks});
 
   factory CorrectTalkItem.fromJson(Map<String, dynamic> json) {
     return CorrectTalkItem(
@@ -96,11 +93,7 @@ class TalkScreen extends StatelessWidget {
   final TalkItem talk;
   final VoidCallback onNext;
 
-  const TalkScreen({
-    super.key,
-    required this.talk,
-    required this.onNext,
-  });
+  const TalkScreen({super.key, required this.talk, required this.onNext});
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +122,10 @@ class TalkScreen extends StatelessWidget {
                 Positioned(
                   left: 0,
                   child: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Color(0xFF3F55A7)),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Color(0xFF3F55A7),
+                    ),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
@@ -192,15 +188,22 @@ class TalkScreen extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          border: Border.all(color: const Color(0xff172D7F), width: 1.5),
-                          borderRadius: const BorderRadius.all(Radius.circular(12)),
+                          border: Border.all(
+                            color: const Color(0xff172D7F),
+                            width: 1.5,
+                          ),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(12),
+                          ),
                         ),
                         child: SingleChildScrollView(
                           child: Text(
                             talk.talk,
                             textAlign: TextAlign.justify,
                             style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width * (15 / 360),
+                              fontSize:
+                                  MediaQuery.of(context).size.width *
+                                  (15 / 360),
                               color: Colors.black87,
                               height: 1.5,
                             ),
@@ -211,18 +214,26 @@ class TalkScreen extends StatelessWidget {
                         top: 0,
                         left: 20,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: const Color(0xff2B4193),
-                            border: Border.all(color: const Color(0xffffffff), width: 1.5),
+                            border: Border.all(
+                              color: const Color(0xffffffff),
+                              width: 1.5,
+                            ),
                             borderRadius: BorderRadius.circular(40),
                           ),
                           child: Text(
                             '푸리',
                             style: TextStyle(
-                                fontSize: MediaQuery.of(context).size.width * (16 / 360),
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold
+                              fontSize:
+                                  MediaQuery.of(context).size.width *
+                                  (16 / 360),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
@@ -231,7 +242,11 @@ class TalkScreen extends StatelessWidget {
                         bottom: 10,
                         right: 10,
                         child: IconButton(
-                          icon: const Icon(Icons.play_circle, color: Color(0xFF101351), size: 32),
+                          icon: const Icon(
+                            Icons.play_circle,
+                            color: Color(0xFF101351),
+                            size: 32,
+                          ),
                           onPressed: onNext,
                         ),
                       ),
@@ -256,7 +271,8 @@ class MiddleMissionScreen extends StatefulWidget {
   State<MiddleMissionScreen> createState() => _MiddleMissionScreenState();
 }
 
-class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerProviderStateMixin {
+class _MiddleMissionScreenState extends State<MiddleMissionScreen>
+    with TickerProviderStateMixin {
   List<MissionItem> missionList = [];
   List<CorrectTalkItem> talkList = [];
   bool isLoading = true;
@@ -266,7 +282,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
   int hintCounter = 0;
   late AnimationController _hintColorController;
   late Animation<double> _hintColorAnimation;
-  
+
   // 힌트 카드 표시 상태 추가
   bool showHint1 = false;
   bool showHint2 = false;
@@ -275,38 +291,38 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
   void initState() {
     super.initState();
     loadMissionData();
-    
+
     _hintColorController = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
     );
-    
-    _hintColorAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _hintColorController,
-      curve: Curves.easeInOut,
-    ));
-    
+
+    _hintColorAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _hintColorController, curve: Curves.easeInOut),
+    );
+
     _hintColorController.repeat(reverse: true);
   }
 
   Future<void> loadMissionData() async {
     try {
-      final String missionJsonString = await rootBundle
-          .loadString('lib/data/middle/middle_question.json');
+      final String missionJsonString = await rootBundle.loadString(
+        'lib/data/middle/middle_question.json',
+      );
       final List<dynamic> missionJsonList = json.decode(missionJsonString);
 
-      final String talkJsonString = await rootBundle
-          .loadString('lib/data/middle/middle_correct_talks.json');
+      final String talkJsonString = await rootBundle.loadString(
+        'lib/data/middle/middle_correct_talks.json',
+      );
       final List<dynamic> talkJsonList = json.decode(talkJsonString);
 
       setState(() {
-        missionList =
-            missionJsonList.map((e) => MissionItem.fromJson(e)).toList();
-        talkList =
-            talkJsonList.map((e) => CorrectTalkItem.fromJson(e)).toList();
+        missionList = missionJsonList
+            .map((e) => MissionItem.fromJson(e))
+            .toList();
+        talkList = talkJsonList
+            .map((e) => CorrectTalkItem.fromJson(e))
+            .toList();
         isLoading = false;
       });
     } catch (e) {
@@ -320,16 +336,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
   void _showHintDialog() {
     final MissionItem currentMission = missionList[currentQuestionIndex];
     int newHintCounter = (hintCounter % 2) + 1;
-
-    setState(() {
-      hintCounter = newHintCounter;
-      // 힌트를 확인했을 때 해당 힌트 카드를 표시
-      if (newHintCounter == 1) {
-        showHint1 = true;
-      } else {
-        showHint2 = true;
-      }
-    });
 
     String title;
     String content;
@@ -348,6 +354,17 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
       builder: (_) => HintDialog(
         hintTitle: title,
         hintContent: content,
+        onConfirm: () {
+          setState(() {
+            hintCounter = newHintCounter;
+            // 힌트 다이얼로그 표출 -> 확인을 눌러서 꺼진 후 힌트 표시
+            if (newHintCounter == 1) {
+              showHint1 = true;
+            } else {
+              showHint2 = true;
+            }
+          });
+        },
       ),
     );
   }
@@ -396,15 +413,16 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
   void _showCorrectAnswerDialog() {
     try {
       final int currentQuestionId = currentQuestionIndex + 1;
-      final CorrectTalkItem correctTalk =
-          talkList.firstWhere((talk) => talk.id == currentQuestionId);
+      final CorrectTalkItem correctTalk = talkList.firstWhere(
+        (talk) => talk.id == currentQuestionId,
+      );
 
       int currentTalkIndex = 0;
 
       void showNextTalk() {
         if (currentTalkIndex < correctTalk.talks.length) {
           final TalkItem talk = correctTalk.talks[currentTalkIndex];
-          
+
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -452,9 +470,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (missionList.isEmpty) {
@@ -480,10 +496,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
           '수학자의 비밀 노트를 찾아라!',
           style: TextStyle(
             color: const Color(0xFF3F55A7),
-            fontSize: MediaQuery
-                .of(context)
-                .size
-                .width * (16 / 360),
+            fontSize: MediaQuery.of(context).size.width * (16 / 360),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -525,10 +538,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: "SBAggro",
-                        fontSize: MediaQuery
-                            .of(context)
-                            .size
-                            .width * (14 / 360),
+                        fontSize:
+                            MediaQuery.of(context).size.width * (14 / 360),
                         fontWeight: FontWeight.w300,
                         color: const Color(0xFFF2F2F2),
                       ),
@@ -539,10 +550,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: "SBAggro",
-                        fontSize: MediaQuery
-                            .of(context)
-                            .size
-                            .width * (14 / 360),
+                        fontSize:
+                            MediaQuery.of(context).size.width * (14 / 360),
                         fontWeight: FontWeight.w300,
                         color: const Color(0xFFF2F2F2),
                       ),
@@ -556,14 +565,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                     children: [
                       // 첫번째 레이어
                       Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width - 60,
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.5,
+                        width: MediaQuery.of(context).size.width - 60,
+                        height: MediaQuery.of(context).size.height * 0.5,
                         margin: const EdgeInsets.only(top: 5),
                         decoration: BoxDecoration(
                           color: const Color(0xFF192243),
@@ -583,14 +586,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                       ),
                       // 두번째 레이어
                       Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width - 40,
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.5,
+                        width: MediaQuery.of(context).size.width - 40,
+                        height: MediaQuery.of(context).size.height * 0.5,
                         margin: const EdgeInsets.only(top: 15),
                         decoration: BoxDecoration(
                           color: const Color(0xFF3F55A7),
@@ -610,14 +607,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                       ),
                       // 세번째 레이어 (실제 콘텐츠 카드)
                       Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width - 20,
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.5,
+                        width: MediaQuery.of(context).size.width - 20,
+                        height: MediaQuery.of(context).size.height * 0.5,
                         padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
                         margin: const EdgeInsets.only(top: 25),
                         decoration: BoxDecoration(
@@ -643,14 +634,11 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '문제 ${currentQuestionIndex +
-                                      1} / $totalQuestions',
+                                  '문제 ${currentQuestionIndex + 1} / $totalQuestions',
                                   style: TextStyle(
                                     fontFamily: "SBAggro",
-                                    fontSize: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width *
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
                                         (18 / 360),
                                     fontWeight: FontWeight.w400,
                                     color: const Color(0xff202020),
@@ -694,10 +682,10 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                             '힌트',
                                             style: TextStyle(
                                               color: color,
-                                              fontSize: MediaQuery
-                                                  .of(context)
-                                                  .size
-                                                  .width *
+                                              fontSize:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).size.width *
                                                   (12 / 360),
                                               fontWeight: FontWeight.w500,
                                             ),
@@ -717,10 +705,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                               style: TextStyle(
                                 fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w400,
-                                fontSize: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width *
+                                fontSize:
+                                    MediaQuery.of(context).size.width *
                                     (16 / 360),
                                 height: 1.4,
                                 color: Colors.black87,
@@ -750,10 +736,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                     style: TextStyle(
                                       fontFeatures: [FontFeature.fractions()],
                                       fontSize:
-                                      MediaQuery
-                                          .of(context)
-                                          .size
-                                          .width *
+                                          MediaQuery.of(context).size.width *
                                           (16 / 360),
                                       color: Colors.black87,
                                       height: 1.4,
@@ -766,8 +749,9 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                               decoration: BoxDecoration(
                                 color: const Color(0xFFFFFFFF),
                                 borderRadius: BorderRadius.circular(8.0),
-                                border:
-                                Border.all(color: const Color(0xffdcdcdc)),
+                                border: Border.all(
+                                  color: const Color(0xffdcdcdc),
+                                ),
                               ),
                               child: Row(
                                 children: [
@@ -776,10 +760,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                     child: TextField(
                                       style: TextStyle(
                                         fontSize:
-                                        MediaQuery
-                                            .of(context)
-                                            .size
-                                            .width *
+                                            MediaQuery.of(context).size.width *
                                             (15 / 360),
                                       ),
                                       controller: _answerController,
@@ -787,18 +768,17 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                         hintText: '정답을 입력해 주세요.',
                                         hintStyle: TextStyle(
                                           fontSize:
-                                          MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width *
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.width *
                                               (14 / 360),
                                           color: const Color(0xffaaaaaa),
                                         ),
                                         contentPadding:
-                                        const EdgeInsets.symmetric(
-                                          horizontal: 12.0,
-                                          vertical: 12.0,
-                                        ),
+                                            const EdgeInsets.symmetric(
+                                              horizontal: 12.0,
+                                              vertical: 12.0,
+                                            ),
                                         border: InputBorder.none,
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
@@ -815,7 +795,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                         foregroundColor: Colors.white,
                                         elevation: 0,
                                         padding: const EdgeInsets.symmetric(
-                                            vertical: 12),
+                                          vertical: 12,
+                                        ),
                                         shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
                                             topRight: Radius.circular(8),
@@ -827,10 +808,9 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                                         '확인',
                                         style: TextStyle(
                                           fontSize:
-                                          MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width *
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.width *
                                               (14 / 360),
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -846,116 +826,157 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen> with TickerPr
                     ],
                   ),
                 ),
-                                 // 힌트 카드
-                 if (showHint1 || showHint2) ...[
-                   const SizedBox(height: 20),
-                   Flexible(
-                     child: SingleChildScrollView(
-                       child: Column(
-                         children: [
-                           if (showHint1)
-                             Container(
-                               width: double.infinity,
-                               padding: EdgeInsets.all(MediaQuery.of(context).size.width * (16 / 360)),
-                               decoration: BoxDecoration(
-                                 color: const Color(0xFFEBEBEB),
-                                 borderRadius: BorderRadius.circular(8),
-                                 border: Border.all(
-                                   color: const Color(0xFFEBEBEB),
-                                   width: 1,
-                                 ),
-                               ),
-                               child: Column(
-                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                 children: [
-                                   Text(
-                                     '단서#1 : 목적지의 비밀',
-                                     style: TextStyle(
-                                       fontSize: MediaQuery
-                                           .of(context)
-                                           .size
-                                           .width *
-                                           (14 / 360),
-                                       fontFamily:"SBAggro",
-                                       fontWeight: FontWeight.w400,
-                                       color: const Color(0xFF101351),
-                                     ),
-                                   ),
-                                   SizedBox(height: MediaQuery.of(context).size.width * (8 / 360)),
-                                   Text(
-                                     mission.hint1,
-                                     style: TextStyle(
-                                       fontFamily: "Pretendard",
-                                       fontWeight: FontWeight.w400,
-                                       fontSize: MediaQuery
-                                           .of(context)
-                                           .size
-                                           .width *
-                                           (13 / 360),
-                                       color: Colors.black87,
-                                       height: 1.4,
-                                     ),
-                                   ),
-                                 ],
-                               ),
-                             ),
-                           if (showHint1 && showHint2) SizedBox(height: MediaQuery.of(context).size.width * (12 / 360)),
-                           if (showHint2)
-                             Container(
-                               width: double.infinity,
-                               padding: EdgeInsets.all(MediaQuery.of(context).size.width * (16 / 360)),
-                               decoration: BoxDecoration(
-                                 color: const Color(0xFFEBEBEB),
-                                 borderRadius: BorderRadius.circular(8),
-                                 border: Border.all(
-                                   color: const Color(0xFFEBEBEB),
-                                   width: 1,
-                                 ),
-                               ),
-                               child: Column(
-                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                 children: [
-                                   Text(
-                                     '단서#2 : 마지막 열쇠',
-                                     style: TextStyle(
-                                       fontSize: MediaQuery
-                                           .of(context)
-                                           .size
-                                           .width *
-                                           (14 / 360),
-                                       fontFamily:"SBAggro",
-                                       fontWeight: FontWeight.w400,
-                                       color: const Color(0xFF101351),
-                                     ),
-                                   ),
-                                   SizedBox(height: MediaQuery.of(context).size.width * (8 / 360)),
-                                   Text(
-                                     mission.hint2,
-                                     style: TextStyle(
-                                       fontFamily: "Pretendard",
-                                       fontWeight: FontWeight.w400,
-                                       fontSize: MediaQuery
-                                           .of(context)
-                                           .size
-                                           .width *
-                                           (13 / 360),
-                                       color: Colors.black87,
-                                       height: 1.4,
-                                     ),
-                                   ),
-                                 ],
-                               ),
-                             ),
-                         ],
-                       ),
-                     ),
-                   ),
-                 ],
-                ]
-               ),
-             ),
-           ],
-         ),
-       );
-     }
-   }
+                // 힌트 카드
+                // if (showHint1 || showHint2) ...[
+                const SizedBox(height: 20),
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        // 힌트 1
+                        AnimatedSlide(
+                          duration: showHint1? const Duration(milliseconds: 300) : Duration.zero,
+                          curve: Curves.easeOut,
+                          offset: showHint1
+                              ? Offset.zero
+                              : const Offset(0, 0.1),
+                          child: AnimatedOpacity(
+                            duration: showHint1? const Duration(milliseconds: 300) : Duration.zero,
+                            opacity: showHint1 ? 1.0 : 0.0,
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(
+                                MediaQuery.of(context).size.width * (16 / 360),
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFEBEBEB),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8),
+                                  bottomRight: Radius.circular(8),
+                                ),
+                                border: Border.all(
+                                  color: const Color(0xFFEBEBEB),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    '단서#1 : 목적지의 비밀',
+                                    style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                          (14 / 360),
+                                      fontFamily: "SBAggro",
+                                      fontWeight: FontWeight.w400,
+                                      color: const Color(0xFF101351),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height:
+                                        MediaQuery.of(context).size.width *
+                                        (8 / 360),
+                                  ),
+                                  Text(
+                                    mission.hint1,
+                                    style: TextStyle(
+                                      fontFamily: "Pretendard",
+                                      fontWeight: FontWeight.w400,
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                          (13 / 360),
+                                      color: Colors.black87,
+                                      height: 1.4,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        if (showHint1 && showHint2)
+                          SizedBox(
+                            height:
+                                MediaQuery.of(context).size.width * (12 / 360),
+                          ),
+
+                        // 힌트 2
+                        AnimatedSlide(
+                          duration: showHint2? const Duration(milliseconds: 300) : Duration.zero,
+                          curve: Curves.easeOut,
+                          offset: showHint2
+                              ? Offset.zero
+                              : const Offset(0, 0.1),
+                          child: AnimatedOpacity(
+                            duration: showHint2? const Duration(milliseconds: 300) : Duration.zero,
+                            opacity: showHint2 ? 1.0 : 0.0,
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(
+                                MediaQuery.of(context).size.width * (16 / 360),
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFEBEBEB),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8),
+                                  bottomLeft: Radius.circular(8),
+                                ),
+                                border: Border.all(
+                                  color: const Color(0xFFEBEBEB),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    '단서#2 : 마지막 열쇠',
+                                    style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                          (14 / 360),
+                                      fontFamily: "SBAggro",
+                                      fontWeight: FontWeight.w400,
+                                      color: const Color(0xFF101351),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height:
+                                        MediaQuery.of(context).size.width *
+                                        (8 / 360),
+                                  ),
+                                  Text(
+                                    mission.hint2,
+                                    style: TextStyle(
+                                      fontFamily: "Pretendard",
+                                      fontWeight: FontWeight.w400,
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                          (13 / 360),
+                                      color: Colors.black87,
+                                      height: 1.4,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

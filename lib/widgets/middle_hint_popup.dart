@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class HintDialog extends StatelessWidget {
   final String hintTitle;
   final String hintContent;
+  final VoidCallback? onConfirm;
 
   const HintDialog({
     Key? key,
     required this.hintTitle,
     required this.hintContent,
+    this.onConfirm,
   }) : super(key: key);
 
   @override
@@ -64,7 +66,10 @@ class HintDialog extends StatelessWidget {
                 ),
               ),
               child: TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  Navigator.pop(context);
+                  onConfirm?.call();
+                },
                 style: TextButton.styleFrom(
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
