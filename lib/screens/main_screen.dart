@@ -71,6 +71,12 @@ class _MainScreenState extends State<MainScreen> {
         MaterialPageRoute(builder: (_) => const MiddleIntroScreen()),
       );
     }
+    else if (level == '초등학교 저학년') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const ElementaryLowIntro()),
+      )
+    }
   }
 
   @override

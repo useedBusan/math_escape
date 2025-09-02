@@ -245,7 +245,7 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindi
                     flex: 6,
                     child: Center(
                       child: PuriImage(
-                        imagePath: talk.puri_image,
+                        imagePath: talk.puriImage,
                         imageKey: imageKey,
                       ),
                     ),
