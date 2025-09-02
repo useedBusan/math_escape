@@ -68,6 +68,10 @@ flutter:
     - assets/images/
     - assets/audio/
     - assets/fonts/
+    - assets/data/elementary_high/
+    - assets/data/elementary_low/
+    - assets/data/high/
+    - assets/data/middle/
 #    - assets/images/introduce.png
 #    - assets/images/bsbackground.png
 #    - assets/images/puri_manse.png

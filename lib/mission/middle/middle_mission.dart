@@ -307,12 +307,12 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
   Future<void> loadMissionData() async {
     try {
       final String missionJsonString = await rootBundle.loadString(
-        'lib/data/middle/middle_question.json',
+        'assets/data/middle/middle_question.json',
       );
       final List<dynamic> missionJsonList = json.decode(missionJsonString);
 
       final String talkJsonString = await rootBundle.loadString(
-        'lib/data/middle/middle_correct_talks.json',
+        'assets/data/middle/middle_correct_talks.json',
       );
       final List<dynamic> talkJsonList = json.decode(talkJsonString);
 

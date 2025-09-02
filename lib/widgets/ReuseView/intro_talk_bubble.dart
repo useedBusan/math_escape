@@ -35,77 +35,69 @@ class TalkBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+
+    return Stack(
+      fit: StackFit.expand,
+      clipBehavior: Clip.none,
       children: [
-        Flexible(
-          flex: 6,
-          child: Center(
-            child: Image.asset(
-              talk.speakerImg,
-              height: MediaQuery.of(context).size.height * 0.24,
-              fit: BoxFit.contain,
+        Container(
+          margin: const EdgeInsets.only(top: 12),
+          padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: _mainColor(), width: 1.5),
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+          ),
+          child: SingleChildScrollView(
+            child: Text(
+              talk.talk,
+              textAlign: TextAlign.justify,
+              style: TextStyle(
+                fontSize: MediaQuery
+                    .of(context)
+                    .size
+                    .width * (15 / 360),
+                color: Colors.black87,
+                height: 1.5,
+              ),
             ),
           ),
         ),
-        const SizedBox(height: 4),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.93,
-                height: MediaQuery.of(context).size.height * 0.32,
-                margin: const EdgeInsets.only(top: 12),
-                padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: _mainColor(), width: 1.5),
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
-                ),
-                child: SingleChildScrollView(
-                  child: Text(
-                    talk.talk,
-                    textAlign: TextAlign.justify,
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * (15 / 360),
-                      color: Colors.black87,
-                      height: 1.5,
-                    ),
-                  ),
-                ),
+
+        // 이름표
+        Positioned(
+          top: 0,
+          left: 20,
+          child: Container(
+            padding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: _mainColor(),
+              border: Border.all(color: const Color(0xffffffff), width: 1.5),
+              borderRadius: BorderRadius.circular(40),
+            ),
+            child: Text(
+              _speakerName(),
+              style: TextStyle(
+                fontSize: MediaQuery
+                    .of(context)
+                    .size
+                    .width * (16 / 360),
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
-              Positioned(
-                top: 0,
-                left: 20,
-                child: Container(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: _mainColor(),
-                    border: Border.all(color: const Color(0xffffffff), width: 1.5),
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  child: Text(
-                    _speakerName(),
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * (16 / 360),
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 10,
-                right: 10,
-                child: IconButton(
-                  icon: Icon(Icons.play_circle,
-                      color: _mainColor(), size: 32),
-                  onPressed: onNext,
-                ),
-              ),
-            ],
+            ),
+          ),
+        ),
+
+        // 다음 버튼
+        Positioned(
+          bottom: 10,
+          right: 10,
+          child: IconButton(
+            icon: Icon(Icons.play_circle,
+                color: _mainColor(), size: 32),
+            onPressed: onNext,
           ),
         ),
       ],

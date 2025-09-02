@@ -98,7 +98,7 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindi
   }
 
   Future<void> loadTalks() async {
-    final String jsonString = await rootBundle.loadString('lib/data/middle/middle_intro.json');
+    final String jsonString = await rootBundle.loadString('assets/data/middle/middle_intro.json');
     final List<dynamic> jsonList = json.decode(jsonString);
     setState(() {
       talkList = jsonList.map((e) => IntroTalkItem.fromJson(e)).toList();

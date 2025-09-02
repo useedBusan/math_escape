@@ -6,6 +6,7 @@ import 'package:math_escape/models/content_item.dart';
 import 'package:math_escape/widgets/school_level_card.dart';
 import 'package:math_escape/widgets/content_card.dart';
 import 'package:math_escape/screens/intro_screen/high_intro_screen.dart';
+import '../mission/elementary_low/View/elementary_low_intro_view.dart';
 import '../mission/middle/middle_talk.dart';
 
 class MainScreen extends StatefulWidget {
@@ -74,8 +75,8 @@ class _MainScreenState extends State<MainScreen> {
     else if (level == '초등학교 저학년') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const ElementaryLowIntro()),
-      )
+        MaterialPageRoute(builder: (_) => const ElementaryLowIntroView()),
+      );
     }
   }
 

@@ -235,12 +235,12 @@ class _ElementaryHighMissionScreenState
     try {
       // 미션 데이터 로드
       final String missionJsonString = await rootBundle
-          .loadString('lib/data/elementary_high/elementary_high_question.json');
+          .loadString('assets/data/elementary_high/elementary_high_question.json');
       final List<dynamic> missionJsonList = json.decode(missionJsonString);
 
       // 대화 데이터 로드
       final String talkJsonString = await rootBundle
-          .loadString('lib/data/elementary_high/elementary_high_correct_talks.json');
+          .loadString('assets/data/elementary_high/elementary_high_correct_talks.json');
       final List<dynamic> talkJsonList = json.decode(talkJsonString);
 
       setState(() {
