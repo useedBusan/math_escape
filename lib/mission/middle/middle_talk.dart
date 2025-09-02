@@ -1,21 +1,17 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../models/elementary_low/talk_model.dart';
 import '../../models/middle/middle_intro_talk.dart';
-import 'dart:convert';
 import 'package:math_escape/mission/middle/middle_mission.dart';
-import 'package:math_escape/widgets/middle_talk_popup.dart';
+import 'package:math_escape/widgets/ReuseView/custom_intro_alert.dart';
+
 //intro page
 class PuriImage extends StatefulWidget {
   final String imagePath;
   final Key imageKey;
 
-  const PuriImage({
-    required this.imagePath,
-    required this.imageKey,
-    super.key,
-  });
+  const PuriImage({required this.imagePath, required this.imageKey, super.key});
 
   @override
   State<PuriImage> createState() => _PuriImageState();
@@ -38,7 +34,8 @@ class _PuriImageState extends State<PuriImage> {
   @override
   void didUpdateWidget(covariant PuriImage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.imageKey != widget.imageKey || oldWidget.imagePath != widget.imagePath) {
+    if (oldWidget.imageKey != widget.imageKey ||
+        oldWidget.imagePath != widget.imagePath) {
       _imageBytes = _loadImageBytes();
     }
   }
@@ -68,7 +65,8 @@ class MiddleIntroScreen extends StatefulWidget {
   State<MiddleIntroScreen> createState() => _MiddleIntroScreenState();
 }
 
-class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindingObserver {
+class _MiddleIntroScreenState extends State<MiddleIntroScreen>
+    with WidgetsBindingObserver {
   List<IntroTalkItem> talkList = [];
   int currentIndex = 0;
   bool isLoading = true;
@@ -98,7 +96,9 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindi
   }
 
   Future<void> loadTalks() async {
-    final String jsonString = await rootBundle.loadString('assets/data/middle/middle_intro.json');
+    final String jsonString = await rootBundle.loadString(
+      'assets/data/middle/middle_intro.json',
+    );
     final List<dynamic> jsonList = json.decode(jsonString);
     setState(() {
       talkList = jsonList.map((e) => IntroTalkItem.fromJson(e)).toList();
@@ -117,21 +117,25 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindi
     // currentIndex가 2일 때 (즉, id 3번 대화일 때)
     else if (currentIndex == 2) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return const MiddleTalkDialog();
-            },
-          ).then((_) {
-            // 다이얼로그가 닫히면 인덱스를 3으로 업데이트하여 다음 대화로 넘어갑니다.
-            setState(() {
-              currentIndex++;
-              imageKey = UniqueKey();
-            });
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return CustomIntroAlert(
+              onConfirm: () {
+                Navigator.of(context).pop();
+              },
+              grade: StudentGrade.middle,
+            );
+          },
+        ).then((_) {
+          // 다이얼로그가 닫히면 인덱스를 3으로 업데이트하여 다음 대화로 넘어갑니다.
+          setState(() {
+            currentIndex++;
+            imageKey = UniqueKey();
           });
-        }
+        });
       });
     }
     // currentIndex가 3 이상일 때 (즉, id 4번 이후 대화)
@@ -157,9 +161,7 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindi
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     final talk = talkList[currentIndex];
@@ -189,7 +191,8 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindi
                       '수학자의 비밀 노트를 찾아라!',
                       style: TextStyle(
                         color: Color(0xff3F55A7),
-                        fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                        fontSize:
+                            MediaQuery.of(context).size.width * (16 / 360),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -197,7 +200,10 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindi
                   Positioned(
                     left: 0,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Color(0xFF3F55A7)),
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Color(0xFF3F55A7),
+                      ),
                       onPressed: () {
                         if (currentIndex > 0) {
                           goToPrevious();
@@ -263,14 +269,25 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindi
                           padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            border: Border.all(color: const Color(0xff172D7F), width: 1.5),
-                            borderRadius: const BorderRadius.all(Radius.circular(12)),
+                            border: Border.all(
+                              color: const Color(0xff172D7F),
+                              width: 1.5,
+                            ),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(12),
+                            ),
                           ),
                           child: SingleChildScrollView(
                             child: Text(
                               talk.talk,
                               textAlign: TextAlign.justify,
-                              style: TextStyle(fontSize: MediaQuery.of(context).size.width * (15 / 360), color: Colors.black87, height: 1.5),
+                              style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width *
+                                    (15 / 360),
+                                color: Colors.black87,
+                                height: 1.5,
+                              ),
                             ),
                           ),
                         ),
@@ -278,18 +295,26 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindi
                           top: 0,
                           left: 20,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
                               color: const Color(0xff2B4193),
-                              border: Border.all(color: const Color(0xffffffff), width: 1.5),
+                              border: Border.all(
+                                color: const Color(0xffffffff),
+                                width: 1.5,
+                              ),
                               borderRadius: BorderRadius.circular(40),
                             ),
                             child: Text(
                               '푸리',
                               style: TextStyle(
-                                  fontSize: MediaQuery.of(context).size.width * (16 / 360),
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold
+                                fontSize:
+                                    MediaQuery.of(context).size.width *
+                                    (16 / 360),
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
@@ -298,7 +323,11 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen> with WidgetsBindi
                           bottom: 10,
                           right: 10,
                           child: IconButton(
-                            icon: const Icon(Icons.play_circle, color: Color(0xFF101351), size: 32),
+                            icon: const Icon(
+                              Icons.play_circle,
+                              color: Color(0xFF101351),
+                              size: 32,
+                            ),
                             onPressed: goToNext,
                           ),
                         ),
