@@ -65,7 +65,7 @@ class ElementaryHighTalkScreen extends StatefulWidget {
   State<ElementaryHighTalkScreen> createState() => _ElementaryHighTalkScreenState();
 }
 
-class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> with WidgetsBindingObserver {
+class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> with WidgetsBindingObserver {  // 앱 생명주기 이벤트를 감지하기 위한 인터페이스
   List<IntroTalkItem> talkList = [];
   int currentIndex = 0;
   bool isLoading = true;
@@ -98,7 +98,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
     final String jsonString = await rootBundle.loadString('assets/data/elementary_high/elementary_high_intro.json');
     final List<dynamic> jsonList = json.decode(jsonString);
     setState(() {
-      talkList = jsonList.map((e) => IntroTalkItem.fromJson(e)).toList();
+      talkList = jsonList.map((e) => IntroTalkItem.fromJson(e)).toList(); //asset내의 json파일 읽어옴
       isLoading = false;
     });
   }
@@ -147,7 +147,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
         return true;
       },
       child: Scaffold(
-        extendBodyBehindAppBar: true,
+        extendBodyBehindAppBar: true, //투명 앱 바
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: AppBar(
@@ -168,6 +168,13 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                       ),
                     ),
                   ),
+<<<<<<< HEAD
+                  Positioned( //좌측상단 뒤로가기 버튼
+                    left: 0, //자식 위젯을 부모 위젯의 왼쪽 가장자리에 붙임
+                    child: IconButton(    //IconButton: 사용자가 탭할 수 있는 버튼
+                      icon: const Icon(Icons.arrow_back, color: Color(0xffD95276)), //아이콘 모양은 뒤로가기(arrow_back), 색깔은 분홍
+                      onPressed: () => Navigator.of(context).pop(), //버튼눌렀을때 현재화면을 스택에서 제거
+=======
                   Positioned(
                     left: 0,
                     child: IconButton(
@@ -179,6 +186,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                           Navigator.of(context).pop();
                         }
                       },
+>>>>>>> 8a5f21e6b14a8c36708dab9d204ee0ffb987dcaa
                     ),
                   ),
                 ],
@@ -189,16 +197,16 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
         backgroundColor: Colors.white,
         body: Stack(
           children: [
-            Positioned.fill(
+            Positioned.fill(  //[배경화면] 부모 위젯이 차지하는 공간에 자식 위젯을 채운다.
               child: Image.asset(
                 'assets/images/bsbackground.png',
-                fit: BoxFit.cover,
+                fit: BoxFit.cover,  //전체공간 채우기
               ),
             ),
             Positioned.fill(
               child: Container(
                 decoration: const BoxDecoration(
-                  gradient: LinearGradient(
+                  gradient: LinearGradient( //그라데이션 효과
                     colors: [
                       Color(0x99D95276),
                       Color(0x99FFFFFF),
@@ -230,7 +238,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
-                        Container(
+                        Container(  //테두리 있는 흰색 박스상자
                           width: MediaQuery.of(context).size.width * 0.93,
                           height: MediaQuery.of(context).size.height * 0.28,
                           margin: const EdgeInsets.only(top: 12),
@@ -248,7 +256,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                             ),
                           ),
                         ),
-                        Positioned(
+                        Positioned( //대화상자 왼쪽 위 '푸리'
                           top: 0,
                           left: 20,
                           child: Container(
@@ -268,7 +276,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Padding(
+                  Padding(  //다음 버튼
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.93,
@@ -281,8 +289,13 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                         ),
                         onPressed: goToNext,
                         child: Text(
+<<<<<<< HEAD
+                          talk.answer,  //하단 버튼 텍스트
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+=======
                           talk.answer,
                           style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360), fontWeight: FontWeight.bold),
+>>>>>>> 8a5f21e6b14a8c36708dab9d204ee0ffb987dcaa
                         ),
                       ),
                     ),

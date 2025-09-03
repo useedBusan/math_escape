@@ -233,12 +233,12 @@ class _ElementaryHighMissionScreenState
 
   Future<void> loadMissionData() async {
     try {
-      // 미션 데이터 로드
+      // 미션 화면 데이터 로드
       final String missionJsonString = await rootBundle
           .loadString('assets/data/elementary_high/elementary_high_question.json');
       final List<dynamic> missionJsonList = json.decode(missionJsonString);
 
-      // 대화 데이터 로드
+      // 정답 화면 대화 데이터 로드
       final String talkJsonString = await rootBundle
           .loadString('assets/data/elementary_high/elementary_high_correct_talks.json');
       final List<dynamic> talkJsonList = json.decode(talkJsonString);
@@ -286,7 +286,7 @@ class _ElementaryHighMissionScreenState
     );
   }
 
-  void _submitAnswer() {
+  void _submitAnswer() {  //[하단] 정답제출 버튼
     final MissionItem currentMission = missionList[currentQuestionIndex];
     final String userAnswer = _answerController.text.trim();
 

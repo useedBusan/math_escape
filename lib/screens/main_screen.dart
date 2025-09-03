@@ -41,7 +41,7 @@ class _MainScreenState extends State<MainScreen> {
     ),
   ];
 
-  Future<void> _launchUrl(String url) async {
+  Future<void> _launchUrl(String url) async { // 메인중간 홈페이지 화면 로직
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
@@ -54,7 +54,7 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-  void _handleSchoolLevelTap(String level) {
+  void _handleSchoolLevelTap(String level) {  //[메인화면] 학년별 이동 카드
     if (level == '고등학교') {
       Navigator.push(
         context,
@@ -88,14 +88,14 @@ class _MainScreenState extends State<MainScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildLogoSection(),
+            children: [   //[메인화면] 총 4개의 자식
+              _buildLogoSection(),  // 상단 로고
               const SizedBox(height: 32),
-              _buildSchoolLevelsSection(),
+              _buildSchoolLevelsSection(),  // 학년별 카드 섹션
               const SizedBox(height: 32),
-              _buildHomepageSection(),
+              _buildHomepageSection(),  // 가운데 홈페이지 이동 박스
               const SizedBox(height: 32),
-              _buildContentSection(),
+              _buildContentSection(),   // 하단 스크롤 섹션
             ],
           ),
         ),
@@ -124,7 +124,7 @@ class _MainScreenState extends State<MainScreen> {
         scrollDirection: Axis.horizontal,
         itemCount: AppConstants.schoolLevels.length,
         separatorBuilder: (_, __) => const SizedBox(width: 16),
-        itemBuilder: (context, index) {
+        itemBuilder: (context, index) { //PageView가 각 페이지를 렌더링할 때 호출
           final level = AppConstants.schoolLevels[index];
           return SchoolLevelCard(
             level: level,
@@ -137,7 +137,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildHomepageSection() {
     return GestureDetector(
-      onTap: () => _launchUrl(AppConstants.homePageUrl),
+      onTap: () => _launchUrl(AppConstants.homePageUrl),  //한번 탭했을 때 실행할 함수
       child: Stack(
         children: [
           ClipRRect(
