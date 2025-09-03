@@ -65,7 +65,7 @@ class _HighMissionState extends State<HighMission> {
   }
 
   Future<MissionAnswer> loadAnswerById(int id) async {
-    final String jsonString = await rootBundle.loadString('lib/data/high/high_level_answer.json');
+    final String jsonString = await rootBundle.loadString('assets/data/high/high_level_answer.json');
     final List<dynamic> jsonData = json.decode(jsonString);
     return jsonData
         .map((e) => MissionAnswer.fromJson(e))
@@ -73,7 +73,7 @@ class _HighMissionState extends State<HighMission> {
   }
 
   Future<List<MissionQuestion>> loadQuestionList() async {
-    final String jsonString = await rootBundle.loadString('lib/data/high/high_level_question.json');
+    final String jsonString = await rootBundle.loadString('assets/data/high/high_level_question.json');
     final List<dynamic> jsonList = json.decode(jsonString);
     return jsonList.map((e) => MissionQuestion.fromJson(e)).toList();
   }
@@ -254,6 +254,7 @@ class _HighMissionState extends State<HighMission> {
                     } else {
                       showDialog(
                         context: context,
+                        barrierDismissible: false,
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: const Text('힌트'),

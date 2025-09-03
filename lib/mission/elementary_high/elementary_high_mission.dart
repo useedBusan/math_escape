@@ -235,12 +235,12 @@ class _ElementaryHighMissionScreenState
     try {
       // 미션 화면 데이터 로드
       final String missionJsonString = await rootBundle
-          .loadString('lib/data/elementary_high/elementary_high_question.json');
+          .loadString('assets/data/elementary_high/elementary_high_question.json');
       final List<dynamic> missionJsonList = json.decode(missionJsonString);
 
       // 정답 화면 대화 데이터 로드
       final String talkJsonString = await rootBundle
-          .loadString('lib/data/elementary_high/elementary_high_correct_talks.json');
+          .loadString('assets/data/elementary_high/elementary_high_correct_talks.json');
       final List<dynamic> talkJsonList = json.decode(talkJsonString);
 
       setState(() {
@@ -278,7 +278,8 @@ class _ElementaryHighMissionScreenState
 
     showDialog(
       context: context,
-      builder: (_) => HintDialog( //힌트 팝업으로 이동
+      barrierDismissible: false,
+      builder: (_) => HintDialog(
         hintTitle: title,
         hintContent: content,
       ),
@@ -293,6 +294,7 @@ class _ElementaryHighMissionScreenState
 
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (_) => AnswerPopup(
         isCorrect: correct,
         onNext: () {

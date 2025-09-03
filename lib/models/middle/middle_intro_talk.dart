@@ -1,15 +1,15 @@
 class IntroTalkItem {
   final int id;
   final String talk;
-  final String puri_image;
-  final String back_image;
+  final String puriImage;
+  final String backImage;
   final int? nextId;
 
   IntroTalkItem({
     required this.id,
     required this.talk,
-    required this.puri_image,
-    required this.back_image,
+    required this.puriImage,
+    required this.backImage,
     this.nextId
   });
 
@@ -17,8 +17,8 @@ class IntroTalkItem {
     return IntroTalkItem(
       id: json['id'],
       talk: json['talk'],
-      puri_image: json['puri_image'],
-      back_image: json['back_image'] ?? '',
+      puriImage: json['puri_image'],
+      backImage: json['back_image'] ?? '',
       nextId: json['next_id'],
     );
   }

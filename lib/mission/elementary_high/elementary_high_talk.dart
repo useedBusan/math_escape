@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'elementary_high_mission.dart';
@@ -96,7 +95,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
   }
 
   Future<void> loadTalks() async {
-    final String jsonString = await rootBundle.loadString('lib/data/elementary_high/elementary_high_intro.json');
+    final String jsonString = await rootBundle.loadString('assets/data/elementary_high/elementary_high_intro.json');
     final List<dynamic> jsonList = json.decode(jsonString);
     setState(() {
       talkList = jsonList.map((e) => IntroTalkItem.fromJson(e)).toList(); //asset내의 json파일 읽어옴

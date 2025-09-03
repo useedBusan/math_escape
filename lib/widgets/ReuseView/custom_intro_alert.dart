@@ -1,7 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:math_escape/models/elementary_low/talk_model.dart';
 
-class MiddleTalkDialog extends StatelessWidget {
-  const MiddleTalkDialog({super.key});
+class CustomIntroAlert extends StatelessWidget {
+  final StudentGrade grade;
+  final String buttonText;
+  final VoidCallback onConfirm;
+
+  const CustomIntroAlert({
+    super.key,
+    this.buttonText = '확인',
+    required this.onConfirm,
+    required this.grade
+  });
+
+  String _mainImage() {
+    switch (grade) {
+      case StudentGrade.elementaryLow:
+        return 'assets/images/introImgEleLow.png';
+      case StudentGrade.middle:
+        return 'assets/images/introImgMiddle.png';
+    }
+  }
+
+  Color _mainColor() {
+    switch(grade) {
+      case StudentGrade.elementaryLow:
+        return const Color(0xffD95276);
+        case StudentGrade.middle:
+        return const Color(0xff3F55A7);
+    }
+  }
+
+  String _mainText() {
+    switch(grade) {
+      case StudentGrade.elementaryLow:
+        return '수학자가 남긴 보물을 찾는 탐험을\n시작하시겠습니까?';
+        case StudentGrade.middle:
+        return '수학자의 비밀 노트를 찾는 여정을\n시작하시겠습니까?';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +60,13 @@ class MiddleTalkDialog extends StatelessWidget {
               child: Column(
                 children: [
                   Image.asset(
-                    'assets/images/diary.png',
+                    _mainImage(),
                     width: 80,
                     height: 80,
                   ),
                   const SizedBox(height: 18),
                   Text(
-                    "수학자의 비밀 노트를 찾는 여정을\n시작하시겠습니까?",
+                    _mainText(),
                     style: TextStyle(
                       fontFamily: "Pretendard",
                       fontSize: MediaQuery.of(context).size.width * (15 / 360),
@@ -45,17 +82,17 @@ class MiddleTalkDialog extends StatelessWidget {
             Container(
               width: double.infinity,
               height: 56,
-              decoration: const BoxDecoration(
-                color: Color(0xFF3f55a7),
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: _mainColor(),
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(8.0),
                   bottomRight: Radius.circular(8.0),
                 ),
               ),
               child: TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: onConfirm,
                 style: TextButton.styleFrom(
-                  foregroundColor: Colors.white, // This is the color for the text
+                  foregroundColor: Colors.white,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8.0),
@@ -64,7 +101,7 @@ class MiddleTalkDialog extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  '확인',
+                  buttonText,
                   style: TextStyle(
                     fontSize: MediaQuery.of(context).size.width * (16 / 360),
                   ),
