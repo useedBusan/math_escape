@@ -1,6 +1,6 @@
-enum Speaker { puri, maemae, book }
-enum BackImg { first, second }
-enum StudentGrade { elementaryLow, middle}
+
+
+import '../Enums/speaker_enums.dart';
 
 class Talk {
   final int id;

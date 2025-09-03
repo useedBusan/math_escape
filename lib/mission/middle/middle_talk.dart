@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../models/elementary_low/talk_model.dart';
+import '../../Common/Enums/grade_enums.dart';
 import '../../models/middle/middle_intro_talk.dart';
 import 'package:math_escape/mission/middle/middle_mission.dart';
 import 'package:math_escape/widgets/ReuseView/custom_intro_alert.dart';

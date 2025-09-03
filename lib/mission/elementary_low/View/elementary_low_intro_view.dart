@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:math_escape/widgets/ReuseView/intro_talk_bubble.dart';
-import '../../../models/elementary_low/talk_model.dart';
+import '../../../Common/Enums/grade_enums.dart';
 import '../ViewModel/elementary_low_intro_view_model.dart';
 import 'elementary_low_mission_view.dart';
 

@@ -1,14 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:math_escape/Common/Enums/grade_enums.dart';
+import 'package:math_escape/Common/View/mission_background_view.dart';
 
-class ElementaryLowMissionView extends StatelessWidget {
+class ElementaryLowMissionView extends StatefulWidget {
   const ElementaryLowMissionView({super.key});
 
   @override
+  State<ElementaryLowMissionView> createState() => _ElementaryLowMissionViewState();
+}
+
+class _ElementaryLowMissionViewState extends State<ElementaryLowMissionView> {
+  final StudentGrade grade = StudentGrade.elementaryLow;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Widget missionBuilder(BuildContext context) {
+    return ElementaryLowMissionListView();
+  }
+
+  Widget hintDialogueBuilder(BuildContext context) {
+    return const ElementaryLowHintDialogue();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("ElementaryLowMissionView"),
-      ),
+    return MissionBackgroundView(
+        grade: grade,
+        title: "미션! 수사모의 수학 보물을 찾아서",
+        missionBuilder: missionBuilder,
+        hintDialogueBuilder: hintDialogueBuilder,
+        onSubmitAnswer: onSubmitAnswer,
     );
   }
 }

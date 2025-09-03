@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:math_escape/models/elementary_low/talk_model.dart';
+import '../../Common/Enums/grade_enums.dart';
 
 class CustomIntroAlert extends StatelessWidget {
   final StudentGrade grade;
@@ -19,6 +19,8 @@ class CustomIntroAlert extends StatelessWidget {
         return 'assets/images/introImgEleLow.png';
       case StudentGrade.middle:
         return 'assets/images/introImgMiddle.png';
+      default:
+        return '';
     }
   }
 
@@ -26,8 +28,10 @@ class CustomIntroAlert extends StatelessWidget {
     switch(grade) {
       case StudentGrade.elementaryLow:
         return const Color(0xffD95276);
-        case StudentGrade.middle:
+      case StudentGrade.middle:
         return const Color(0xff3F55A7);
+      default:
+        return Colors.white;
     }
   }
 
@@ -35,8 +39,10 @@ class CustomIntroAlert extends StatelessWidget {
     switch(grade) {
       case StudentGrade.elementaryLow:
         return '수학자가 남긴 보물을 찾는 탐험을\n시작하시겠습니까?';
-        case StudentGrade.middle:
+      case StudentGrade.middle:
         return '수학자의 비밀 노트를 찾는 여정을\n시작하시겠습니까?';
+      default:
+        return '';
     }
   }
 

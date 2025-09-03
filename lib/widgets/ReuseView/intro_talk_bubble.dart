@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../models/elementary_low/talk_model.dart';
+import '../../Common/Enums/grade_enums.dart';
+import '../../Common/Enums/speaker_enums.dart';
+import '../../Common/Model/talk_model.dart';
 
 class TalkBubble extends StatelessWidget {
   final Talk talk;
@@ -19,6 +21,8 @@ class TalkBubble extends StatelessWidget {
         return const Color(0xffB73D5D);
       case StudentGrade.middle:
         return const Color(0xff2B4193);
+      default:
+        return Colors.white;
     }
   }
 

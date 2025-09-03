@@ -168,13 +168,6 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                       ),
                     ),
                   ),
-<<<<<<< HEAD
-                  Positioned( //좌측상단 뒤로가기 버튼
-                    left: 0, //자식 위젯을 부모 위젯의 왼쪽 가장자리에 붙임
-                    child: IconButton(    //IconButton: 사용자가 탭할 수 있는 버튼
-                      icon: const Icon(Icons.arrow_back, color: Color(0xffD95276)), //아이콘 모양은 뒤로가기(arrow_back), 색깔은 분홍
-                      onPressed: () => Navigator.of(context).pop(), //버튼눌렀을때 현재화면을 스택에서 제거
-=======
                   Positioned(
                     left: 0,
                     child: IconButton(
@@ -186,7 +179,6 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                           Navigator.of(context).pop();
                         }
                       },
->>>>>>> 8a5f21e6b14a8c36708dab9d204ee0ffb987dcaa
                     ),
                   ),
                 ],
@@ -289,13 +281,8 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen> wit
                         ),
                         onPressed: goToNext,
                         child: Text(
-<<<<<<< HEAD
-                          talk.answer,  //하단 버튼 텍스트
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-=======
                           talk.answer,
                           style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360), fontWeight: FontWeight.bold),
->>>>>>> 8a5f21e6b14a8c36708dab9d204ee0ffb987dcaa
                         ),
                       ),
                     ),

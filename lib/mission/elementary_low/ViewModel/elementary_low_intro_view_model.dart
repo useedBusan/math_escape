@@ -1,7 +1,7 @@
 import "dart:convert";
 import "package:flutter/cupertino.dart";
 import "package:flutter/services.dart";
-import "../../../models/elementary_low/talk_model.dart";
+import "../../../Common/Model/talk_model.dart";
 
 class ElementaryLowIntroViewModel {
   List<Talk> talks = [];
