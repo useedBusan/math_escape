@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:math_escape/screens/splash_screen.dart';
 import 'package:math_escape/constants/app_constants.dart';
 import 'package:math_escape/theme/app_theme.dart';
+import 'package:math_escape/services/service_locator.dart';
 
 void main() {
+  // 서비스 초기화
+  serviceLocator.initialize();
+
   runApp(const MyApp());
 }
 

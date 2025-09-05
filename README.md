@@ -10,7 +10,7 @@
 - 중등 미션 대화 시스템 ✅ 새로 구현 완료
 
 ### 진행 현황 개발표
-- [학년별 개발 현황 진행 표](https://www.notion.so/mindtrendsetter/25b1e62ca0e980aa9703e9b3c6262328?v=25b1e62ca0e980ae8c23000c74b6bd61&source=copy_link)
+- [학년별 개발 현황 진행 표](https://www.notion.so/mindtrendsetter/4c8b2b62344940d2a432fc19a78810f6?source=copy_link)
 
 ## 🏗️ 프로젝트 구조
 
