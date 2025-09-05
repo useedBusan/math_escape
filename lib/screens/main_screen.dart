@@ -41,20 +41,22 @@ class _MainScreenState extends State<MainScreen> {
     ),
   ];
 
-  Future<void> _launchUrl(String url) async { // 메인중간 홈페이지 화면 로직
+  Future<void> _launchUrl(String url) async {
+    // 메인중간 홈페이지 화면 로직
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('URL을 열 수 없습니다')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('URL을 열 수 없습니다')));
       }
     }
   }
 
-  void _handleSchoolLevelTap(String level) {  //[메인화면] 학년별 이동 카드
+  void _handleSchoolLevelTap(String level) {
+    //[메인화면] 학년별 이동 카드
     if (level == '고등학교') {
       Navigator.push(
         context,
@@ -65,14 +67,12 @@ class _MainScreenState extends State<MainScreen> {
         context,
         MaterialPageRoute(builder: (_) => const ElementaryHighTalkScreen()),
       );
-    }
-    else if (level == '중학교') {
+    } else if (level == '중학교') {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => const MiddleIntroScreen()),
       );
-    }
-    else if (level == '초등학교 저학년') {
+    } else if (level == '초등학교 저학년') {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => const ElementaryLowIntroView()),
@@ -88,14 +88,15 @@ class _MainScreenState extends State<MainScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [   //[메인화면] 총 4개의 자식
-              _buildLogoSection(),  // 상단 로고
+            children: [
+              //[메인화면] 총 4개의 자식
+              _buildLogoSection(), // 상단 로고
               const SizedBox(height: 32),
-              _buildSchoolLevelsSection(),  // 학년별 카드 섹션
+              _buildSchoolLevelsSection(), // 학년별 카드 섹션
               const SizedBox(height: 32),
-              _buildHomepageSection(),  // 가운데 홈페이지 이동 박스
+              _buildHomepageSection(), // 가운데 홈페이지 이동 박스
               const SizedBox(height: 32),
-              _buildContentSection(),   // 하단 스크롤 섹션
+              _buildContentSection(), // 하단 스크롤 섹션
             ],
           ),
         ),
@@ -124,7 +125,8 @@ class _MainScreenState extends State<MainScreen> {
         scrollDirection: Axis.horizontal,
         itemCount: AppConstants.schoolLevels.length,
         separatorBuilder: (_, __) => const SizedBox(width: 16),
-        itemBuilder: (context, index) { //PageView가 각 페이지를 렌더링할 때 호출
+        itemBuilder: (context, index) {
+          //PageView가 각 페이지를 렌더링할 때 호출
           final level = AppConstants.schoolLevels[index];
           return SchoolLevelCard(
             level: level,
@@ -137,7 +139,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildHomepageSection() {
     return GestureDetector(
-      onTap: () => _launchUrl(AppConstants.homePageUrl),  //한번 탭했을 때 실행할 함수
+      onTap: () => _launchUrl(AppConstants.homePageUrl), //한번 탭했을 때 실행할 함수
       child: Stack(
         children: [
           ClipRRect(
@@ -228,4 +230,4 @@ class _MainScreenState extends State<MainScreen> {
       }),
     );
   }
-} 
+}
