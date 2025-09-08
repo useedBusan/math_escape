@@ -6,6 +6,7 @@ import 'package:math_escape/widgets/elementary_high_answer_popup.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import '../../models/elementary_high/elementary_high_correct_talk.dart';
 import 'package:math_escape/screens/qr_scan_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 // MissionItem class as provided in the original code
 class MissionItem {
@@ -46,18 +47,12 @@ class MissionItem {
   }
 }
 
-
-
 // TalkScreen 위젯
 class TalkScreen extends StatelessWidget {
   final CorrectTalkItem talk;
   final VoidCallback onNext;
 
-  const TalkScreen({
-    Key? key,
-    required this.talk,
-    required this.onNext,
-  }) : super(key: key);
+  const TalkScreen({super.key, required this.talk, required this.onNext});
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +81,10 @@ class TalkScreen extends StatelessWidget {
                 Positioned(
                   left: 0,
                   child: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Color(0xffD95276)),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Color(0xffD95276),
+                    ),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
@@ -100,7 +98,9 @@ class TalkScreen extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.asset(
-              talk.back_image.isNotEmpty ? talk.back_image : 'assets/images/bsbackground.png',
+              talk.back_image.isNotEmpty
+                  ? talk.back_image
+                  : 'assets/images/bsbackground.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -108,10 +108,7 @@ class TalkScreen extends StatelessWidget {
             child: Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Color(0x99D95276),
-                    Color(0x99FFFFFF),
-                  ],
+                  colors: [Color(0x99D95276), Color(0x99FFFFFF)],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
@@ -140,40 +137,63 @@ class TalkScreen extends StatelessWidget {
                   child: Stack(
                     clipBehavior: Clip.none,
                     children: [
-                                              Container(
-                          width: MediaQuery.of(context).size.width * 0.93,
-                          height: MediaQuery.of(context).size.height * 0.28,
-                          margin: const EdgeInsets.only(top: 12),
-                          padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: const Color(0xff952B47), width: 1.5),
-                            borderRadius: const BorderRadius.all(Radius.circular(12)),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.93,
+                        height: MediaQuery.of(context).size.height * 0.28,
+                        margin: const EdgeInsets.only(top: 12),
+                        padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: const Color(0xff952B47),
+                            width: 1.5,
                           ),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(12),
+                          ),
+                        ),
                         child: SingleChildScrollView(
                           child: Text(
                             talk.talk,
                             textAlign: TextAlign.justify,
-                            style: TextStyle(fontSize: MediaQuery.of(context).size.width * (15 / 360), color: Colors.black87, height: 1.5),
+                            style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.width *
+                                  (15 / 360),
+                              color: Colors.black87,
+                              height: 1.5,
+                            ),
                           ),
                         ),
                       ),
                       Positioned(
-                          top: 0,
-                          left: 20,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: const Color(0xffB73D5D),
-                              border: Border.all(color: const Color(0xffffffff), width: 1.5),
-                              borderRadius: BorderRadius.circular(40),
+                        top: 0,
+                        left: 20,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xffB73D5D),
+                            border: Border.all(
+                              color: const Color(0xffffffff),
+                              width: 1.5,
                             ),
-                            child: Text(
-                              '푸리',
-                              style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360), color: Colors.white, fontWeight: FontWeight.bold),
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                          child: Text(
+                            '푸리',
+                            style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.width *
+                                  (16 / 360),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
+                      ),
                     ],
                   ),
                 ),
@@ -187,12 +207,18 @@ class TalkScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xffD95276),
                         foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                       onPressed: onNext,
                       child: Text(
                         talk.answer,
-                        style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360), fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize:
+                              MediaQuery.of(context).size.width * (16 / 360),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -234,18 +260,24 @@ class _ElementaryHighMissionScreenState
   Future<void> loadMissionData() async {
     try {
       // 미션 화면 데이터 로드
-      final String missionJsonString = await rootBundle
-          .loadString('assets/data/elementary_high/elementary_high_question.json');
+      final String missionJsonString = await rootBundle.loadString(
+        'assets/data/elementary_high/elementary_high_question.json',
+      );
       final List<dynamic> missionJsonList = json.decode(missionJsonString);
 
       // 정답 화면 대화 데이터 로드
-      final String talkJsonString = await rootBundle
-          .loadString('assets/data/elementary_high/elementary_high_correct_talks.json');
+      final String talkJsonString = await rootBundle.loadString(
+        'assets/data/elementary_high/elementary_high_correct_talks.json',
+      );
       final List<dynamic> talkJsonList = json.decode(talkJsonString);
 
       setState(() {
-        missionList = missionJsonList.map((e) => MissionItem.fromJson(e)).toList();
-        talkList = talkJsonList.map((e) => CorrectTalkItem.fromJson(e)).toList();
+        missionList = missionJsonList
+            .map((e) => MissionItem.fromJson(e))
+            .toList();
+        talkList = talkJsonList
+            .map((e) => CorrectTalkItem.fromJson(e))
+            .toList();
         isLoading = false;
       });
     } catch (e) {
@@ -279,14 +311,50 @@ class _ElementaryHighMissionScreenState
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => HintDialog(
-        hintTitle: title,
-        hintContent: content,
-      ),
+      builder: (_) => HintDialog(hintTitle: title, hintContent: content),
     );
   }
 
-  void _submitAnswer() {  //[하단] 정답제출 버튼
+  void _handleSubmit() {
+    final int questionNumber = currentQuestionIndex + 1;
+
+    // QR 스캔이 필요한 문제들 (2, 3, 4, 8번)
+    final qrScanQuestions = [2, 3, 4, 8];
+
+    if (qrScanQuestions.contains(questionNumber)) {
+      _openQRScanner();
+    } else {
+      _submitTextAnswer();
+    }
+  }
+
+  void _openQRScanner() async {
+    // 카메라 권한 요청
+    final status = await Permission.camera.request();
+
+    if (status.isGranted) {
+      // QR 스캔 화면으로 이동
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const QRScanScreen()),
+      );
+
+      if (result != null && result is String) {
+        // QR 스캔 결과 처리
+        _handleQRScanResult(result);
+      }
+    } else {
+      // 권한 거부 시 안내 메시지
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('카메라 권한이 필요합니다. 설정에서 권한을 허용해주세요.'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
+  }
+
+  void _submitTextAnswer() {
     final MissionItem currentMission = missionList[currentQuestionIndex];
     final String userAnswer = _answerController.text.trim();
 
@@ -300,7 +368,30 @@ class _ElementaryHighMissionScreenState
         onNext: () {
           Navigator.pop(context); // 정답 팝업 닫기
           if (correct) {
-            // 정답일 때만 id 5번 대화 화면으로 이동
+            // 정답일 때만 대화 화면으로 이동
+            _showCorrectAnswerDialog();
+          }
+          // 오답일 때는 아무것도 하지 않음 (현재 문제 유지)
+        },
+      ),
+    );
+  }
+
+  void _handleQRScanResult(String qrResult) {
+    final MissionItem currentMission = missionList[currentQuestionIndex];
+
+    // QR 스캔 결과를 정답과 비교
+    final bool correct = currentMission.answer.contains(qrResult.trim());
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AnswerPopup(
+        isCorrect: correct,
+        onNext: () {
+          Navigator.pop(context); // 정답 팝업 닫기
+          if (correct) {
+            // 정답일 때만 대화 화면으로 이동
             _showCorrectAnswerDialog();
           }
           // 오답일 때는 아무것도 하지 않음 (현재 문제 유지)
@@ -321,6 +412,86 @@ class _ElementaryHighMissionScreenState
     });
   }
 
+  Widget _buildSubmitButtonContent(BuildContext context) {
+    final int questionNumber = currentQuestionIndex + 1;
+    final qrScanQuestions = [2, 3, 4, 8];
+
+    if (qrScanQuestions.contains(questionNumber)) {
+      // QR 스캔 버튼
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.qr_code_scanner, color: Colors.white, size: 20),
+          const SizedBox(width: 6),
+          Text(
+            'QR 스캔',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: MediaQuery.of(context).size.width * (16 / 360),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      );
+    } else {
+      // 텍스트 입력 버튼
+      return Text(
+        '정답제출',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: MediaQuery.of(context).size.width * (16 / 360),
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    }
+  }
+
+  Widget _buildAnswerInput(BuildContext context) {
+    final int questionNumber = currentQuestionIndex + 1;
+    final qrScanQuestions = [2, 3, 4, 8];
+    final Color mainColor = const Color(0xffD95276);
+
+    if (qrScanQuestions.contains(questionNumber)) {
+      // QR 스캔 문제는 입력 필드 숨김
+      return const SizedBox.shrink();
+    } else {
+      // 텍스트 입력 문제는 입력 필드 표시
+      return Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFFFFF),
+          borderRadius: BorderRadius.circular(4.0),
+          border: Border.all(color: const Color(0xffdcdcdc)),
+        ),
+        child: TextField(
+          style: TextStyle(
+            fontSize: MediaQuery.of(context).size.width * (15 / 360),
+          ),
+          controller: _answerController,
+          decoration: InputDecoration(
+            hintText: '정답을 입력해 주세요.',
+            hintStyle: TextStyle(
+              fontSize: MediaQuery.of(context).size.width * (14 / 360),
+              color: Color(0xffaaaaaa),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 12.0,
+            ),
+            border: InputBorder.none,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: const BorderSide(color: Color(0xffaaaaaa)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: BorderSide(color: mainColor, width: 2.0),
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
   void _showCorrectAnswerDialog() {
     try {
       final int currentQuestionId = currentQuestionIndex + 1;
@@ -338,8 +509,9 @@ class _ElementaryHighMissionScreenState
         firstTalkId = currentQuestionId + 1;
       }
 
-      final CorrectTalkItem firstTalk =
-      talkList.firstWhere((talk) => talk.id == firstTalkId);
+      final CorrectTalkItem firstTalk = talkList.firstWhere(
+        (talk) => talk.id == firstTalkId,
+      );
 
       void showTalk(CorrectTalkItem talk) {
         Navigator.push(
@@ -351,8 +523,9 @@ class _ElementaryHighMissionScreenState
                 Navigator.pop(context);
 
                 if (talk.nextId != null) {
-                  final nextTalk =
-                  talkList.firstWhere((t) => t.id == talk.nextId);
+                  final nextTalk = talkList.firstWhere(
+                    (t) => t.id == talk.nextId,
+                  );
                   showTalk(nextTalk);
                 } else {
                   _goToNextQuestion();
@@ -370,13 +543,10 @@ class _ElementaryHighMissionScreenState
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (missionList.isEmpty) {
@@ -430,11 +600,12 @@ class _ElementaryHighMissionScreenState
                           ClipRRect(
                             borderRadius: BorderRadius.circular(5.0),
                             child: LinearProgressIndicator(
-                              value: (currentQuestionIndex + 1) /
-                                  totalQuestions,
+                              value:
+                                  (currentQuestionIndex + 1) / totalQuestions,
                               backgroundColor: const Color(0xffebebeb),
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                  mainColor),
+                                mainColor,
+                              ),
                               minHeight: 10,
                             ),
                           ),
@@ -443,11 +614,12 @@ class _ElementaryHighMissionScreenState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '문제 ${currentQuestionIndex +
-                                    1} / $totalQuestions',
+                                '문제 ${currentQuestionIndex + 1} / $totalQuestions',
                                 style: TextStyle(
                                   fontFamily: "SBAggro",
-                                  fontSize: MediaQuery.of(context).size.width * (18 / 360),
+                                  fontSize:
+                                      MediaQuery.of(context).size.width *
+                                      (18 / 360),
                                   fontWeight: FontWeight.w400,
                                   color: Color(0xff202020),
                                 ),
@@ -457,46 +629,15 @@ class _ElementaryHighMissionScreenState
                                 mission.question,
                                 textAlign: TextAlign.justify,
                                 style: TextStyle(
-                                  height : 1.4,
-                                  fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                                  height: 1.4,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width *
+                                      (16 / 360),
                                   color: Color(0xff333333),
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFFFFF),
-                                  borderRadius: BorderRadius.circular(4.0),
-                                  border: Border.all(
-                                      color: const Color(0xffdcdcdc)),
-                                ),
-                                child: TextField(
-                                  style: TextStyle(fontSize: MediaQuery.of(context).size.width * (15 / 360)),
-                                  controller: _answerController,
-                                  decoration: InputDecoration(
-                                    hintText: '정답을 입력해 주세요.',
-                                    hintStyle: TextStyle(
-                                        fontSize: MediaQuery.of(context).size.width * (14 / 360),
-                                        color: Color(0xffaaaaaa)),
-                                    contentPadding: const EdgeInsets
-                                        .symmetric(
-                                        horizontal: 16.0, vertical: 12.0),
-                                    border: InputBorder.none,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          4.0),
-                                      borderSide: const BorderSide(
-                                          color: const Color(0xffaaaaaa)),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          4.0),
-                                      borderSide: BorderSide(
-                                          color: mainColor, width: 2.0),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              _buildAnswerInput(context),
                             ],
                           ),
                           const SizedBox(height: 20),
@@ -518,35 +659,40 @@ class _ElementaryHighMissionScreenState
           child: Row(
             children: [
               Expanded(
-                  child: SizedBox(
-                    height: 56,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xffffedfa),
-                        elevation: 1,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          side: BorderSide(color: mainColor, width: 2),
-                        ),
-                      ),
-                      onPressed: _showHintDialog,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min, // 버튼 크기를 내용에 맞춤
-                        children: [
-                          Icon(Symbols.tooltip_2, color: mainColor, size: 24), // 아이콘
-                          SizedBox(width: 6), // 간격
-                          Text(
-                            '힌트',
-                            style: TextStyle(
-                              color: mainColor,
-                              fontSize: MediaQuery.of(context).size.width * (16 / 360),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                child: SizedBox(
+                  height: 56,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xffffedfa),
+                      elevation: 1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: BorderSide(color: mainColor, width: 2),
                       ),
                     ),
-                  )
+                    onPressed: _showHintDialog,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min, // 버튼 크기를 내용에 맞춤
+                      children: [
+                        Icon(
+                          Symbols.tooltip_2,
+                          color: mainColor,
+                          size: 24,
+                        ), // 아이콘
+                        SizedBox(width: 6), // 간격
+                        Text(
+                          '힌트',
+                          style: TextStyle(
+                            color: mainColor,
+                            fontSize:
+                                MediaQuery.of(context).size.width * (16 / 360),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -560,18 +706,10 @@ class _ElementaryHighMissionScreenState
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
-                    onPressed: _submitAnswer,
+                    onPressed: _handleSubmit,
                     child: Stack(
                       alignment: Alignment.center,
-                      children: [
-                        Text(
-                          '정답제출',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: MediaQuery.of(context).size.width * (16 / 360),
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
+                      children: [_buildSubmitButtonContent(context)],
                     ),
                   ),
                 ),

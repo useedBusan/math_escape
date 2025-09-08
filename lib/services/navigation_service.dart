@@ -3,6 +3,8 @@ import '../screens/intro_screen/high_intro_screen.dart';
 import '../mission/middle/middle_talk.dart';
 import '../mission/elementary_high/elementary_high_talk.dart';
 import '../mission/elementary_low/View/elementary_low_intro_view.dart';
+import '../screens/qr_scan_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 /// 네비게이션을 담당하는 서비스
 class NavigationService {
@@ -48,9 +50,33 @@ class NavigationService {
   /// QR 스캔 화면으로 이동
   ///
   /// [context] BuildContext
-  void navigateToQRScan(BuildContext context) {
-    // TODO: QR 스캔 화면으로 이동하는 로직 구현
-    // Navigator.push(context, MaterialPageRoute(builder: (_) => const QRScanScreen()));
+  /// [onQRScanned] QR 스캔 완료 시 콜백 함수
+  Future<void> navigateToQRScan(
+    BuildContext context, {
+    Function(String)? onQRScanned,
+  }) async {
+    // 카메라 권한 요청
+    final status = await Permission.camera.request();
+
+    if (status.isGranted) {
+      // QR 스캔 화면으로 이동
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const QRScanScreen()),
+      );
+
+      if (result != null && result is String && onQRScanned != null) {
+        onQRScanned(result);
+      }
+    } else {
+      // 권한 거부 시 안내 메시지
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('카메라 권한이 필요합니다. 설정에서 권한을 허용해주세요.'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
   }
 
   /// 이전 화면으로 돌아가기
