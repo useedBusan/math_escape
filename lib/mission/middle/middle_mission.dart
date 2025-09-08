@@ -3,9 +3,6 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:math_escape/widgets/middle_hint_popup.dart';
 import 'package:math_escape/widgets/middle_answer_popup.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
-import '../../models/elementary_high/elementary_high_correct_talk.dart';
-import 'package:math_escape/screens/qr_scan_screen.dart';
 
 // 새로운 모델 클래스 추가
 class CorrectTalkItem {
@@ -764,6 +761,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                             (15 / 360),
                                       ),
                                       controller: _answerController,
+                                      keyboardType: TextInputType.text,
+                                      textInputAction: TextInputAction.done,
                                       decoration: InputDecoration(
                                         hintText: '정답을 입력해 주세요.',
                                         hintStyle: TextStyle(
@@ -835,13 +834,17 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                       children: [
                         // 힌트 1
                         AnimatedSlide(
-                          duration: showHint1? const Duration(milliseconds: 300) : Duration.zero,
+                          duration: showHint1
+                              ? const Duration(milliseconds: 300)
+                              : Duration.zero,
                           curve: Curves.easeOut,
                           offset: showHint1
                               ? Offset.zero
                               : const Offset(0, 0.1),
                           child: AnimatedOpacity(
-                            duration: showHint1? const Duration(milliseconds: 300) : Duration.zero,
+                            duration: showHint1
+                                ? const Duration(milliseconds: 300)
+                                : Duration.zero,
                             opacity: showHint1 ? 1.0 : 0.0,
                             child: Container(
                               width: double.infinity,
@@ -906,13 +909,17 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
 
                         // 힌트 2
                         AnimatedSlide(
-                          duration: showHint2? const Duration(milliseconds: 300) : Duration.zero,
+                          duration: showHint2
+                              ? const Duration(milliseconds: 300)
+                              : Duration.zero,
                           curve: Curves.easeOut,
                           offset: showHint2
                               ? Offset.zero
                               : const Offset(0, 0.1),
                           child: AnimatedOpacity(
-                            duration: showHint2? const Duration(milliseconds: 300) : Duration.zero,
+                            duration: showHint2
+                                ? const Duration(milliseconds: 300)
+                                : Duration.zero,
                             opacity: showHint2 ? 1.0 : 0.0,
                             child: Container(
                               width: double.infinity,

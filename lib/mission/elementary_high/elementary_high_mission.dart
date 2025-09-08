@@ -467,6 +467,8 @@ class _ElementaryHighMissionScreenState
             fontSize: MediaQuery.of(context).size.width * (15 / 360),
           ),
           controller: _answerController,
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.done,
           decoration: InputDecoration(
             hintText: '정답을 입력해 주세요.',
             hintStyle: TextStyle(
