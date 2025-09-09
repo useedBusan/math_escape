@@ -67,7 +67,9 @@ class _HighMissionState extends State<HighMission> {
   }
 
   Future<MissionAnswer> loadAnswerById(int id) async {
-    final String jsonString = await rootBundle.loadString('assets/data/high/high_level_answer.json');
+    final String jsonString = await rootBundle.loadString(
+      'assets/data/high/high_level_answer.json',
+    );
     final List<dynamic> jsonData = json.decode(jsonString);
     return jsonData
         .map((e) => MissionAnswer.fromJson(e))
@@ -75,21 +77,24 @@ class _HighMissionState extends State<HighMission> {
   }
 
   Future<List<MissionQuestion>> loadQuestionList() async {
-    final String jsonString = await rootBundle.loadString('assets/data/high/high_level_question.json');
+    final String jsonString = await rootBundle.loadString(
+      'assets/data/high/high_level_question.json',
+    );
     final List<dynamic> jsonList = json.decode(jsonString);
     return jsonList.map((e) => MissionQuestion.fromJson(e)).toList();
   }
 
-  Future<void> showAnswerPopup(BuildContext context, {required bool isCorrect}) async {
+  Future<void> showAnswerPopup(
+    BuildContext context, {
+    required bool isCorrect,
+  }) async {
     showGeneralDialog(
       context: context,
       barrierDismissible: false,
       barrierLabel: '',
       transitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (context, animation, secondaryAnimation) {
-        return Center(
-          child: AnswerPopup(isCorrect: isCorrect, grade: StudentGrade.high, onNext: () {  },),
-        );
+        return Center(child: AnswerPopup(isCorrect: isCorrect));
       },
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         return ScaleTransition(
@@ -138,7 +143,10 @@ class _HighMissionState extends State<HighMission> {
                 SizedBox(height: screenHeight * 0.02),
                 Text(
                   q.title,
-                  style: TextStyle(fontSize: screenWidth * 0.05, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.05,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 SizedBox(height: screenHeight * 0.015),
                 QuestionBalloon(
@@ -149,15 +157,26 @@ class _HighMissionState extends State<HighMission> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('답변:', style: TextStyle(fontSize: screenWidth * 0.045, fontWeight: FontWeight.bold)),
+                    Text(
+                      '답변:',
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.045,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     SizedBox(width: screenWidth * 0.03),
                     Expanded(
                       child: TextField(
                         controller: _controller,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.done,
                         decoration: const InputDecoration(
                           hintText: '정답을 입력하세요',
                           border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
                         ),
                       ),
                     ),
@@ -169,15 +188,16 @@ class _HighMissionState extends State<HighMission> {
                     alignment: Alignment.centerRight,
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.qr_code_scanner),
-                      label: Text('QR코드 촬영', style: TextStyle(fontSize: screenWidth * 0.04)),
+                      label: Text(
+                        'QR코드 촬영',
+                        style: TextStyle(fontSize: screenWidth * 0.04),
+                      ),
                       onPressed: () async {
                         final status = await Permission.camera.request();
                         if (status.isGranted) {
                           final result = await Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (_) => QRScanScreen(),
-                            ),
+                            MaterialPageRoute(builder: (_) => QRScanScreen()),
                           );
                           if (result != null && result is String) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -199,7 +219,9 @@ class _HighMissionState extends State<HighMission> {
                     ElevatedButton(
                       onPressed: () async {
                         final input = _controller.text.trim().toLowerCase();
-                        final answers = q.answer.map((a) => a.trim().toLowerCase()).toList();
+                        final answers = q.answer
+                            .map((a) => a.trim().toLowerCase())
+                            .toList();
                         final isCorrect = answers.contains(input);
                         await showAnswerPopup(context, isCorrect: isCorrect);
                         if (isCorrect) {
@@ -217,7 +239,10 @@ class _HighMissionState extends State<HighMission> {
                           );
                         }
                       },
-                      child: Text('확인', style: TextStyle(fontSize: screenWidth * 0.04)),
+                      child: Text(
+                        '확인',
+                        style: TextStyle(fontSize: screenWidth * 0.04),
+                      ),
                     ),
                     SizedBox(width: screenWidth * 0.03),
                   ],
@@ -226,7 +251,9 @@ class _HighMissionState extends State<HighMission> {
                 TextButton(
                   onPressed: () async {
                     if (q.title == '역설, 혹은 모호함_1') {
-                      final idx = widget.questionList.indexWhere((qq) => qq.id == 2);
+                      final idx = widget.questionList.indexWhere(
+                        (qq) => qq.id == 2,
+                      );
                       if (idx != -1) {
                         Navigator.pushReplacement(
                           context,
@@ -240,7 +267,9 @@ class _HighMissionState extends State<HighMission> {
                         );
                       }
                     } else if (q.title == '역설, 혹은 모호함_3') {
-                      final idx = widget.questionList.indexWhere((qq) => qq.id == 5);
+                      final idx = widget.questionList.indexWhere(
+                        (qq) => qq.id == 5,
+                      );
                       if (idx != -1) {
                         Navigator.pushReplacement(
                           context,
@@ -274,7 +303,10 @@ class _HighMissionState extends State<HighMission> {
                       );
                     }
                   },
-                  child: Text('힌트 보기', style: TextStyle(fontSize: screenWidth * 0.04)),
+                  child: Text(
+                    '힌트 보기',
+                    style: TextStyle(fontSize: screenWidth * 0.04),
+                  ),
                 ),
               ],
             ),
