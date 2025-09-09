@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:math_escape/Common/Enums/grade_enums.dart';
 import 'package:math_escape/Common/View/mission_background_view.dart';
+import 'package:math_escape/Common/View/temporary_elementary_hint_dialogue.dart';
+import '../ViewModel/elementary_low_mission_view_model.dart';
+import 'elementary_low_mission_list_view.dart';
 
 class ElementaryLowMissionView extends StatefulWidget {
   const ElementaryLowMissionView({super.key});
@@ -22,7 +25,12 @@ class _ElementaryLowMissionViewState extends State<ElementaryLowMissionView> {
   }
 
   Widget hintDialogueBuilder(BuildContext context) {
-    return const ElementaryLowHintDialogue();
+    return const TemporaryElementaryHintDialogue();
+  }
+
+  Future<bool> onSubmitAnswer(BuildContext context) async {
+    await ElementaryLowMissionViewModel.instance.submitAnswer();
+    return ElementaryLowMissionViewModel.instance.lastSubmitCorrect ?? false;
   }
 
   @override
@@ -36,8 +44,6 @@ class _ElementaryLowMissionViewState extends State<ElementaryLowMissionView> {
     );
   }
 }
-
-
 
 
 
