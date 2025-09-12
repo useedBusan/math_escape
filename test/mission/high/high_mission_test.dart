@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:math_escape/mission/high/high_mission.dart';
 import 'package:math_escape/models/high/high_mission_question.dart';
+import 'package:math_escape/widgets/common/common_answer_popup.dart';
+import '../../helpers/timer_test_helper.dart';
 
 void main() {
   group('HighMission Widget Tests', () {
@@ -43,7 +45,10 @@ void main() {
         ),
       );
 
-      // 앱바 타이틀이 표시되는지 확인
+      // Timer가 실행되도록 여러 번 pump
+      await TimerTestHelper.pumpWithTimer(tester, pumpCount: 3);
+
+      // 앱바 타이틀이 표시되는지 확인 (실제 앱바 타이틀 확인)
       expect(find.text('역설, 혹은 모호함'), findsOneWidget);
 
       // 문제 제목이 표시되는지 확인
@@ -74,82 +79,93 @@ void main() {
         ),
       );
 
+      await TimerTestHelper.pumpWithTimer(tester, pumpCount: 2);
+
       // QR 코드 버튼이 표시되는지 확인
       expect(find.text('QR코드 촬영'), findsOneWidget);
     });
 
     testWidgets('QR 코드 버튼이 일반 문제에서는 표시되지 않는지 테스트', (WidgetTester tester) async {
-      // 일반 문제로 테스트
-      await tester.pumpWidget(
-        MaterialApp(
-          home: HighMission(
-            questionList: mockQuestionList,
-            currentIndex: 0, // 일반 문제
-            gameStartTime: mockGameStartTime,
+        // 일반 문제로 테스트
+        await tester.pumpWidget(
+          MaterialApp(
+            home: HighMission(
+              questionList: mockQuestionList,
+              currentIndex: 0, // 일반 문제
+              gameStartTime: mockGameStartTime,
+            ),
           ),
-        ),
-      );
+        );
 
-      // QR 코드 버튼이 표시되지 않는지 확인
-      expect(find.text('QR코드 촬영'), findsNothing);
+        await TimerTestHelper.pumpWithTimer(tester, pumpCount: 2);
+
+        // QR 코드 버튼이 표시되지 않는지 확인
+        expect(find.text('QR코드 촬영'), findsNothing);
     });
 
     testWidgets('힌트 다이얼로그가 올바르게 표시되는지 테스트', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: HighMission(
-            questionList: mockQuestionList,
-            currentIndex: 0,
-            gameStartTime: mockGameStartTime,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: HighMission(
+              questionList: mockQuestionList,
+              currentIndex: 0,
+              gameStartTime: mockGameStartTime,
+            ),
           ),
-        ),
-      );
+        );
 
-      // 힌트 버튼을 탭 (첫 번째 힌트 버튼만 탭)
-      await tester.tap(find.text('힌트').first);
-      await tester.pumpAndSettle();
+        await TimerTestHelper.pumpWithTimer(tester, pumpCount: 2);
 
-      // 힌트 다이얼로그가 표시되는지 확인
-      expect(find.text('힌트'), findsWidgets);
-      expect(find.text('테스트 힌트입니다.'), findsOneWidget);
+        // 힌트 버튼을 탭 (첫 번째 힌트 버튼만 탭)
+        await tester.tap(find.text('힌트').first);
+        await tester.pumpAndSettle();
+
+        // 힌트 다이얼로그가 표시되는지 확인
+        expect(find.text('힌트'), findsOneWidget);
+        expect(find.text('테스트 힌트입니다.'), findsOneWidget);
     });
 
     testWidgets('답변 입력 및 제출 기능 테스트', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: HighMission(
-            questionList: mockQuestionList,
-            currentIndex: 0,
-            gameStartTime: mockGameStartTime,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: HighMission(
+              questionList: mockQuestionList,
+              currentIndex: 0,
+              gameStartTime: mockGameStartTime,
+            ),
           ),
-        ),
-      );
+        );
 
-      // 답변 입력
-      await tester.enterText(find.byType(TextField), '정답1');
+        await TimerTestHelper.pumpWithTimer(tester, pumpCount: 2);
 
-      // 확인 버튼 탭 (warnIfMissed: false로 경고 무시)
-      await tester.tap(find.text('확인'), warnIfMissed: false);
-      await tester.pump();
+        // 답변 입력
+        await tester.enterText(find.byType(TextField), '정답1');
 
-      // 답변 팝업이 표시되는지 확인 (정답인 경우)
-      expect(find.byType(AlertDialog), findsOneWidget);
+        // 확인 버튼 탭 (warnIfMissed: false로 경고 무시)
+        await tester.tap(find.text('확인'), warnIfMissed: false);
+        await tester.pump();
+
+        // 답변 팝업이 표시되는지 확인 (정답인 경우)
+        expect(find.byType(CommonAnswerPopup), findsOneWidget);
     });
 
     testWidgets('타이머 정보가 올바르게 표시되는지 테스트', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: HighMission(
-            questionList: mockQuestionList,
-            currentIndex: 0,
-            gameStartTime: mockGameStartTime,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: HighMission(
+              questionList: mockQuestionList,
+              currentIndex: 0,
+              gameStartTime: mockGameStartTime,
+            ),
           ),
-        ),
-      );
+        );
 
-      // 타이머 정보가 표시되는지 확인
-      expect(find.textContaining('생각의 시간'), findsOneWidget);
-      expect(find.textContaining('몸의 시간'), findsOneWidget);
+        // Timer가 실행되도록 여러 번 pump
+        await TimerTestHelper.pumpWithTimer(tester, pumpCount: 5);
+
+        // 타이머 정보가 표시되는지 확인
+        expect(find.textContaining('생각의 시간'), findsOneWidget);
+        expect(find.textContaining('몸의 시간'), findsOneWidget);
     });
   });
 
@@ -246,39 +262,41 @@ void main() {
 
   group('HighMission 위젯 상태 관리 테스트', () {
     testWidgets('힌트 상태 토글 테스트', (WidgetTester tester) async {
-      final questionList = [
-        MissionQuestion(
-          id: 1,
-          description: '테스트',
-          level: '고급',
-          title: '테스트',
-          question: '테스트',
-          answer: ['정답'],
-          hint: '힌트',
-        ),
-      ];
-
-      await tester.pumpWidget(
-        MaterialApp(
-          home: HighMission(
-            questionList: questionList,
-            currentIndex: 0,
-            gameStartTime: DateTime.now(),
+        final questionList = [
+          MissionQuestion(
+            id: 1,
+            description: '테스트',
+            level: '고급',
+            title: '테스트',
+            question: '테스트',
+            answer: ['정답'],
+            hint: '힌트',
           ),
-        ),
-      );
+        ];
 
-      // 초기에는 힌트 카드가 보이지 않아야 함
-      expect(find.text('힌트'), findsWidgets); // 버튼만 있음
+        await tester.pumpWidget(
+          MaterialApp(
+            home: HighMission(
+              questionList: questionList,
+              currentIndex: 0,
+              gameStartTime: DateTime.now(),
+            ),
+          ),
+        );
 
-      // 힌트 버튼을 탭하고 다이얼로그에서 확인을 누름
-      await tester.tap(find.text('힌트').first);
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('확인'));
-      await tester.pumpAndSettle();
+        await TimerTestHelper.pumpWithTimer(tester, pumpCount: 2);
 
-      // 힌트 카드가 표시되어야 함 (더 많은 힌트 텍스트가 있어야 함)
-      expect(find.text('힌트'), findsWidgets); // 버튼과 카드 모두 있음
+        // 초기에는 힌트 버튼만 있음
+        expect(find.text('힌트'), findsOneWidget);
+
+        // 힌트 버튼을 탭하고 다이얼로그에서 확인을 누름
+        await tester.tap(find.text('힌트'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('확인'));
+        await tester.pumpAndSettle();
+
+        // 힌트 카드가 표시되어야 함
+        expect(find.text('힌트'), findsOneWidget);
     });
   });
 }

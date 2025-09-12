@@ -4,7 +4,6 @@ import 'package:math_escape/models/high/high_mission_answer.dart';
 import 'package:math_escape/models/high/high_mission_question.dart';
 import 'package:math_escape/mission/high/high_mission.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
-import 'package:math_escape/mission/high/high_answer_constants.dart';
 import 'package:math_escape/mission/high/answer_widgets.dart';
 
 class HighAnswer extends StatefulWidget {
@@ -66,26 +65,34 @@ class _HighAnswerState extends State<HighAnswer> {
     int lastEnd = 0;
     for (final match in matches) {
       if (match.start > lastEnd) {
-        spans.add(TextSpan(
-          text: explanation.substring(lastEnd, match.start).replaceAll('\\\\', '\\'),
-          style: TextStyle(fontSize: fontSize, color: Colors.black87),
-        ));
+        spans.add(
+          TextSpan(
+            text: explanation
+                .substring(lastEnd, match.start)
+                .replaceAll('\\\\', '\\'),
+            style: TextStyle(fontSize: fontSize, color: Colors.black87),
+          ),
+        );
       }
       final latex = match.group(1)!.replaceAll('\\\\', '\\');
-      spans.add(WidgetSpan(
-        alignment: PlaceholderAlignment.middle,
-        child: Math.tex(
-          latex,
-          textStyle: TextStyle(fontSize: fontSize + 2, color: Colors.black87),
+      spans.add(
+        WidgetSpan(
+          alignment: PlaceholderAlignment.middle,
+          child: Math.tex(
+            latex,
+            textStyle: TextStyle(fontSize: fontSize + 2, color: Colors.black87),
+          ),
         ),
-      ));
+      );
       lastEnd = match.end;
     }
     if (lastEnd < explanation.length) {
-      spans.add(TextSpan(
-        text: explanation.substring(lastEnd).replaceAll('\\\\', '\\'),
-        style: TextStyle(fontSize: fontSize, color: Colors.black87),
-      ));
+      spans.add(
+        TextSpan(
+          text: explanation.substring(lastEnd).replaceAll('\\\\', '\\'),
+          style: TextStyle(fontSize: fontSize, color: Colors.black87),
+        ),
+      );
     }
     return spans;
   }
@@ -168,7 +175,10 @@ class _HighAnswerState extends State<HighAnswer> {
             ),
             SizedBox(height: screenHeight * 0.01),
             ExplanationBox(
-              explanationSpans: parseExplanation(widget.answer.explanation, screenWidth * 0.05),
+              explanationSpans: parseExplanation(
+                widget.answer.explanation,
+                screenWidth * 0.05,
+              ),
               answerImage: widget.answer.answerImage,
               fontSize: screenWidth * 0.05,
               screenWidth: screenWidth,
@@ -186,11 +196,15 @@ class _HighAnswerState extends State<HighAnswer> {
               child: ElevatedButton(
                 onPressed: handleNextButton,
                 child: Text(
-                  widget.answer.title == '역설, 혹은 모호함_A' || widget.answer.title == '진리_A'
+                  widget.answer.title == '역설, 혹은 모호함_A' ||
+                          widget.answer.title == '진리_A'
                       ? '돌아가기'
-                      : (widget.answer.title == '역설, 혹은 모호함_1' || widget.answer.title == '진리_1')
-                          ? '다음 문제로'
-                          : (widget.currentIndex + 1 < widget.questionList.length ? '다음 문제로' : '마지막 문제'),
+                      : (widget.answer.title == '역설, 혹은 모호함_1' ||
+                            widget.answer.title == '진리_1')
+                      ? '다음 문제로'
+                      : (widget.currentIndex + 1 < widget.questionList.length
+                            ? '다음 문제로'
+                            : '마지막 문제'),
                   style: TextStyle(fontSize: fontSize),
                 ),
               ),

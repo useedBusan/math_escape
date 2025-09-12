@@ -118,6 +118,7 @@ void main() {
       await tester.pumpWidget(MaterialApp(home: Scaffold(body: QRScanError())));
 
       expect(find.byIcon(Icons.qr_code_scanner), findsOneWidget);
+      expect(find.text('오류가 발생했습니다'), findsOneWidget);
       expect(find.text('QR 코드를 인식할 수 없습니다.'), findsOneWidget);
       expect(find.text('다시 스캔'), findsOneWidget);
     });
@@ -140,6 +141,7 @@ void main() {
       );
 
       expect(find.byIcon(Icons.camera_alt), findsOneWidget);
+      expect(find.text('오류가 발생했습니다'), findsOneWidget);
       expect(find.text('카메라 권한이 필요합니다.'), findsOneWidget);
       expect(find.text('권한 설정'), findsOneWidget);
     });
@@ -162,6 +164,7 @@ void main() {
       );
 
       expect(find.byIcon(Icons.data_usage), findsOneWidget);
+      expect(find.text('오류가 발생했습니다'), findsOneWidget);
       expect(find.text('데이터를 불러올 수 없습니다.'), findsOneWidget);
       expect(find.text('다시 시도'), findsOneWidget);
     });
