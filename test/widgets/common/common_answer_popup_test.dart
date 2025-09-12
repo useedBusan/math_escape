@@ -29,8 +29,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byIcon(Icons.check_circle), findsOneWidget);
-      expect(find.text('정답'), findsOneWidget);
-      expect(find.text('입니다!'), findsOneWidget);
+      expect(find.text('정답입니다!'), findsOneWidget);
       expect(find.text('조금만 더 풀면 탈출할 수 있어요!'), findsOneWidget);
       expect(find.text('다음'), findsOneWidget);
     });
@@ -60,8 +59,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byIcon(Icons.cancel), findsOneWidget);
-      expect(find.text('오답'), findsOneWidget);
-      expect(find.text('입니다.'), findsOneWidget);
+      expect(find.text('오답입니다.'), findsOneWidget);
       expect(find.text('다시 한번 생각해 볼까요?'), findsOneWidget);
       expect(find.text('확인'), findsOneWidget);
     });

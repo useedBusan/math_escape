@@ -51,7 +51,9 @@ class _HighMissionState extends State<HighMission> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    if (_timer.isActive) {
+      _timer.cancel();
+    }
     _controller.dispose();
     super.dispose();
   }
@@ -535,13 +537,16 @@ class _HighMissionState extends State<HighMission> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // 왼쪽: 생각의 시간
-                  Text(
-                    '생각의 시간 $thinkingTime',
-                    style: TextStyle(
-                      fontFamily: "Pretendard",
-                      fontSize: screenWidth * (14 / 360),
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey[600],
+                  Flexible(
+                    child: Text(
+                      '생각의 시간 $thinkingTime',
+                      style: TextStyle(
+                        fontFamily: "Pretendard",
+                        fontSize: screenWidth * (14 / 360),
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[600],
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   // 가운데: 원형 진행률 타이머
@@ -584,13 +589,16 @@ class _HighMissionState extends State<HighMission> {
                     ),
                   ),
                   // 오른쪽: 몸의 시간
-                  Text(
-                    '몸의 시간 $bodyTime',
-                    style: TextStyle(
-                      fontFamily: "Pretendard",
-                      fontSize: screenWidth * (14 / 360),
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey[600],
+                  Flexible(
+                    child: Text(
+                      '몸의 시간 $bodyTime',
+                      style: TextStyle(
+                        fontFamily: "Pretendard",
+                        fontSize: screenWidth * (14 / 360),
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[600],
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

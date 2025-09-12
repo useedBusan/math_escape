@@ -61,7 +61,7 @@ void main() {
       // AnswerPopup 테스트
       await tester.tap(find.text('Show Answer Dialog'));
       await tester.pumpAndSettle();
-      expect(find.text('정답'), findsOneWidget);
+      expect(find.text('정답입니다!'), findsOneWidget);
       await tester.tap(find.text('다음'));
       await tester.pumpAndSettle();
       expect(answerCallbackCalled, true);
@@ -173,7 +173,7 @@ void main() {
       );
 
       // 각 버튼의 텍스트 확인
-      expect(find.text('QR 스캔'), findsOneWidget);
+      expect(find.text('QR코드 촬영'), findsOneWidget);
       expect(find.text('힌트'), findsOneWidget);
       expect(find.text('제출'), findsOneWidget);
       expect(find.text('다음'), findsOneWidget);
@@ -227,10 +227,11 @@ void main() {
       );
 
       // 각 에러 타입의 메시지 확인
-      expect(find.text('네트워크 연결을 확인해주세요'), findsOneWidget);
-      expect(find.text('QR 코드를 인식할 수 없습니다'), findsOneWidget);
-      expect(find.text('카메라 권한이 필요합니다'), findsOneWidget);
-      expect(find.text('데이터를 불러올 수 없습니다'), findsOneWidget);
+      expect(find.text('오류가 발생했습니다'), findsNWidgets(4));
+      expect(find.text('네트워크 연결을 확인해주세요.'), findsOneWidget);
+      expect(find.text('QR 코드를 인식할 수 없습니다.'), findsOneWidget);
+      expect(find.text('카메라 권한이 필요합니다.'), findsOneWidget);
+      expect(find.text('데이터를 불러올 수 없습니다.'), findsOneWidget);
     });
 
     testWidgets('전체 위젯들이 실제 앱 시나리오에서 사용되는 통합 테스트', (WidgetTester tester) async {
@@ -297,7 +298,7 @@ void main() {
       );
 
       // QR 스캔 버튼 테스트
-      await tester.tap(find.text('QR 스캔'));
+      await tester.tap(find.text('QR코드 촬영'));
       await tester.pump();
       expect(qrScanPressed, true);
 
@@ -314,7 +315,7 @@ void main() {
       await tester.tap(find.text('답안 제출'));
       await tester.pumpAndSettle();
       expect(submitPressed, true);
-      expect(find.text('정답'), findsOneWidget);
+      expect(find.text('정답입니다!'), findsOneWidget);
       await tester.tap(find.text('다음'));
       await tester.pumpAndSettle();
 
