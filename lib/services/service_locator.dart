@@ -10,9 +10,9 @@ class ServiceLocator {
   ServiceLocator._internal();
 
   // 서비스 인스턴스들
-  late final UrlLauncherService _urlLauncherService;
-  late final NavigationService _navigationService;
-  late final DataService _dataService;
+  late final UrlLauncherService _urlLauncherService; //외부 URL 실행 담당
+  late final NavigationService _navigationService; //화면간 네비게이션 담당
+  late final DataService _dataService; //데이터 로딩 및 관리 담당
 
   // ViewModel 인스턴스들
   late final MainViewModel _mainViewModel;

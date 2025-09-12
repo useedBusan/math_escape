@@ -6,18 +6,16 @@ class HintDialog extends StatelessWidget {
   final VoidCallback? onConfirm;
 
   const HintDialog({
-    Key? key,
+    super.key,
     required this.hintTitle,
     required this.hintContent,
     this.onConfirm,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.93,
         decoration: BoxDecoration(
@@ -31,11 +29,7 @@ class HintDialog extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 24.0),
               child: Column(
                 children: [
-                  Image.asset(
-                    'assets/images/bulb.png',
-                    width: 80,
-                    height: 80,
-                  ),
+                  Image.asset('assets/images/bulb.png', width: 80, height: 80),
                   const SizedBox(height: 18),
                   Text(
                     hintTitle,
@@ -50,7 +44,9 @@ class HintDialog extends StatelessWidget {
                   Text(
                     hintContent,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360)),
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                    ),
                   ),
                 ],
               ),

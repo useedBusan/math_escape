@@ -5,17 +5,15 @@ class HintDialog extends StatelessWidget {
   final String hintContent;
 
   const HintDialog({
-    Key? key,
+    super.key,
     required this.hintTitle,
     required this.hintContent,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.93,
         decoration: BoxDecoration(
@@ -48,7 +46,9 @@ class HintDialog extends StatelessWidget {
                   Text(
                     hintContent,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360)),
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                    ),
                   ),
                 ],
               ),
@@ -56,7 +56,7 @@ class HintDialog extends StatelessWidget {
             Container(
               width: double.infinity,
               height: 56,
-               decoration: const BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color(0xFFD95276),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(8.0),
@@ -65,7 +65,7 @@ class HintDialog extends StatelessWidget {
               ),
               child: TextButton(
                 onPressed: () => Navigator.pop(context),
-                 style: TextButton.styleFrom(
+                style: TextButton.styleFrom(
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8.0),

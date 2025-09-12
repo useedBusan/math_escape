@@ -33,7 +33,6 @@ class _HighMissionState extends State<HighMission> {
   late Timer _timer;
   Duration _elapsed = Duration.zero;
 
-
   @override
   void initState() {
     super.initState();
@@ -84,11 +83,9 @@ class _HighMissionState extends State<HighMission> {
 
   void _showHintDialog() {
     final q = widget.questionList[widget.currentIndex];
-    
+
     if (q.title == '역설, 혹은 모호함_1') {
-      final idx = widget.questionList.indexWhere(
-        (qq) => qq.id == 2,
-      );
+      final idx = widget.questionList.indexWhere((qq) => qq.id == 2);
       if (idx != -1) {
         Navigator.pushReplacement(
           context,
@@ -102,9 +99,7 @@ class _HighMissionState extends State<HighMission> {
         );
       }
     } else if (q.title == '역설, 혹은 모호함_3') {
-      final idx = widget.questionList.indexWhere(
-        (qq) => qq.id == 5,
-      );
+      final idx = widget.questionList.indexWhere((qq) => qq.id == 5);
       if (idx != -1) {
         Navigator.pushReplacement(
           context,
@@ -169,7 +164,7 @@ class _HighMissionState extends State<HighMission> {
     final input = _controller.text.trim().toLowerCase();
     final answers = q.answer.map((a) => a.trim().toLowerCase()).toList();
     final isCorrect = answers.contains(input);
-    
+
     showAnswerPopup(context, isCorrect: isCorrect).then((_) async {
       if (isCorrect) {
         final answerData = await loadAnswerById(q.id);
@@ -284,7 +279,10 @@ class _HighMissionState extends State<HighMission> {
                         decoration: BoxDecoration(
                           color: const Color(0xFF192243),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFF192243), width: 1),
+                          border: Border.all(
+                            color: const Color(0xFF192243),
+                            width: 1,
+                          ),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.3),
@@ -302,7 +300,10 @@ class _HighMissionState extends State<HighMission> {
                         decoration: BoxDecoration(
                           color: const Color(0xFF3F55A7),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFF192243), width: 1),
+                          border: Border.all(
+                            color: const Color(0xFF192243),
+                            width: 1,
+                          ),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.2),
@@ -321,7 +322,10 @@ class _HighMissionState extends State<HighMission> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFF192243), width: 1),
+                          border: Border.all(
+                            color: const Color(0xFF192243),
+                            width: 1,
+                          ),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.15),
@@ -394,14 +398,18 @@ class _HighMissionState extends State<HighMission> {
                               decoration: BoxDecoration(
                                 color: const Color(0xFFFFFFFF),
                                 borderRadius: BorderRadius.circular(8.0),
-                                border: Border.all(color: const Color(0xffdcdcdc)),
+                                border: Border.all(
+                                  color: const Color(0xffdcdcdc),
+                                ),
                               ),
                               child: Row(
                                 children: [
                                   Expanded(
                                     flex: 2,
                                     child: TextField(
-                                      style: TextStyle(fontSize: screenWidth * (15 / 360)),
+                                      style: TextStyle(
+                                        fontSize: screenWidth * (15 / 360),
+                                      ),
                                       controller: _controller,
                                       keyboardType: TextInputType.text,
                                       textInputAction: TextInputAction.done,
@@ -411,10 +419,11 @@ class _HighMissionState extends State<HighMission> {
                                           fontSize: screenWidth * (14 / 360),
                                           color: const Color(0xffaaaaaa),
                                         ),
-                                        contentPadding: const EdgeInsets.symmetric(
-                                          horizontal: 12.0,
-                                          vertical: 12.0,
-                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                              horizontal: 12.0,
+                                              vertical: 12.0,
+                                            ),
                                         border: InputBorder.none,
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
@@ -430,7 +439,9 @@ class _HighMissionState extends State<HighMission> {
                                         backgroundColor: mainColor,
                                         foregroundColor: Colors.white,
                                         elevation: 0,
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 12,
+                                        ),
                                         shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
                                             topRight: Radius.circular(8),
@@ -474,14 +485,18 @@ class _HighMissionState extends State<HighMission> {
                                         ),
                                       );
                                       if (result != null && result is String) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
                                           SnackBar(
                                             content: Text('QR 코드 결과: $result'),
                                           ),
                                         );
                                       }
                                     } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
                                         const SnackBar(
                                           content: Text('카메라 권한이 필요합니다.'),
                                         ),
