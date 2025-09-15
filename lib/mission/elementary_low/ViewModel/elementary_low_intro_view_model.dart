@@ -1,5 +1,4 @@
 import "dart:convert";
-import "package:flutter/cupertino.dart";
 import "package:flutter/services.dart";
 import "../../../Common/Model/talk_model.dart";
 
@@ -11,7 +10,9 @@ class ElementaryLowIntroViewModel {
   bool canGoPrevious() => currentIdx > 0;
 
   Future<void> loadTalks() async {
-    final jsonString = await rootBundle.loadString('assets/data/elementary_low/elementary_low_intro_view.json');
+    final jsonString = await rootBundle.loadString(
+      'assets/data/elementary_low/elementary_low_intro_view.json',
+    );
     final List<dynamic> jsonList = json.decode(jsonString);
     talks = jsonList.map((json) => Talk.fromJson(json)).toList();
   }

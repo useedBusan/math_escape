@@ -125,17 +125,18 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
             return CustomIntroAlert(
               onConfirm: () {
                 Navigator.of(context).pop();
+                // 팝업 확인 후 바로 미션창으로 이동
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const MiddleMissionScreen(),
+                  ),
+                );
               },
               grade: StudentGrade.middle,
             );
           },
-        ).then((_) {
-          // 다이얼로그가 닫히면 인덱스를 3으로 업데이트하여 다음 대화로 넘어갑니다.
-          setState(() {
-            currentIndex++;
-            imageKey = UniqueKey();
-          });
-        });
+        );
       });
     }
     // currentIndex가 3 이상일 때 (즉, id 4번 이후 대화)

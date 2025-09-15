@@ -84,6 +84,59 @@ class _HighMissionState extends State<HighMission> {
     return jsonList.map((e) => MissionQuestion.fromJson(e)).toList();
   }
 
+  void _showHintDialog() {
+    final q = widget.questionList[widget.currentIndex];
+
+    if (q.title == '역설, 혹은 모호함_1') {
+      final idx = widget.questionList.indexWhere((qq) => qq.id == 2);
+      if (idx != -1) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => HighMission(
+              questionList: widget.questionList,
+              currentIndex: idx,
+              gameStartTime: widget.gameStartTime,
+            ),
+          ),
+        );
+      }
+    } else if (q.title == '역설, 혹은 모호함_3') {
+      final idx = widget.questionList.indexWhere((qq) => qq.id == 5);
+      if (idx != -1) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => HighMission(
+              questionList: widget.questionList,
+              currentIndex: idx,
+              gameStartTime: widget.gameStartTime,
+            ),
+          ),
+        );
+      }
+    } else {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('힌트'),
+            content: Text(q.hint),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('확인'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   Future<void> showAnswerPopup(
     BuildContext context, {
     required bool isCorrect,
@@ -109,208 +162,363 @@ class _HighMissionState extends State<HighMission> {
     }
   }
 
+  void _submitAnswer() {
+    final q = widget.questionList[widget.currentIndex];
+    final input = _controller.text.trim().toLowerCase();
+    final answers = q.answer.map((a) => a.trim().toLowerCase()).toList();
+    final isCorrect = answers.contains(input);
+
+    showAnswerPopup(context, isCorrect: isCorrect).then((_) async {
+      if (isCorrect) {
+        final answerData = await loadAnswerById(q.id);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => HighAnswer(
+              answer: answerData,
+              gameStartTime: widget.gameStartTime,
+              questionList: widget.questionList,
+              currentIndex: widget.currentIndex,
+            ),
+          ),
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final q = widget.questionList[widget.currentIndex];
+    final Color mainColor = const Color(0xFF3F55A7);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(q.title, style: TextStyle(fontSize: screenWidth * 0.05)),
         backgroundColor: Colors.white,
-        foregroundColor: Colors.blue,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF3F55A7)),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(
+          '역설, 혹은 모호함',
+          style: TextStyle(
+            color: const Color(0xFF3F55A7),
+            fontSize: screenWidth * (16 / 360),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Stack(
         children: [
-          SingleChildScrollView(
-            padding: EdgeInsets.only(
-              left: screenWidth * 0.04,
-              right: screenWidth * 0.04,
-              top: screenWidth * 0.04,
-              bottom: screenHeight * 0.18,
+          // 배경 이미지
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/bsbackground.png',
+              fit: BoxFit.cover,
             ),
+          ),
+          // 그라데이션 오버레이
+          Positioned.fill(
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromRGBO(0, 0, 0, 0.75),
+                    Color.fromRGBO(0, 0, 0, 0.50),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                DescriptionLevelBox(
-                  description: q.description,
-                  level: q.level,
-                  fontSize: screenWidth * 0.035,
-                ),
-                SizedBox(height: screenHeight * 0.02),
-                Text(
-                  q.title,
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.05,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.015),
-                QuestionBalloon(
-                  question: q.question,
-                  fontSize: screenWidth * 0.04,
-                ),
-                SizedBox(height: screenHeight * 0.025),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                const SizedBox(height: 14),
+                // 설명 텍스트
+                Column(
                   children: [
                     Text(
-                      '답변:',
+                      '고등학생을 위한 수학 미션',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: screenWidth * 0.045,
-                        fontWeight: FontWeight.bold,
+                        fontFamily: "SBAggro",
+                        fontSize: screenWidth * (14 / 360),
+                        fontWeight: FontWeight.w300,
+                        color: const Color(0xFFF2F2F2),
                       ),
                     ),
-                    SizedBox(width: screenWidth * 0.03),
-                    Expanded(
-                      child: TextField(
-                        controller: _controller,
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.done,
-                        decoration: const InputDecoration(
-                          hintText: '정답을 입력하세요',
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 10,
+                    const SizedBox(height: 2),
+                    Text(
+                      '수학의 깊이를 탐구하며 정답을 찾아보세요!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: "SBAggro",
+                        fontSize: screenWidth * (14 / 360),
+                        fontWeight: FontWeight.w300,
+                        color: const Color(0xFFF2F2F2),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                // 3단 레이어 카드
+                Center(
+                  child: Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      // 첫번째 레이어 (어두운 배경)
+                      Container(
+                        width: screenWidth - 60,
+                        height: screenHeight * 0.5,
+                        margin: const EdgeInsets.only(top: 5),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF192243),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color(0xFF192243),
+                            width: 1,
                           ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                if (q.title == '역설, 혹은 모호함_B') ...[
-                  SizedBox(height: screenHeight * 0.01),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.qr_code_scanner),
-                      label: Text(
-                        'QR코드 촬영',
-                        style: TextStyle(fontSize: screenWidth * 0.04),
+                      // 두번째 레이어 (파란색 중간)
+                      Container(
+                        width: screenWidth - 40,
+                        height: screenHeight * 0.5,
+                        margin: const EdgeInsets.only(top: 15),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF3F55A7),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color(0xFF192243),
+                            width: 1,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
                       ),
-                      onPressed: () async {
-                        final status = await Permission.camera.request();
-                        if (status.isGranted) {
-                          final result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => QRScanScreen()),
-                          );
-                          if (result != null && result is String) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('QR 코드 결과: $result')),
-                            );
-                          }
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('카메라 권한이 필요합니다.')),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ],
-                SizedBox(height: screenHeight * 0.015),
-                Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        final input = _controller.text.trim().toLowerCase();
-                        final answers = q.answer
-                            .map((a) => a.trim().toLowerCase())
-                            .toList();
-                        final isCorrect = answers.contains(input);
-                        await showAnswerPopup(context, isCorrect: isCorrect);
-                        if (isCorrect) {
-                          final answerData = await loadAnswerById(q.id);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => HighAnswer(
-                                answer: answerData,
-                                gameStartTime: widget.gameStartTime,
-                                questionList: widget.questionList,
-                                currentIndex: widget.currentIndex,
+                      // 세번째 레이어 (흰색 콘텐츠)
+                      Container(
+                        width: screenWidth - 20,
+                        height: screenHeight * 0.5,
+                        padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
+                        margin: const EdgeInsets.only(top: 25),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color(0xFF192243),
+                            width: 1,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // 문제 번호 + 힌트 버튼
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  q.title,
+                                  style: TextStyle(
+                                    fontFamily: "SBAggro",
+                                    fontSize: screenWidth * (18 / 360),
+                                    fontWeight: FontWeight.w400,
+                                    color: const Color(0xff202020),
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.help_outline,
+                                        color: Color(0xFF3F55A7),
+                                      ),
+                                      onPressed: _showHintDialog,
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                      iconSize: 28,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Transform.translate(
+                                      offset: const Offset(0, -15),
+                                      child: Text(
+                                        '힌트',
+                                        style: TextStyle(
+                                          color: const Color(0xFF3F55A7),
+                                          fontSize: screenWidth * (12 / 360),
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            // 문제 영역
+                            Text(
+                              q.question,
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(
+                                fontFamily: "Pretendard",
+                                fontWeight: FontWeight.w400,
+                                fontSize: screenWidth * (16 / 360),
+                                height: 1.4,
+                                color: Colors.black87,
                               ),
                             ),
-                          );
-                        }
-                      },
-                      child: Text(
-                        '확인',
-                        style: TextStyle(fontSize: screenWidth * 0.04),
-                      ),
-                    ),
-                    SizedBox(width: screenWidth * 0.03),
-                  ],
-                ),
-                SizedBox(height: screenHeight * 0.015),
-                TextButton(
-                  onPressed: () async {
-                    if (q.title == '역설, 혹은 모호함_1') {
-                      final idx = widget.questionList.indexWhere(
-                        (qq) => qq.id == 2,
-                      );
-                      if (idx != -1) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => HighMission(
-                              questionList: widget.questionList,
-                              currentIndex: idx,
-                              gameStartTime: widget.gameStartTime,
+                            const Expanded(child: SizedBox()),
+                            // 답변 입력 영역
+                            Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFFFFF),
+                                borderRadius: BorderRadius.circular(8.0),
+                                border: Border.all(
+                                  color: const Color(0xffdcdcdc),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: TextField(
+                                      style: TextStyle(
+                                        fontSize: screenWidth * (15 / 360),
+                                      ),
+                                      controller: _controller,
+                                      keyboardType: TextInputType.text,
+                                      textInputAction: TextInputAction.done,
+                                      decoration: InputDecoration(
+                                        hintText: '정답을 입력해 주세요.',
+                                        hintStyle: TextStyle(
+                                          fontSize: screenWidth * (14 / 360),
+                                          color: const Color(0xffaaaaaa),
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                              horizontal: 12.0,
+                                              vertical: 12.0,
+                                            ),
+                                        border: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 60,
+                                    height: 52,
+                                    child: ElevatedButton(
+                                      onPressed: _submitAnswer,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: mainColor,
+                                        foregroundColor: Colors.white,
+                                        elevation: 0,
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 12,
+                                        ),
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(8),
+                                            bottomRight: Radius.circular(8),
+                                          ),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        '확인',
+                                        style: TextStyle(
+                                          fontSize: screenWidth * (14 / 360),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      }
-                    } else if (q.title == '역설, 혹은 모호함_3') {
-                      final idx = widget.questionList.indexWhere(
-                        (qq) => qq.id == 5,
-                      );
-                      if (idx != -1) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => HighMission(
-                              questionList: widget.questionList,
-                              currentIndex: idx,
-                              gameStartTime: widget.gameStartTime,
-                            ),
-                          ),
-                        );
-                      }
-                    } else {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('힌트'),
-                            content: Text(q.hint),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('확인'),
+                            // QR 코드 버튼 (특정 문제에서만)
+                            if (q.title == '역설, 혹은 모호함_B') ...[
+                              const SizedBox(height: 16),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: ElevatedButton.icon(
+                                  icon: const Icon(Icons.qr_code_scanner),
+                                  label: Text(
+                                    'QR코드 촬영',
+                                    style: TextStyle(
+                                      fontSize: screenWidth * (14 / 360),
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    final status = await Permission.camera
+                                        .request();
+                                    if (status.isGranted) {
+                                      final result = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => QRScanScreen(),
+                                        ),
+                                      );
+                                      if (result != null && result is String) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text('QR 코드 결과: $result'),
+                                          ),
+                                        );
+                                      }
+                                    } else {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('카메라 권한이 필요합니다.'),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
                               ),
                             ],
-                          );
-                        },
-                      );
-                    }
-                  },
-                  child: Text(
-                    '힌트 보기',
-                    style: TextStyle(fontSize: screenWidth * 0.04),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
+          // 하단 타이머
           SafeArea(
             child: Align(
               alignment: Alignment.bottomCenter,
