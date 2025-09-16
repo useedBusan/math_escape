@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:math_escape/services/navigation_service.dart';
+import 'package:math_escape/Core/services/navigation_service.dart';
 
 void main() {
   group('NavigationService QR Scan Tests', () {
@@ -44,9 +44,9 @@ void main() {
       final testResult = 'test_qr_result';
 
       // When: 콜백 함수가 호출됨
-      final callback = (String result) {
+      void callback(String result) {
         capturedResult = result;
-      };
+      }
 
       callback(testResult);
 

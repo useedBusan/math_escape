@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/services.dart';
 import 'package:math_escape/main.dart';
-import 'package:math_escape/services/service_locator.dart';
+import 'package:math_escape/Core/services/service_locator.dart';
 
 void main() {
   group('Performance Integration Tests', () {

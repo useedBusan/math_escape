@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:math_escape/mission/high/high_mission.dart';
-import 'package:math_escape/models/high/high_mission_question.dart';
+import 'package:math_escape/Feature/high/model/high_mission_question.dart';
+import 'package:math_escape/Feature/high/view/high_mission.dart';
 
 void main() {
   group('HighMission Widget Tests', () {

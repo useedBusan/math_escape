@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:math_escape/viewmodels/main_viewmodel.dart';
-import 'package:math_escape/services/url_launcher_service.dart';
-import 'package:math_escape/services/navigation_service.dart';
+import 'package:math_escape/Core/services/url_launcher_service.dart';
+import 'package:math_escape/Core/utils/view_model/main_viewmodel.dart';
+import 'package:math_escape/Core/services/navigation_service.dart';
 
 void main() {
   group('MainViewModel Tests', () {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:math_escape/mission/elementary_high/elementary_high_mission.dart';
+import 'package:math_escape/Feature/elementary_high/view/elementary_high_mission.dart';
 
 void main() {
   group('ElementaryHighMissionScreen QR Scan Tests', () {
