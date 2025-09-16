@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../Core/utils/enum/speaker_enums.dart';
 
 class HintModel {
   final String img;

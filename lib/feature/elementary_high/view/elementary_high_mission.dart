@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:math_escape/core/utils/model/hint_model.dart';
-import 'package:math_escape/core/utils/view/hint_popup.dart';
-import '../../../Core/utils/enum/grade_enums.dart';
+import '../../../Core/utils/model/hint_model.dart';
+import '../../../Core/utils/view/hint_popup.dart';
+import '../../../constants/enum/grade_enums.dart';
 import 'dart:convert';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../Core/utils/view/answer_popup.dart';
@@ -305,21 +305,7 @@ class _ElementaryHighMissionScreenState
         ? currentMission.hint1
         : currentMission.hint2;
 
-    // HintModel 생성
-    final model = HintModel(
-      img: 'assets/images/poori.png',
-      upString: upText,
-      downString: downText,
-      mainColor: CustomBlue.s500,
-    );
-
-    showHintPopup(
-      context: context,
-      model: model,
-      onConfirm: () {
-        Navigator.pop(context);
-      },
-    );
+    //TODO: 공용 힌트모델 사용
   }
 
 

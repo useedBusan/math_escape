@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../Core/utils/enum/grade_enums.dart';
-import '../../../Core/utils/enum/speaker_enums.dart';
+import '../../../constants/enum/grade_enums.dart';
+import '../../../constants/enum/speaker_enums.dart';
 import '../../../Core/utils/model/talk_model.dart';
 
 class TalkBubble extends StatelessWidget {

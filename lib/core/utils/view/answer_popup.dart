@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../Core/utils/enum/grade_enums.dart';
+import '../../../constants/enum/grade_enums.dart';
 import '../model/answer_model.dart';
 
 class AnswerPopup extends StatelessWidget {
@@ -100,20 +100,24 @@ class _HighlightedTitle extends StatelessWidget {
       color: const Color(0xff202020),
       fontWeight: FontWeight.w700,
     );
-    final pattern = RegExp('(${highlightWords.join('|')})');
-    final parts = text.split(pattern);
 
-    return Text.rich(
-      TextSpan(
-        children: parts.map((part) {
-          if (highlightWords.contains(part)) {
-            return TextSpan(text: part, style: base.copyWith(color: highlightColor));
-          } else {
-            return TextSpan(text: part, style: base);
-          }
-        }).toList(),
-      ),
-      textAlign: TextAlign.center,
-    );
+    final pattern = RegExp(highlightWords.join('|'));
+
+    final spans = <InlineSpan>[];
+    int start = 0;
+
+    for (final m in pattern.allMatches(text)) {
+      if (m.start > start) {
+        spans.add(TextSpan(text: text.substring(start, m.start), style: base));
+      }
+      final word = text.substring(m.start, m.end);
+      spans.add(TextSpan(text: word, style: base.copyWith(color: highlightColor)));
+      start = m.end;
+    }
+    if (start < text.length) {
+      spans.add(TextSpan(text: text.substring(start), style: base));
+    }
+
+    return Text.rich(TextSpan(children: spans), textAlign: TextAlign.center);
   }
 }

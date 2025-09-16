@@ -1,7 +1,5 @@
-// hint_popup.dart
 import 'package:flutter/material.dart';
 import '../model/hint_model.dart';
-
 
 class HintPopup extends StatelessWidget {
   final HintModel model;
@@ -19,24 +17,39 @@ class HintPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final mq = MediaQuery.of(context);
+    final width = mq.size.width;
+    final height = mq.size.height;
     final baseSize = width * (16 / 360);
 
     return Dialog(
       backgroundColor: Colors.white,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      shape: RoundedRectangleBorder(
+        borderRadius:
+        BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+          bottomLeft: Radius.circular(40),
+          bottomRight: Radius.circular(40)
+        ),
+      ),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 420),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // 상단 이미지
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+        constraints: BoxConstraints(
+          maxWidth: 420,
+          maxHeight: height * 0.55,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxHeight: 360,
+              ),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(top: 20, left: 24, right: 24),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset(
                       model.img,
@@ -52,6 +65,7 @@ class HintPopup extends StatelessWidget {
                         fontSize: baseSize,
                         fontWeight: FontWeight.w700,
                         color: const Color(0xff202020),
+                        height: 1.25,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -61,60 +75,39 @@ class HintPopup extends StatelessWidget {
                       style: TextStyle(
                         fontSize: baseSize,
                         color: const Color(0xff202020),
+                        height: 1.4,
                       ),
                     ),
+                    const SizedBox(height: 18),
                   ],
                 ),
               ),
+            ),
 
-              const SizedBox(height: 18),
-
-              if (showColoredBar)
-                Container(
-                  height: 12,
-                  width: double.infinity,
-                  color: model.mainColor,
-                )
-              else
-                const Divider(height: 1, thickness: 1, color: Color(0xFFDDDDDD)),
-
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: TextButton(
-                  onPressed: onConfirm,
-                  style: TextButton.styleFrom(
-                    foregroundColor: model.mainColor,
-                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: model.mainColor,
+                  foregroundColor: Colors.white,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(12),
+                      bottomRight: Radius.circular(12),
+                    ),
                   ),
-                  child: Text(confirmText, style: TextStyle(fontSize: baseSize)),
+                ),
+                onPressed: onConfirm,
+                child: Text(
+                  confirmText,
+                  style: TextStyle(fontSize: baseSize, fontWeight: FontWeight.bold),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
-}
-
-Future<void> showHintPopup({
-  required BuildContext context,
-  required HintModel model,
-  required VoidCallback onConfirm,
-  String confirmText = '확인',
-  bool barrierDismissible = true,
-  bool showColoredBar = true,
-}) {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: barrierDismissible,
-    builder: (_) => HintPopup(
-      model: model,
-      onConfirm: onConfirm,
-      confirmText: confirmText,
-      showColoredBar: showColoredBar,
-    ),
-  );
 }

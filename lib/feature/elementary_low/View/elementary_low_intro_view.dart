@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../Core/utils/enum/grade_enums.dart';
+import '../../../constants/enum/grade_enums.dart';
 import '../../../Core/utils/view/intro_talk_bubble.dart';
 import '../ViewModel/elementary_low_intro_view_model.dart';
 import 'elementary_low_mission_view.dart';

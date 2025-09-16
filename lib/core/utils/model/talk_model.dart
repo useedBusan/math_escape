@@ -1,4 +1,4 @@
-import '../../../Core/utils/enum/speaker_enums.dart';
+import '../../../constants/enum/speaker_enums.dart';
 
 class Talk {
   final int id;

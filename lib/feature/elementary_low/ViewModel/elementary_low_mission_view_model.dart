@@ -17,25 +17,18 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
 
   // Getters
   List<ElementaryLowMissionModel> get missions => List.unmodifiable(_missions);
-
   int get currentIndex => _currentIndex;
-
   ElementaryLowMissionModel? get currentMission =>
       _missions.isEmpty ? null : _missions[_currentIndex];
-
   int? get selectedChoiceIndex => _selectedChoiceIndex;
-
   double get progress {
     final total = _missions.length;
     if (total == 0) return 0.0;
     final done = (_currentIndex + 1);
     return (done / total).clamp(0.0, 1.0);
   }
-
   bool get canSubmit => _selectedChoiceIndex != null && !isLoading;
-
   bool? get lastSubmitCorrect => _lastSubmitCorrect;
-
   bool get isLoaded => _loaded;
 
   // Intents
@@ -110,7 +103,6 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
       _currentIndex = 0;
       _selectedChoiceIndex = null;
       _lastSubmitCorrect = null;
-
       _loaded = true;
       safeNotifyListeners();
     } catch (e) {

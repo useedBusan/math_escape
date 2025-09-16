@@ -7,7 +7,6 @@ import 'constants/app_constants.dart';
 void main() {
   // 서비스 초기화
   serviceLocator.initialize();
-
   runApp(const MyApp());
 }
 
