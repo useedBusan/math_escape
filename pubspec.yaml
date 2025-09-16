@@ -113,7 +113,7 @@ flutter:
 #    - assets/images/wrong.png
 #    - assets/images/correct.png
 #    - assets/images/hint_puri.png
-#    - assets/images/banner.png
+#    - assets/images/elementary_banner.png
 #    - assets/audio/
 #    - assets/images/middle_Q1.png
 #    - assets/images/middle_Q9.png
@@ -153,11 +153,11 @@ flutter:
             weight: 900
     - family: SBAggro
       fonts:
-          - asset: assets/fonts/SB 어그로 B.ttf
+          - asset: assets/fonts/SBAggroB.ttf
             weight: 700
-          - asset: assets/fonts/SB 어그로 L.ttf
-            weight: 600
-          - asset: assets/fonts/SB 어그로 M.ttf
-            weight: 400
+          - asset: assets/fonts/SBAggroL.ttf
+            weight: 300
+          - asset: assets/fonts/SBAggroM.ttf
+            weight: 500
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

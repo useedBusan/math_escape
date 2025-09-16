@@ -3,17 +3,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:math_escape/Common/Enums/grade_enums.dart';
 import 'package:math_escape/models/high/high_mission_question.dart';
 import 'dart:async';
 import 'package:math_escape/models/high/high_mission_answer.dart';
 import 'package:math_escape/mission/high/high_answer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:math_escape/screens/qr_scan_screen.dart';
-import 'package:math_escape/Common/View/answer_popup.dart';
-import 'package:math_escape/mission/high/high_mission_constants.dart';
 import 'package:math_escape/mission/high/widgets.dart';
-
-import '../../Common/Enums/grade_enums.dart';
+import '../../Common/View/answer_popup.dart';
 
 class HighMission extends StatefulWidget {
   final List<MissionQuestion> questionList;
@@ -147,7 +145,11 @@ class _HighMissionState extends State<HighMission> {
       barrierLabel: '',
       transitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (context, animation, secondaryAnimation) {
-        return Center(child: AnswerPopup(isCorrect: isCorrect));
+        return Center(child: AnswerPopup(
+          isCorrect: isCorrect,
+          grade: StudentGrade.elementaryHigh,
+          onNext: () {  }
+        ));
       },
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         return ScaleTransition(

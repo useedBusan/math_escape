@@ -1,58 +1,64 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import '../../../viewmodels/base_viewmodel.dart';
 import '../Model/elementary_low_mission_model.dart';
 
-
-class ElementaryLowMissionViewModel extends ChangeNotifier {
-  ElementaryLowMissionViewModel._internal() {
+class ElementaryLowMissionViewModel extends BaseViewModel {
+  ElementaryLowMissionViewModel() {
     _loadMissions();
   }
-  static final ElementaryLowMissionViewModel instance =
-  ElementaryLowMissionViewModel._internal();
 
-  // ---------------- State ----------------
+  // State
   final List<ElementaryLowMissionModel> _missions = [];
   int _currentIndex = 0;
   int? _selectedChoiceIndex;
-  bool _isSubmitting = false;
   bool? _lastSubmitCorrect;
   bool _loaded = false;
 
-  // ---------------- Getters ----------------
+  // Getters
   List<ElementaryLowMissionModel> get missions => List.unmodifiable(_missions);
+
   int get currentIndex => _currentIndex;
+
   ElementaryLowMissionModel? get currentMission =>
       _missions.isEmpty ? null : _missions[_currentIndex];
 
   int? get selectedChoiceIndex => _selectedChoiceIndex;
-  bool get canSubmit => _selectedChoiceIndex != null && !_isSubmitting;
-  bool get isSubmitting => _isSubmitting;
+
+  double get progress {
+    final total = _missions.length;
+    if (total == 0) return 0.0;
+    final done = (_currentIndex + 1);
+    return (done / total).clamp(0.0, 1.0);
+  }
+
+  bool get canSubmit => _selectedChoiceIndex != null && !isLoading;
+
   bool? get lastSubmitCorrect => _lastSubmitCorrect;
+
   bool get isLoaded => _loaded;
 
-  // ---------------- Intents ----------------
+  // Intents
   void selectChoice(int index) {
     final mission = currentMission;
     if (mission == null) return;
     if (index < 0 || index >= mission.choices.length) return;
     _selectedChoiceIndex = index;
     _lastSubmitCorrect = null;
-    notifyListeners();
+    safeNotifyListeners();
   }
 
   Future<void> submitAnswer() async {
     if (!canSubmit || currentMission == null) return;
-    _isSubmitting = true;
-    notifyListeners();
-
+    setLoading(true);
     try {
-      final int correctIndex = currentMission!.answerIndex;
+      final correctIndex = currentMission!.answerIndex;
       _lastSubmitCorrect = (_selectedChoiceIndex == correctIndex);
       await Future<void>.delayed(const Duration(milliseconds: 150));
+    } catch (_) {
+      setError('정답 확인 중 오류가 발생했어요.');
     } finally {
-      _isSubmitting = false;
-      notifyListeners();
+      setLoading(false);
     }
   }
 
@@ -62,7 +68,7 @@ class ElementaryLowMissionViewModel extends ChangeNotifier {
       _currentIndex++;
       _selectedChoiceIndex = null;
       _lastSubmitCorrect = null;
-      notifyListeners();
+      safeNotifyListeners();
     }
   }
 
@@ -72,26 +78,41 @@ class ElementaryLowMissionViewModel extends ChangeNotifier {
       _currentIndex--;
       _selectedChoiceIndex = null;
       _lastSubmitCorrect = null;
-      notifyListeners();
+      safeNotifyListeners();
     }
   }
 
-  // ---------------- Load ----------------
+  /// 화면 빠져나갈 때 초기화가 필요하면 외부에서 호출
+  void reset() {
+    _missions.clear();
+    _currentIndex = 0;
+    _selectedChoiceIndex = null;
+    _lastSubmitCorrect = null;
+    _loaded = false;
+    safeNotifyListeners();
+  }
+
+  // Load
   Future<void> _loadMissions() async {
     try {
-      final String jsonStr = await rootBundle.loadString(
+      final jsonStr = await rootBundle.loadString(
         'assets/data/elementary_low/elementary_low_questions.json',
       );
-      final List<dynamic> list = json.decode(jsonStr) as List<dynamic>;
+      final list = json.decode(jsonStr) as List<dynamic>;
 
       _missions
         ..clear()
-        ..addAll(
-          list.map((e) => ElementaryLowMissionModel.fromJson(e as Map<String, dynamic>)),
-        );
+        ..addAll(list.map(
+              (e) => ElementaryLowMissionModel.fromJson(e as Map<String, dynamic>),
+        ));
+
+      // 방어적으로 인덱스 초기화
+      _currentIndex = 0;
+      _selectedChoiceIndex = null;
+      _lastSubmitCorrect = null;
 
       _loaded = true;
-      notifyListeners();
+      safeNotifyListeners();
     } catch (e) {
       _missions
         ..clear()
@@ -108,7 +129,8 @@ class ElementaryLowMissionViewModel extends ChangeNotifier {
           ),
         );
       _loaded = true;
-      notifyListeners();
+      setError('미션 데이터 로딩 실패');
+      safeNotifyListeners();
     }
   }
 }

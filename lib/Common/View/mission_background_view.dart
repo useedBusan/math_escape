@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:math_escape/widgets/elementary_high_answer_popup.dart';
+import '../../Common/View/answer_popup.dart';
 import '../Enums/grade_enums.dart';
 
 class MissionBackgroundView extends StatelessWidget {
@@ -57,73 +57,88 @@ class MissionBackgroundView extends StatelessWidget {
 
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(0),
               child: missionBuilder(context),
             ),
           ),
 
           Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: mainColor),
-                      foregroundColor: mainColor,
-                      backgroundColor: Color(0xffFFEDFA),
-                    ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: hintDialogueBuilder,
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          "assets/images/hint.png",
-                          width: 24,
-                          height: 24,
+            padding: const EdgeInsets.all(24),
+            child: SizedBox(
+              height: 60,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(0, 52),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        SizedBox(width: 2),
-                        Text('힌트'),
-                      ],
+                        side: BorderSide(color: mainColor),
+                        foregroundColor: mainColor,
+                        backgroundColor: Color(0xffFFEDFA),
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: hintDialogueBuilder,
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(
+                            "assets/images/hintIcon.png",
+                            width: 24,
+                            height: 24,
+                          ),
+                          SizedBox(width: 2),
+                          Text('힌트'),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: mainColor,
-                    ),
-                    onPressed: () async {
-                      final ok = await onSubmitAnswer(context);
-                      if (!context.mounted) return;
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(0, 52),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        side: BorderSide(color: mainColor),
+                        foregroundColor: Colors.white,
+                        backgroundColor: mainColor,
+                      ),
+                      onPressed: () async {
+                        final ok = await onSubmitAnswer(context);
+                        if (!context.mounted) return;
 
-                      showDialog(
-                        context: context,
-                        builder: (context) => AnswerPopup(
-                          isCorrect: ok,
-                          onNext: () {
-                            Navigator.of(context).pop();
-                            if (ok) {
-                              onCorrect?.call();
-                            } else {
-                              onWrong?.call();
-                            }
-                          },
-                        ),
-                      );
-                    },
-                    child: const Text('정답 제출'),
+                        showDialog(
+                          context: context,
+                          builder: (context) => AnswerPopup(
+                            isCorrect: ok,
+                            grade: StudentGrade.elementaryLow,
+                            onNext: () {
+                              Navigator.of(context).pop();
+                              if (ok) {
+                                onCorrect?.call();
+                              } else {
+                                onWrong?.call();
+                              }
+                            },
+                          ),
+                        );
+                      },
+                      child: const Text('정답 제출'),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
+          SizedBox(height: 20),
         ],
       ),
     );

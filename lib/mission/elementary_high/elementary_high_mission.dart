@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:math_escape/Common/Enums/grade_enums.dart';
 import 'dart:convert';
 import 'package:math_escape/widgets/elementary_high_hint_popup.dart';
 import 'package:math_escape/widgets/elementary_high_answer_popup.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import '../../Common/View/answer_popup.dart';
 import '../../models/elementary_high/elementary_high_correct_talk.dart';
 import 'package:math_escape/screens/qr_scan_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -365,6 +367,7 @@ class _ElementaryHighMissionScreenState
       barrierDismissible: false,
       builder: (_) => AnswerPopup(
         isCorrect: correct,
+        grade: StudentGrade.high,
         onNext: () {
           Navigator.pop(context); // 정답 팝업 닫기
           if (correct) {
@@ -388,6 +391,7 @@ class _ElementaryHighMissionScreenState
       barrierDismissible: false,
       builder: (_) => AnswerPopup(
         isCorrect: correct,
+        grade: StudentGrade.elementaryHigh,
         onNext: () {
           Navigator.pop(context); // 정답 팝업 닫기
           if (correct) {
@@ -590,7 +594,7 @@ class _ElementaryHighMissionScreenState
                 child: Column(
                   children: [
                     Image.asset(
-                      'assets/images/banner.png',
+                      'assets/images/elementary_banner.png',
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),

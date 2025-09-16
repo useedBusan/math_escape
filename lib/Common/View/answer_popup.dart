@@ -19,27 +19,57 @@ class AnswerPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Container(
-        width: 300,
-        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+        width: MediaQuery.of(context).size.width * 0.93,
+        padding: const EdgeInsets.only(top: 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(
-              isCorrect
-                  ? 'assets/images/correct.png'
-                  : 'assets/images/wrong.png',
-              width: 64,
-              height: 64,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                children: [
+                  Icon(
+                    isCorrect ? Icons.check_circle : Icons.cancel,
+                    size: 80,
+                    color: isCorrect ? const Color(0xff08BBAC) : const Color(0xffD95252),
+                  ),
+                  const SizedBox(height: 12),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                          color: const Color(0xff202020)),
+                      children: [
+                        TextSpan(
+                          text: isCorrect ? '정답이야! 수학천재 등장!' : '아쉽지만 오답이야. 조금 헷갈렸지?',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: isCorrect ? const Color(0xff08BBAC) : const Color(0xffD95252),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    isCorrect
+                        ? '보물에 한 걸음 더 가까워졌어!'
+                        : '다시 한 번 생각해볼까?',
+                    style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360)),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 16),
-            Text(
-              grade.answerText(isCorrect: isCorrect),
-              style: const TextStyle(fontSize: 16),
-              textAlign: TextAlign.center,
+            const SizedBox(height: 28),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child:
+              const Divider(height: 1, thickness: 1, color: Color(0xFFDDDDDD))
             ),
-            const Divider(height: 1, thickness: 1, color: Color(0xFFDDDDDD)),
             SizedBox(
               width: double.infinity,
               height: 56,
@@ -50,7 +80,9 @@ class AnswerPopup extends StatelessWidget {
                   textStyle: const TextStyle(fontWeight: FontWeight.bold),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                child: Text('확인'),
+                child: Text(isCorrect ? '다음' : '확인',
+                style: TextStyle(fontSize: MediaQuery.of(context).size.width * (16 / 360)),
+                ),
               ),
             ),
           ],
