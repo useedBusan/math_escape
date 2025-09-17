@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../Core/utils/Model/content_item.dart';
+import '../../../core/utils/Model/content_item.dart';
 
 class ContentCard extends StatelessWidget {
   final ContentItem item;

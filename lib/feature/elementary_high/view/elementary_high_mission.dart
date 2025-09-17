@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import '../../../Core/utils/model/hint_model.dart';
-import '../../../Core/utils/view/hint_popup.dart';
+import '../../../core/utils/model/hint_model.dart';
+import '../../../core/utils/view/hint_popup.dart';
 import '../../../constants/enum/grade_enums.dart';
 import 'dart:convert';
 import 'package:permission_handler/permission_handler.dart';
-import '../../../Core/utils/view/answer_popup.dart';
-import '../../../Core/utils/view/qr_scan_screen.dart';
+import '../../../core/utils/view/answer_popup.dart';
+import '../../../core/utils/view/qr_scan_screen.dart';
 import '../../../Feature/elementary_high/Model/elementary_high_correct_talk.dart';
 
 

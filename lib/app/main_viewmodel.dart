@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../constants/app_constants.dart';
-import '../../../Core/services/navigation_service.dart';
-import '../../../Core/services/url_launcher_service.dart';
-import '../../../Core/utils/Model/content_item.dart';
-import 'base_viewmodel.dart';
+import '../constants/app_constants.dart';
+import '../core/services/navigation_service.dart';
+import '../core/services/url_launcher_service.dart';
+import '../core/utils/Model/content_item.dart';
+import '../core/utils/view_model/base_viewmodel.dart';
 
 /// 메인 화면의 비즈니스 로직을 담당하는 ViewModel
 class MainViewModel extends BaseViewModel {

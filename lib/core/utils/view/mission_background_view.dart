@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../constants/enum/grade_enums.dart';
-import '../../../Core/utils/view/answer_popup.dart';
+import '../../../core/utils/view/answer_popup.dart';
 
 class MissionBackgroundView extends StatelessWidget {
   // 외부에서 주입받는 parameters

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
-import '../../../Core/utils/view_model/base_viewmodel.dart';
+import '../../../core/utils/view_model/base_viewmodel.dart';
 import '../Model/elementary_low_mission_model.dart';
 
 class ElementaryLowMissionViewModel extends BaseViewModel {

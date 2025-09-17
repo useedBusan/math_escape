@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:math_escape/App/main_view.dart';
-import '../Core/services/service_locator.dart';
+import '../core/services/service_locator.dart';
+import 'main_view.dart';
+
 
 /// 메인 화면 (MainView를 사용하는 래퍼)
 class MainScreen extends StatelessWidget {
@@ -12,6 +13,6 @@ class MainScreen extends StatelessWidget {
     final viewModel = serviceLocator.mainViewModel;
 
     // MainView에 ViewModel 주입
-    return MainView(viewModel: viewModel);
+    return MainView(viewModel: viewModel,);
   }
 }

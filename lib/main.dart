@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:math_escape/app/splash_screen.dart';
-import 'App/theme/app_theme.dart';
-import 'Core/services/service_locator.dart';
+import 'app/theme/app_theme.dart';
+import 'core/services/service_locator.dart';
 import 'constants/app_constants.dart';
 
 void main() {

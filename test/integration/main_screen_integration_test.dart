@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/services.dart';
-import 'package:math_escape/Core/services/service_locator.dart';
+import 'package:math_escape/core/services/service_locator.dart';
 import 'package:math_escape/main.dart';
 
 void main() {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:math_escape/Core/services/navigation_service.dart';
+import 'package:math_escape/core/services/navigation_service.dart';
 
 void main() {
   group('NavigationService QR Scan Tests', () {

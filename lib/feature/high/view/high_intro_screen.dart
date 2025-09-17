@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:math_escape/feature/high/view/high_mission_view.dart';
 import '../../../Feature/high/model/high_mission_question.dart';
 import '../../../Feature/high/view/high_mission.dart';
 
@@ -165,12 +166,13 @@ Paratruth Space, PS라고 불리는 이 공간에서,
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => HighMission(
-                          questionList: questionList,
-                          currentIndex: 0,
-                          gameStartTime: DateTime.now(),
-                        ),
-                      ),
+                        builder: (_) => HighMissionView()
+                      //     builder: (_) => HighMission(
+                      //       questionList: questionList,
+                      //       currentIndex: 0,
+                      //       gameStartTime: DateTime.now(),
+                      //     ),
+                      )
                     );
                   },
                   style: ElevatedButton.styleFrom(

@@ -8,8 +8,8 @@ import 'package:math_escape/Feature/high/model/high_mission_question.dart';
 import 'dart:async';
 import 'package:math_escape/Feature/high/model/high_mission_answer.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../../Core/utils/view/answer_popup.dart';
-import '../../../Core/utils/view/qr_scan_screen.dart';
+import '../../../core/utils/view/answer_popup.dart';
+import '../../../core/utils/view/qr_scan_screen.dart';
 import '../../../Feature/high/view/answer_widgets.dart';
 import '../../../Feature/high/view/high_answer.dart';
 

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../constants/app_constants.dart';
-import '../Core/utils/view/content_card.dart';
-import '../Core/utils/view/school_level_card.dart';
-import '../Core/utils/view_model/main_viewmodel.dart';
-
+import '../core/utils/view/content_card.dart';
+import '../core/utils/view/school_level_card.dart';
+import '../app/main_viewmodel.dart';
 
 /// 메인 화면의 view (UI만 담당)
 class MainView extends StatelessWidget {

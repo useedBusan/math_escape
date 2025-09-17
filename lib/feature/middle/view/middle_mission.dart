@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:math_escape/core/utils/view/hint_popup.dart';
 import 'dart:convert';
 import '../../../constants/enum/grade_enums.dart';
-import '../../../Core/utils/view/answer_popup.dart';
+import '../../../core/utils/view/answer_popup.dart';
 
 // 새로운 모델 클래스 추가
 class CorrectTalkItem {

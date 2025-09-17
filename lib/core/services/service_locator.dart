@@ -1,7 +1,7 @@
-import '../../Core/services/data_service.dart';
-import '../../Core/services/navigation_service.dart';
-import '../../Core/services/url_launcher_service.dart';
-import '../../Core/utils/view_model/main_viewmodel.dart';
+import '../../core/services/data_service.dart';
+import '../../core/services/navigation_service.dart';
+import '../../core/services/url_launcher_service.dart';
+import '../../app/main_viewmodel.dart';
 
 
 /// 서비스 의존성 주입을 관리하는 클래스
