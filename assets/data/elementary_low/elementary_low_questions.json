@@ -1,33 +1,62 @@
-[{
-  "id" : 1,
-  "title" : "1단계: 수학자의 서재 - 숨겨진 숫자의 비밀",
-  "question" : "원주율(π = 3.1415926535)의 소수점 아래 첫 10자리 숫자를 참고하여, 풍선 속에서 보이지 않는 숫자 2개를 찾아봐!",
-  "images": null,
-  "choices": ["7과 8", "1과 5", "3과 4"],
-  "answer" : 1,
-  "hint1" : "2층 수학놀이관을 살펴보자.",
-  "hint2" : "2층 수학놀이관에 들어가는\n입구 부분을 살펴보자."
-},
-
+[
   {
-    "id" : 2,
-    "title" : "2단계: 숫자의 미로 - 짝수를 밟아 탈출하라!",
-    "question" : "부산수학문화관 2층에 위치한 ‘수학놀이관’에서는 동시에 최대 몇 명까지 체험할 수 있을까?",
-    "images": null,
-    "choices": ["72명", "84명", "96명"],
-    "answer" : 3,
-    "hint1" : "2층 수학놀이관 피자 가게를 살펴보자.",
-    "hint2" : "피자 조각들의 뒷면을 살펴보자."
+    "id": 1,
+    "title": "1단계: 수학자의 서재 – 숨겨진 숫자의 비밀",
+    "question": "원주율(π)의 소수점 아래 첫 10자리 숫자를 참고하여, 풍선 속에서 보이지 않는 숫자 2개를 찾아봐! π = 3.1415926535",
+    "images": "assets/images/piBalloons.png",
+    "choices": ["7과 8", "1과 5", "3과 4"],
+    "answer": 1,
+    "hintText": "\uD83D\uDCCD 2층 수학도서관을 살펴보자.",
+    "hintImage": ""
   },
-
   {
-    "id" : 5,
-    "title" : "5단계: 시간의 회랑 - 시계와 수학의 만남",
-    "question" : "지금 피보나치 시계에 불빛이 켜졌어! 현재 시각은 몇 시일까?",
-    "images": "assets/images/pibonacciClock.png",
-    "choices": ["3시", "6시", "7시"],
-    "answer" : 3,
-    "hint1" : "2층 수학놀이관 피자 가게를 살펴보자.",
-    "hint2" : "피자 조각들의 뒷면을 살펴보자."
+    "id": 2,
+    "title": "2단계: 숫자의 미로 – 짝수를 밟아 탈출하라!",
+    "question": "부산수학문화관 2층 ‘수학놀이관’에서는 동시에 최대 몇 명까지 체험할 수 있을까?",
+    "images": "assets/images/mathPlaygroundCapacity.png",
+    "choices": ["72명", "84명", "96명"],
+    "answer": 3,
+    "hintText": "\uD83D\uDCCD 2층 수학놀이관 입구를 살펴보자.",
+    "hintImage": ""
+  },
+  {
+    "id": 3,
+    "title": "3단계: 미로 놀이터 – 사방이 수다!",
+    "question": "미로 놀이터 안에 놓인 다양한 체험 시설물의 ‘전체 개수’를 맞춰봐!",
+    "images": "assets/images/mazePlayground.png",
+    "choices": ["10개", "12개", "15개"],
+    "answer": 3,
+    "hintText": "\uD83D\uDCCD 2층 미로놀이터 안내도를 살펴보자.",
+    "hintImage": ""
+  },
+  {
+    "id": 4,
+    "title": "4단계: 도형의 정원 – 거울과 돔의 비밀",
+    "question": "삼각형, 사각형, 육각형 중 하나를 선택해 다빈치 돔을 만들고, QR을 찍어 다음 단계로 넘어가!",
+    "images": "assets/images/davinciDome.png",
+    "choices": ["https://example.com/qr/davinci-dome"],
+    "answer": 1,
+    "hintText": "\uD83D\uDCCD 수정 예정",
+    "hintImage": ""
+  },
+  {
+    "id": 5,
+    "title": "5단계: 시간의 회랑 – 시계와 수학의 만남",
+    "question": "지금 피보나치 시계에 불빛이 켜졌어! 현재 시각은 몇 시일까?",
+    "images": "assets/images/fibonacciClock.png",
+    "choices": ["3시", "5시", "7시"],
+    "answer": 3,
+    "hintText": "\uD83D\uDCCD 2층 복도 시계탑 패널을 확인해 봐!",
+    "hintImage": ""
+  },
+  {
+    "id": 6,
+    "title": "6단계: 보물의 방 – 마지막 미션",
+    "question": "나이트가 보드의 ‘가운데 칸’에 있을 때, 한 번에 이동할 수 있는 칸의 개수는?",
+    "images": "assets/images/chessKnight.png",
+    "choices": ["6칸", "8칸", "10칸"],
+    "answer": 2,
+    "hintText": "\uD83D\uDCCD 2층 미로놀이터 ①에 가보자.",
+    "hintImage": ""
   }
 ]

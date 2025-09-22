@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 enum HighPane { problem, solution, custom }
 
 class BaseHighViewModel extends ChangeNotifier {
-  static const _limit = Duration(minutes: 100);
+  static const _limit = Duration(minutes: 90);
   final Stopwatch _think = Stopwatch();
   final Stopwatch _body = Stopwatch();
   Timer? _ticker;
