@@ -14,6 +14,8 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
   int? _selectedChoiceIndex;
   bool? _lastSubmitCorrect;
   bool _loaded = false;
+  bool _showConversation = true; // 첫 번째 문제 전에 대화를 보여줄지 여부
+  bool _showFinalConversation = false; // 마지막 스테이지 대화를 보여줄지 여부
 
   // Getters
   List<ElementaryLowMissionModel> get missions => List.unmodifiable(_missions);
@@ -31,6 +33,8 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
   bool? get lastSubmitCorrect => _lastSubmitCorrect;
   bool get isLoaded => _loaded;
   bool get isqr => currentMission?.isqr ?? false;
+  bool get showConversation => _showConversation;
+  bool get showFinalConversation => _showFinalConversation;
 
   // Intents
   void selectChoice(int index) {
@@ -62,8 +66,23 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
       _currentIndex++;
       _selectedChoiceIndex = null;
       _lastSubmitCorrect = null;
+      _showConversation = true; // 다음 문제 전에 대화를 보여줌
+      safeNotifyListeners();
+    } else {
+      // 마지막 문제를 완료했을 때 최종 대화 표시
+      _showFinalConversation = true;
       safeNotifyListeners();
     }
+  }
+
+  void completeConversation() {
+    _showConversation = false;
+    safeNotifyListeners();
+  }
+
+  void completeFinalConversation() {
+    _showFinalConversation = false;
+    safeNotifyListeners();
   }
 
   void previousMission() {
@@ -83,6 +102,7 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
     _selectedChoiceIndex = null;
     _lastSubmitCorrect = null;
     _loaded = false;
+    _showConversation = true;
     safeNotifyListeners();
   }
 

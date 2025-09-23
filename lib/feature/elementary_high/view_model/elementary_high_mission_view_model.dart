@@ -12,6 +12,8 @@ class ElementaryHighMissionViewModel extends ChangeNotifier {
   bool _isBusy = false;
   String _typedAnswer = '';
   final TextEditingController textController = TextEditingController();
+  bool _showConversation = true; // 첫 번째 문제 전에 대화를 보여줄지 여부
+  bool _showFinalConversation = false; // 마지막 스테이지 대화를 보여줄지 여부
 
   bool get isLoading => _isLoading;
   bool get isBusy => _isBusy;
@@ -27,6 +29,8 @@ class ElementaryHighMissionViewModel extends ChangeNotifier {
       hasMission ? (_currentIndex + 1) / _missions.length : 0;
 
   bool get isqr => currentMission?.isqr ?? false;
+  bool get showConversation => _showConversation;
+  bool get showFinalConversation => _showFinalConversation;
 
   Future<void> load(String assetPath) async {
     _isLoading = true;
@@ -37,6 +41,7 @@ class ElementaryHighMissionViewModel extends ChangeNotifier {
       ..clear()
       ..addAll(jsonList.map((e) => ElementaryHighMissionModel.fromJson(e)));
     _isLoading = false;
+    _showFinalConversation = false;
     textController.removeListener(_onTextChanged);
     textController.addListener(_onTextChanged);
     notifyListeners();
@@ -89,7 +94,21 @@ class ElementaryHighMissionViewModel extends ChangeNotifier {
       _typedAnswer = '';
       textController.clear();
       notifyListeners();
+    } else {
+      // 마지막 문제를 완료했을 때 최종 대화 표시
+      _showFinalConversation = true;
+      notifyListeners();
     }
+  }
+
+  void completeConversation() {
+    _showConversation = false;
+    notifyListeners();
+  }
+
+  void completeFinalConversation() {
+    _showFinalConversation = false;
+    notifyListeners();
   }
 
   @override

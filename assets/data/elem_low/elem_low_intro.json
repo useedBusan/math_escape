@@ -18,20 +18,20 @@
     "speaker": "Puri",
     "speakerImg": "assets/images/common/furiReading.png",
     "backImg": "assets/images/common/bsbackground.png",
-    "talk": "여기 무언가 적혀 있어!\n\"수학자의 비밀 일기장은 이곳 어딘가에 숨겨져 있다.\n여섯 개의 수학 방을 모두 통과한 자만이 진정한 수학 보물탐험가가 될 수 있다.\""
+    "talk": "여기 무언가 적혀 있어! “수학자의 비밀 일기장은 이곳 어딘가에 숨겨져 있다. 여섯 개의 수학 방을 모두 통과한 자만이 진정한 수학 보물탐험가가 될 수 있다.”"
   },
   {
     "id": 4,
     "speaker": "Maemae",
-    "speakerImg": "assets/images/common/maemaeHurray.png",
+    "speakerImg": "assets/images/common/maemaeJajan.png",
     "backImg": "assets/images/common/bsbackground.png",
     "talk": "우와! 수학자가 남긴 전설의 보물인가 봐!"
   },
   {
     "id": 5,
-    "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiHurray.png",
+    "speaker": "Both",
+    "speakerImg": "assets/images/elementary_low/elemLowBoth.png",
     "backImg": "assets/images/common/bsbackground.png",
-    "talk": "우리 둘이 힘을 합쳐 보물을 찾아보자."
+    "talk": "우리 둘이 힘을 합쳐 보물을 찾아보자!"
   }
 ]

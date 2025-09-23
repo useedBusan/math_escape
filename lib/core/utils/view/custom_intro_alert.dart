@@ -16,9 +16,9 @@ class CustomIntroAlert extends StatelessWidget {
   String _mainImage() {
     switch (grade) {
       case StudentGrade.elementaryLow:
-        return 'assets/images/introImgEleLow.png';
+        return '';
       case StudentGrade.middle:
-        return 'assets/images/introImgMiddle.png';
+        return 'assets/images/middle/middleDiary.png';
       default:
         return '';
     }

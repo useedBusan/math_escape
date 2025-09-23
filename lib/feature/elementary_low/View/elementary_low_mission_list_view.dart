@@ -72,25 +72,28 @@ class ElementaryLowMissionListView extends StatelessWidget {
           ),
           const SizedBox(height: 20),
 
-          if (mission.questionImage != null) ...[
-            const SizedBox(height: 12),
-            Expanded(
-              child: Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      return Image.asset(
-                        mission.questionImage!,
-                        fit: BoxFit.contain,
-                        width: constraints.maxWidth,
-                        height: constraints.maxHeight,
-                      );
-                    },
+          // QR 문제가 아닐 때만 이미지와 선택 버튼 표시
+          if (!mission.isqr) ...[
+            if (mission.questionImage != null) ...[
+              const SizedBox(height: 12),
+              Expanded(
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Image.asset(
+                          mission.questionImage!,
+                          fit: BoxFit.contain,
+                          width: constraints.maxWidth,
+                          height: constraints.maxHeight,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -101,30 +104,20 @@ class ElementaryLowMissionListView extends StatelessWidget {
                 mainAxisExtent: 60,
               ),
               itemCount: mission.choices.length,
-              itemBuilder: (context, i) { },
+              itemBuilder: (context, i) {
+                final isSelected = vm.selectedChoiceIndex == i;
+                return _ChoiceChipBox(
+                  label: mission.choices[i],
+                  selected: isSelected,
+                  enabled: !vm.isLoading,
+                  onTap: () => vm.selectChoice(i),
+                );
+              },
             ),
+          ] else ...[
+            // QR 문제일 때는 빈 공간 확보
+            const Expanded(child: SizedBox()),
           ],
-
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              mainAxisExtent: 60,
-            ),
-            itemCount: mission.choices.length,
-            itemBuilder: (context, i) {
-              final isSelected = vm.selectedChoiceIndex == i;
-              return _ChoiceChipBox(
-                label: mission.choices[i],
-                selected: isSelected,
-                enabled: !vm.isLoading,
-                onTap: () => vm.selectChoice(i),
-              );
-            },
-          ),
         ],
       ),
     );

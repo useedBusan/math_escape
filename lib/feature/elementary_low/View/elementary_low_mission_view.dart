@@ -26,22 +26,43 @@ class ElementaryLowMissionView extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ElementaryLowMissionViewModel()),
         ChangeNotifierProvider(create: (_) => HintPopupViewModel()),
       ],
-      child: Builder(
-        builder: (ctx) {
-        return MissionBackgroundView(
+      child: Consumer<ElementaryLowMissionViewModel>(
+        builder: (ctx, vm, child) {
+          // 최종 대화를 보여줘야 하는 경우
+          if (vm.showFinalConversation) {
+            return _ConversationView(
+              stage: 7, // 마지막 스테이지
+              onComplete: () {
+                vm.completeFinalConversation();
+                // 최종 대화 완료 후 메인 화면으로 돌아가거나 다른 처리
+                Navigator.of(ctx).pop();
+              },
+            );
+          }
+          
+          // 일반 대화를 보여줘야 하는 경우
+          if (vm.showConversation) {
+            return _ConversationView(
+              stage: vm.currentIndex + 1,
+              onComplete: () {
+                vm.completeConversation();
+              },
+            );
+          }
+          
+          return MissionBackgroundView(
           grade: grade,
           title: '미션! 수사모의 수학 보물을 찾아서',
           missionBuilder: (_) => const ElementaryLowMissionListView(),
-          isqr: ctx.read<ElementaryLowMissionViewModel>().isqr,
+          isqr: vm.isqr,
 
             // 힌트 팝업
             hintDialogueBuilder: (_) {
-              final mission =
-                  ctx.read<ElementaryLowMissionViewModel>().currentMission;
+              final mission = vm.currentMission;
               if (mission == null) return const SizedBox.shrink();
 
               final hintVM = ctx.read<HintPopupViewModel>();
-              final List<HintEntry> hints = mission.hints;
+              final hints = mission.hints;
               hintVM.setHints(hints);
               final content = hintVM.consumeNext();
               if (content == null) return const SizedBox.shrink();
@@ -58,42 +79,13 @@ class ElementaryLowMissionView extends StatelessWidget {
             },
 
             onSubmitAnswer: (c) async {
-              final vm = c.read<ElementaryLowMissionViewModel>();
               await vm.submitAnswer();
               return vm.lastSubmitCorrect ?? false;
             },
 
             onCorrect: () async {
-              final vm = ctx.read<ElementaryLowMissionViewModel>();
-              final int currentStage = vm.currentIndex + 1; // 1-based stage
-              
-              try {
-                // IntroViewModel을 사용해서 대화 시퀀스 관리
-                final conversationVM = IntroViewModel();
-                await conversationVM.loadTalks('assets/data/elem_low/elem_low_conversation.json');
-                
-                // 현재 stage의 대화만 필터링
-                conversationVM.setStageTalks(currentStage);
-                
-                if (conversationVM.talks.isNotEmpty) {
-                  Navigator.push(ctx, MaterialPageRoute(builder: (_) {
-                    return _ConversationView(
-                      viewModel: conversationVM,
-                      onComplete: () {
-                        Navigator.of(ctx).pop();
-                        vm.nextMission();
-                        ctx.read<HintPopupViewModel>().reset();
-                      },
-                    );
-                  }));
-                } else {
-                  vm.nextMission();
-                  ctx.read<HintPopupViewModel>().reset();
-                }
-              } catch (_) {
-                vm.nextMission();
-                ctx.read<HintPopupViewModel>().reset();
-              }
+              vm.nextMission();
+              ctx.read<HintPopupViewModel>().reset();
             },
           );
         },
@@ -104,11 +96,11 @@ class ElementaryLowMissionView extends StatelessWidget {
 
 // 대화 시퀀스를 관리하는 전용 위젯
 class _ConversationView extends StatefulWidget {
-  final IntroViewModel viewModel;
+  final int stage;
   final VoidCallback onComplete;
 
   const _ConversationView({
-    required this.viewModel,
+    required this.stage,
     required this.onComplete,
   });
 
@@ -117,10 +109,48 @@ class _ConversationView extends StatefulWidget {
 }
 
 class _ConversationViewState extends State<_ConversationView> {
+  late IntroViewModel viewModel;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadConversation();
+  }
+
+  Future<void> _loadConversation() async {
+    try {
+      viewModel = IntroViewModel();
+      await viewModel.loadTalks('assets/data/elem_low/elem_low_conversation.json');
+      viewModel.setStageTalks(widget.stage);
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (viewModel.talks.isEmpty) {
+      // 대화가 없으면 바로 완료 처리
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.onComplete();
+      });
+      return const SizedBox.shrink();
+    }
+
     return ChangeNotifierProvider.value(
-      value: widget.viewModel,
+      value: viewModel,
       child: Consumer<IntroViewModel>(
         builder: (context, vm, child) {
           final talk = vm.currentTalk;
@@ -157,7 +187,7 @@ class _ConversationViewState extends State<_ConversationView> {
               if (vm.canGoPrevious()) {
                 vm.goToPreviousTalk();
               } else {
-                Navigator.of(context).pop();
+                widget.onComplete();
               }
             },
           );

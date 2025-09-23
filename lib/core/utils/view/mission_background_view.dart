@@ -114,24 +114,40 @@ class MissionBackgroundView extends StatelessWidget {
                         backgroundColor: mainColor,
                       ),
                       onPressed: () async {
-                        final ok = await onSubmitAnswer(context);
-                        if (!context.mounted) return;
-
-                        showDialog(
-                          context: context,
-                          builder: (context) => AnswerPopup(
-                            isCorrect: ok,
-                            grade: grade,
-                            onNext: () {
-                              Navigator.of(context).pop();
-                              if (ok) {
+                        if (isqr) {
+                          // QR 문제일 때는 바로 정답으로 처리
+                          showDialog(
+                            context: context,
+                            builder: (context) => AnswerPopup(
+                              isCorrect: true,
+                              grade: grade,
+                              onNext: () {
+                                Navigator.of(context).pop();
                                 onCorrect?.call();
-                              } else {
-                                onWrong?.call();
-                              }
-                            },
-                          ),
-                        );
+                              },
+                            ),
+                          );
+                        } else {
+                          // 일반 문제일 때는 기존 로직 사용
+                          final ok = await onSubmitAnswer(context);
+                          if (!context.mounted) return;
+
+                          showDialog(
+                            context: context,
+                            builder: (context) => AnswerPopup(
+                              isCorrect: ok,
+                              grade: grade,
+                              onNext: () {
+                                Navigator.of(context).pop();
+                                if (ok) {
+                                  onCorrect?.call();
+                                } else {
+                                  onWrong?.call();
+                                }
+                              },
+                            ),
+                          );
+                        }
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,

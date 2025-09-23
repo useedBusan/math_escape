@@ -575,93 +575,117 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                   ),
                                 ),
                             const Expanded(child: SizedBox()),
-                            // 텍스트필드
-                            Container(
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFFFFF),
-                                borderRadius: BorderRadius.circular(8.0),
-                                border: Border.all(
-                                  color: const Color(0xffdcdcdc),
+                            // QR 문제일 때 QR 스캔 버튼 표시
+                            if (mission.isqr) ...[
+                              SizedBox(
+                                width: double.infinity,
+                                height: 60,
+                                child: ElevatedButton(
+                                  onPressed: _submitAnswer,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: mainColor,
+                                    foregroundColor: Colors.white,
+                                    elevation: 2,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.qr_code_scanner,
+                                        size: 24,
+                                        color: Colors.white,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        'QR코드 스캔',
+                                        style: TextStyle(
+                                          fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: TextField(
-                                      style: TextStyle(
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                            (15 / 360),
-                                      ),
-                                      controller: _answerController,
-                                      keyboardType: TextInputType.text,
-                                      textInputAction: TextInputAction.done,
-                                      decoration: InputDecoration(
-                                        hintText: '정답을 입력해 주세요.',
-                                        hintStyle: TextStyle(
+                            ] else ...[
+                              // 일반 문제일 때 텍스트필드 표시
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFFFFF),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  border: Border.all(
+                                    color: const Color(0xffdcdcdc),
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: TextField(
+                                        style: TextStyle(
                                           fontSize:
-                                              MediaQuery.of(
-                                                context,
-                                              ).size.width *
-                                              (14 / 360),
-                                          color: const Color(0xffaaaaaa),
+                                              MediaQuery.of(context).size.width *
+                                              (15 / 360),
                                         ),
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                              horizontal: 12.0,
-                                              vertical: 12.0,
-                                            ),
-                                        border: InputBorder.none,
-                                        enabledBorder: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
+                                        controller: _answerController,
+                                        keyboardType: TextInputType.text,
+                                        textInputAction: TextInputAction.done,
+                                        decoration: InputDecoration(
+                                          hintText: '정답을 입력해 주세요.',
+                                          hintStyle: TextStyle(
+                                            fontSize:
+                                                MediaQuery.of(
+                                                  context,
+                                                ).size.width *
+                                                (14 / 360),
+                                            color: const Color(0xffaaaaaa),
+                                          ),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                horizontal: 12.0,
+                                                vertical: 12.0,
+                                              ),
+                                          border: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 60,
-                                    height: 52,
-                                    child: ElevatedButton(
-                                      onPressed: _submitAnswer,
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: mainColor,
-                                        foregroundColor: Colors.white,
-                                        elevation: 0,
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 12,
+                                    SizedBox(
+                                      width: 60,
+                                      height: 52,
+                                      child: ElevatedButton(
+                                        onPressed: _submitAnswer,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: mainColor,
+                                          foregroundColor: Colors.white,
+                                          elevation: 0,
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 12,
+                                          ),
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(8),
+                                              bottomRight: Radius.circular(8),
+                                            ),
+                                          ),
                                         ),
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(8),
-                                            bottomRight: Radius.circular(8),
+                                        child: Text(
+                                          '제출',
+                                          style: TextStyle(
+                                            fontSize: MediaQuery.of(context).size.width * (12 / 360),
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          if (isqr) ...[
-                                            Icon(
-                                              Icons.qr_code_scanner,
-                                              size: 16,
-                                              color: Colors.white,
-                                            ),
-                                            SizedBox(width: 4),
-                                          ],
-                                          Text(
-                                            isqr ? 'QR 인식' : '확인',
-                                            style: TextStyle(
-                                              fontSize: MediaQuery.of(context).size.width * (14 / 360),
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
+                            ],
                           ],
                         ),
                       ),

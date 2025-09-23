@@ -4,7 +4,7 @@
     "question": "소마큐브 조각 중 옆모습, 앞모습, 윗모습에서 보여지는 조각의 개수가 모두 같은 조각은 무엇일까?",
     "title": "문제 1 / 10",
     "back_image": "assets/images/middle/middleBG123.png",
-    "questionImage": "assets/images/middle_Q1.png",
+    "questionImage": "assets/images/middle/middleQuestion1.png",
     "answer": [
       "1",
       "①"
@@ -66,7 +66,7 @@
     "question": "<우표로 보는 수학의 역사> 중 황금나선과 관련된 우표를 찾아서 QR코드를 찍어 제출해 줘.",
     "title": "문제 5 / 10",
     "back_image": "assets/images/middle/middleBG456.png",
-    "questionImage": "assets/images/golden_spiral_stamp.png",
+    "questionImage": "",
     "answer": "",
     "hint1": "3층 연결 복도를 살펴보자",
     "hint2": "황금비가 적용된 나선형 구조를 찾아보자",
@@ -123,7 +123,7 @@
     "question": "아래의 전시물을 찾아 공을 굴려봐. 어떤 레일의 공이 제일 먼저 도착할까?",
     "title": "문제 9 / 10",
     "back_image": "assets/images/middle/middleBG789.png",
-    "questionImage": "assets/images/middle_Q9.png",
+    "questionImage": "assets/images/middle/middleQuestion9.png",
     "answer": [
       "2",
       "②"

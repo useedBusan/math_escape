@@ -21,21 +21,29 @@ class Talk {
 
   factory Talk.fromJson(Map<String, dynamic> json) {
     Speaker speaker;
-    switch (json['speaker']) {
-      case 'Puri':
-        speaker = Speaker.puri;
-        break;
-      case 'Maemae':
-        speaker = Speaker.maemae;
-        break;
-      case 'Both':
-        speaker = Speaker.both;
-        break;
-      case 'Book':
-        speaker = Speaker.book;
-        break;
-      default:
-        throw Exception('Invalid speaker value: ${json['speaker']}');
+    
+    // 초등고학년 데이터 구조 처리 (speaker 필드가 없는 경우)
+    if (json['speaker'] == null) {
+      // puri_image가 있으면 푸리로 간주
+      speaker = Speaker.puri;
+    } else {
+      // 초등저학년 데이터 구조 처리
+      switch (json['speaker']) {
+        case 'Puri':
+          speaker = Speaker.puri;
+          break;
+        case 'Maemae':
+          speaker = Speaker.maemae;
+          break;
+        case 'Both':
+          speaker = Speaker.both;
+          break;
+        case 'Book':
+          speaker = Speaker.book;
+          break;
+        default:
+          throw Exception('Invalid speaker value: ${json['speaker']}');
+      }
     }
 
     return Talk(
@@ -43,12 +51,12 @@ class Talk {
       stage: json['stage'] as int?,
       speaker: speaker,
       speakerImg: ImagePathValidator.validate(
-        json['speakerImg'] as String?,
+        json['speakerImg'] as String? ?? json['puri_image'] as String?,
         ImageAssets.furiStanding.path,
         logInvalid: true,
       ),
       backImg: ImagePathValidator.validate(
-        json['backImg'] as String?,
+        json['backImg'] as String? ?? json['back_image'] as String?,
         ImageAssets.background.path,
         logInvalid: true,
       ),
