@@ -1,156 +1,187 @@
-// // lib/app/base_main_view.dart
-// import 'package:flutter/material.dart';
-// import 'base_main_view_model.dart';
-//
-//
-// /// 메인 홈 화면
-// /// - MainScreen -> serviceLocator.mainViewModel 주입 받아 사용
-// /// - 카드 탭 시 NavigationService를 통해 개별 화면으로 이동
-// class BaseMainView extends StatelessWidget {
-//   const BaseMainView({super.key, required this.viewModel});
-//
-//   final BaseMainViewModel viewModel;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     // MainViewModel이 ChangeNotifier이므로 AnimatedBuilder로 상태 반영
-//     return AnimatedBuilder(
-//       animation: viewModel,
-//       builder: (context, _) {
-//         return Scaffold(
-//           backgroundColor: Colors.white,
-//           body: SafeArea(
-//             child: SingleChildScrollView(
-//               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   // 상단 로고/타이틀 영역 ------------------------------
-//                   // 로고 이미지가 있으면 여기에 Image.asset(...)로 교체
-//                   Row(
-//                     children: [
-//                       // TODO: 로고 자산 있으면 교체
-//                       const Icon(Icons.school, size: 28),
-//                       const SizedBox(width: 8),
-//                       const Text(
-//                         '부산수학문화관',
-//                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-//                       ),
-//                     ],
-//                   ),
-//                   const SizedBox(height: 16),
-//                   const Text(
-//                     '미션투어시리즈에 온 걸 환영해! 🎉\n너만의 수학 모험을 시작해 봐!',
-//                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, height: 1.25),
-//                   ),
-//                   const SizedBox(height: 16),
-//
-//                   // 2x2 카드 영역 -------------------------------------
-//                   GridView(
-//                     shrinkWrap: true,
-//                     physics: const NeverScrollableScrollPhysics(),
-//                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//                       crossAxisCount: 2,
-//                       crossAxisSpacing: 12,
-//                       mainAxisSpacing: 12,
-//                       childAspectRatio: 0.78, // 디자인에 맞춰 조정
-//                     ),
-//                     children: [
-//                       _LevelCard(
-//                         bgColor: const Color(0xFFFFEEF3),
-//                         title: '미션! 수학자의\n수첩을 찾아서',
-//                         subtitle: '초등 저학년 8~10세',
-//                         // TODO: 실제 일러스트 자산으로 교체 -> Image.asset('assets/elem_low.png')
-//                         leading: const Icon(Icons.explore, size: 72),
-//                         onTap: () => viewModel.onSchoolLevelCardTap(context, '초등학교 저학년'),
-//                       ),
-//                       _LevelCard(
-//                         bgColor: const Color(0xFFFFEEF6),
-//                         title: '미션! 수사모의\n보물을 찾아서',
-//                         subtitle: '초등 고학년 11~13세',
-//                         leading: const Icon(Icons.auto_awesome, size: 72),
-//                         onTap: () => viewModel.onSchoolLevelCardTap(context, '초등학교 고학년'),
-//                       ),
-//                       _LevelCard(
-//                         bgColor: const Color(0xFFEFF3FF),
-//                         title: '수학자의 비밀\n노트를 찾아라!',
-//                         subtitle: '중학생 14~16세',
-//                         leading: const Icon(Icons.menu_book, size: 72),
-//                         onTap: () => viewModel.onSchoolLevelCardTap(context, '중학교'),
-//                       ),
-//                       _LevelCard(
-//                         bgColor: const Color(0xFFEFF3FF),
-//                         title: '역설, 혹은\n모호함',
-//                         subtitle: '고등학생 17~19세',
-//                         leading: const Icon(Icons.edit_note, size: 72),
-//                         onTap: () => viewModel.onSchoolLevelCardTap(context, '고등학교'),
-//                       ),
-//                     ],
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
-//
-// /// 단일 학년 카드 위젯
-// class _LevelCard extends StatelessWidget {
-//   const _LevelCard({
-//     required this.title,
-//     required this.subtitle,
-//     required this.onTap,
-//     required this.leading,
-//     required this.bgColor,
-//   });
-//
-//   final String title;
-//   final String subtitle;
-//   final VoidCallback onTap;
-//   final Widget leading;
-//   final Color bgColor;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Material(
-//       color: bgColor,
-//       borderRadius: BorderRadius.circular(16),
-//       child: InkWell(
-//         borderRadius: BorderRadius.circular(16),
-//         onTap: onTap,
-//         child: Container(
-//           padding: const EdgeInsets.all(16),
-//           decoration: BoxDecoration(
-//             borderRadius: BorderRadius.circular(16),
-//             border: Border.all(color: Colors.black12),
-//           ),
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               Expanded(child: Center(child: leading)),
-//               const SizedBox(height: 8),
-//               Text(
-//                 title,
-//                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
-//                 maxLines: 2,
-//                 overflow: TextOverflow.ellipsis,
-//               ),
-//               const SizedBox(height: 6),
-//               Text(
-//                 subtitle,
-//                 style: const TextStyle(
-//                   fontSize: 13,
-//                   fontWeight: FontWeight.w700,
-//                   color: Color(0xFF4E6BFA), // 디자인에 맞춰 보라/블루 톤
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../constants/enum/grade_enums.dart';
+import '../theme/app_colors.dart';
+import 'base_main_view_model.dart';
+
+class BaseMainView extends StatelessWidget {
+  const BaseMainView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => BaseMainViewModel(),
+      child: Consumer<BaseMainViewModel>(
+        builder: (ctx, vm, _) {
+          return Scaffold(
+            body: SafeArea(
+              child: Column(
+                children: [
+                  // 상단 로고
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, left: 16),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Image.asset(
+                        'assets/images/common/mainLogo.png',
+                        height: 22,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 25),
+
+                  // 스크롤 가능한 메인 콘텐츠
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // 인사말
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '미션투어시리즈에 온 걸 환영해! 🎉',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Pretendard',
+                                  ),
+                                ),
+                                Text(
+                                  '너만의 수학 모험을 시작해 봐!',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Pretendard',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                          // 카드 영역
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: GridView.count(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 12,
+                              crossAxisSpacing: 12,
+                              childAspectRatio: 0.9,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              children: StudentGrade.values.map((level) {
+                                return _buildLevelCard(context, vm, level);
+                              }).toList(),
+                            ),
+                          ),
+
+                          // 시작하기 버튼
+                          const SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: ElevatedButton(
+                              onPressed: vm.hasSelection
+                                  ? () => vm.startMission(context)
+                                  : null,
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                backgroundColor: CustomBlue.s500,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                elevation: 2,
+                              ),
+                              child: const Text(
+                                '시작하기',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Pretendard',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // 하단 배너 (바닥에 고정)
+                  SizedBox(
+                    width: double.infinity,
+                    child: Image.asset(
+                      'assets/images/common/bannerMain.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildLevelCard(
+      BuildContext context,
+      BaseMainViewModel vm,
+      StudentGrade level) {
+    final isSelected = vm.selectedLevel == level;
+
+    return GestureDetector(
+      onTap: () => vm.selectLevel(level),
+      child: Container(
+        decoration: BoxDecoration(
+          color: level.backgroundColor,
+          border: isSelected ? Border.all(
+            color: CustomBlue.s500,
+            width: 2,
+          ) : null,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            if (isSelected)
+              BoxShadow(
+                color: CustomBlue.s500.withOpacity(0.3),
+                blurRadius: 6,
+                offset: const Offset(0, 3),
+              ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(level.imagePath, height: 80),
+            const SizedBox(height: 12),
+            Text(
+              level.title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontFamily: 'SBAggroM',
+                color: AppColors.body,
+                height: 1.2,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 6),
+            Text(
+              level.subtitle,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Pretendard',
+                color: level.mainColor,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

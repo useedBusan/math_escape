@@ -13,6 +13,7 @@ class AppColors {
 
 /// 디자이너님께서 정리해주신 컬러셋
 class CustomPink {
+  static const s50 = Color(0xFFFFEDFA);
   static const s100 = Color(0xFFFFCFDC);
   static const s200 = Color(0xFFFFAEC3);
   static const s300 = Color(0xFFFF8DAB);
@@ -24,12 +25,13 @@ class CustomPink {
   static const s900 = Color(0xFF511021);
 
   static const swatch = <int, Color>{
-    100: s100, 200: s200, 300: s300, 400: s400, 500: s500,
+    50: s50, 100: s100, 200: s200, 300: s300, 400: s400, 500: s500,
     600: s600, 700: s700, 800: s800, 900: s900,
   };
 }
 
 class CustomBlue {
+  static const s50 = Color(0xFFDEE5FF);
   static const s100 = Color(0xFFD9DDED);
   static const s200 = Color(0xFFB2BBDC);
   static const s300 = Color(0xFF8C99CA);
@@ -41,7 +43,7 @@ class CustomBlue {
   static const s900 = Color(0xFF0D1121);
 
   static const swatch = <int, Color>{
-    100: s100, 200: s200, 300: s300, 400: s400, 500: s500,
+    50: s50, 100: s100, 200: s200, 300: s300, 400: s400, 500: s500,
     600: s600, 700: s700, 800: s800, 900: s900,
   };
 }
