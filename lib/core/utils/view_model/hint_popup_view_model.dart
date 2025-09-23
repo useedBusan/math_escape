@@ -2,51 +2,61 @@ import 'package:flutter/material.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../model/hint_model.dart';
 
-/// 힌트 2단계(1/2) 순환과 grade→색/이미지 매핑만 담당하는 가벼운 VM
 class HintPopupViewModel extends ChangeNotifier {
-  int _stepIdx = 0;
+  int _index = -1;
+  List<HintEntry> _hints = const [];
 
-  int consumeNextStep() {
-    _stepIdx = (_stepIdx % 2) + 1;
-    return _stepIdx;
-  }
-
-  void reset() {
-    _stepIdx = 0;
+  void setHints(List<HintEntry> hints) {
+    _hints = hints;
+    _index = -1;
     notifyListeners();
   }
 
-  /// grade 별 이미지/색 매핑
-  ({String img, Color color}) paletteOf(StudentGrade grade) {
+  int get total => _hints.length;
+  int get step  => (_index >= 0) ? (_index + 1) : 0;
+
+  HintEntry? consumeNext() {
+    if (_hints.isEmpty) return null;
+    _index = (_index + 1) % _hints.length;
+    return _hints[_index];
+  }
+
+  void reset({bool clearHints = false}) {
+    _index = -1;
+    if (clearHints) _hints = const [];
+    notifyListeners();
+  }
+
+  ({String icon, Color color}) paletteOf(StudentGrade grade) {
     switch (grade) {
       case StudentGrade.elementaryLow:
       case StudentGrade.elementaryHigh:
-        return (img: 'assets/images/hint_puri.png', color: CustomPink.s500);
+        return (icon: 'assets/images/hint_puri.png', color: CustomPink.s500);
       case StudentGrade.middle:
       case StudentGrade.high:
-        return (img: 'assets/images/bulb.png', color: CustomBlue.s500);
+        return (icon: 'assets/images/bulb.png', color: CustomBlue.s500);
     }
   }
 
-  /// 힌트 모델 조립 (힌트 텍스트만 넘겨주면 됨)
   HintModel buildModel({
     required StudentGrade grade,
-    required int step,
-    required String hintText,
+    required HintEntry content,
     String? customUpText,
   }) {
-    final p = paletteOf(grade);
-    final up = customUpText ?? (grade.isElementary ? '푸리 힌트 $step / 2' : '힌트 $step / 2');
+    final p  = paletteOf(grade);
+    final up = customUpText ?? (grade.isElementary ? '푸리 힌트 $step / $total' : '힌트 $step / $total');
+
     return HintModel(
-      img: p.img,
+      hintIcon: p.icon,
       upString: up,
-      downString: hintText,
+      downString: content.text,
+      hintImg: content.image,
+      hintVideo: content.video,
       mainColor: p.color,
     );
   }
 }
 
-// 간단 헬퍼: 초등 여부
 extension on StudentGrade {
   bool get isElementary =>
       this == StudentGrade.elementaryLow || this == StudentGrade.elementaryHigh;

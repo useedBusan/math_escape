@@ -25,50 +25,71 @@ class ElementaryLowMissionListView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            mission.title,
-            style: TextStyle(
-              fontFamily: 'SBAggro',
-              fontSize: w * (16 / 360),
-              fontWeight: FontWeight.w500,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 20),
           ClipRRect(
             borderRadius: BorderRadius.circular(999),
             child: LinearProgressIndicator(
               value: vm.progress,
-              minHeight: 8,
+              minHeight: 10,
               backgroundColor: const Color(0xFFEDEDED),
-              valueColor: AlwaysStoppedAnimation<Color>(CustomPink.s600),
+              valueColor: AlwaysStoppedAnimation<Color>(CustomPink.s500),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
+          Text(
+            mission.title,
+            style: TextStyle(
+              fontFamily: 'SBAggroM',
+              fontSize: w * (17 / 360),
+              color: AppColors.head,
+            ),
+          ),
+          const SizedBox(height: 4),
 
-          // 질문
           Text(
             mission.question,
             textAlign: TextAlign.justify,
             style: TextStyle(
               fontFamily: 'Pretendard',
-              fontSize: w * (16 / 360),
+              fontSize: w * (17 / 360),
               fontWeight: FontWeight.w400,
               color: AppColors.body,
             ),
           ),
           const SizedBox(height: 20),
 
-          // 이미지
           if (mission.questionImage != null) ...[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(mission.questionImage!, fit: BoxFit.cover),
+            const SizedBox(height: 12),
+            Expanded(
+              child: Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Image.asset(
+                        mission.questionImage!,
+                        fit: BoxFit.contain,
+                        width: constraints.maxWidth,
+                        height: constraints.maxHeight,
+                      );
+                    },
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(height: 20),
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                mainAxisExtent: 60,
+              ),
+              itemCount: mission.choices.length,
+              itemBuilder: (context, i) { },
+            ),
           ],
 
-          // 선택지
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -76,7 +97,7 @@ class ElementaryLowMissionListView extends StatelessWidget {
               crossAxisCount: 3,
               mainAxisSpacing: 8,
               crossAxisSpacing: 8,
-              mainAxisExtent: 60, // 카드 높이 60 고정
+              mainAxisExtent: 60,
             ),
             itemCount: mission.choices.length,
             itemBuilder: (context, i) {
@@ -84,7 +105,7 @@ class ElementaryLowMissionListView extends StatelessWidget {
               return _ChoiceChipBox(
                 label: mission.choices[i],
                 selected: isSelected,
-                enabled: !vm.isLoading, // 제출 중 탭 방어
+                enabled: !vm.isLoading,
                 onTap: () => vm.selectChoice(i),
               );
             },

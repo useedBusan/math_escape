@@ -115,8 +115,7 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
             question: '에셋 JSON을 불러오지 못했습니다..',
             choices: const ['확인함', '나중에'],
             answerIndex: 0,
-            hint1: '힌트1',
-            hint2: '힌트2',
+            hints:[],
             questionImage: null,
           ),
         );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_escape/core/utils/view/show_full_screen_video.dart';
 import '../model/hint_model.dart';
 
 class HintPopup extends StatelessWidget {
@@ -52,12 +53,12 @@ class HintPopup extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset(
-                      model.img,
-                      width: 72,
-                      height: 72,
+                      model.hintIcon,
+                      width: 80,
+                      height: 80,
                       fit: BoxFit.contain,
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 15),
                     Text(
                       model.upString,
                       textAlign: TextAlign.center,
@@ -68,7 +69,7 @@ class HintPopup extends StatelessWidget {
                         height: 1.25,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 2),
                     Text(
                       model.downString,
                       textAlign: TextAlign.center,
@@ -78,7 +79,17 @@ class HintPopup extends StatelessWidget {
                         height: 1.4,
                       ),
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 10),
+
+                    if (model.hintImg != null)
+                      _HintImage(path: model.hintImg!)
+                    else if (model.hintVideo != null)
+                      _VideoPreviewButton(
+                        onTap: () => showFullscreenVideo(
+                          context,
+                          model.hintVideo!,
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -104,6 +115,53 @@ class HintPopup extends StatelessWidget {
                   style: TextStyle(fontSize: baseSize, fontWeight: FontWeight.bold),
                 ),
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+class _HintImage extends StatelessWidget {
+  final String path;
+  const _HintImage({required this.path});
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 300, maxHeight: 180),
+      child: Center(
+        child: Image.asset(path, fit: BoxFit.contain),
+      ),
+    );
+  }
+}
+
+class _VideoPreviewButton extends StatelessWidget {
+  final VoidCallback onTap;
+  const _VideoPreviewButton({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Ink(
+        width: double.infinity,
+        height: 140,
+        decoration: BoxDecoration(
+          color: const Color(0xFF121212),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Icon(Icons.play_circle_fill, size: 64, color: Colors.white.withOpacity(0.95)),
+            const Positioned(
+              bottom: 10,
+              child: Text('영상 보기', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
