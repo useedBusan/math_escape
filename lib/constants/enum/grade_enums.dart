@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../app/theme/app_colors.dart';
 
 
 enum StudentGrade { elementaryLow, elementaryHigh, middle, high }
@@ -10,21 +11,58 @@ extension GradeTheme on StudentGrade {
     switch (this) {
       case StudentGrade.elementaryLow:
       case StudentGrade.elementaryHigh:
-        return const Color(0xffD95276);
+        return CustomPink.s500;
       case StudentGrade.middle:
       case StudentGrade.high:
-        return const Color(0xff3F55A7);
+        return CustomBlue.s500;
     }
   }
 
-  // 배너 이미지 - 고등은 없음
-  String? get bannerImg {
+  // 말풍선 테두리 색상
+  Color get bubbleBorderColor {
     switch (this) {
       case StudentGrade.elementaryLow:
       case StudentGrade.elementaryHigh:
-        return 'assets/images/elementary_banner.png';
+        return CustomPink.s700;
       case StudentGrade.middle:
-        return 'assets/images/middle_banner.png';
+      case StudentGrade.high:
+        return CustomBlue.s800;
+    }
+  }
+
+  // 스피커 이름표 배경 색상
+  Color get speakerLabelColor {
+    switch (this) {
+      case StudentGrade.elementaryLow:
+      case StudentGrade.elementaryHigh:
+        return CustomPink.s600;
+      case StudentGrade.middle:
+      case StudentGrade.high:
+        return CustomBlue.s500;
+    }
+  }
+
+  // 그라데이션 색상 (배경 오버레이)
+  List<Color> get gradientColors {
+    switch (this) {
+      case StudentGrade.elementaryLow:
+      case StudentGrade.elementaryHigh:
+        return [CustomBlue.s900.withOpacity(0.75), CustomBlue.s800.withOpacity(0.5)];
+      case StudentGrade.middle:
+      case StudentGrade.high:
+        return [CustomBlue.s900.withOpacity(0.75), CustomBlue.s800.withOpacity(0.5)];
+    }
+  }
+
+  // 배너 이미지
+  String? get bannerImg {
+    switch (this) {
+      case StudentGrade.elementaryLow:
+        return 'assets/images/elementary_low/bannerElemLow.png';
+      case StudentGrade.elementaryHigh:
+        return 'assets/images/elementary_high/bannerElemHigh.png';
+      case StudentGrade.middle:
+        return '';
       case StudentGrade.high:
         return '';
     }

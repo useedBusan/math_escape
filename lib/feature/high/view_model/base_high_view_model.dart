@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../../../app/theme/app_colors.dart';
+
 
 enum HighPane { problem, solution, custom }
 

@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:math_escape/core/utils/view/hint_popup.dart';
+import 'package:provider/provider.dart';
 import 'dart:convert';
 import '../../../constants/enum/grade_enums.dart';
+import '../../../constants/enum/speaker_enums.dart';
 import '../../../core/utils/view/answer_popup.dart';
+import '../../../core/utils/view/common_intro_view.dart';
+import '../../../core/utils/viewmodel/intro_view_model.dart';
+import '../../../core/utils/model/talk_model.dart';
+import '../../../constants/enum/image_enums.dart';
+import '../../../core/utils/image_path_validator.dart';
 
 // 새로운 모델 클래스 추가
 class CorrectTalkItem {
@@ -36,8 +43,16 @@ class TalkItem {
   factory TalkItem.fromJson(Map<String, dynamic> json) {
     return TalkItem(
       talk: json['talk'],
-      puri_image: json['puri_image'],
-      back_image: json['back_image'],
+      puri_image: ImagePathValidator.validate(
+        json['puri_image'] as String?,
+        ImageAssets.furiGood.path,
+        logInvalid: true,
+      ),
+      back_image: ImagePathValidator.validate(
+        json['back_image'] as String?,
+        ImageAssets.background.path,
+        logInvalid: true,
+      ),
     );
   }
 }
@@ -51,6 +66,7 @@ class MissionItem {
   final String hint2;
   final String back_image;
   final String questionImage;
+  final bool isqr;
 
   MissionItem({
     required this.id,
@@ -61,6 +77,7 @@ class MissionItem {
     required this.hint2,
     required this.back_image,
     required this.questionImage,
+    this.isqr = false,
   });
 
   factory MissionItem.fromJson(Map<String, dynamic> json) {
@@ -82,184 +99,12 @@ class MissionItem {
       hint2: json['hint2'],
       back_image: json['back_image'] ?? '',
       questionImage: json['questionImage'] ?? '',
+      isqr: json['isqr'] as bool? ?? false,
     );
   }
 }
 
-// TalkScreen 위젯
-class TalkScreen extends StatelessWidget {
-  final TalkItem talk;
-  final VoidCallback onNext;
-
-  const TalkScreen({super.key, required this.talk, required this.onNext});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60),
-        child: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          flexibleSpace: SafeArea(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Center(
-                  child: Text(
-                    '수학자의 비밀 노트를 찾아라!',
-                    style: TextStyle(
-                      color: Color(0xff3F55A7),
-                      fontSize: MediaQuery.of(context).size.width * (16 / 360),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 0,
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Color(0xFF3F55A7),
-                    ),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              talk.back_image.isNotEmpty
-                  ? talk.back_image
-                  : 'assets/images/bsbackground.png',
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color.fromRGBO(0, 0, 0, 0.75), // 위쪽 (36%)
-                    Color.fromRGBO(0, 0, 0, 0.50), // 아래쪽 (20%)
-                  ],
-                ),
-              ),
-            ),
-          ),
-          SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 24),
-                Flexible(
-                  flex: 6,
-                  child: Center(
-                    child: Image.asset(
-                      talk.puri_image,
-                      height: MediaQuery.of(context).size.height * 0.24,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.93,
-                        height: MediaQuery.of(context).size.height * 0.32,
-                        margin: const EdgeInsets.only(top: 12),
-                        padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: const Color(0xff172D7F),
-                            width: 1.5,
-                          ),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(12),
-                          ),
-                        ),
-                        child: SingleChildScrollView(
-                          child: Text(
-                            talk.talk,
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width *
-                                  (15 / 360),
-                              color: Colors.black87,
-                              height: 1.5,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 0,
-                        left: 20,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xff2B4193),
-                            border: Border.all(
-                              color: const Color(0xffffffff),
-                              width: 1.5,
-                            ),
-                            borderRadius: BorderRadius.circular(40),
-                          ),
-                          child: Text(
-                            '푸리',
-                            style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width *
-                                  (16 / 360),
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        right: 10,
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.play_circle,
-                            color: Color(0xFF101351),
-                            size: 32,
-                          ),
-                          onPressed: onNext,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+  // 기존 TalkScreen은 공통 인트로 뷰로 대체됨
 
 // MiddleMissionScreen
 class MiddleMissionScreen extends StatefulWidget {
@@ -284,6 +129,11 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
   // 힌트 카드 표시 상태 추가
   bool showHint1 = false;
   bool showHint2 = false;
+
+  // QR 인식 여부
+  bool get isqr => missionList.isNotEmpty && currentQuestionIndex < missionList.length 
+      ? missionList[currentQuestionIndex].isqr 
+      : false;
 
   @override
   void initState() {
@@ -310,7 +160,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
       final List<dynamic> missionJsonList = json.decode(missionJsonString);
 
       final String talkJsonString = await rootBundle.loadString(
-        'assets/data/middle/middle_correct_talks.json',
+        'assets/data/middle/middle_conversation.json',
       );
       final List<dynamic> talkJsonList = json.decode(talkJsonString);
 
@@ -395,56 +245,56 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     });
   }
 
-  void _showCorrectAnswerDialog() {
+  void _showCorrectAnswerDialog() async {
     try {
       final int currentQuestionId = currentQuestionIndex + 1;
       final CorrectTalkItem correctTalk = talkList.firstWhere(
         (talk) => talk.id == currentQuestionId,
       );
 
-      int currentTalkIndex = 0;
+      // IntroViewModel을 사용해서 대화 시퀀스 관리
+      final conversationVM = IntroViewModel();
+      
+      // CorrectTalkItem의 talks를 Talk 모델로 변환
+      final List<Talk> talks = correctTalk.talks.asMap().entries.map((entry) {
+        final index = entry.key;
+        final talkItem = entry.value;
+        return Talk(
+          id: currentQuestionId * 100 + index, // 고유 ID 생성
+          speaker: Speaker.puri, // middle은 항상 푸리
+          speakerImg: talkItem.puri_image,
+          backImg: talkItem.back_image.isNotEmpty ? talkItem.back_image : ImageAssets.background.path,
+          talk: talkItem.talk,
+        );
+      }).toList();
+      
+      conversationVM.talks = talks;
+      conversationVM.currentIdx = 0;
 
-      void showNextTalk() {
-        if (currentTalkIndex < correctTalk.talks.length) {
-          final TalkItem talk = correctTalk.talks[currentTalkIndex];
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => TalkScreen(
-                talk: talk,
-                onNext: () {
-                  Navigator.pop(context);
-                  currentTalkIndex++;
-                  if (currentTalkIndex < correctTalk.talks.length) {
-                    showNextTalk();
-                  } else {
-                    if (currentQuestionId == 10) {
-                      Navigator.of(context).pop();
-                    } else {
-                      _goToNextQuestion();
-                    }
-                  }
-                },
-              ),
-            ),
-          );
-        } else {
-          // 대화가 없는 경우 (10번 문제)
-          if (currentQuestionId == 10) {
-            // 10번 문제를 맞췄다면 메인화면으로
-            Navigator.of(context).pop();
-          } else {
-            // 다른 문제라면 다음 문제로
-            _goToNextQuestion();
-          }
-        }
-      }
-
-      showNextTalk();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => _MiddleConversationView(
+            viewModel: conversationVM,
+            onComplete: () {
+              Navigator.of(context).pop();
+              if (currentQuestionId == 10) {
+                Navigator.of(context).pop(); // 메인화면으로
+              } else {
+                _goToNextQuestion();
+              }
+            },
+          ),
+        ),
+      );
     } catch (e) {
       print("Error finding talk for question ${currentQuestionIndex + 1}: $e");
-      _goToNextQuestion();
+      // 대화가 없는 경우 바로 다음 문제로
+      if (currentQuestionIndex + 1 == 10) {
+        Navigator.of(context).pop(); // 메인화면으로
+      } else {
+        _goToNextQuestion();
+      }
     }
   }
 
@@ -489,7 +339,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
             child: Image.asset(
               mission.back_image.isNotEmpty
                   ? mission.back_image
-                  : 'assets/images/bsbackground.png',
+                  : ImageAssets.background.path,
               fit: BoxFit.cover,
             ),
           ),
@@ -518,7 +368,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                       '각 문제마다 2개의 힌트가 있어.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: "SBAggro",
+                        fontFamily: "SBAggroM",
                         fontSize:
                             MediaQuery.of(context).size.width * (14 / 360),
                         fontWeight: FontWeight.w300,
@@ -530,7 +380,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                       '2개의 힌트를 활용해 수학자의 비밀 노트를 찾아내자!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: "SBAggro",
+                        fontFamily: "SBAggroM",
                         fontSize:
                             MediaQuery.of(context).size.width * (14 / 360),
                         fontWeight: FontWeight.w300,
@@ -617,7 +467,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                 Text(
                                   '문제 ${currentQuestionIndex + 1} / $totalQuestions',
                                   style: TextStyle(
-                                    fontFamily: "SBAggro",
+                                    fontFamily: "SBAggroM",
                                     fontSize:
                                         MediaQuery.of(context).size.width *
                                         (18 / 360),
@@ -787,16 +637,25 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                           ),
                                         ),
                                       ),
-                                      child: Text(
-                                        '확인',
-                                        style: TextStyle(
-                                          fontSize:
-                                              MediaQuery.of(
-                                                context,
-                                              ).size.width *
-                                              (14 / 360),
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          if (isqr) ...[
+                                            Icon(
+                                              Icons.qr_code_scanner,
+                                              size: 16,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(width: 4),
+                                          ],
+                                          Text(
+                                            isqr ? 'QR 인식' : '확인',
+                                            style: TextStyle(
+                                              fontSize: MediaQuery.of(context).size.width * (14 / 360),
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -857,7 +716,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                       fontSize:
                                           MediaQuery.of(context).size.width *
                                           (14 / 360),
-                                      fontFamily: "SBAggro",
+                                      fontFamily: "SBAggroM",
                                       fontWeight: FontWeight.w400,
                                       color: const Color(0xFF101351),
                                     ),
@@ -932,7 +791,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                       fontSize:
                                           MediaQuery.of(context).size.width *
                                           (14 / 360),
-                                      fontFamily: "SBAggro",
+                                      fontFamily: "SBAggroM",
                                       fontWeight: FontWeight.w400,
                                       color: const Color(0xFF101351),
                                     ),
@@ -967,6 +826,58 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// 중학교 대화 시퀀스를 관리하는 전용 위젯
+class _MiddleConversationView extends StatefulWidget {
+  final IntroViewModel viewModel;
+  final VoidCallback onComplete;
+
+  const _MiddleConversationView({
+    required this.viewModel,
+    required this.onComplete,
+  });
+
+  @override
+  State<_MiddleConversationView> createState() => _MiddleConversationViewState();
+}
+
+class _MiddleConversationViewState extends State<_MiddleConversationView> {
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: widget.viewModel,
+      child: Consumer<IntroViewModel>(
+        builder: (context, vm, child) {
+          final talk = vm.currentTalk;
+
+          return CommonIntroView(
+            appBarTitle: '수학자의 비밀 노트를 찾아라!',
+            backgroundAssetPath: talk.backImg,
+            characterImageAssetPath: talk.speakerImg,
+            speakerName: '푸리',
+            talkText: talk.talk,
+            buttonText: '확인',
+            grade: StudentGrade.middle,
+            onNext: () {
+              if (vm.canGoNext()) {
+                vm.goToNextTalk();
+              } else {
+                widget.onComplete();
+              }
+            },
+            onBack: () {
+              if (vm.canGoPrevious()) {
+                vm.goToPreviousTalk();
+              } else {
+                Navigator.of(context).pop();
+              }
+            },
+          );
+        },
       ),
     );
   }

@@ -15,11 +15,13 @@ class MissionBackgroundView extends StatelessWidget {
     this.onCorrect,
     this.onWrong,
     this.onBack,
+    this.isqr = false, // QR 인식 여부 추가
   });
 
   // Properties
   final StudentGrade grade;
   final String title;
+  final bool isqr; // QR 인식 여부
 
   final Widget Function(BuildContext context) missionBuilder;
   final Widget Function(BuildContext context) hintDialogueBuilder;
@@ -89,11 +91,11 @@ class MissionBackgroundView extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Image.asset(
-                            "assets/images/hintIcon.png",
+                            "assets/images/common/hintIcon.png",
                             width: 24,
                             height: 24,
                           ),
-                          SizedBox(width: 2),
+                          SizedBox(width: 4),
                           Text('힌트'),
                         ],
                       ),
@@ -119,7 +121,7 @@ class MissionBackgroundView extends StatelessWidget {
                           context: context,
                           builder: (context) => AnswerPopup(
                             isCorrect: ok,
-                            grade: StudentGrade.elementaryLow,
+                            grade: grade,
                             onNext: () {
                               Navigator.of(context).pop();
                               if (ok) {
@@ -131,7 +133,20 @@ class MissionBackgroundView extends StatelessWidget {
                           ),
                         );
                       },
-                      child: const Text('정답 제출'),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (isqr) ...[
+                            Icon(
+                              Icons.qr_code_scanner,
+                              size: 20,
+                              color: Colors.white,
+                            ),
+                            SizedBox(width: 4),
+                          ],
+                          Text(isqr ? 'QR 인식' : '정답 제출'),
+                        ],
+                      ),
                     ),
                   ),
                 ],

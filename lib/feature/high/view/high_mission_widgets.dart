@@ -123,7 +123,7 @@ class HighHintCard extends StatelessWidget {
                 hintTitle,
                 style: TextStyle(
                   fontSize: screenWidth * (14 / 360),
-                  fontFamily: "SBAggro",
+                  fontFamily: "SBAggroM",
                   fontWeight: FontWeight.w400,
                   color: const Color(0xFF101351),
                 ),

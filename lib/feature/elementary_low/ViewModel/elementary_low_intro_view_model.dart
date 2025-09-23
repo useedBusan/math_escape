@@ -11,7 +11,7 @@ class ElementaryLowIntroViewModel {
 
   Future<void> loadTalks() async {
     final jsonString = await rootBundle.loadString(
-      'assets/data/elementary_low/elementary_low_intro_view.json',
+      'assets/data/elem_low/elem_low_intro.json',
     );
     final List<dynamic> jsonList = json.decode(jsonString);
     talks = jsonList.map((json) => Talk.fromJson(json)).toList();

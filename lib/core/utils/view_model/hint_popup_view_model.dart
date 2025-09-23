@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../model/hint_model.dart';
+import '../../../app/theme/app_colors.dart';
+
 
 class HintPopupViewModel extends ChangeNotifier {
   int _index = -1;
@@ -18,6 +20,7 @@ class HintPopupViewModel extends ChangeNotifier {
   HintEntry? consumeNext() {
     if (_hints.isEmpty) return null;
     _index = (_index + 1) % _hints.length;
+    print('HintPopupViewModel: consumeNext() called, index: $_index, total: ${_hints.length}');
     return _hints[_index];
   }
 
@@ -31,10 +34,10 @@ class HintPopupViewModel extends ChangeNotifier {
     switch (grade) {
       case StudentGrade.elementaryLow:
       case StudentGrade.elementaryHigh:
-        return (icon: 'assets/images/hint_puri.png', color: CustomPink.s500);
+        return (icon: 'assets/images/common/hintFuri.png', color: CustomPink.s500);
       case StudentGrade.middle:
       case StudentGrade.high:
-        return (icon: 'assets/images/bulb.png', color: CustomBlue.s500);
+        return (icon: 'assets/images/middle/middleHint.png', color: CustomBlue.s500);
     }
   }
 
@@ -44,7 +47,22 @@ class HintPopupViewModel extends ChangeNotifier {
     String? customUpText,
   }) {
     final p  = paletteOf(grade);
-    final up = customUpText ?? (grade.isElementary ? '푸리 힌트 $step / $total' : '힌트 $step / $total');
+    String up;
+    if (customUpText != null) {
+      up = customUpText;
+    } else if (grade.isElementary) {
+      if (total <= 1) {
+        up = '푸리 힌트';
+      } else {
+        up = '푸리 힌트 $step / $total';
+      }
+    } else {
+      if (total <= 1) {
+        up = '힌트';
+      } else {
+        up = '힌트 $step / $total';
+      }
+    }
 
     return HintModel(
       hintIcon: p.icon,

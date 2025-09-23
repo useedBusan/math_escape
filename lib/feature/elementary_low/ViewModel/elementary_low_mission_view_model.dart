@@ -30,6 +30,7 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
   bool get canSubmit => _selectedChoiceIndex != null && !isLoading;
   bool? get lastSubmitCorrect => _lastSubmitCorrect;
   bool get isLoaded => _loaded;
+  bool get isqr => currentMission?.isqr ?? false;
 
   // Intents
   void selectChoice(int index) {
@@ -89,7 +90,7 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
   Future<void> _loadMissions() async {
     try {
       final jsonStr = await rootBundle.loadString(
-        'assets/data/elementary_low/elementary_low_questions.json',
+        'assets/data/elem_low/elem_low_question.json',
       );
       final list = json.decode(jsonStr) as List<dynamic>;
 

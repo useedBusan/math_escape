@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Model/elementary_low_mission_model.dart';
 import '../ViewModel/elementary_low_mission_view_model.dart';
+import '../../../app/theme/app_colors.dart';
 
 class ElementaryLowMissionListView extends StatelessWidget {
   const ElementaryLowMissionListView({super.key});
@@ -35,12 +36,26 @@ class ElementaryLowMissionListView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          Text(
-            mission.title,
-            style: TextStyle(
-              fontFamily: 'SBAggroM',
-              fontSize: w * (17 / 360),
-              color: AppColors.head,
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: '문제 ${vm.currentIndex + 1}',
+                  style: TextStyle(
+                    fontFamily: 'SBAggroM',
+                    fontSize: w * (18 / 360),
+                    color: AppColors.head,
+                  ),
+                ),
+                TextSpan(
+                  text: ' / ${vm.missions.length}',
+                  style: TextStyle(
+                    fontFamily: 'SBAggroM',
+                    fontSize: w * (15 / 360),
+                    color: CustomGray.darkGray,
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 4),

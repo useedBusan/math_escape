@@ -1,1 +1,1 @@
-enum Speaker { puri, maemae, book }
+enum Speaker { puri, maemae, both, book }

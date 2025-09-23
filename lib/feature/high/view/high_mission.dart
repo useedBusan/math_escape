@@ -220,7 +220,7 @@ class _HighMissionState extends State<HighMission> {
           // 배경 이미지
           Positioned.fill(
             child: Image.asset(
-              'assets/images/bsbackground.png',
+              'assets/images/common/bsbackground.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -251,7 +251,7 @@ class _HighMissionState extends State<HighMission> {
                       '고등학생을 위한 수학 미션',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: "SBAggro",
+                        fontFamily: "SBAggroM",
                         fontSize: screenWidth * (14 / 360),
                         fontWeight: FontWeight.w300,
                         color: const Color(0xFFF2F2F2),
@@ -262,7 +262,7 @@ class _HighMissionState extends State<HighMission> {
                       '수학의 깊이를 탐구하며 정답을 찾아보세요!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: "SBAggro",
+                        fontFamily: "SBAggroM",
                         fontSize: screenWidth * (14 / 360),
                         fontWeight: FontWeight.w300,
                         color: const Color(0xFFF2F2F2),
@@ -349,7 +349,7 @@ class _HighMissionState extends State<HighMission> {
                                 Text(
                                   q.title,
                                   style: TextStyle(
-                                    fontFamily: "SBAggro",
+                                    fontFamily: "SBAggroM",
                                     fontSize: screenWidth * (18 / 360),
                                     fontWeight: FontWeight.w400,
                                     color: const Color(0xff202020),

@@ -10,6 +10,7 @@ class ElementaryLowMissionModel {
   final int answerIndex;
   final String? questionImage;
   final List<HintEntry> hints;
+  final bool isqr;
 
   const ElementaryLowMissionModel({
     required this.id,
@@ -19,6 +20,7 @@ class ElementaryLowMissionModel {
     required this.answerIndex,
     required this.hints,
     this.questionImage,
+    this.isqr = false,
   });
 
   factory ElementaryLowMissionModel.fromJson(Map<String, dynamic> json) {
@@ -40,6 +42,7 @@ class ElementaryLowMissionModel {
       answerIndex: zeroBased,
       questionImage: json['images'] as String?,
       hints: list,
+      isqr: json['isqr'] as bool? ?? false,
     );
   }
 

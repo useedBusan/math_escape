@@ -21,7 +21,8 @@ class HintPopup extends StatelessWidget {
     final mq = MediaQuery.of(context);
     final width = mq.size.width;
     final height = mq.size.height;
-    final baseSize = width * (16 / 360);
+    final headerSize = width * (18 / 360);
+    final baseSize = width * (17 / 360);
 
     return Dialog(
       backgroundColor: Colors.white,
@@ -63,7 +64,7 @@ class HintPopup extends StatelessWidget {
                       model.upString,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: baseSize,
+                        fontSize: headerSize,
                         fontWeight: FontWeight.w700,
                         color: const Color(0xff202020),
                         height: 1.25,

@@ -45,20 +45,20 @@ class DataService {
 
       switch (grade) {
         case 'elementary_low':
-          missionFilePath = 'assets/data/elementary_low/elementary_low_question.json';
-          talkFilePath = 'assets/data/elementary_low/elementary_low_correct_talks.json';
+          missionFilePath = 'assets/data/elem_low/elem_low_question.json';
+          talkFilePath = 'assets/data/elem_low/elem_low_conversation.json';
           break;
         case 'elementary_high':
-          missionFilePath = 'assets/data/elementary_high/elementary_high_question.json';
-          talkFilePath = 'assets/data/elementary_high/elementary_high_correct_talks.json';
+          missionFilePath = 'assets/data/elem_high/elem_high_question.json';
+          talkFilePath = 'assets/data/elem_high/elem_high_conversation.json';
           break;
         case 'middle':
           missionFilePath = 'assets/data/middle/middle_question.json';
-          talkFilePath = 'assets/data/middle/middle_correct_talks.json';
+          talkFilePath = 'assets/data/middle/middle_conversation.json';
           break;
         case 'high':
           missionFilePath = 'assets/data/high/high_question.json';
-          talkFilePath = 'assets/data/high/high_correct_talks.json';
+          talkFilePath = 'assets/data/high/high_conversation.json';
           break;
         default:
           throw Exception('Unknown grade: $grade');

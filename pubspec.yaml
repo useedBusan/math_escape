@@ -76,8 +76,8 @@ flutter:
     - assets/video/
     - assets/audio/
     - assets/fonts/
-    - assets/data/elementary_high/
-    - assets/data/elementary_low/
+    - assets/data/elem_high/
+    - assets/data/elem_low/
     - assets/data/high/
     - assets/data/middle/
 
