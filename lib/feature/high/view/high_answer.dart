@@ -8,10 +8,10 @@ import '../../../Feature/high/view/high_mission.dart';
 import 'widgets/hourglass_timer_bar.dart';
 
 class HighAnswer extends StatefulWidget {
-  final MissionAnswer answer;
-  final DateTime gameStartTime;
-  final List<MissionQuestion> questionList;
-  final int currentIndex;
+  final MissionAnswer answer; //답안 데이터
+  final DateTime gameStartTime; //게임시작시간
+  final List<MissionQuestion> questionList; //문제 목록
+  final int currentIndex; //현재 문제 인덱스
 
   const HighAnswer({
     super.key,
@@ -24,7 +24,9 @@ class HighAnswer extends StatefulWidget {
   @override
   State<HighAnswer> createState() => _HighAnswerState();
 }
-
+//상태 관리
+//1. 타이머 관리
+//2. 시간 계산 thinkingTime, body time
 class _HighAnswerState extends State<HighAnswer> {
   late Timer _timer;
   late Duration _elapsed;
@@ -168,7 +170,24 @@ class _HighAnswerState extends State<HighAnswer> {
       }
     } else {
       // 일반 문제의 경우 다음 문제로 이동
-      if (widget.currentIndex + 1 < widget.questionList.length) {
+      // 진리_1 페이지인 경우 문제 2번으로 직접 이동
+      if (widget.answer.title == '진리_1') {
+        final idx = widget.questionList.indexWhere(
+          (qq) => qq.id == 3,
+        ); // 문제 2번 (id: 3)
+        if (idx != -1) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HighMission(
+                questionList: widget.questionList,
+                currentIndex: idx,
+                gameStartTime: widget.gameStartTime,
+              ),
+            ),
+          );
+        }
+      } else if (widget.currentIndex + 1 < widget.questionList.length) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -196,138 +215,176 @@ class _HighAnswerState extends State<HighAnswer> {
       // 문제 3번의 진리 페이지 - 새로운 디자인
       return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: const Color(0xFFF5F5F5), // 연한 회색 배경
-        body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            horizontal: screenWidth * 0.04,
-            vertical: screenWidth * 0.04,
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Color(0xFF3F55A7)),
+            onPressed: () => Navigator.of(context).pop(),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 진리 제목
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Text(
-                  '진리 3', // 간단한 제목
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.08,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+          title: Text(
+            '역설, 혹은 모호함',
+            style: TextStyle(
+              color: const Color(0xFF3F55A7),
+              fontSize: screenWidth * (16 / 360),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          centerTitle: true,
+        ),
+        body: Container(
+          color: const Color(0xFFE8F0FE),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                const SizedBox(height: 14),
+                // 설명 텍스트 (퓨리 이미지 + 텍스트) - 기존과 동일
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
-
-              // 설명 박스 (간소화)
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Text(
-                  '문제 3번의 정답과 설명이 여기에 표시됩니다.',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.05,
-                    color: Colors.black87,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE8F0FE),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
-
-              // 문구의 단서 섹션 (진한 회색 컨테이너)
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF6B6B6B), // 진한 회색
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '진리 문구의 단서 3', // 간단한 제목
-                      style: TextStyle(
-                        fontSize: screenWidth * 0.06,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                  child: Row(
+                    children: [
+                      // 퓨리 이미지 (왼쪽)
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: const DecorationImage(
+                            image: AssetImage(
+                              'assets/images/high/highFuri.png',
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      '문구의 단서 내용이 여기에 표시됩니다.',
-                      style: TextStyle(
-                        fontSize: screenWidth * 0.05,
-                        color: Colors.white,
+                      const SizedBox(width: 16),
+                      // 텍스트 (오른쪽)
+                      Expanded(
+                        child: Text(
+                          '인류의 처음 정수의 정수는 한 개인의\n처음 정수를 만들기 위해 가장 기본이 되는 것,\n곧, 정수!',
+                          style: TextStyle(
+                            fontFamily: "SBAggroM",
+                            fontSize: screenWidth * (14 / 360),
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xFF1A1A1A),
+                            height: 1.3,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
-
-              // 다음 문제로 버튼
-              Center(
-                child: ElevatedButton(
-                  onPressed: handleNextButton,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF3F55A7),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 16,
+                const SizedBox(height: 20),
+                // 진리3 콘텐츠 - 캡쳐 이미지와 동일하게
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF5F5F5), // 연한 회색 배경
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 진리 3 제목
+                        Text(
+                          '진리 3',
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.08,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        // 설명 텍스트
+                        Text(
+                          '측지선은 평면 또는 곡면에서 두 점을 연결하는 최단 거리를 의미한다. 평면에서의 측지선은 학교에서 배우는 직선(선분)을 의미한다. 곡면에서의 측지선은 학교에서 배우는 곡선처럼 보이지만 평면에서의 직선과 같은 의미를 가진다.',
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.045,
+                            color: Colors.black,
+                            height: 1.5,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        // 문구의 단서 3 섹션 (진한 회색 박스)
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF6B6B6B), // 진한 회색
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '문구의 단서 3',
+                                style: TextStyle(
+                                  fontSize: screenWidth * 0.05,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                '정수(整數): 양의 정수(자연수), 0, 음의 정수의 집합',
+                                style: TextStyle(
+                                  fontSize: screenWidth * 0.045,
+                                  color: Colors.white,
+                                  height: 1.4,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Spacer(),
+                        // 다음 문제로 버튼
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: handleNextButton,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF3F55A7),
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: Text(
+                              _getButtonText(),
+                              style: TextStyle(
+                                fontSize: screenWidth * 0.05,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  child: Text('다음 문제로', style: TextStyle(fontSize: fontSize)),
                 ),
-              ),
-              SizedBox(height: 24),
-
-              // 하단 모래시계 타이머
-              Center(
-                child: HourglassTimerBar(
+                const SizedBox(height: 20),
+                // 하단 모래시계 타이머 - 기존과 동일
+                HourglassTimerBar(
                   mainColor: const Color(0xFF3F55A7),
                   think: thinkingTime,
                   body: bodyTime,
-                  progress: 0.0, // 답안 화면에서는 진행률 표시 안함
+                  progress: 0.0,
                 ),
-              ),
-              SizedBox(height: 24),
-            ],
+              ],
+            ),
           ),
         ),
       );
@@ -371,7 +428,7 @@ class _HighAnswerState extends State<HighAnswer> {
               ),
               SizedBox(height: screenHeight * 0.025),
               ClueBox(
-                clueTitle: widget.answer.clueTitle ?? '문구의 단서',
+                clueTitle: widget.answer.clueTitle,
                 clue: widget.answer.clue,
                 fontSize: screenWidth * 0.05,
               ),
