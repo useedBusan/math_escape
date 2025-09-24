@@ -3,7 +3,6 @@ import '../../core/services/navigation_service.dart';
 import '../../core/services/url_launcher_service.dart';
 import '../../app/main_viewmodel.dart';
 
-
 /// 서비스 의존성 주입을 관리하는 클래스
 class ServiceLocator {
   static final ServiceLocator _instance = ServiceLocator._internal();

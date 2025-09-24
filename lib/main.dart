@@ -10,7 +10,7 @@ void main() {
   serviceLocator.initialize();
   // 개발 모드에서 이미지 경로 검증 실행
   ImagePathValidationTool.runValidationOnStartup();
-  
+
   runApp(const MyApp());
 }
 
