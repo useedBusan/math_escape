@@ -15,6 +15,7 @@ import '../../../Feature/high/view/high_answer.dart';
 import '../view_model/high_mission_view_model.dart';
 import 'widgets/hourglass_timer_bar.dart';
 import 'high_hint_popup.dart';
+import '../../../core/services/service_locator.dart';
 
 class HighMission extends StatelessWidget {
   final List<MissionQuestion> questionList;
@@ -164,9 +165,15 @@ class _HighMissionContentState extends State<_HighMissionContent> {
   void _handleQRScanResult(HighMissionViewModel vm, String qrResult) {
     final q = vm.currentQuestion;
 
-    // QR 스캔 결과를 정답으로 처리
-    // QR 문제의 경우 answer가 빈 배열이므로, QR 스캔 결과 자체를 정답으로 간주
-    final isCorrect = true; // QR 스캔이 성공하면 정답으로 처리
+    // QR 스캔 결과가 정답인지 확인 (서비스에서 가져오기)
+    final correctQRAnswer = serviceLocator.qrAnswerService
+        .getCorrectAnswerByTitle(q.title);
+    final isCorrect = correctQRAnswer != null && qrResult == correctQRAnswer;
+
+    // 디버그 정보 출력
+    print('QR 스캔 결과: $qrResult');
+    print('정답: $correctQRAnswer');
+    print('정답 여부: $isCorrect');
 
     showAnswerPopup(context, isCorrect: isCorrect).then((_) async {
       if (isCorrect) {
@@ -234,20 +241,17 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                     ),
                     child: Row(
                       children: [
-                        // 퓨리 이미지 공간 (왼쪽)
+                        // 퓨리 이미지 (왼쪽)
                         Container(
                           width: 60,
                           height: 60,
                           decoration: BoxDecoration(
-                            color: Colors.red.withOpacity(0.1),
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.red, width: 2),
-                          ),
-                          child: const Center(
-                            child: Icon(
-                              Icons.pets,
-                              color: Colors.red,
-                              size: 30,
+                            image: const DecorationImage(
+                              image: AssetImage(
+                                'assets/images/high/highFuri.png',
+                              ),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
