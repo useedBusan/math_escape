@@ -19,86 +19,104 @@ class HourglassTimerBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final h = MediaQuery.of(context).size.height;
-    final double circleSize = h * 0.13;
-    final double barHeight = circleSize / 2;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final double circleSize = screenHeight * 0.08;
+    final double barHeight = screenHeight * 0.08;
 
-    return SizedBox(
+    return Container(
       width: double.infinity,
+      height: barHeight,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF5F5F5), // 연한 회색 배경
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 4,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // 좌측: 생각의 시간
+          _buildTimeText('생각의 시간', think),
+
+          // 중앙: 모래시계 + 진행률
+          _buildHourglassWithProgress(circleSize),
+
+          // 우측: 몸의 시간
+          _buildTimeText('몸의 시간', body),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTimeText(String label, String value) {
+    return Text.rich(
+      TextSpan(
+        children: [
+          TextSpan(
+            text: '$label ',
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF333333),
+            ),
+          ),
+          TextSpan(
+            text: value,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              color: Color(0xFF333333),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHourglassWithProgress(double circleSize) {
+    return SizedBox(
+      width: circleSize,
       height: circleSize,
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // 1) 하단 바: 좌우/아래 꽉
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              height: barHeight,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: const BoxDecoration(
-                color: Color(0xFFF5F6FA),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _kv(
-                    '생각의 시간',
-                    think,
-                    isBoldKey: false,
-                    textAlign: TextAlign.left,
-                  ),
-                  _kv(
-                    '몸의 시간',
-                    body,
-                    isBoldKey: true,
-                    textAlign: TextAlign.right,
-                  ),
-                ],
-              ),
+          // 원형 배경
+          Container(
+            width: circleSize,
+            height: circleSize,
+            decoration: BoxDecoration(
+              color: const Color(0xFFE3F2FD), // 연한 파란색
+              shape: BoxShape.circle,
             ),
           ),
 
-          // 2) 가운데 모래시계 원 (바와 살짝 겹치도록)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: SizedBox(
-              width: circleSize,
-              height: circleSize,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  CustomPaint(
-                    size: Size(circleSize, circleSize),
-                    painter: _RingPainter(
-                      background: const Color(0xFFE2E6F2),
-                      foreground: mainColor,
-                      progress: progress.clamp(0.0, 1.0),
-                      strokeWidth: circleSize * 0.11,
-                    ),
-                  ),
-                  Container(
-                    width: circleSize * 0.8,
-                    height: circleSize * 0.8,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      hourglassAsset,
-                      width: circleSize * 0.47,
-                      height: circleSize * 0.47,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ],
-              ),
+          // 진행률 표시 (상단에 작은 세그먼트)
+          CustomPaint(
+            size: Size(circleSize, circleSize),
+            painter: _ProgressPainter(
+              progress: progress.clamp(0.0, 1.0),
+              color: mainColor,
+            ),
+          ),
+
+          // 모래시계 아이콘
+          Container(
+            width: circleSize * 0.6,
+            height: circleSize * 0.6,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.hourglass_empty,
+              size: circleSize * 0.4,
+              color: const Color(0xFF8B4513), // 갈색 모래시계
             ),
           ),
         ],
@@ -138,7 +156,44 @@ class HourglassTimerBar extends StatelessWidget {
   }
 }
 
-/// 중앙 원형 링 그리기
+/// 상단 진행률 세그먼트 그리기
+class _ProgressPainter extends CustomPainter {
+  _ProgressPainter({required this.progress, required this.color});
+
+  final double progress;
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (progress <= 0) return;
+
+    final center = size.center(Offset.zero);
+    final radius = size.width / 2;
+    final strokeWidth = radius * 0.15;
+
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.round;
+
+    // 상단에 작은 세그먼트로 진행률 표시 (12시 방향부터)
+    final startAngle = -90 * (3.1415926535 / 180.0); // 12시 방향
+    final sweepAngle = 2 * 3.1415926535 * progress; // 진행률에 따른 각도
+
+    final rect = Rect.fromCircle(
+      center: center,
+      radius: radius - strokeWidth / 2,
+    );
+    canvas.drawArc(rect, startAngle, sweepAngle, false, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _ProgressPainter old) =>
+      old.progress != progress || old.color != color;
+}
+
+/// 중앙 원형 링 그리기 (기존 코드 유지)
 class _RingPainter extends CustomPainter {
   _RingPainter({
     required this.background,
