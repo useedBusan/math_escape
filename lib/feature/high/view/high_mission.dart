@@ -231,10 +231,6 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                     decoration: BoxDecoration(
                       color: const Color(0xFFE8F0FE),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: const Color(0xFF3F55A7),
-                        width: 1,
-                      ),
                     ),
                     child: Row(
                       children: [
@@ -402,7 +398,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                               ),
                               const Expanded(child: SizedBox()),
                               // 답변 입력 영역 또는 QR 코드 버튼
-                              if (q.title == '역설, 혹은 모호함_B') ...[
+                              if (q.title == '역설, 혹은 모호함_4') ...[
                                 // QR 코드 문제 - 하나의 버튼으로 통일
                                 SizedBox(
                                   width: double.infinity,

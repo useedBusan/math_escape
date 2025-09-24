@@ -50,10 +50,6 @@ class HighHintPopup extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: const Color(0xFF3F55A7).withOpacity(0.1),
                         shape: BoxShape.circle,
-                        border: Border.all(
-                          color: const Color(0xFF3F55A7),
-                          width: 2,
-                        ),
                       ),
                       child: const Icon(
                         Icons.lightbulb_outline,
