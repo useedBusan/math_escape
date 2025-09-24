@@ -14,6 +14,8 @@ import '../../../core/utils/view/qr_scan_screen.dart';
 import '../../../Feature/high/view/high_answer.dart';
 import '../view_model/high_mission_view_model.dart';
 import 'widgets/hourglass_timer_bar.dart';
+import 'high_hint_popup.dart';
+import '../../../core/services/service_locator.dart';
 
 class HighMission extends StatelessWidget {
   final List<MissionQuestion> questionList;
@@ -87,23 +89,18 @@ class _HighMissionContentState extends State<_HighMissionContent> {
     if (q.title == '역설, 혹은 모호함_1') {
       vm.goToQuestionById(2);
     } else if (q.title == '역설, 혹은 모호함_3') {
-      vm.goToQuestionById(5);
+      vm.goToQuestionById(5); // 역설, 혹은 모호함_B로 이동
     } else {
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('힌트'),
-            content: Text(q.hint),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('확인'),
-              ),
-            ],
+          return HighHintPopup(
+            hintTitle: '힌트',
+            hintContent: q.hint,
+            onConfirm: () {
+              Navigator.of(context).pop();
+            },
           );
         },
       );
@@ -149,18 +146,77 @@ class _HighMissionContentState extends State<_HighMissionContent> {
 
     showAnswerPopup(context, isCorrect: isCorrect).then((_) async {
       if (isCorrect) {
-        final answerData = await loadAnswerById(q.id);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => HighAnswer(
-              answer: answerData,
-              gameStartTime: widget.gameStartTime,
-              questionList: vm.questionList,
-              currentIndex: vm.currentIndex,
+        // 힌트 문제 B에서 정답을 맞추면 문제 3번으로 돌아가기
+        if (q.title == '역설, 혹은 모호함_B') {
+          vm.goToQuestionById(4); // 문제 3번 (id: 4)으로 돌아가기
+        }
+        // 문제 3번을 맞추면 진리 페이지를 거쳐 문제 4번(QR 인식 문제)으로 넘어가기
+        else if (q.title == '역설, 혹은 모호함_3') {
+          final answerData = await loadAnswerById(q.id);
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HighAnswer(
+                answer: answerData,
+                gameStartTime: widget.gameStartTime,
+                questionList: vm.questionList,
+                currentIndex: vm.currentIndex,
+              ),
             ),
-          ),
-        );
+          );
+          // HighAnswer 페이지가 닫히면 문제 4번 (id: 6)으로 이동
+          vm.goToQuestionById(6);
+        } else {
+          final answerData = await loadAnswerById(q.id);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HighAnswer(
+                answer: answerData,
+                gameStartTime: widget.gameStartTime,
+                questionList: vm.questionList,
+                currentIndex: vm.currentIndex,
+              ),
+            ),
+          );
+        }
+      }
+    });
+  }
+
+  void _handleQRScanResult(HighMissionViewModel vm, String qrResult) {
+    final q = vm.currentQuestion;
+
+    // QR 스캔 결과가 정답인지 확인 (서비스에서 가져오기)
+    final correctQRAnswer = serviceLocator.qrAnswerService
+        .getCorrectAnswerByTitle(q.title);
+    final isCorrect = correctQRAnswer != null && qrResult == correctQRAnswer;
+
+    // 디버그 정보 출력
+    print('QR 스캔 결과: $qrResult');
+    print('문제 제목: ${q.title}');
+    print('정답: $correctQRAnswer');
+    print('정답 여부: $isCorrect');
+
+    showAnswerPopup(context, isCorrect: isCorrect).then((_) async {
+      if (isCorrect) {
+        // 힌트 문제 B에서 정답을 맞추면 문제 3번으로 돌아가기
+        if (q.title.endsWith('_B')) {
+          vm.goToQuestionById(4); // 문제 3번 (id: 4)으로 돌아가기
+        } else {
+          final answerData = await loadAnswerById(q.id);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HighAnswer(
+                answer: answerData,
+                gameStartTime: widget.gameStartTime,
+                questionList: vm.questionList,
+                currentIndex: vm.currentIndex,
+              ),
+            ),
+          );
+        }
       }
     });
   }
@@ -210,27 +266,20 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                     decoration: BoxDecoration(
                       color: const Color(0xFFE8F0FE),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: const Color(0xFF3F55A7),
-                        width: 1,
-                      ),
                     ),
                     child: Row(
                       children: [
-                        // 퓨리 이미지 공간 (왼쪽)
+                        // 퓨리 이미지 (왼쪽)
                         Container(
                           width: 60,
                           height: 60,
                           decoration: BoxDecoration(
-                            color: Colors.red.withOpacity(0.1),
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.red, width: 2),
-                          ),
-                          child: const Center(
-                            child: Icon(
-                              Icons.pets,
-                              color: Colors.red,
-                              size: 30,
+                            image: const DecorationImage(
+                              image: AssetImage(
+                                'assets/images/high/highFuri.png',
+                              ),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -380,85 +429,20 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                                 ),
                               ),
                               const Expanded(child: SizedBox()),
-                              // 답변 입력 영역
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFFFFF),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  border: Border.all(
-                                    color: const Color(0xffdcdcdc),
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: TextField(
-                                        style: TextStyle(
-                                          fontSize: screenWidth * (15 / 360),
-                                        ),
-                                        controller: _controller,
-                                        keyboardType: TextInputType.text,
-                                        textInputAction: TextInputAction.done,
-                                        decoration: InputDecoration(
-                                          hintText: '정답을 입력해 주세요.',
-                                          hintStyle: TextStyle(
-                                            fontSize: screenWidth * (14 / 360),
-                                            color: const Color(0xffaaaaaa),
-                                          ),
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                horizontal: 12.0,
-                                                vertical: 12.0,
-                                              ),
-                                          border: InputBorder.none,
-                                          enabledBorder: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 60,
-                                      height: 52,
-                                      child: ElevatedButton(
-                                        onPressed: () => _submitAnswer(vm),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: mainColor,
-                                          foregroundColor: Colors.white,
-                                          elevation: 0,
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 12,
-                                          ),
-                                          shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(8),
-                                              bottomRight: Radius.circular(8),
-                                            ),
-                                          ),
-                                        ),
-                                        child: Text(
-                                          '확인',
-                                          style: TextStyle(
-                                            fontSize: screenWidth * (14 / 360),
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // QR 코드 버튼 (특정 문제에서만)
-                              if (q.title == '역설, 혹은 모호함_B') ...[
-                                const SizedBox(height: 16),
-                                Align(
-                                  alignment: Alignment.centerRight,
+                              // 답변 입력 영역 또는 QR 코드 버튼
+                              if (q.title.endsWith('_4') ||
+                                  q.title.endsWith('_B')) ...[
+                                // QR 코드 문제 - 하나의 버튼으로 통일
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 52,
                                   child: ElevatedButton.icon(
                                     icon: const Icon(Icons.qr_code_scanner),
                                     label: Text(
-                                      'QR코드 촬영',
+                                      'QR코드 스캔',
                                       style: TextStyle(
-                                        fontSize: screenWidth * (14 / 360),
+                                        fontSize: screenWidth * (16 / 360),
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     onPressed: () async {
@@ -473,15 +457,8 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                                         );
                                         if (result != null &&
                                             result is String) {
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                'QR 코드 결과: $result',
-                                              ),
-                                            ),
-                                          );
+                                          // QR 스캔 결과를 정답으로 처리
+                                          _handleQRScanResult(vm, result);
                                         }
                                       } else {
                                         ScaffoldMessenger.of(
@@ -493,6 +470,85 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                                         );
                                       }
                                     },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: mainColor,
+                                      foregroundColor: Colors.white,
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ] else ...[
+                                // 일반 문제 - 기존 입력 필드 + 확인 버튼
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFFFFF),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(
+                                      color: const Color(0xffdcdcdc),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: TextField(
+                                          style: TextStyle(
+                                            fontSize: screenWidth * (15 / 360),
+                                          ),
+                                          controller: _controller,
+                                          keyboardType: TextInputType.text,
+                                          textInputAction: TextInputAction.done,
+                                          decoration: InputDecoration(
+                                            hintText: '정답을 입력해 주세요.',
+                                            hintStyle: TextStyle(
+                                              fontSize:
+                                                  screenWidth * (14 / 360),
+                                              color: const Color(0xffaaaaaa),
+                                            ),
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                                  horizontal: 12.0,
+                                                  vertical: 12.0,
+                                                ),
+                                            border: InputBorder.none,
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 60,
+                                        height: 52,
+                                        child: ElevatedButton(
+                                          onPressed: () => _submitAnswer(vm),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: mainColor,
+                                            foregroundColor: Colors.white,
+                                            elevation: 0,
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 12,
+                                            ),
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(8),
+                                                bottomRight: Radius.circular(8),
+                                              ),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            '확인',
+                                            style: TextStyle(
+                                              fontSize:
+                                                  screenWidth * (14 / 360),
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
