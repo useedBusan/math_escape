@@ -5,6 +5,7 @@ import 'package:math_escape/Feature/high/model/high_mission_question.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import '../../../Feature/high/view/answer_widgets.dart';
 import '../../../Feature/high/view/high_mission.dart';
+import 'widgets/hourglass_timer_bar.dart';
 
 class HighAnswer extends StatefulWidget {
   final MissionAnswer answer;
@@ -65,26 +66,34 @@ class _HighAnswerState extends State<HighAnswer> {
     int lastEnd = 0;
     for (final match in matches) {
       if (match.start > lastEnd) {
-        spans.add(TextSpan(
-          text: explanation.substring(lastEnd, match.start).replaceAll('\\\\', '\\'),
-          style: TextStyle(fontSize: fontSize, color: Colors.black87),
-        ));
+        spans.add(
+          TextSpan(
+            text: explanation
+                .substring(lastEnd, match.start)
+                .replaceAll('\\\\', '\\'),
+            style: TextStyle(fontSize: fontSize, color: Colors.black87),
+          ),
+        );
       }
       final latex = match.group(1)!.replaceAll('\\\\', '\\');
-      spans.add(WidgetSpan(
-        alignment: PlaceholderAlignment.middle,
-        child: Math.tex(
-          latex,
-          textStyle: TextStyle(fontSize: fontSize + 2, color: Colors.black87),
+      spans.add(
+        WidgetSpan(
+          alignment: PlaceholderAlignment.middle,
+          child: Math.tex(
+            latex,
+            textStyle: TextStyle(fontSize: fontSize + 2, color: Colors.black87),
+          ),
         ),
-      ));
+      );
       lastEnd = match.end;
     }
     if (lastEnd < explanation.length) {
-      spans.add(TextSpan(
-        text: explanation.substring(lastEnd).replaceAll('\\\\', '\\'),
-        style: TextStyle(fontSize: fontSize, color: Colors.black87),
-      ));
+      spans.add(
+        TextSpan(
+          text: explanation.substring(lastEnd).replaceAll('\\\\', '\\'),
+          style: TextStyle(fontSize: fontSize, color: Colors.black87),
+        ),
+      );
     }
     return spans;
   }
@@ -167,7 +176,10 @@ class _HighAnswerState extends State<HighAnswer> {
             ),
             SizedBox(height: screenHeight * 0.01),
             ExplanationBox(
-              explanationSpans: parseExplanation(widget.answer.explanation, screenWidth * 0.05),
+              explanationSpans: parseExplanation(
+                widget.answer.explanation,
+                screenWidth * 0.05,
+              ),
               answerImage: widget.answer.answerImage,
               fontSize: screenWidth * 0.05,
               screenWidth: screenWidth,
@@ -185,21 +197,26 @@ class _HighAnswerState extends State<HighAnswer> {
               child: ElevatedButton(
                 onPressed: handleNextButton,
                 child: Text(
-                  widget.answer.title == '역설, 혹은 모호함_A' || widget.answer.title == '진리_A'
+                  widget.answer.title == '역설, 혹은 모호함_A' ||
+                          widget.answer.title == '진리_A'
                       ? '돌아가기'
-                      : (widget.answer.title == '역설, 혹은 모호함_1' || widget.answer.title == '진리_1')
-                          ? '다음 문제로'
-                          : (widget.currentIndex + 1 < widget.questionList.length ? '다음 문제로' : '마지막 문제'),
+                      : (widget.answer.title == '역설, 혹은 모호함_1' ||
+                            widget.answer.title == '진리_1')
+                      ? '다음 문제로'
+                      : (widget.currentIndex + 1 < widget.questionList.length
+                            ? '다음 문제로'
+                            : '마지막 문제'),
                   style: TextStyle(fontSize: fontSize),
                 ),
               ),
             ),
             SizedBox(height: 24),
             Center(
-              child: TimerInfoBox(
-                thinkingTime: thinkingTime,
-                bodyTime: bodyTime,
-                fontSize: screenWidth * 0.05,
+              child: HourglassTimerBar(
+                mainColor: const Color(0xFF3F55A7),
+                think: thinkingTime,
+                body: bodyTime,
+                progress: 0.0, // 답안 화면에서는 진행률 표시 안함
               ),
             ),
             SizedBox(height: 24),
