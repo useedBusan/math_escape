@@ -1,5 +1,5 @@
 ---
-name: Feature request
+name: feature request
 about: 기능을 추가합니다.
 title: 'feat:'
 labels: ''
