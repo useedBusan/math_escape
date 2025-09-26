@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../core/services/service_locator.dart';
 import 'main/base_main_view.dart';
 
 

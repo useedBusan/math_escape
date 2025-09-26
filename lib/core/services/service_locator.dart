@@ -2,7 +2,6 @@ import '../../core/services/data_service.dart';
 import '../../core/services/navigation_service.dart';
 import '../../core/services/url_launcher_service.dart';
 import '../../core/services/qr_answer_service.dart';
-import '../../app/main_viewmodel.dart';
 
 
 /// 서비스 의존성 주입을 관리하는 클래스
@@ -17,8 +16,6 @@ class ServiceLocator {
   late final DataService _dataService; //데이터 로딩 및 관리 담당
   late final QRAnswerService _qrAnswerService; //QR 정답 관리 담당
 
-  // ViewModel 인스턴스들
-  late final MainViewModel _mainViewModel;
 
   /// 서비스 초기화
   void initialize() {
@@ -28,11 +25,6 @@ class ServiceLocator {
     _dataService = DataService();
     _qrAnswerService = QRAnswerService();
 
-    // ViewModel 인스턴스 생성 (의존성 주입)
-    _mainViewModel = MainViewModel(
-      urlService: _urlLauncherService,
-      navService: _navigationService,
-    );
   }
 
   /// 서비스 인스턴스 반환
@@ -41,12 +33,10 @@ class ServiceLocator {
   DataService get dataService => _dataService;
   QRAnswerService get qrAnswerService => _qrAnswerService;
 
-  /// ViewModel 인스턴스 반환
-  MainViewModel get mainViewModel => _mainViewModel;
 
   /// 모든 서비스 정리
   void dispose() {
-    _mainViewModel.dispose();
+    // 서비스 정리 로직이 필요한 경우 여기에 추가
   }
 }
 
