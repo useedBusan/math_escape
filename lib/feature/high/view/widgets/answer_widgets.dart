@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../Feature/high/high_answer_constants.dart';
+import '../../high_answer_constants.dart';
 
 class DescriptionLevelBox extends StatelessWidget {
   final String description;
