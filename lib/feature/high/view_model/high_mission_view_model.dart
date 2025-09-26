@@ -70,6 +70,14 @@ class HighMissionViewModel extends ChangeNotifier {
     return '$years년, $months개월';
   }
 
+  // BaseHighViewModel과 호환을 위한 추가 메서드들
+  Color get progressColor {
+    if (thinkProgress >= 0.75) {
+      return CustomPink.s500;
+    }
+    return CustomBlue.s500;
+  }
+
   /// 게임 시작, timer 초기화 로직
   void startGame(List<MissionQuestion> questions, {int initialIndex = 0}) {
     _questionList = questions;

@@ -1,22 +1,21 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../app/theme/app_colors.dart';
+import 'high_mission_view_model.dart';
 
 
 enum HighPane { problem, solution, custom }
 
 class BaseHighViewModel extends ChangeNotifier {
-  static const _limit = Duration(minutes: 90);
-  final Stopwatch _think = Stopwatch();
-  final Stopwatch _body = Stopwatch();
-  Timer? _ticker;
-
   HighPane _pane = HighPane.problem;
   HighPane get pane => _pane;
 
+  // HighMissionViewModel 인스턴스 사용
+  HighMissionViewModel get _timer => HighMissionViewModel.instance;
+
   BaseHighViewModel() {
-    _think.start();
-    _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
+    // HighMissionViewModel의 타이머를 구독
+    _timer.addListener(() {
       notifyListeners();
     });
   }
@@ -25,42 +24,30 @@ class BaseHighViewModel extends ChangeNotifier {
   void toSolution() { _pane = HighPane.solution; notifyListeners(); }
   void toCustom()  { _pane = HighPane.custom;  notifyListeners(); }
 
-  void startThink() => _think.start();
-  void pauseThink() => _think.stop();
-  void resetThink() { _think.reset(); notifyListeners(); }
+  // HighMissionViewModel로 위임
+  void startThink() => _timer.resumeTimers();
+  void pauseThink() => _timer.pauseTimers();
+  void resetThink() => _timer.resetGame();
 
-  void startBody() => _body.start();
-  void pauseBody() => _body.stop();
-  void resetBody() { _body.reset(); notifyListeners(); }
+  void startBody() => _timer.resumeTimers();
+  void pauseBody() => _timer.pauseTimers();
+  void resetBody() => _timer.resetGame();
 
-  Duration get thinkElapsed => _think.elapsed;
-  Duration get bodyElapsed  => _body.elapsed;
+  Duration get thinkElapsed => _timer.thinkElapsed;
+  Duration get bodyElapsed => _timer.bodyElapsed;
 
-  double get thinkProgress {
-    final ratio = thinkElapsed.inSeconds / _limit.inSeconds;
-    return ratio.clamp(0.0, 1.0);
-  }
+  double get thinkProgress => _timer.thinkProgress;
+  Color get progressColor => _timer.progressColor;
 
-  Color get progressColor {
-    if (thinkProgress >= 0.75) {
-      return CustomPink.s500;
-    }
-    return CustomBlue.s500;
-  }
-
-  String _fmt(Duration d) {
-    final m = d.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final s = d.inSeconds.remainder(60).toString().padLeft(2, '0');
-    return '$m:$s';
-  }
-
-  String get thinkText => _fmt(thinkElapsed);
-  String get bodyText  => _fmt(bodyElapsed);
-  bool get isTimeOver => thinkElapsed >= _limit;
+  String get thinkText => _timer.thinkText;
+  String get bodyText => _timer.bodyTimeText;
+  bool get isTimeOver => _timer.isTimeOver;
 
   @override
   void dispose() {
-    _ticker?.cancel();
+    _timer.removeListener(() {
+      notifyListeners();
+    });
     super.dispose();
   }
 }

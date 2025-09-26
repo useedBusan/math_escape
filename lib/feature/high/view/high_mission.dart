@@ -13,9 +13,11 @@ import '../../../core/utils/view/answer_popup.dart';
 import '../../../core/utils/view/qr_scan_screen.dart';
 import '../../../Feature/high/view/high_answer.dart';
 import '../view_model/high_mission_view_model.dart';
+import '../view_model/base_high_view_model.dart';
 import 'widgets/hourglass_timer_bar.dart';
 import 'high_hint_popup.dart';
 import '../../../core/services/service_locator.dart';
+import 'base_high_view.dart';
 
 class HighMission extends StatelessWidget {
   final List<MissionQuestion> questionList;
@@ -149,8 +151,9 @@ class _HighMissionContentState extends State<_HighMissionContent> {
     }
   }
 
-  void _submitAnswer(HighMissionViewModel vm) {
-    final q = vm.currentQuestion;
+  void _submitAnswer(BaseHighViewModel vm) {
+    final timerVm = HighMissionViewModel.instance;
+    final q = timerVm.currentQuestion;
     final input = _controller.text.trim().toLowerCase();
     final answers = q.answer.map((a) => a.trim().toLowerCase()).toList();
     final isCorrect = answers.contains(input);
@@ -234,36 +237,20 @@ class _HighMissionContentState extends State<_HighMissionContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HighMissionViewModel>(
+    return Consumer<BaseHighViewModel>(
       builder: (context, vm, child) {
         final screenWidth = MediaQuery.of(context).size.width;
         final screenHeight = MediaQuery.of(context).size.height;
-        final q = vm.currentQuestion;
+        final timerVm = HighMissionViewModel.instance;
+        final q = timerVm.currentQuestion;
         final Color mainColor = const Color(0xFF3F55A7);
 
-        return Scaffold(
-          backgroundColor: Colors.white,
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Color(0xFF3F55A7)),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            title: Text(
-              '역설, 혹은 모호함',
-              style: TextStyle(
-                color: const Color(0xFF3F55A7),
-                fontSize: screenWidth * (16 / 360),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            centerTitle: true,
-          ),
-          body: Container(
-            color: const Color(0xFFE8F0FE),
-            child: Padding(
+        return BaseHighView(
+          title: '역설, 혹은 모호함',
+          mainColor: mainColor,
+          background: Container(color: const Color(0xFFE8F0FE)),
+          paneBuilder: (context, pane) {
+            return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
@@ -569,18 +556,10 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  // 하단 모래시계 타이머
-                  HourglassTimerBar(
-                    mainColor: vm.progressColor,
-                    think: vm.thinkText,
-                    body: vm.bodyTimeText,
-                    progress: vm.thinkProgress,
-                  ),
                 ],
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );

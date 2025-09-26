@@ -2,9 +2,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:provider/provider.dart';
 import 'package:math_escape/feature/high/view/high_mission_view.dart';
 import '../../../Feature/high/model/high_mission_question.dart';
 import '../../../Feature/high/view/high_mission.dart';
+import '../view_model/high_mission_view_model.dart';
+import '../view_model/base_high_view_model.dart';
+import 'base_high_view.dart';
 
 Future<List<MissionQuestion>> loadQuestionList() async {
   final String jsonString = await rootBundle.loadString('assets/data/high/high_level_question.json');
@@ -113,85 +117,91 @@ Paratruth Space, PS라고 불리는 이 공간에서,
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF6E6764),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Intro',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+    return ChangeNotifierProvider(
+      create: (_) => BaseHighViewModel(),
+      child: BaseHighView(
+        title: 'Intro',
+        background: Container(color: const Color(0xFF6E6764)),
+        paneBuilder: (context, pane) {
+          return Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Intro',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 24),
-                      buildNarrationText(),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          ElevatedButton(
-                            onPressed: isPlaying ? null : playIntro,
-                            child: Text(isPlaying ? "재생 중..." : "나레이션 듣기"),
-                          ),
-                          const SizedBox(width: 12),
-                          ElevatedButton(
-                            onPressed: stopAudio,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.redAccent,
+                        const SizedBox(height: 24),
+                        buildNarrationText(),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            ElevatedButton(
+                              onPressed: isPlaying ? null : playIntro,
+                              child: Text(isPlaying ? "재생 중..." : "나레이션 듣기"),
                             ),
-                            child: const Text("정지"),
-                          ),
-                        ],
-                      ),
-                    ],
+                            const SizedBox(width: 12),
+                            ElevatedButton(
+                              onPressed: stopAudio,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.redAccent,
+                              ),
+                              child: const Text("정지"),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    final questionList = await loadQuestionList();
-                    stopAudio();
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final questionList = await loadQuestionList();
+                      stopAudio();
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                         //builder: (_) => HighMissionView()
+                      // 게임 시작 - 타이머 초기화
+                      HighMissionViewModel.instance.startGame(questionList, initialIndex: 0);
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
                           builder: (_) => HighMission(
                             questionList: questionList,
                             currentIndex: 0,
                             gameStartTime: DateTime.now(),
                           ),
-                      )
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[200],
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  child: const Text(
-                    '게임 시작',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                        )
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[200],
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: const Text(
+                      '게임 시작',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
