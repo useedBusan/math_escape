@@ -106,19 +106,7 @@ class _HighAnswerState extends State<HighAnswer> {
     // 진리3 페이지인지 확인 (문제 3번의 진리 페이지)
     if (widget.answer.title.endsWith('_3') || widget.answer.title == '진리_3') {
       // 문제 3번의 진리 페이지에서 다음 문제로 버튼을 누르면 문제 4번으로 이동
-      final idx = widget.questionList.indexWhere((qq) => qq.id == 6);
-      if (idx != -1) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => HighMission(
-              questionList: widget.questionList,
-              currentIndex: idx,
-              gameStartTime: widget.gameStartTime,
-            ),
-          ),
-        );
-      }
+      _safeNavigateToQuestion(6);
     }
     // 힌트 문제인지 확인 (A, B 등으로 끝나는 경우)
     else if (widget.answer.title.endsWith('_A') ||
@@ -134,56 +122,56 @@ class _HighAnswerState extends State<HighAnswer> {
         targetQuestionId = answerId - 1; // 기본적으로 이전 문제로
       }
 
-      final idx = widget.questionList.indexWhere(
-        (qq) => qq.id == targetQuestionId,
-      );
-      if (idx != -1) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => HighMission(
-              questionList: widget.questionList,
-              currentIndex: idx,
-              gameStartTime: widget.gameStartTime,
-            ),
-          ),
-        );
-      }
+      _safeNavigateToQuestion(targetQuestionId);
     } else {
       // 일반 문제의 경우 다음 문제로 이동
       // 진리_1 페이지인 경우 문제 2번으로 직접 이동
       if (widget.answer.title == '진리_1') {
-        final idx = widget.questionList.indexWhere(
-          (qq) => qq.id == 3,
-        ); // 문제 2번 (id: 3)
-        if (idx != -1) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => HighMission(
-                questionList: widget.questionList,
-                currentIndex: idx,
-                gameStartTime: widget.gameStartTime,
-              ),
-            ),
-          );
-        }
+        _safeNavigateToQuestion(3); // 문제 2번 (id: 3)
       } else if (widget.currentIndex + 1 < widget.questionList.length) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => HighMission(
-              questionList: widget.questionList,
-              currentIndex: widget.currentIndex + 1,
-              gameStartTime: widget.gameStartTime,
-            ),
-          ),
-        );
+        _safeNavigateToNextQuestion();
       } else {
         // 마지막 문제 완료 - 게임 종료 처리
         _showGameCompletionDialog();
       }
     }
+  }
+
+  /// 안전한 문제 네비게이션 (메모리 누수 방지)
+  void _safeNavigateToQuestion(int questionId) {
+    if (!mounted) return;
+
+    final idx = widget.questionList.indexWhere((qq) => qq.id == questionId);
+    if (idx != -1) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (_) => HighMission(
+            questionList: widget.questionList,
+            currentIndex: idx,
+            gameStartTime: widget.gameStartTime,
+          ),
+        ),
+        (route) => route.isFirst, // 첫 번째 라우트만 유지
+      );
+    }
+  }
+
+  /// 다음 문제로 안전하게 이동
+  void _safeNavigateToNextQuestion() {
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => HighMission(
+          questionList: widget.questionList,
+          currentIndex: widget.currentIndex + 1,
+          gameStartTime: widget.gameStartTime,
+        ),
+      ),
+      (route) => route.isFirst, // 첫 번째 라우트만 유지
+    );
   }
 
   @override

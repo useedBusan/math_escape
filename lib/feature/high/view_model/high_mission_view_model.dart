@@ -128,18 +128,23 @@ class HighMissionViewModel extends ChangeNotifier {
   void _startTicker() {
     _ticker?.cancel();
     _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
-      notifyListeners();
+      if (!_gameCompleted && _gameStartTime != null) {
+        notifyListeners();
+      }
     });
   }
 
   /// 타이머 일시정지
   void pauseTimers() {
     _ticker?.cancel();
+    _ticker = null;
   }
 
   /// 타이머 재시작
   void resumeTimers() {
-    _startTicker();
+    if (_gameStartTime != null && !_gameCompleted) {
+      _startTicker();
+    }
   }
 
   /// 게임 종료
@@ -159,6 +164,21 @@ class HighMissionViewModel extends ChangeNotifier {
     _gameCompleted = false;
     _questionList.clear();
     notifyListeners();
+  }
+
+  /// 특정 문제로 안전하게 이동 (메모리 누수 방지)
+  void safeGoToQuestionById(int id) {
+    // 현재 타이머 일시정지
+    pauseTimers();
+
+    final index = _questionList.indexWhere((q) => q.id == id);
+    if (index != -1) {
+      _currentIndex = index;
+      notifyListeners();
+
+      // 타이머 재시작
+      resumeTimers();
+    }
   }
 
   @override

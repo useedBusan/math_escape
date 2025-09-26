@@ -73,6 +73,9 @@ class _HighMissionContentState extends State<_HighMissionContent> {
   @override
   void dispose() {
     _controller.dispose();
+    // ViewModel의 타이머 정리
+    final vm = Provider.of<HighMissionViewModel>(context, listen: false);
+    vm.pauseTimers();
     super.dispose();
   }
 
@@ -159,40 +162,40 @@ class _HighMissionContentState extends State<_HighMissionContent> {
       if (isCorrect) {
         // 힌트 문제 B에서 정답을 맞추면 문제 3번으로 돌아가기
         if (q.title == '역설, 혹은 모호함_B') {
-          vm.goToQuestionById(4); // 문제 3번 (id: 4)으로 돌아가기
+          vm.safeGoToQuestionById(4); // 문제 3번 (id: 4)으로 돌아가기
         }
         // 문제 3번을 맞추면 진리 페이지를 거쳐 문제 4번(QR 인식 문제)으로 넘어가기
         else if (q.title == '역설, 혹은 모호함_3') {
           final answerData = await loadAnswerById(q.id);
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => HighAnswer(
-                answer: answerData,
-                gameStartTime: widget.gameStartTime,
-                questionList: vm.questionList,
-                currentIndex: vm.currentIndex,
-              ),
-            ),
-          );
+          await _navigateToAnswer(answerData, vm);
           // HighAnswer 페이지가 닫히면 문제 4번 (id: 6)으로 이동
-          vm.goToQuestionById(6);
+          vm.safeGoToQuestionById(6);
         } else {
           final answerData = await loadAnswerById(q.id);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => HighAnswer(
-                answer: answerData,
-                gameStartTime: widget.gameStartTime,
-                questionList: vm.questionList,
-                currentIndex: vm.currentIndex,
-              ),
-            ),
-          );
+          _navigateToAnswer(answerData, vm);
         }
       }
     });
+  }
+
+  /// 안전한 답변 페이지 네비게이션 (메모리 누수 방지)
+  Future<void> _navigateToAnswer(
+    dynamic answerData,
+    HighMissionViewModel vm,
+  ) async {
+    if (!mounted) return;
+
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => HighAnswer(
+          answer: answerData,
+          gameStartTime: widget.gameStartTime,
+          questionList: vm.questionList,
+          currentIndex: vm.currentIndex,
+        ),
+      ),
+    );
   }
 
   void _handleQRScanResult(HighMissionViewModel vm, String qrResult) {
@@ -213,20 +216,10 @@ class _HighMissionContentState extends State<_HighMissionContent> {
       if (isCorrect) {
         // 힌트 문제 B에서 정답을 맞추면 문제 3번으로 돌아가기
         if (q.title.endsWith('_B')) {
-          vm.goToQuestionById(4); // 문제 3번 (id: 4)으로 돌아가기
+          vm.safeGoToQuestionById(4); // 문제 3번 (id: 4)으로 돌아가기
         } else {
           final answerData = await loadAnswerById(q.id);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => HighAnswer(
-                answer: answerData,
-                gameStartTime: widget.gameStartTime,
-                questionList: vm.questionList,
-                currentIndex: vm.currentIndex,
-              ),
-            ),
-          );
+          _navigateToAnswer(answerData, vm);
         }
       }
     });
