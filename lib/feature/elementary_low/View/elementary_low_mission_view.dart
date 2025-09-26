@@ -113,7 +113,6 @@ class ElementaryLowMissionView extends StatelessWidget {
         if (hints.isEmpty) return const SizedBox.shrink();
 
         // 힌트가 설정되지 않았거나 다른 문제의 힌트인 경우에만 새로 설정
-        hintVM.setHints(hints, missionId: mission.id);
 
         // 다음 힌트 가져오기 (순환)
         final content = hintVM.consumeNext();
