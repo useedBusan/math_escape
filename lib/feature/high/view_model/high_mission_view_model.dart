@@ -181,6 +181,36 @@ class HighMissionViewModel extends ChangeNotifier {
     }
   }
 
+  /// 힌트 처리 - 타입에 따라 다른 동작 수행
+  void handleHint() {
+    final question = currentQuestion;
+
+    // hintType이 없으면 기본 팝업 동작 (기존 호환성 유지)
+    if (question.hintType == null) {
+      // 기존 로직 유지
+      if (question.title == '역설, 혹은 모호함_1') {
+        goToQuestionById(2);
+      }
+      // 다른 문제들은 팝업 표시 (외부에서 처리)
+      return;
+    }
+
+    // 새로운 힌트 시스템
+    switch (question.hintType) {
+      case 'problem':
+        if (question.hintTargetId != null) {
+          goToQuestionById(question.hintTargetId!);
+        }
+        break;
+      case 'popup':
+        // 팝업 표시 (외부에서 처리)
+        break;
+      default:
+        // 기본 동작
+        break;
+    }
+  }
+
   @override
   void dispose() {
     _ticker?.cancel();

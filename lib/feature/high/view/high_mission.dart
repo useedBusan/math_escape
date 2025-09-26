@@ -100,11 +100,11 @@ class _HighMissionContentState extends State<_HighMissionContent> {
   void _showHintDialog(HighMissionViewModel vm) {
     final q = vm.currentQuestion;
 
-    if (q.title == '역설, 혹은 모호함_1') {
-      vm.goToQuestionById(2);
-    } else if (q.title == '역설, 혹은 모호함_3') {
-      vm.goToQuestionById(5); // 역설, 혹은 모호함_B로 이동
-    } else {
+    // 새로운 힌트 시스템 사용
+    vm.handleHint();
+
+    // 팝업이 필요한 경우에만 팝업 표시
+    if (q.hintType == 'popup' || q.hintType == null) {
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -168,8 +168,8 @@ class _HighMissionContentState extends State<_HighMissionContent> {
         else if (q.title == '역설, 혹은 모호함_3') {
           final answerData = await loadAnswerById(q.id);
           await _navigateToAnswer(answerData, vm);
-          // HighAnswer 페이지가 닫히면 문제 4번 (id: 6)으로 이동
-          vm.safeGoToQuestionById(6);
+          // HighAnswer 페이지가 닫히면 문제 4번 (id: 8)으로 이동
+          vm.safeGoToQuestionById(8);
         } else {
           final answerData = await loadAnswerById(q.id);
           _navigateToAnswer(answerData, vm);

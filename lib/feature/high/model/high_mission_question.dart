@@ -7,6 +7,8 @@ class MissionQuestion {
   final List<String> answer;
   final String hint;
   final String description;
+  final String? hintType;
+  final int? hintTargetId;
 
   MissionQuestion({
     required this.id,
@@ -17,6 +19,8 @@ class MissionQuestion {
     required this.answer,
     required this.hint,
     required this.description,
+    this.hintType,
+    this.hintTargetId,
   });
 
   factory MissionQuestion.fromJson(Map<String, dynamic> json) {
@@ -26,9 +30,13 @@ class MissionQuestion {
       title: json['title'],
       question: json['question'],
       questionImage: json['questionImage'],
-      answer: (json['answer'] as List<dynamic>).map((e) => e.toString()).toList(),
+      answer: (json['answer'] as List<dynamic>)
+          .map((e) => e.toString())
+          .toList(),
       hint: json['hint'],
       description: json['description'],
+      hintType: json['hintType'],
+      hintTargetId: json['hintTargetId'],
     );
   }
 }
