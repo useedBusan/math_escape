@@ -10,7 +10,7 @@ class BaseMainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => BaseMainViewModel(),
+      create: (_) => BaseMainViewModel(), //viewModel 연동
       child: Consumer<BaseMainViewModel>(
         builder: (ctx, vm, _) {
           return Scaffold(
@@ -133,10 +133,10 @@ class BaseMainView extends StatelessWidget {
       BuildContext context,
       BaseMainViewModel vm,
       StudentGrade level) {
-    final isSelected = vm.selectedLevel == level;
+    final isSelected = vm.selectedLevel == level; //선택 상태 관리
 
     return GestureDetector(
-      onTap: () => vm.selectLevel(level),
+      onTap: () => vm.selectLevel(level),   //선택로직
       child: Container(
         decoration: BoxDecoration(
           color: level.backgroundColor,

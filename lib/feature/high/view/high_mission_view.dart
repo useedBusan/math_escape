@@ -4,7 +4,10 @@ import '../view_model/base_high_view_model.dart';
 import 'base_high_view.dart';
 import '../../../app/theme/app_colors.dart';
 
-
+/* analysis*/
+//Provider 를 통한 상태괸리
+//BaseView를 래핑하는 컨테이너 역할
+//BaseHighViewModel() >> 모래시계 기능 포함
 
 class HighMissionView extends StatelessWidget {
   const HighMissionView({super.key});
@@ -16,7 +19,10 @@ class HighMissionView extends StatelessWidget {
       child: Builder(
         builder: (ctx) {
           final vm = ctx.read<BaseHighViewModel>();
-
+      //BaseHighView 래핑
+          //모래시계 UI가 포함된 BaseHighView 사용
+          //Pane 기반 화면 전환 시스템
+          //문제/해설/커스텀 3가지 화면 모드
           return BaseHighView(
             title: '역설, 혹은 모호함',
             background: Container(color: CustomBlue.s100),

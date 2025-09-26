@@ -203,24 +203,7 @@ class _HighMissionState extends State<HighMission> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFF3F55A7)),
-          onPressed: () {
-            // 첫 번째 문제가 아닌 경우 이전 문제로 이동
-            if (widget.currentIndex > 0) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => HighMission(
-                    questionList: widget.questionList,
-                    currentIndex: widget.currentIndex - 1,
-                    gameStartTime: widget.gameStartTime,
-                  ),
-                ),
-              );
-            } else {
-              // 첫 번째 문제인 경우 이전 화면(intro)으로 이동
-              Navigator.of(context).pop();
-            }
-          },
+          onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           '역설, 혹은 모호함',
