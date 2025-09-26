@@ -7,11 +7,16 @@ import '../../../app/theme/app_colors.dart';
 class HintPopupViewModel extends ChangeNotifier {
   int _index = -1;
   List<HintEntry> _hints = const [];
+  int? _currentMissionId; // 현재 미션 ID 추적
 
-  void setHints(List<HintEntry> hints) {
-    _hints = hints;
-    _index = -1;
-    notifyListeners();
+  void setHints(List<HintEntry> hints, {int? missionId}) {
+    // 다른 미션의 힌트인 경우에만 새로 설정
+    if (_currentMissionId != missionId) {
+      _hints = hints;
+      _index = -1;
+      _currentMissionId = missionId;
+      notifyListeners();
+    }
   }
 
   int get total => _hints.length;
@@ -26,7 +31,10 @@ class HintPopupViewModel extends ChangeNotifier {
 
   void reset({bool clearHints = false}) {
     _index = -1;
-    if (clearHints) _hints = const [];
+    if (clearHints) {
+      _hints = const [];
+      _currentMissionId = null;
+    }
     notifyListeners();
   }
 
