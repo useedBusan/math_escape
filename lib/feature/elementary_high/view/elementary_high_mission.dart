@@ -111,10 +111,8 @@ class ElementaryHighMissionScreen extends StatelessWidget {
 
         if (hints.isEmpty) return const SizedBox.shrink();
 
-        // 힌트가 설정되지 않았으면 설정하고 첫 번째 힌트로 이동
-        if (hintVM.total == 0) {
-          hintVM.setHints(hints);
-        }
+        // 매번 현재 문제의 힌트로 설정 (문제가 바뀔 때마다 새로 설정)
+        hintVM.setHints(hints);
 
         // 다음 힌트 가져오기 (순환)
         final content = hintVM.consumeNext();

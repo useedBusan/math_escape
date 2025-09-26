@@ -98,6 +98,7 @@ class MissionBackgroundView extends StatelessWidget {
                       onPressed: () {
                         showDialog(
                           context: context,
+                          barrierDismissible: false,
                           builder: hintDialogueBuilder,
                         );
                       },
@@ -132,6 +133,7 @@ class MissionBackgroundView extends StatelessWidget {
                           // QR 문제일 때는 바로 정답으로 처리
                           showDialog(
                             context: context,
+                            barrierDismissible: false,
                             builder: (context) => AnswerPopup(
                               isCorrect: true,
                               grade: grade,
@@ -148,6 +150,7 @@ class MissionBackgroundView extends StatelessWidget {
 
                           showDialog(
                             context: context,
+                            barrierDismissible: false,
                             builder: (context) => AnswerPopup(
                               isCorrect: ok,
                               grade: grade,

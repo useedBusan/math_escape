@@ -3,7 +3,6 @@ import '../../core/services/navigation_service.dart';
 import '../../core/services/url_launcher_service.dart';
 import '../../core/services/qr_answer_service.dart';
 
-
 /// 서비스 의존성 주입을 관리하는 클래스
 class ServiceLocator {
   static final ServiceLocator _instance = ServiceLocator._internal();
@@ -16,7 +15,6 @@ class ServiceLocator {
   late final DataService _dataService; //데이터 로딩 및 관리 담당
   late final QRAnswerService _qrAnswerService; //QR 정답 관리 담당
 
-
   /// 서비스 초기화
   void initialize() {
     // 서비스 인스턴스 생성
@@ -24,7 +22,6 @@ class ServiceLocator {
     _navigationService = NavigationService();
     _dataService = DataService();
     _qrAnswerService = QRAnswerService();
-
   }
 
   /// 서비스 인스턴스 반환
@@ -32,12 +29,6 @@ class ServiceLocator {
   NavigationService get navigationService => _navigationService;
   DataService get dataService => _dataService;
   QRAnswerService get qrAnswerService => _qrAnswerService;
-
-
-  /// 모든 서비스 정리
-  void dispose() {
-    // 서비스 정리 로직이 필요한 경우 여기에 추가
-  }
 }
 
 /// 전역 서비스 로케이터 인스턴스
