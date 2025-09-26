@@ -19,6 +19,7 @@ class IntroViewModel extends ChangeNotifier {
   }
 
   Talk get currentTalk => talks[currentIdx];
+  int get totalCount => talks.length;
 
   void goToNextTalk() {
     if (canGoNext()) {

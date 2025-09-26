@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../app/theme/app_colors.dart';
+import 'home_alert.dart';
+import 'lottie_animation_widget.dart';
 
 class CommonIntroView extends StatelessWidget {
   final String appBarTitle;
@@ -12,6 +14,9 @@ class CommonIntroView extends StatelessWidget {
   final VoidCallback onNext;
   final VoidCallback onBack;
   final StudentGrade? grade; // 학년 정보 추가
+  final String? lottieAnimationPath; // 로티 애니메이션 경로 추가
+  final bool showLottieInsteadOfImage; // 로티 애니메이션 표시 여부
+  final bool lottieRepeat; // 로티 애니메이션 반복 여부
 
   const CommonIntroView({
     super.key,
@@ -24,6 +29,9 @@ class CommonIntroView extends StatelessWidget {
     required this.onNext,
     required this.onBack,
     this.grade, // 기본값 null로 하위 호환성 유지
+    this.lottieAnimationPath, // 로티 애니메이션 경로
+    this.showLottieInsteadOfImage = false, // 기본값 false로 하위 호환성 유지
+    this.lottieRepeat = true, // 기본값 true로 하위 호환성 유지
   });
 
   @override
@@ -69,6 +77,18 @@ class CommonIntroView extends StatelessWidget {
                         color: mainColor,
                       ),
                       onPressed: onBack,
+                    ),
+                  ),
+                  Positioned(
+                    right: 0,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.home_outlined,
+                        color: mainColor,
+                      ),
+                      onPressed: () {
+                        HomeAlert.showAndNavigate(context);
+                      },
                     ),
                   ),
                 ],
@@ -117,12 +137,19 @@ class CommonIntroView extends StatelessWidget {
                           left: 0,
                           right: 0,
                           child: Center(
-                            child: Image.asset(
-                              characterImageAssetPath,
-                              gaplessPlayback: true,
-                              filterQuality: FilterQuality.high,
-                              isAntiAlias: true,
-                            ),
+                            child: showLottieInsteadOfImage && lottieAnimationPath != null
+                                ? LottieAnimationWidget(
+                                    assetPath: lottieAnimationPath!,
+                                    width: size.width * 0.6,
+                                    height: size.height * 0.3,
+                                    repeat: lottieRepeat,
+                                  )
+                                : Image.asset(
+                                    characterImageAssetPath,
+                                    gaplessPlayback: true,
+                                    filterQuality: FilterQuality.high,
+                                    isAntiAlias: true,
+                                  ),
                           ),
                         ),
                       ],

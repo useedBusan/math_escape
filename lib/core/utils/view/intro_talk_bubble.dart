@@ -1,3 +1,5 @@
+// 사용하지 않는 파일 - CommonIntroView가 대신 사용됨
+/*
 import 'package:flutter/material.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../constants/enum/speaker_enums.dart';
@@ -110,3 +112,4 @@ class TalkBubble extends StatelessWidget {
     );
   }
 }
+*/

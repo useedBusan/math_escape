@@ -1,3 +1,5 @@
+// 사용하지 않는 파일 - BaseMainView가 실제로 사용됨
+/*
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../constants/app_constants.dart';
@@ -180,3 +182,4 @@ class MainView extends StatelessWidget {
     );
   }
 }
+*/

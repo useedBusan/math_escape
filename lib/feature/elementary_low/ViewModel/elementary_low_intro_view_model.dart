@@ -1,3 +1,5 @@
+// 사용하지 않는 파일 - IntroViewModel이 대신 사용됨
+/*
 import "dart:convert";
 import "package:flutter/services.dart";
 import "../../../core/utils/model/talk_model.dart";
@@ -31,3 +33,4 @@ class ElementaryLowIntroViewModel {
     }
   }
 }
+*/

@@ -18,7 +18,12 @@
     "question": "다빈치 돔에서 찾을 수 없는 도형은 무엇일까?",
     "title": "문제 2 / 10",
     "back_image": "assets/images/middle/middleBG123.png",
-    "questionImage": "① 삼각형 패턴\n② 육각형 패턴\n③ 팔각형 패턴",
+    "questionImage": "",
+    "options": [
+      "① 삼각형 패턴",
+      "② 육각형 패턴",
+      "③ 팔각형 패턴"
+    ],
     "answer": [
       "3",
       "③",
@@ -93,7 +98,12 @@
     "question": "원뿔, 구, 원기둥의 단면을 잘라보자. 원, 삼각형, 타원이 동시에 나올 수 있는 도형은 무엇일까?",
     "title": "문제 7 / 10",
     "back_image": "assets/images/middle/middleBG789.png",
-    "questionImage": "① 원뿔\n② 구\n③ 원기둥",
+    "questionImage": "",
+    "options": [
+      "① 원뿔",
+      "② 구",
+      "③ 원기둥"
+    ],
     "answer": [
       "1",
       "①",
@@ -108,7 +118,12 @@
     "question": "플라톤의 다면체 → 정팔면체 중점 절단을 누르면 생기는 입체도형의 면의 모양이 아닌 것은?",
     "title": "문제 8 / 10",
     "back_image": "assets/images/middle/middleBG789.png",
-    "questionImage": "① 정삼각형\n② 정사각형\n③ 정오각형",
+    "questionImage": "",
+    "options": [
+      "① 정삼각형",
+      "② 정사각형",
+      "③ 정오각형"
+    ],
     "answer": [
       "3",
       "③",
@@ -137,13 +152,19 @@
     "question": "하모노 그래프에서 단진자의 진동수는 길이의 제곱근에 반비례하기 때문에 한 옥타브를 높이려면 길이를 얼마나 줄이면 될까?",
     "title": "문제 10 / 10",
     "back_image": "assets/images/middle/middleBG789.png",
-    "questionImage": "① 1/2\n② 1/4\n③ 1/8\n④ 1/16",
+    "questionImage": "",
+    "options": [
+      "① 1/2",
+      "② 1/4",
+      "③ 1/8",
+      "④ 1/16"
+    ],
     "answer": [
       "2",
       "②"
     ],
     "hint1": "4층 역사지혜관을 살펴보자",
-    "hint2": "진자의 길이가 길어질수록 진동수는 작아지고, 진자의 길이가 짧아질수록 진동수는 커져",
+    "hint2": "진자의 길이가 길어질수록 진동수는 작아지고, 진자의 길이가 짧아질수록 진동수는 커져.",
     "isqr": false
   }
 ]

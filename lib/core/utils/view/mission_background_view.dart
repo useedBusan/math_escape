@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../core/utils/view/answer_popup.dart';
+import '../../../core/utils/view/home_alert.dart';
 
 class MissionBackgroundView extends StatelessWidget {
   // 외부에서 주입받는 parameters
@@ -15,6 +16,7 @@ class MissionBackgroundView extends StatelessWidget {
     this.onCorrect,
     this.onWrong,
     this.onBack,
+    this.onHome,
     this.isqr = false, // QR 인식 여부 추가
   });
 
@@ -30,6 +32,7 @@ class MissionBackgroundView extends StatelessWidget {
   final VoidCallback? onCorrect;
   final VoidCallback? onWrong;
   final VoidCallback? onBack;
+  final VoidCallback? onHome;
 
   // view
   @override
@@ -48,6 +51,17 @@ class MissionBackgroundView extends StatelessWidget {
           icon: Icon(Icons.arrow_back, color: mainColor, size: 28),
           onPressed: onBack ?? () => Navigator.of(context).maybePop(),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.home_outlined, color: mainColor, size: 28),
+            onPressed: () {
+              HomeAlert.showAndNavigate(
+                context,
+                onHome: onHome,
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [

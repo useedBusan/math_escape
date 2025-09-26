@@ -153,6 +153,10 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen>
       talkText: talk.talk,
       buttonText: talk.answer,
       grade: StudentGrade.elementaryHigh,
+      // 첫 번째 화면에만 furiAppearance 애니메이션 표시 (한 번만 재생)
+      lottieAnimationPath: currentIndex == 0 ? 'assets/animations/furiAppearance.json' : null,
+      showLottieInsteadOfImage: currentIndex == 0,
+      lottieRepeat: false, // furiAppearance는 한 번만 재생
       onNext: goToNext,
       onBack: () {
         if (currentIndex > 0) {

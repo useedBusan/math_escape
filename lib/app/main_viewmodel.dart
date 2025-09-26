@@ -1,3 +1,5 @@
+// 사용하지 않는 파일 - BaseMainViewModel이 실제로 사용됨
+/*
 import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
 import '../core/services/navigation_service.dart';
@@ -124,3 +126,4 @@ class MainViewModel extends BaseViewModel {
     super.dispose();
   }
 }
+*/

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../core/utils/view/custom_intro_alert.dart';
-import '../../../Feature/middle/view/middle_mission.dart';
+import 'middle_mission.dart';
 import '../../../core/utils/view/common_intro_view.dart';
 import '../model/middle_intro_talk.dart';
 
@@ -121,6 +121,10 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
       talkText: talk.talk,
       buttonText: '다음',
       grade: StudentGrade.middle,
+      // 첫 번째 화면에만 furiAppearance 애니메이션 표시 (한 번만 재생)
+      lottieAnimationPath: currentIndex == 0 ? 'assets/animations/furiAppearance.json' : null,
+      showLottieInsteadOfImage: currentIndex == 0,
+      lottieRepeat: false, // furiAppearance는 한 번만 재생
       onNext: goToNext,
       onBack: () {
         if (currentIndex > 0) {

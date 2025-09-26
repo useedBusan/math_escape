@@ -70,30 +70,31 @@ class ElementaryLowMissionListView extends StatelessWidget {
               color: AppColors.body,
             ),
           ),
-          const SizedBox(height: 20),
-
           // QR 문제가 아닐 때만 이미지와 선택 버튼 표시
           if (!mission.isqr) ...[
             if (mission.questionImage != null) ...[
               const SizedBox(height: 12),
-              Expanded(
-                child: Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        return Image.asset(
+              Flexible(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // 이미지의 원본 비율을 유지하면서 사용 가능한 공간에 맞춤
+                    return Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.asset(
                           mission.questionImage!,
                           fit: BoxFit.contain,
                           width: constraints.maxWidth,
-                          height: constraints.maxHeight,
-                        );
-                      },
-                    ),
-                  ),
+                          // 높이는 이미지의 원본 비율에 따라 자동으로 결정됨
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
+              const SizedBox(height: 20), // 이미지와 버튼 사이 일정한 패딩
             ],
+            const SizedBox(height: 12), // 버튼 위 일정한 패딩
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),

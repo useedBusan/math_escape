@@ -1,7 +1,7 @@
 import '../../core/services/data_service.dart';
 import '../../core/services/navigation_service.dart';
 import '../../core/services/url_launcher_service.dart';
-import '../../app/main_viewmodel.dart';
+// import '../../app/main_viewmodel.dart'; // 사용하지 않음 - BaseMainViewModel 사용
 
 
 /// 서비스 의존성 주입을 관리하는 클래스
@@ -16,7 +16,7 @@ class ServiceLocator {
   late final DataService _dataService; //데이터 로딩 및 관리 담당
 
   // ViewModel 인스턴스들
-  late final MainViewModel _mainViewModel;
+  // late final MainViewModel _mainViewModel; // 사용하지 않음
 
   /// 서비스 초기화
   void initialize() {
@@ -26,10 +26,10 @@ class ServiceLocator {
     _dataService = DataService();
 
     // ViewModel 인스턴스 생성 (의존성 주입)
-    _mainViewModel = MainViewModel(
-      urlService: _urlLauncherService,
-      navService: _navigationService,
-    );
+    // _mainViewModel = MainViewModel(
+    //   urlService: _urlLauncherService,
+    //   navService: _navigationService,
+    // ); // 사용하지 않음
   }
 
   /// 서비스 인스턴스 반환
@@ -38,11 +38,11 @@ class ServiceLocator {
   DataService get dataService => _dataService;
 
   /// ViewModel 인스턴스 반환
-  MainViewModel get mainViewModel => _mainViewModel;
+  // MainViewModel get mainViewModel => _mainViewModel; // 사용하지 않음
 
   /// 모든 서비스 정리
   void dispose() {
-    _mainViewModel.dispose();
+    // _mainViewModel.dispose(); // 사용하지 않음
   }
 }
 

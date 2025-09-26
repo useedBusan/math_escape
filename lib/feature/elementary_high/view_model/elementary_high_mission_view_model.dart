@@ -14,6 +14,11 @@ class ElementaryHighMissionViewModel extends ChangeNotifier {
   final TextEditingController textController = TextEditingController();
   bool _showConversation = true; // 첫 번째 문제 전에 대화를 보여줄지 여부
   bool _showFinalConversation = false; // 마지막 스테이지 대화를 보여줄지 여부
+  
+  // Coordinator와의 동기화를 위한 콜백
+  Function(int)? _onIndexChangedCallback;
+  
+  bool get hasIndexCallback => _onIndexChangedCallback != null;
 
   bool get isLoading => _isLoading;
   bool get isBusy => _isBusy;
@@ -93,6 +98,12 @@ class ElementaryHighMissionViewModel extends ChangeNotifier {
       _selectedChoiceIndex = null;
       _typedAnswer = '';
       textController.clear();
+      
+      // Coordinator에 인덱스 변경 알림
+      if (_onIndexChangedCallback != null) {
+        _onIndexChangedCallback!(_currentIndex);
+      }
+      
       notifyListeners();
     } else {
       // 마지막 문제를 완료했을 때 최종 대화 표시
@@ -110,6 +121,28 @@ class ElementaryHighMissionViewModel extends ChangeNotifier {
     _showFinalConversation = false;
     notifyListeners();
   }
+
+  void setCurrentIndex(int index) {
+    if (index >= 0 && index < _missions.length) {
+      _currentIndex = index;
+      _selectedChoiceIndex = null;
+      _typedAnswer = '';
+      textController.clear();
+      notifyListeners();
+    }
+  }
+  
+  // Coordinator와의 동기화를 위한 메서드들
+  void setIndexChangedCallback(Function(int) callback) {
+    _onIndexChangedCallback = callback;
+  }
+  
+  void syncWithCoordinator(int coordinatorIndex) {
+    if (_currentIndex != coordinatorIndex) {
+      setCurrentIndex(coordinatorIndex);
+    }
+  }
+
 
   @override
   void dispose() {

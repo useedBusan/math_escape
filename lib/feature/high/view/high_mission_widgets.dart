@@ -1,3 +1,5 @@
+// 사용하지 않는 파일 - BaseHighView가 대신 사용됨
+/*
 import 'package:flutter/material.dart';
 
 // 고등학교 미션 전용 위젯들
@@ -314,3 +316,4 @@ class HighAnswerInput extends StatelessWidget {
     );
   }
 }
+*/

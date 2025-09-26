@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:math_escape/core/utils/view/hint_popup.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import '../../../constants/enum/grade_enums.dart';
-import '../../../constants/enum/speaker_enums.dart';
 import '../../../core/utils/view/answer_popup.dart';
 import '../../../core/utils/view/common_intro_view.dart';
 import '../../../core/utils/viewmodel/intro_view_model.dart';
-import '../../../core/utils/model/talk_model.dart';
 import '../../../constants/enum/image_enums.dart';
 import '../../../core/utils/image_path_validator.dart';
+import '../coordinator/middle_mission_coordinator.dart';
+import 'conversation_overlay.dart';
 
 // 새로운 모델 클래스 추가
 class CorrectTalkItem {
@@ -66,6 +65,7 @@ class MissionItem {
   final String hint2;
   final String back_image;
   final String questionImage;
+  final List<String> options;
   final bool isqr;
 
   MissionItem({
@@ -77,6 +77,7 @@ class MissionItem {
     required this.hint2,
     required this.back_image,
     required this.questionImage,
+    required this.options,
     this.isqr = false,
   });
 
@@ -99,6 +100,7 @@ class MissionItem {
       hint2: json['hint2'],
       back_image: json['back_image'] ?? '',
       questionImage: json['questionImage'] ?? '',
+      options: List<String>.from(json['options'] ?? []),
       isqr: json['isqr'] as bool? ?? false,
     );
   }
@@ -150,6 +152,18 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     );
 
     _hintColorController.repeat(reverse: true);
+  }
+
+  void _syncWithCoordinator(int coordinatorIndex) {
+    if (coordinatorIndex != currentQuestionIndex) {
+      setState(() {
+        currentQuestionIndex = coordinatorIndex;
+        _answerController.clear();
+        hintCounter = 0;
+        showHint1 = false;
+        showHint2 = false;
+      });
+    }
   }
 
   Future<void> loadMissionData() async {
@@ -204,7 +218,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
   }
 
 
-  void _submitAnswer() {
+  void _submitAnswer(MiddleMissionCoordinator coordinator) {
     final MissionItem currentMission = missionList[currentQuestionIndex];
     final String userAnswer = _answerController.text.trim();
     final bool correct = currentMission.answer.contains(userAnswer);
@@ -217,7 +231,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         onNext: () {
           Navigator.pop(context);
           if (correct) {
-            _showCorrectAnswerDialog();
+            _showCorrectAnswerDialog(coordinator);
           }
         }, grade: StudentGrade.middle,
       ),
@@ -240,58 +254,30 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         showHint1 = false;
         showHint2 = false;
       } else {
+        // 모든 문제 완료 - 메인 화면으로 이동
+        print('DEBUG: Middle - All questions completed, navigating to main');
         Navigator.pop(context);
       }
     });
   }
 
-  void _showCorrectAnswerDialog() async {
+  void _showCorrectAnswerDialog(MiddleMissionCoordinator coordinator) async {
     try {
       final int currentQuestionId = currentQuestionIndex + 1;
       final CorrectTalkItem correctTalk = talkList.firstWhere(
         (talk) => talk.id == currentQuestionId,
       );
 
-      // IntroViewModel을 사용해서 대화 시퀀스 관리
-      final conversationVM = IntroViewModel();
-      
-      // CorrectTalkItem의 talks를 Talk 모델로 변환
-      final List<Talk> talks = correctTalk.talks.asMap().entries.map((entry) {
-        final index = entry.key;
-        final talkItem = entry.value;
-        return Talk(
-          id: currentQuestionId * 100 + index, // 고유 ID 생성
-          speaker: Speaker.puri, // middle은 항상 푸리
-          speakerImg: talkItem.puri_image,
-          backImg: talkItem.back_image.isNotEmpty ? talkItem.back_image : ImageAssets.background.path,
-          talk: talkItem.talk,
-        );
-      }).toList();
-      
-      conversationVM.talks = talks;
-      conversationVM.currentIdx = 0;
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => _MiddleConversationView(
-            viewModel: conversationVM,
-            onComplete: () {
-              Navigator.of(context).pop();
-              if (currentQuestionId == 10) {
-                Navigator.of(context).pop(); // 메인화면으로
-              } else {
-                _goToNextQuestion();
-              }
-            },
-          ),
-        ),
-      );
+      // 정답 후 대화 표시 → Coordinator로 대화 단계 이동
+      print('DEBUG: Middle - Answer correct! currentQuestionId=$currentQuestionId');
+      coordinator.toConversation(currentQuestionId);
     } catch (e) {
       print("Error finding talk for question ${currentQuestionIndex + 1}: $e");
-      // 대화가 없는 경우 바로 다음 문제로
-      if (currentQuestionIndex + 1 == 10) {
-        Navigator.of(context).pop(); // 메인화면으로
+      // 대화가 없는 경우 바로 다음 문제로 또는 완료 처리
+      if (currentQuestionIndex + 1 >= totalQuestions) {
+        // 모든 문제 완료 - 메인화면으로
+        print('DEBUG: Middle - All questions completed (no talk), navigating to main');
+        Navigator.of(context).pop();
       } else {
         _goToNextQuestion();
       }
@@ -300,6 +286,56 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
 
   @override
   Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => MiddleMissionCoordinator()),
+      ],
+      child: Consumer<MiddleMissionCoordinator>(
+        builder: (context, coordinator, child) {
+          // Coordinator와 동기화 설정 (한 번만)
+          coordinator.setQuestionIndexCallback(_syncWithCoordinator);
+          
+          return WillPopScope(
+            onWillPop: () async {
+              return !coordinator.handleBack();
+            },
+            child: _buildCurrentStep(context, coordinator),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildCurrentStep(BuildContext context, MiddleMissionCoordinator coordinator) {
+    // 현재 단계에 따라 화면 결정
+    if (coordinator.isInConversation) {
+      return ConversationOverlay(
+        stage: coordinator.current.stage,
+        isFinalConversation: false,
+        onComplete: () {
+          print('DEBUG: Middle - Conversation completed, stage=${coordinator.current.stage}');
+          // 대화 종료 후 다음 문제 이동 또는 완료 처리
+          final int nextStage = coordinator.current.stage + 1;
+          if (nextStage <= totalQuestions) {
+            coordinator.toQuestion(nextStage);
+          } else {
+            // 모든 문제 완료 - 메인 화면으로 이동
+            print('DEBUG: Middle - All questions completed, navigating to main');
+            Navigator.of(context).pop();
+          }
+        },
+        onCloseByBack: () {
+          // 대화에서 뒤로가기할 때는 코디네이터에서만 히스토리를 관리
+          coordinator.handleBack();
+        },
+      );
+    }
+
+    // 기본: 질문 화면 (question 단계)
+    return _buildQuestionScreen(context, coordinator);
+  }
+
+  Widget _buildQuestionScreen(BuildContext context, MiddleMissionCoordinator coordinator) {
     if (isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
@@ -458,234 +494,268 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                           ],
                         ),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // 문제 번호 + 힌트 버튼
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '문제 ${currentQuestionIndex + 1} / $totalQuestions',
-                                  style: TextStyle(
-                                    fontFamily: "SBAggroM",
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                        (18 / 360),
-                                    fontWeight: FontWeight.w400,
-                                    color: const Color(0xff202020),
-                                  ),
-                                ),
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
+                            // 스크롤 가능한 상단 영역
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    AnimatedBuilder(
-                                      animation: _hintColorAnimation,
-                                      builder: (context, child) {
-                                        final color = Color.lerp(
-                                          const Color(0xFF3F55A7),
-                                          const Color(0xFFB2BBDC),
-                                          _hintColorAnimation.value,
-                                        )!;
-                                        return IconButton(
-                                          icon: Icon(
-                                            Icons.help_outline,
-                                            color: color,
+                                    // 문제 번호 + 힌트 버튼
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '문제 ${currentQuestionIndex + 1} / $totalQuestions',
+                                          style: TextStyle(
+                                            fontFamily: "SBAggroM",
+                                            fontSize:
+                                                MediaQuery.of(context).size.width *
+                                                (18 / 360),
+                                            fontWeight: FontWeight.w400,
+                                            color: const Color(0xff202020),
                                           ),
-                                          onPressed: _showHintDialog,
-                                          padding: EdgeInsets.zero,
-                                          constraints: const BoxConstraints(),
-                                          iconSize: 28,
-                                        );
-                                      },
+                                        ),
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            AnimatedBuilder(
+                                              animation: _hintColorAnimation,
+                                              builder: (context, child) {
+                                                final color = Color.lerp(
+                                                  const Color(0xFF3F55A7),
+                                                  const Color(0xFFB2BBDC),
+                                                  _hintColorAnimation.value,
+                                                )!;
+                                                return IconButton(
+                                                  icon: Icon(
+                                                    Icons.help_outline,
+                                                    color: color,
+                                                  ),
+                                                  onPressed: _showHintDialog,
+                                                  padding: EdgeInsets.zero,
+                                                  constraints: const BoxConstraints(),
+                                                  iconSize: 28,
+                                                );
+                                              },
+                                            ),
+                                            const SizedBox(height: 4),
+                                            AnimatedBuilder(
+                                              animation: _hintColorAnimation,
+                                              builder: (context, child) {
+                                                final color = Color.lerp(
+                                                  const Color(0xFF3F55A7),
+                                                  const Color(0xFFB2BBDC),
+                                                  _hintColorAnimation.value,
+                                                )!;
+                                                return Transform.translate(
+                                                  offset: const Offset(0, -15),
+                                                  child: Text(
+                                                    '힌트',
+                                                    style: TextStyle(
+                                                      color: color,
+                                                      fontSize:
+                                                          MediaQuery.of(
+                                                            context,
+                                                          ).size.width *
+                                                          (12 / 360),
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(height: 4),
-                                    AnimatedBuilder(
-                                      animation: _hintColorAnimation,
-                                      builder: (context, child) {
-                                        final color = Color.lerp(
-                                          const Color(0xFF3F55A7),
-                                          const Color(0xFFB2BBDC),
-                                          _hintColorAnimation.value,
-                                        )!;
-                                        return Transform.translate(
-                                          offset: const Offset(0, -15),
-                                          child: Text(
-                                            '힌트',
-                                            style: TextStyle(
-                                              color: color,
-                                              fontSize:
-                                                  MediaQuery.of(
-                                                    context,
-                                                  ).size.width *
-                                                  (12 / 360),
-                                              fontWeight: FontWeight.w500,
+                                    // 이미지가 없을 때 간격 줄이기, 있을 때는 기본 간격
+                                    SizedBox(height: mission.questionImage.isEmpty ? 4 : 8),
+                                    // 문제 영역
+                                    Text(
+                                      mission.question,
+                                      textAlign: TextAlign.justify,
+                                      style: TextStyle(
+                                        fontFamily: "Pretendard",
+                                        fontWeight: FontWeight.w400,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                            (16 / 360),
+                                        height: 1.4,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    // 이미지 영역 (이미지가 있을때만) - 가운데 정렬 및 유동적 높이
+                                    if (mission.questionImage.isNotEmpty)
+                                      SizedBox(
+                                        height: 200, // 고정 높이로 설정하여 비율 유지
+                                        child: Center(
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(8),
+                                            child: Image.asset(
+                                              mission.questionImage,
+                                              fit: BoxFit.contain,
                                             ),
                                           ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            // 문제 영역
-                            Text(
-                              mission.question,
-                              textAlign: TextAlign.justify,
-                              style: TextStyle(
-                                fontFamily: "Pretendard",
-                                fontWeight: FontWeight.w400,
-                                fontSize:
-                                    MediaQuery.of(context).size.width *
-                                    (16 / 360),
-                                height: 1.4,
-                                color: Colors.black87,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            // 이미지 영역 (이미지가 있을때만)
-                            if (mission.questionImage.isNotEmpty)
-                              if (mission.questionImage.startsWith('assets/'))
-                                ClipRRect(
-                                  child: Image.asset(
-                                    mission.questionImage,
-                                    fit: BoxFit.contain,
-                                  ),
-                                )
-                              else
-                                Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFFFFFF),
-                                    border: Border.all(
-                                      color: const Color(0xFFFFFFFF),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    mission.questionImage,
-                                    style: TextStyle(
-                                      fontFeatures: [FontFeature.fractions()],
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                          (16 / 360),
-                                      color: Colors.black87,
-                                      height: 1.4,
-                                    ),
-                                  ),
-                                ),
-                            const Expanded(child: SizedBox()),
-                            // QR 문제일 때 QR 스캔 버튼 표시
-                            if (mission.isqr) ...[
-                              SizedBox(
-                                width: double.infinity,
-                                height: 60,
-                                child: ElevatedButton(
-                                  onPressed: _submitAnswer,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: mainColor,
-                                    foregroundColor: Colors.white,
-                                    elevation: 2,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.qr_code_scanner,
-                                        size: 24,
-                                        color: Colors.white,
+                                        ),
                                       ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        'QR코드 스캔',
-                                        style: TextStyle(
-                                          fontSize: MediaQuery.of(context).size.width * (16 / 360),
-                                          fontWeight: FontWeight.w500,
+                                    
+                                    // 옵션 영역 (옵션이 있을때만)
+                                    if (mission.options.isNotEmpty) ...[
+                                      const SizedBox(height: 16),
+                                      Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.all(16),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFFFFFFF),
+                                          borderRadius: BorderRadius.circular(8),
+                                          border: Border.all(
+                                            color: const Color(0xFFE0E0E0),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: mission.options.map((option) => 
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 4),
+                                              child: Text(
+                                                option,
+                                                style: TextStyle(
+                                                  fontFeatures: [FontFeature.fractions()],
+                                                  fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                                                  color: Colors.black87,
+                                                  height: 1.4,
+                                                ),
+                                              ),
+                                            ),
+                                          ).toList(),
                                         ),
                                       ),
                                     ],
-                                  ),
-                                ),
-                              ),
-                            ] else ...[
-                              // 일반 문제일 때 텍스트필드 표시
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFFFFF),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  border: Border.all(
-                                    color: const Color(0xffdcdcdc),
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: TextField(
-                                        style: TextStyle(
-                                          fontSize:
-                                              MediaQuery.of(context).size.width *
-                                              (15 / 360),
-                                        ),
-                                        controller: _answerController,
-                                        keyboardType: TextInputType.text,
-                                        textInputAction: TextInputAction.done,
-                                        decoration: InputDecoration(
-                                          hintText: '정답을 입력해 주세요.',
-                                          hintStyle: TextStyle(
-                                            fontSize:
-                                                MediaQuery.of(
-                                                  context,
-                                                ).size.width *
-                                                (14 / 360),
-                                            color: const Color(0xffaaaaaa),
-                                          ),
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                horizontal: 12.0,
-                                                vertical: 12.0,
-                                              ),
-                                          border: InputBorder.none,
-                                          enabledBorder: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 60,
-                                      height: 52,
-                                      child: ElevatedButton(
-                                        onPressed: _submitAnswer,
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: mainColor,
-                                          foregroundColor: Colors.white,
-                                          elevation: 0,
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 12,
-                                          ),
-                                          shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(8),
-                                              bottomRight: Radius.circular(8),
-                                            ),
-                                          ),
-                                        ),
-                                        child: Text(
-                                          '제출',
-                                          style: TextStyle(
-                                            fontSize: MediaQuery.of(context).size.width * (12 / 360),
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ),
-                            ],
+                            ),
+                            // 하단 고정 영역 (제출 버튼/텍스트필드)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16),
+                              child: Column(
+                                children: [
+                                  // QR 문제일 때 QR 스캔 버튼 표시
+                                  if (mission.isqr) ...[
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height: 60,
+                                      child: ElevatedButton(
+                                        onPressed: () => _submitAnswer(coordinator),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: mainColor,
+                                          foregroundColor: Colors.white,
+                                          elevation: 2,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.qr_code_scanner,
+                                              size: 24,
+                                              color: Colors.white,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              'QR코드 스캔',
+                                              style: TextStyle(
+                                                fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ] else ...[
+                                    // 일반 문제일 때 텍스트필드 표시
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFFFFFFF),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        border: Border.all(
+                                          color: const Color(0xffdcdcdc),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 2,
+                                            child: TextField(
+                                              style: TextStyle(
+                                                fontSize:
+                                                    MediaQuery.of(context).size.width *
+                                                    (15 / 360),
+                                              ),
+                                              controller: _answerController,
+                                              keyboardType: TextInputType.text,
+                                              textInputAction: TextInputAction.done,
+                                              decoration: InputDecoration(
+                                                hintText: '정답을 입력해 주세요.',
+                                                hintStyle: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(
+                                                        context,
+                                                      ).size.width *
+                                                      (14 / 360),
+                                                  color: const Color(0xffaaaaaa),
+                                                ),
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 12.0,
+                                                      vertical: 12.0,
+                                                    ),
+                                                border: InputBorder.none,
+                                                enabledBorder: InputBorder.none,
+                                                focusedBorder: InputBorder.none,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 60,
+                                            height: 52,
+                                            child: ElevatedButton(
+                                              onPressed: () => _submitAnswer(coordinator),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: mainColor,
+                                                foregroundColor: Colors.white,
+                                                elevation: 0,
+                                                padding: const EdgeInsets.symmetric(
+                                                  vertical: 12,
+                                                ),
+                                                shape: const RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.only(
+                                                    topRight: Radius.circular(8),
+                                                    bottomRight: Radius.circular(8),
+                                                  ),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                '제출',
+                                                style: TextStyle(
+                                                  fontSize: MediaQuery.of(context).size.width * (12 / 360),
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),

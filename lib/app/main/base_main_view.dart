@@ -101,7 +101,7 @@ class BaseMainView extends StatelessWidget {
                                 '시작하기',
                                 style: TextStyle(
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w700,
                                   fontFamily: 'Pretendard',
                                 ),
                               ),

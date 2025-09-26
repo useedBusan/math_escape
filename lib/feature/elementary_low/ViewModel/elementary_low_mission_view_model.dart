@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import '../../../core/utils/view_model/base_viewmodel.dart';
+import '../../../core/utils/viewmodel/intro_view_model.dart';
 import '../Model/elementary_low_mission_model.dart';
 
 class ElementaryLowMissionViewModel extends BaseViewModel {
@@ -14,8 +15,14 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
   int? _selectedChoiceIndex;
   bool? _lastSubmitCorrect;
   bool _loaded = false;
-  bool _showConversation = true; // 첫 번째 문제 전에 대화를 보여줄지 여부
+  bool _showConversation = false; // Coordinator가 단계를 관리하므로 사용하지 않음
   bool _showFinalConversation = false; // 마지막 스테이지 대화를 보여줄지 여부
+  
+  // 현재 대화 상태 관리
+  IntroViewModel? _currentConversation;
+  
+  // Coordinator와의 동기화를 위한 콜백
+  Function(int)? _onIndexChangedCallback;
 
   // Getters
   List<ElementaryLowMissionModel> get missions => List.unmodifiable(_missions);
@@ -35,6 +42,9 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
   bool get isqr => currentMission?.isqr ?? false;
   bool get showConversation => _showConversation;
   bool get showFinalConversation => _showFinalConversation;
+  int get totalCount => _missions.length;
+  IntroViewModel? get currentConversation => _currentConversation;
+  bool get hasIndexCallback => _onIndexChangedCallback != null;
 
   // Intents
   void selectChoice(int index) {
@@ -46,37 +56,45 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
     safeNotifyListeners();
   }
 
-  Future<void> submitAnswer() async {
-    if (!canSubmit || currentMission == null) return;
+  Future<bool> submitAnswer() async {
+    if (!isLoaded || currentMission == null) return false;
     setLoading(true);
     try {
-      final correctIndex = currentMission!.answerIndex;
-      _lastSubmitCorrect = (_selectedChoiceIndex == correctIndex);
-      await Future<void>.delayed(const Duration(milliseconds: 150));
-    } catch (_) {
-      setError('정답 확인 중 오류가 발생했어요.');
-    } finally {
+      final mission = currentMission!;
+      final String answerCandidate = _selectedChoiceIndex != null &&
+          _selectedChoiceIndex! < mission.choices.length
+          ? mission.choices[_selectedChoiceIndex!]
+          : '';
+      final ok = mission.answerIndex == _selectedChoiceIndex;
+      
       setLoading(false);
+      return ok;
+    } catch (_) {
+      setLoading(false);
+      return false;
     }
   }
 
-  void nextMission() {
-    if (_missions.isEmpty) return;
-    if (_currentIndex < _missions.length - 1) {
-      _currentIndex++;
+  // Coordinator가 호출하는 메서드 - 직접 호출하지 않음
+  void setCurrentIndexByCoordinator(int index) {
+    if (index >= 0 && index < _missions.length) {
+      _currentIndex = index;
       _selectedChoiceIndex = null;
       _lastSubmitCorrect = null;
-      _showConversation = true; // 다음 문제 전에 대화를 보여줌
-      safeNotifyListeners();
-    } else {
-      // 마지막 문제를 완료했을 때 최종 대화 표시
-      _showFinalConversation = true;
+      _currentConversation = null; // 이전 대화 상태 초기화
       safeNotifyListeners();
     }
   }
+  
+  void setFinalConversationByCoordinator(bool show) {
+    _showFinalConversation = show;
+    print('DEBUG: ViewModel - setFinalConversationByCoordinator: $_showFinalConversation');
+    safeNotifyListeners();
+  }
+
 
   void completeConversation() {
-    _showConversation = false;
+    // Coordinator가 단계를 관리하므로 여기서는 상태 변경하지 않음
     safeNotifyListeners();
   }
 
@@ -85,10 +103,45 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
     safeNotifyListeners();
   }
 
+  // 대화 상태 관리 메서드들
+  void setCurrentConversation(IntroViewModel conversation) {
+    _currentConversation = conversation;
+    safeNotifyListeners();
+  }
+
+  void clearCurrentConversation() {
+    _currentConversation = null;
+    safeNotifyListeners();
+  }
+
+
   void previousMission() {
     if (_missions.isEmpty) return;
     if (_currentIndex > 0) {
       _currentIndex--;
+      _selectedChoiceIndex = null;
+      _lastSubmitCorrect = null;
+      safeNotifyListeners();
+    }
+  }
+  
+  // Coordinator와의 동기화를 위한 메서드들
+  void setIndexChangedCallback(Function(int) callback) {
+    _onIndexChangedCallback = callback;
+  }
+  
+  void syncWithCoordinator(int coordinatorIndex) {
+    if (_currentIndex != coordinatorIndex) {
+      _currentIndex = coordinatorIndex;
+      _selectedChoiceIndex = null;
+      _lastSubmitCorrect = null;
+      safeNotifyListeners();
+    }
+  }
+  
+  void setCurrentIndex(int index) {
+    if (index >= 0 && index < _missions.length) {
+      _currentIndex = index;
       _selectedChoiceIndex = null;
       _lastSubmitCorrect = null;
       safeNotifyListeners();
