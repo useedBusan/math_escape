@@ -31,13 +31,12 @@ class HighMission extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) =>
-          HighMissionViewModel()
-            ..startGame(questionList, initialIndex: currentIndex),
+    return ChangeNotifierProvider.value(
+      value: HighMissionViewModel.instance,
       child: _HighMissionContent(
         currentIndex: currentIndex,
         gameStartTime: gameStartTime,
+        questionList: questionList,
       ),
     );
   }
@@ -46,10 +45,12 @@ class HighMission extends StatelessWidget {
 class _HighMissionContent extends StatefulWidget {
   final int currentIndex;
   final DateTime gameStartTime;
+  final List<MissionQuestion> questionList;
 
   const _HighMissionContent({
     required this.currentIndex,
     required this.gameStartTime,
+    required this.questionList,
   });
 
   @override
@@ -58,6 +59,16 @@ class _HighMissionContent extends StatefulWidget {
 
 class _HighMissionContentState extends State<_HighMissionContent> {
   final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // ViewModel 초기화
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final vm = Provider.of<HighMissionViewModel>(context, listen: false);
+      vm.startGame(widget.questionList, initialIndex: widget.currentIndex);
+    });
+  }
 
   @override
   void dispose() {

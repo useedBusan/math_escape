@@ -24,6 +24,7 @@ class HighAnswer extends StatefulWidget {
   @override
   State<HighAnswer> createState() => _HighAnswerState();
 }
+
 //상태 관리
 //1. 타이머 관리
 //2. 시간 계산 thinkingTime, body time
@@ -119,6 +120,46 @@ class _HighAnswerState extends State<HighAnswer> {
     }
   }
 
+  void _showGameCompletionDialog() {
+    final totalTime = DateTime.now().difference(widget.gameStartTime);
+    final minutes = totalTime.inMinutes;
+    final seconds = totalTime.inSeconds % 60;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('게임 완료!'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('모든 문제를 완료했습니다!'),
+              const SizedBox(height: 16),
+              Text(
+                '총 소요 시간: ${minutes}분 ${seconds}초',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+                Navigator.of(context).pop(); // HighAnswer 닫기
+                Navigator.of(context).pop(); // HighMission 닫기 (메인 화면으로 돌아가기)
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void handleNextButton() {
     final answerId = widget.answer.id;
 
@@ -198,6 +239,9 @@ class _HighAnswerState extends State<HighAnswer> {
             ),
           ),
         );
+      } else {
+        // 마지막 문제 완료 - 게임 종료 처리
+        _showGameCompletionDialog();
       }
     }
   }

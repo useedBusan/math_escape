@@ -6,9 +6,14 @@ import 'package:math_escape/Feature/high/model/high_mission_question.dart';
 /// 고등학교 미션 통합 ViewModel
 class HighMissionViewModel extends ChangeNotifier {
   static const _limit = Duration(minutes: 90);
-  final Stopwatch _think = Stopwatch();
-  final Stopwatch _body = Stopwatch();
   Timer? _ticker;
+
+  // 싱글톤 인스턴스
+  static final HighMissionViewModel _instance =
+      HighMissionViewModel._internal();
+  static HighMissionViewModel get instance => _instance;
+
+  HighMissionViewModel._internal();
 
   // 문제 데이터
   List<MissionQuestion> _questionList = [];
@@ -19,13 +24,21 @@ class HighMissionViewModel extends ChangeNotifier {
 
   MissionQuestion get currentQuestion => _questionList[_currentIndex];
 
+  // 게임 완료 상태
+  bool get isGameCompleted => _gameCompleted;
+  bool _gameCompleted = false;
+
   // 게임 상태
   DateTime? _gameStartTime;
   DateTime? get gameStartTime => _gameStartTime;
 
   // 타이머 상태
-  Duration get thinkElapsed => _think.elapsed;
-  Duration get bodyElapsed => _body.elapsed;
+  Duration get thinkElapsed {
+    if (_gameStartTime == null) return Duration.zero;
+    return DateTime.now().difference(_gameStartTime!);
+  }
+
+  Duration get bodyElapsed => thinkElapsed;
 
   double get thinkProgress {
     final ratio = thinkElapsed.inSeconds / _limit.inSeconds;
@@ -57,13 +70,16 @@ class HighMissionViewModel extends ChangeNotifier {
     return '$years년, $months개월';
   }
 
-  /// 게임 시작
+  /// 게임 시작, timer 초기화 로직
   void startGame(List<MissionQuestion> questions, {int initialIndex = 0}) {
     _questionList = questions;
     _currentIndex = initialIndex;
-    _gameStartTime = DateTime.now();
-    _think.start();
-    _body.start();
+
+    // 게임이 이미 시작되지 않은 경우에만 시작 시간 설정
+    if (_gameStartTime == null) {
+      _gameStartTime = DateTime.now();
+    }
+
     _startTicker();
     notifyListeners();
   }
@@ -92,6 +108,22 @@ class HighMissionViewModel extends ChangeNotifier {
     }
   }
 
+  /// 마지막 문제인지 확인
+  bool isLastQuestion(int questionId) {
+    // 문제 리스트에서 가장 높은 ID를 찾아서 마지막 문제인지 확인
+    final maxId = _questionList
+        .map((q) => q.id)
+        .reduce((a, b) => a > b ? a : b);
+    return questionId == maxId;
+  }
+
+  /// 게임 완료 처리
+  void completeGame() {
+    _gameCompleted = true;
+    pauseTimers();
+    notifyListeners();
+  }
+
   /// 타이머 시작
   void _startTicker() {
     _ticker?.cancel();
@@ -102,23 +134,12 @@ class HighMissionViewModel extends ChangeNotifier {
 
   /// 타이머 일시정지
   void pauseTimers() {
-    _think.stop();
-    _body.stop();
     _ticker?.cancel();
   }
 
   /// 타이머 재시작
   void resumeTimers() {
-    _think.start();
-    _body.start();
     _startTicker();
-  }
-
-  /// 타이머 리셋
-  void resetTimers() {
-    _think.reset();
-    _body.reset();
-    notifyListeners();
   }
 
   /// 게임 종료
@@ -126,6 +147,17 @@ class HighMissionViewModel extends ChangeNotifier {
     pauseTimers();
     _gameStartTime = null;
     _currentIndex = 0;
+    _gameCompleted = false;
+    notifyListeners();
+  }
+
+  /// 게임 완전 리셋 (새 게임 시작 시 사용)
+  void resetGame() {
+    pauseTimers();
+    _gameStartTime = null;
+    _currentIndex = 0;
+    _gameCompleted = false;
+    _questionList.clear();
     notifyListeners();
   }
 
