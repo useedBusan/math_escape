@@ -35,9 +35,8 @@ void main() {
     });
 
     testWidgets('QR 문제 4번 UI 렌더링 테스트', (WidgetTester tester) async {
-      // 서비스 초기화
-      serviceLocator.initialize();
-      await serviceLocator.qrAnswerService.loadQrAnswers();
+      // 서비스 초기화 (QR 정답 데이터 로드 포함)
+      await serviceLocator.initialize();
 
       // HighMission 위젯 생성
       await tester.pumpWidget(
@@ -64,9 +63,8 @@ void main() {
     });
 
     testWidgets('일반 문제 UI 렌더링 테스트', (WidgetTester tester) async {
-      // 서비스 초기화
-      serviceLocator.initialize();
-      await serviceLocator.qrAnswerService.loadQrAnswers();
+      // 서비스 초기화 (QR 정답 데이터 로드 포함)
+      await serviceLocator.initialize();
 
       // HighMission 위젯 생성 (문제 1번)
       await tester.pumpWidget(
@@ -93,9 +91,8 @@ void main() {
     });
 
     test('QR 정답 검증 로직 테스트', () async {
-      // 서비스 초기화
-      serviceLocator.initialize();
-      await serviceLocator.qrAnswerService.loadQrAnswers();
+      // 서비스 초기화 (QR 정답 데이터 로드 포함)
+      await serviceLocator.initialize();
 
       // 문제 4번 정답 확인
       final correctAnswer = serviceLocator.qrAnswerService
@@ -112,9 +109,8 @@ void main() {
     });
 
     test('QR 오답 검증 로직 테스트', () async {
-      // 서비스 초기화
-      serviceLocator.initialize();
-      await serviceLocator.qrAnswerService.loadQrAnswers();
+      // 서비스 초기화 (QR 정답 데이터 로드 포함)
+      await serviceLocator.initialize();
 
       // 문제 4번 정답 확인
       final correctAnswer = serviceLocator.qrAnswerService
@@ -131,9 +127,8 @@ void main() {
     });
 
     test('QR 답안 데이터 무결성 테스트', () async {
-      // 서비스 초기화
-      serviceLocator.initialize();
-      await serviceLocator.qrAnswerService.loadQrAnswers();
+      // 서비스 초기화 (QR 정답 데이터 로드 포함)
+      await serviceLocator.initialize();
 
       // 전체 QR 답안 확인
       final allAnswers = serviceLocator.qrAnswerService.allQrAnswers;

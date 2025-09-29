@@ -6,9 +6,9 @@ import 'package:math_escape/main.dart';
 
 void main() {
   group('Main Screen Integration Tests', () {
-    setUp(() {
+    setUp(() async {
       // 서비스 초기화
-      serviceLocator.initialize();
+      await serviceLocator.initialize();
     });
 
     tearDown(() {

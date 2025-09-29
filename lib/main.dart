@@ -6,10 +6,8 @@ import 'constants/app_constants.dart';
 import 'core/utils/image_path_validation_tool.dart';
 
 void main() async {
-  // 서비스 초기화
-  serviceLocator.initialize();
-  // QR 정답 데이터 로드
-  await serviceLocator.qrAnswerService.loadQrAnswers();
+  // 서비스 초기화 (QR 정답 데이터 로드 포함)
+  await serviceLocator.initialize();
   // 개발 모드에서 이미지 경로 검증 실행
   ImagePathValidationTool.runValidationOnStartup();
 

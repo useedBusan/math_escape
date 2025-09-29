@@ -20,12 +20,15 @@ class ServiceLocator {
   late final MainViewModel _mainViewModel;
 
   /// 서비스 초기화
-  void initialize() {
+  Future<void> initialize() async {
     // 서비스 인스턴스 생성
     _urlLauncherService = UrlLauncherService();
     _navigationService = NavigationService();
     _dataService = DataService();
     _qrAnswerService = QRAnswerService();
+
+    // QR 정답 데이터 로드
+    await _qrAnswerService.loadQrAnswers();
 
     // ViewModel 인스턴스 생성 (의존성 주입)
     _mainViewModel = MainViewModel(

@@ -212,7 +212,10 @@ class MissionBackgroundView extends StatelessWidget {
 
       if (!context.mounted) return;
 
-      if (result != null && result is String) {
+      // 🔧 개선된 결과 처리
+      if (result != null && result is String && result.isNotEmpty) {
+        print('🔍 QR 스캔 결과: "$result" (길이: ${result.length})');
+
         // QR 스캔 결과를 정답과 비교
         final isCorrect = await _validateQRAnswer(context, result);
 
@@ -232,6 +235,16 @@ class MissionBackgroundView extends StatelessWidget {
             },
           ),
         );
+      } else {
+        print('🔍 QR 스캔 결과가 비어있거나 null입니다: $result');
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('QR 코드를 인식하지 못했습니다. 다시 시도해주세요.'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
       }
     } catch (e) {
       print('QR 스캔 오류: $e');
