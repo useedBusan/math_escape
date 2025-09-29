@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:math_escape/core/utils/view/hint_popup.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import '../../../constants/enum/grade_enums.dart';
@@ -11,6 +10,9 @@ import '../../../core/utils/viewmodel/intro_view_model.dart';
 import '../../../core/utils/model/talk_model.dart';
 import '../../../constants/enum/image_enums.dart';
 import '../../../core/utils/image_path_validator.dart';
+import '../../../core/utils/view/qr_scan_screen.dart';
+import '../../../core/services/service_locator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 // 새로운 모델 클래스 추가
 class CorrectTalkItem {
@@ -182,7 +184,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
   }
 
   void _showHintDialog() {
-    final MissionItem currentMission = missionList[currentQuestionIndex];
     hintCounter++;
 
     switch (hintCounter) {
@@ -220,6 +221,32 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
             _showCorrectAnswerDialog();
           }
         }, grade: StudentGrade.middle,
+      ),
+    );
+  }
+
+  void _handleQRScanResult(String qrResult) {
+    final MissionItem currentMission = missionList[currentQuestionIndex];
+    // QR 스캔 결과가 정답인지 확인
+    final correctQRAnswer = serviceLocator.qrAnswerService
+        .getCorrectAnswerByGrade('middle', currentMission.id);
+    final isCorrect = correctQRAnswer != null && qrResult == correctQRAnswer;
+    
+    print('중학교 QR 스캔 결과: $qrResult');
+    print('정답: $correctQRAnswer, 맞음: $isCorrect');
+    
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AnswerPopup(
+        isCorrect: isCorrect,
+        onNext: () {
+          Navigator.pop(context);
+          if (isCorrect) {
+            _showCorrectAnswerDialog();
+          }
+        }, 
+        grade: StudentGrade.middle,
       ),
     );
   }
@@ -581,7 +608,27 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                 width: double.infinity,
                                 height: 60,
                                 child: ElevatedButton(
-                                  onPressed: _submitAnswer,
+                                  onPressed: () async {
+                                    final status = await Permission.camera.request();
+                                    if (status.isGranted) {
+                                      final result = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => const QRScanScreen(),
+                                        ),
+                                      );
+                                      if (result != null && result is String) {
+                                        _handleQRScanResult(result);
+                                      }
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('카메라 권한이 필요합니다.'),
+                                          duration: Duration(seconds: 3),
+                                        ),
+                                      );
+                                    }
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: mainColor,
                                     foregroundColor: Colors.white,
