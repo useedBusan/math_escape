@@ -225,11 +225,12 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.red, width: 2),
                           ),
-                          child: const Center(
-                            child: Icon(
-                              Icons.pets,
-                              color: Colors.red,
-                              size: 30,
+                          child: Center(
+                            child: Image.asset(
+                              "assets/images/high/highFuri.png",
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
@@ -237,7 +238,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                         // 텍스트 (오른쪽)
                         Expanded(
                           child: Text(
-                            '인류의 처음 정수의 정수는 한 개인의\n처음 정수를 만들기 위해 가장 기본이 되는 것,\n곧, 정수!',
+                            '인류의 처음 정수의 정수는 한 개인의 처음 정수를 만들기 위해 가장 기본이 되는 것. 곧, 정수!',
                             style: TextStyle(
                               fontFamily: "SBAggroM",
                               fontSize: screenWidth * (14 / 360),
@@ -251,77 +252,23 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // 3단 레이어 카드
+                  // 최적화된 배경 이미지 카드
                   Center(
-                    child: Stack(
-                      alignment: Alignment.topCenter,
-                      children: [
-                        // 첫번째 레이어 (어두운 배경)
-                        Container(
-                          width: screenWidth - 60,
-                          height: screenHeight * 0.5,
-                          margin: const EdgeInsets.only(top: 5),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF192243),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: const Color(0xFF192243),
-                              width: 1,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.3),
-                                blurRadius: 8,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
+                    child: Container(
+                      width: screenWidth - 20,
+                      height: screenHeight * 0.5,
+                      padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
+                      decoration: BoxDecoration(
+                        image: const DecorationImage(
+                          image: AssetImage('assets/images/high/highQuestionBackground.png'),
+                          fit: BoxFit.contain,
                         ),
-                        // 두번째 레이어 (파란색 중간)
-                        Container(
-                          width: screenWidth - 40,
-                          height: screenHeight * 0.5,
-                          margin: const EdgeInsets.only(top: 15),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF3F55A7),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: const Color(0xFF192243),
-                              width: 1,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 6,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // 세번째 레이어 (흰색 콘텐츠)
-                        Container(
-                          width: screenWidth - 20,
-                          height: screenHeight * 0.5,
-                          padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
-                          margin: const EdgeInsets.only(top: 25),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: const Color(0xFF192243),
-                              width: 1,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.15),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              const SizedBox(height: 44),
                               // 문제 번호 + 힌트 버튼
                               Row(
                                 mainAxisAlignment:
@@ -495,10 +442,9 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                                   ),
                                 ),
                               ],
+                              const SizedBox(height: 24),
                             ],
                           ),
-                        ),
-                      ],
                     ),
                   ),
                   const SizedBox(height: 20),

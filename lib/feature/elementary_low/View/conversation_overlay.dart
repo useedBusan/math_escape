@@ -90,9 +90,9 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
                       talkText: talk.talk,
                       buttonText: "다음",
                       grade: StudentGrade.elementaryLow,
-                      // stage 7 (id: 27)에서만 furiClapping 애니메이션 표시
+                      // stage 7 (id: 27)에서만 furiClear 애니메이션 표시
                       lottieAnimationPath: widget.stage == 7 
-                          ? 'assets/animations/furiClapping.json' 
+                          ? 'assets/animations/furiClear.json' 
                           : null,
                       showLottieInsteadOfImage: widget.stage == 7,
                       onNext: () {

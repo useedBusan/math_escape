@@ -1,3 +1,5 @@
+// 사용하지 않는 파일 - middle_mission.dart가 대신 사용됨
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -943,8 +945,8 @@ class _MiddleConversationViewState extends State<_MiddleConversationView> {
             talkText: talk.talk,
             buttonText: '확인',
             grade: StudentGrade.middle,
-            // id 10에서만 furiClapping 애니메이션 표시
-            lottieAnimationPath: widget.isLastQuestion ? 'assets/animations/furiClapping.json' : null,
+            // id 10에서만 furiClear 애니메이션 표시
+            lottieAnimationPath: widget.isLastQuestion ? 'assets/animations/furiClear.json' : null,
             showLottieInsteadOfImage: widget.isLastQuestion,
             onNext: () {
               if (vm.canGoNext()) {
@@ -967,3 +969,4 @@ class _MiddleConversationViewState extends State<_MiddleConversationView> {
     );
   }
 }
+*/

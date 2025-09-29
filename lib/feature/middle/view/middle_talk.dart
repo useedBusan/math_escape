@@ -77,7 +77,7 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const MiddleMissionScreen(),
+                    builder: (_) => const MiddleMissionScreen(), // middle_mission.dart에서 import됨
                   ),
                 );
               },
@@ -89,7 +89,7 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const MiddleMissionScreen()),
+        MaterialPageRoute(builder: (_) => const MiddleMissionScreen()), // middle_mission.dart에서 import됨
       );
     }
   }

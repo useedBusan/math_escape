@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:math_escape/feature/high/view/high_mission_view.dart';
+// import 'package:math_escape/feature/high/view/high_mission_view.dart'; // 사용하지 않는 파일
+import '../../../App/theme/app_colors.dart';
 import '../../../Feature/high/model/high_mission_question.dart';
 import '../../../Feature/high/view/high_mission.dart';
 
@@ -100,7 +101,7 @@ Paratruth Space, PS라고 불리는 이 공간에서,
       style: const TextStyle(
         fontSize: 18,
         height: 1.6,
-        color: Color(0xFFE9D7CE),
+        color: Color(0xFF000000),
       ),
     );
   }
@@ -114,7 +115,7 @@ Paratruth Space, PS라고 불리는 이 공간에서,
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF6E6764),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -136,22 +137,6 @@ Paratruth Space, PS라고 불리는 이 공간에서,
                       const SizedBox(height: 24),
                       buildNarrationText(),
                       const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          ElevatedButton(
-                            onPressed: isPlaying ? null : playIntro,
-                            child: Text(isPlaying ? "재생 중..." : "나레이션 듣기"),
-                          ),
-                          const SizedBox(width: 12),
-                          ElevatedButton(
-                            onPressed: stopAudio,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.redAccent,
-                            ),
-                            child: const Text("정지"),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
                 ),
@@ -176,13 +161,16 @@ Paratruth Space, PS라고 불리는 이 공간에서,
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[200],
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    backgroundColor: CustomBlue.s500,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    minimumSize: const Size(double.infinity, 56),
                   ),
                   child: const Text(
                     '게임 시작',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Color(0xFFFFFFFF),
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),

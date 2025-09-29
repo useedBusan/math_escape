@@ -118,9 +118,9 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
                       talkText: talk.talk,
                       buttonText: "다음",
                       grade: StudentGrade.middle,
-                      // 최종 대화에서만 furiClapping 애니메이션 표시 (stage는 middle 데이터에 따라 조정)
+                      // 최종 대화에서만 furiClear 애니메이션 표시 (stage는 middle 데이터에 따라 조정)
                       lottieAnimationPath: widget.isFinalConversation 
-                          ? 'assets/animations/furiClapping.json' 
+                          ? 'assets/animations/furiClear.json' 
                           : null,
                       showLottieInsteadOfImage: widget.isFinalConversation,
                       onNext: () {
