@@ -6,6 +6,7 @@ import '../../../core/utils/view/qr_scan_screen.dart';
 import '../../../core/services/service_locator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../feature/elementary_high/view_model/elementary_high_mission_view_model.dart';
+import '../../../feature/elementary_low/ViewModel/elementary_low_mission_view_model.dart';
 
 class MissionBackgroundView extends StatelessWidget {
   // 외부에서 주입받는 parameters
@@ -120,9 +121,10 @@ class MissionBackgroundView extends StatelessWidget {
                       ),
                       onPressed: () async {
                         if (isqr) {
-                          // 초등학교 고학년일 때만 실제 QR 스캔 수행
-                          if (grade == StudentGrade.elementaryHigh) {
-                            await _handleQRScanForElementaryHigh(context);
+                          // 초등학교 고학년 또는 저학년일 때 실제 QR 스캔 수행
+                          if (grade == StudentGrade.elementaryHigh ||
+                              grade == StudentGrade.elementaryLow) {
+                            await _handleQRScanForElementary(context);
                           } else {
                             // 다른 학년은 기존 로직 유지 (바로 정답 처리)
                             showDialog(
@@ -185,8 +187,8 @@ class MissionBackgroundView extends StatelessWidget {
     );
   }
 
-  /// 초등학교 고학년용 QR 스캔 처리 함수
-  Future<void> _handleQRScanForElementaryHigh(BuildContext context) async {
+  /// 초등학교용 QR 스캔 처리 함수 (저학년, 고학년 공통)
+  Future<void> _handleQRScanForElementary(BuildContext context) async {
     try {
       // 카메라 권한 요청
       final status = await Permission.camera.request();
@@ -247,10 +249,28 @@ class MissionBackgroundView extends StatelessWidget {
   /// QR 스캔 결과를 정답과 비교하는 함수
   Future<bool> _validateQRAnswer(BuildContext context, String qrResult) async {
     try {
-      // 현재 문제의 ID를 가져오기 위해 context에서 ViewModel 접근
-      // 초등학교 고학년의 경우 Provider를 통해 접근
-      final vm = context.read<ElementaryHighMissionViewModel>();
-      final currentMission = vm.currentMission;
+      // 학년에 따라 적절한 ViewModel과 학년 코드 사용
+      String gradeCode;
+      dynamic vm;
+
+      if (grade == StudentGrade.elementaryLow) {
+        gradeCode = 'elementary_low';
+        vm = context.read<ElementaryLowMissionViewModel>();
+      } else if (grade == StudentGrade.elementaryHigh) {
+        gradeCode = 'elementary_high';
+        vm = context.read<ElementaryHighMissionViewModel>();
+      } else {
+        print('지원하지 않는 학년입니다: $grade');
+        return false;
+      }
+
+      // 현재 미션 가져오기
+      dynamic currentMission;
+      if (grade == StudentGrade.elementaryLow) {
+        currentMission = vm.currentMission;
+      } else {
+        currentMission = vm.currentMission;
+      }
 
       if (currentMission == null) {
         print('현재 미션을 찾을 수 없습니다.');
@@ -259,11 +279,11 @@ class MissionBackgroundView extends StatelessWidget {
 
       // QR 정답 서비스를 통해 정답 확인
       final correctQRAnswer = serviceLocator.qrAnswerService
-          .getCorrectAnswerByGrade('elementary_high', currentMission.id);
+          .getCorrectAnswerByGrade(gradeCode, currentMission.id);
 
       final isCorrect = correctQRAnswer != null && qrResult == correctQRAnswer;
 
-      print('초등학교 고학년 QR 스캔 결과: $qrResult');
+      print('초등학교 QR 스캔 결과: $qrResult');
       print('정답: $correctQRAnswer, 맞음: $isCorrect');
 
       return isCorrect;
