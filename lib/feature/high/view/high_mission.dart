@@ -260,7 +260,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                     '인류의 처음 정수의 정수는 한 개인의 처음 정수를 만들기 위해 가장 기본이 되는 것. 곧, 정수!',
                     style: TextStyle(
                       fontFamily: "Pretendard",
-                      fontSize: screenWidth * (13 / 360),
+                      fontSize: screenWidth * (12 / 360),
                       fontWeight: FontWeight.w400,
                       color: const Color(0xFF1A1A1A),
                     ),
