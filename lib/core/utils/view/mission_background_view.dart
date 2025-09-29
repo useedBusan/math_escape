@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../core/utils/view/answer_popup.dart';
+import '../../../core/utils/view/qr_scan_screen.dart';
+import '../../../core/services/service_locator.dart';
+import 'package:permission_handler/permission_handler.dart';
+import '../../../feature/elementary_high/view_model/elementary_high_mission_view_model.dart';
 
 class MissionBackgroundView extends StatelessWidget {
   // 외부에서 주입받는 parameters
@@ -115,18 +120,23 @@ class MissionBackgroundView extends StatelessWidget {
                       ),
                       onPressed: () async {
                         if (isqr) {
-                          // QR 문제일 때는 바로 정답으로 처리
-                          showDialog(
-                            context: context,
-                            builder: (context) => AnswerPopup(
-                              isCorrect: true,
-                              grade: grade,
-                              onNext: () {
-                                Navigator.of(context).pop();
-                                onCorrect?.call();
-                              },
-                            ),
-                          );
+                          // 초등학교 고학년일 때만 실제 QR 스캔 수행
+                          if (grade == StudentGrade.elementaryHigh) {
+                            await _handleQRScanForElementaryHigh(context);
+                          } else {
+                            // 다른 학년은 기존 로직 유지 (바로 정답 처리)
+                            showDialog(
+                              context: context,
+                              builder: (context) => AnswerPopup(
+                                isCorrect: true,
+                                grade: grade,
+                                onNext: () {
+                                  Navigator.of(context).pop();
+                                  onCorrect?.call();
+                                },
+                              ),
+                            );
+                          }
                         } else {
                           // 일반 문제일 때는 기존 로직 사용
                           final ok = await onSubmitAnswer(context);
@@ -173,5 +183,93 @@ class MissionBackgroundView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// 초등학교 고학년용 QR 스캔 처리 함수
+  Future<void> _handleQRScanForElementaryHigh(BuildContext context) async {
+    try {
+      // 카메라 권한 요청
+      final status = await Permission.camera.request();
+      if (!status.isGranted) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('카메라 권한이 필요합니다.'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+        return;
+      }
+
+      // QR 스캔 화면으로 이동
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const QRScanScreen()),
+      );
+
+      if (!context.mounted) return;
+
+      if (result != null && result is String) {
+        // QR 스캔 결과를 정답과 비교
+        final isCorrect = await _validateQRAnswer(context, result);
+
+        // 정답/오답 팝업 표시
+        showDialog(
+          context: context,
+          builder: (context) => AnswerPopup(
+            isCorrect: isCorrect,
+            grade: grade,
+            onNext: () {
+              Navigator.of(context).pop();
+              if (isCorrect) {
+                onCorrect?.call();
+              } else {
+                onWrong?.call();
+              }
+            },
+          ),
+        );
+      }
+    } catch (e) {
+      print('QR 스캔 오류: $e');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('QR 스캔 중 오류가 발생했습니다.'),
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    }
+  }
+
+  /// QR 스캔 결과를 정답과 비교하는 함수
+  Future<bool> _validateQRAnswer(BuildContext context, String qrResult) async {
+    try {
+      // 현재 문제의 ID를 가져오기 위해 context에서 ViewModel 접근
+      // 초등학교 고학년의 경우 Provider를 통해 접근
+      final vm = context.read<ElementaryHighMissionViewModel>();
+      final currentMission = vm.currentMission;
+
+      if (currentMission == null) {
+        print('현재 미션을 찾을 수 없습니다.');
+        return false;
+      }
+
+      // QR 정답 서비스를 통해 정답 확인
+      final correctQRAnswer = serviceLocator.qrAnswerService
+          .getCorrectAnswerByGrade('elementary_high', currentMission.id);
+
+      final isCorrect = correctQRAnswer != null && qrResult == correctQRAnswer;
+
+      print('초등학교 고학년 QR 스캔 결과: $qrResult');
+      print('정답: $correctQRAnswer, 맞음: $isCorrect');
+
+      return isCorrect;
+    } catch (e) {
+      print('QR 정답 검증 오류: $e');
+      return false;
+    }
   }
 }

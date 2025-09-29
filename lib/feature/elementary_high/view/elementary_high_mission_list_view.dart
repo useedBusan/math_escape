@@ -2,30 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../app/theme/app_colors.dart';
 import '../view_model/elementary_high_mission_view_model.dart';
-import '../../../core/utils/view/qr_scan_screen.dart';
-import '../../../core/services/service_locator.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class ElementaryHighMissionListView extends StatelessWidget {
   const ElementaryHighMissionListView({super.key});
-
-  void _handleQRScanResult(ElementaryHighMissionViewModel vm, String qrResult) {
-    // QR 스캔 결과가 정답인지 확인
-    final correctQRAnswer = serviceLocator.qrAnswerService
-        .getCorrectAnswerByGrade('elementary_high', vm.currentMission!.id);
-    final isCorrect = correctQRAnswer != null && qrResult == correctQRAnswer;
-    
-    print('초등학교 고학년 QR 스캔 결과: $qrResult');
-    print('정답: $correctQRAnswer, 맞음: $isCorrect');
-    
-    if (isCorrect) {
-      // 정답 처리 - 다음 문제로 이동
-      vm.nextMission();
-    } else {
-      // 오답 처리 - 오답 팝업 표시 (구현 예정)
-      print('오답입니다. 다시 시도해주세요.');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +31,9 @@ class ElementaryHighMissionListView extends StatelessWidget {
               value: vm.progress,
               minHeight: 10,
               backgroundColor: const Color(0xFFEDEDED),
-              valueColor: const AlwaysStoppedAnimation<Color>(Color(0xffD95276)),
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                Color(0xffD95276),
+              ),
             ),
           ),
           const SizedBox(height: 20),
@@ -101,9 +82,7 @@ class ElementaryHighMissionListView extends StatelessWidget {
               child: TextField(
                 controller: vm.textController,
                 onChanged: vm.setTypedAnswer,
-                style: TextStyle(
-                  fontSize: width * (15 / 360),
-                ),
+                style: TextStyle(fontSize: width * (15 / 360)),
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
@@ -123,7 +102,10 @@ class ElementaryHighMissionListView extends StatelessWidget {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(4.0),
-                    borderSide: const BorderSide(color: Color(0xffD95276), width: 2.0),
+                    borderSide: const BorderSide(
+                      color: Color(0xffD95276),
+                      width: 2.0,
+                    ),
                   ),
                 ),
               ),
@@ -173,49 +155,8 @@ class ElementaryHighMissionListView extends StatelessWidget {
               },
             ),
           ] else ...[
-            // QR 문제일 때 QR 스캔 버튼 표시
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.qr_code_scanner),
-                label: Text(
-                  'QR코드 스캔',
-                  style: TextStyle(
-                    fontSize: width * (16 / 360),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () async {
-                  final status = await Permission.camera.request();
-                  if (status.isGranted) {
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const QRScanScreen(),
-                      ),
-                    );
-                    if (result != null && result is String) {
-                      _handleQRScanResult(vm, result);
-                    }
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('카메라 권한이 필요합니다.'),
-                        duration: Duration(seconds: 3),
-                      ),
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xffD95276),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
+            // QR 문제일 때는 하단의 QR 인식 버튼을 사용하므로 여기서는 빈 공간
+            const Expanded(child: SizedBox()),
           ],
         ],
       ),
@@ -253,7 +194,9 @@ class _ChoiceChipBox extends StatelessWidget {
             color: selected ? const Color(0xFFFFFFF2) : const Color(0xFFFFFFFF),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: selected ? const Color(0xffD95276) : const Color(0xFFDCDCDC),
+              color: selected
+                  ? const Color(0xffD95276)
+                  : const Color(0xFFDCDCDC),
             ),
           ),
           child: Text(
@@ -271,5 +214,3 @@ class _ChoiceChipBox extends StatelessWidget {
     );
   }
 }
-
-
