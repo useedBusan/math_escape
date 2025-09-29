@@ -48,7 +48,6 @@ class ElementaryHighMissionCoordinator extends ChangeNotifier implements Coordin
 
   void toConversation(int stage) {
     _history.add(FlowStep(FlowStepType.conversation, stage));
-    print('DEBUG: Coordinator - toConversation(stage: $stage), history: ${_history.map((e) => e.toString()).toList()}');
     notifyListeners();
   }
 
@@ -59,16 +58,13 @@ class ElementaryHighMissionCoordinator extends ChangeNotifier implements Coordin
     if (_onQuestionIndexChanged != null) {
       final questionIndex = stage - 1; // stage는 1-based, index는 0-based
       _onQuestionIndexChanged!(questionIndex);
-      print('DEBUG: Coordinator - toQuestion: Synced VM currentIndex to $questionIndex');
     }
     
-    print('DEBUG: Coordinator - toQuestion(stage: $stage), history: ${_history.map((e) => e.toString()).toList()}');
     notifyListeners();
   }
 
   bool popStepInternal() {
     if (_history.length <= 1) {
-      print('DEBUG: Coordinator - popStepInternal: No more steps, allowing route pop');
       return true; // 더 이상 이전 없음 → Route pop 허용
     }
     final removed = _history.removeLast();
@@ -77,10 +73,8 @@ class ElementaryHighMissionCoordinator extends ChangeNotifier implements Coordin
     if (removed.type == FlowStepType.question && _onQuestionIndexChanged != null) {
       final questionIndex = removed.stage - 1; // stage는 1-based, index는 0-based
       _onQuestionIndexChanged!(questionIndex);
-      print('DEBUG: Coordinator - popStepInternal: Synced VM currentIndex to $questionIndex');
     }
     
-    print('DEBUG: Coordinator - popStepInternal: Removed $removed, history: ${_history.map((e) => e.toString()).toList()}');
     notifyListeners();
     return false; // Route pop 하지 않음
   }

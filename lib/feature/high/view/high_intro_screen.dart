@@ -87,7 +87,7 @@ Paratruth Space, PS라고 불리는 이 공간에서,
     try {
       await audioPlayer.play(AssetSource('audio/high_intro_sound.mp3'));
     } catch (e) {
-      print('오디오 재생 오류: $e');
+      // 오디오 재생 오류
     }
   }
 

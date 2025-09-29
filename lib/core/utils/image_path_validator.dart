@@ -21,7 +21,6 @@ class ImagePathValidator {
   static String validate(String? path, String defaultPath, {bool logInvalid = true}) {
     if (path == null || path.isEmpty) {
       if (logInvalid) {
-        debugPrint('ImagePathValidator: 경로가 null이거나 비어있음, 기본값 사용: $defaultPath');
       }
       return defaultPath;
     }
@@ -35,7 +34,6 @@ class ImagePathValidator {
 
     // 유효하지 않은 경로
     if (logInvalid) {
-      debugPrint('ImagePathValidator: 유효하지 않은 이미지 경로: "$path", 기본값 사용: $defaultPath');
     }
     return defaultPath;
   }
@@ -94,7 +92,6 @@ class ImagePathValidator {
       bool isValid = validPathPatterns.any((pattern) => path.startsWith(pattern));
       
       if (!isValid) {
-        debugPrint('ImagePathValidator: $context에서 유효하지 않은 이미지 경로: "$path"');
       }
     }
   }

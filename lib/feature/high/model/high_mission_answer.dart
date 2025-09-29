@@ -1,5 +1,6 @@
 class MissionAnswer {
   final int id;
+  final int stage;
   final String level;
   final String title;
   final String explanation;
@@ -10,6 +11,7 @@ class MissionAnswer {
 
   MissionAnswer({
     required this.id,
+    required this.stage,
     required this.level,
     required this.title,
     required this.explanation,
@@ -22,6 +24,7 @@ class MissionAnswer {
   factory MissionAnswer.fromJson(Map<String, dynamic> json) {
     return MissionAnswer(
       id: json['id'],
+      stage: json['stage'],
       level: json['level'],
       title: json['title'],
       explanation: json['explanation'],

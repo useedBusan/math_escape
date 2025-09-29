@@ -88,7 +88,6 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
   
   void setFinalConversationByCoordinator(bool show) {
     _showFinalConversation = show;
-    print('DEBUG: ViewModel - setFinalConversationByCoordinator: $_showFinalConversation');
     safeNotifyListeners();
   }
 

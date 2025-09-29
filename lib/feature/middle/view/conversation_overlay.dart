@@ -66,15 +66,10 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
       viewModel.talks = talks;
       viewModel.currentIdx = 0;
       
-      print('DEBUG: Middle Conversation loaded for stage ${widget.stage}, talks count: ${viewModel.talks.length}');
-      if (widget.isFinalConversation) {
-        print('DEBUG: Middle Final conversation - stage: ${widget.stage}, talks: ${viewModel.talks.length}');
-      }
       setState(() {
         isLoading = false;
       });
     } catch (e) {
-      print('DEBUG: Error loading middle conversation: $e');
       setState(() {
         isLoading = false;
       });
@@ -124,11 +119,9 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
                           : null,
                       showLottieInsteadOfImage: widget.isFinalConversation,
                       onNext: () {
-                        print('DEBUG: Middle ConversationOverlay onNext - canGoNext: ${vm.canGoNext()}, currentIdx: ${vm.currentIdx}, totalCount: ${vm.totalCount}');
                         if (vm.canGoNext()) {
                           vm.goToNextTalk();
                         } else {
-                          print('DEBUG: Middle ConversationOverlay onNext - calling onComplete');
                           widget.onComplete();
                         }
                       },

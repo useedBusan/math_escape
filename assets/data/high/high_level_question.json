@@ -8,7 +8,8 @@
     "question": "'이 사람'은 만물이 자연수(또는 자연수의 비)로 이루어졌다고 주장했다가 자신의 주장이 거짓임을 스스로 밝힐 수 밖에 없었던 사람이다.  '이 사람'은 누굴까?",
     "answer": ["피타고라스", "Pitagoras", "Pythagoras"],
     "hint": "자연수의 세계만을 믿었지만  무리수를 마주하게 된 사람",
-    "isqr": false
+    "isqr": false,
+    "isHint": true
   },
 
 
@@ -22,7 +23,8 @@
     "question": "'이 곳에는 수 많은 숫자가 있다. 거기에는 11,22,33,44,55,66,77,88,99,00도 있다는데...... 피타고라스가 이 수를 알았다면 이 수를 인정하지 않았을 것 같다. 이 수는 무엇인가?",
     "answer": ["원주율"],
     "hint": "무리수, 즉 순환하지 않는 무한소수, 그리고 원",
-    "isqr": false
+    "isqr": false,
+    "isHint": false
   },
 
   {
@@ -34,7 +36,8 @@
     "question": "이 입체도형 위에서는 곡선이 직선이 된다. 직선이지만 직선이 아닌 것처럼 보이는 이 입체도형은 무엇일까?",
     "answer": ["구","곡면","공"],
     "hint": "",
-    "isqr": false
+    "isqr": false,
+    "isHint": true
   },
 
   {
@@ -46,7 +49,8 @@
     "question": "이 곳에서는 삼각형의 세 내각의 합이 180°보다 크다. 세 내각의 합이 270°인 삼각형도 찾아서  QR코드를 찍으시오.",
     "answer": ["127Q"],
     "hint": "말의 안장처럼 생겼다.",
-    "isqr": true
+    "isqr": true,
+    "isHint": false
   },
   {
     "id": 5,
@@ -57,7 +61,8 @@
     "question": "곱하기를 더하기로 만들어주고, 더하기를 곱하기로 만들어 주는 도구는? ",
     "answer": ["slide rule","로그자"],
     "hint": " 지수함수의 역함수",
-    "isqr": false
+    "isqr": false,
+    "isHint": false
   },
   {
     "id": 6,
@@ -68,7 +73,8 @@
     "question": "여러개의 직선이 한 점을 지나더니 두 개의 원뿔이 만들어졌다. 이 원뿔을 일정한 각도로 잘랐더니 같은 모양의 곡선 한 쌍이 만들어졌다. 이 곡선의 이름은 무엇일까?",
     "answer": ["쌍곡선"],
     "hint": "원뿔을 잘랐을 때  만들어지는 곡선: 원, 타원 포물선, 그리고 이것.",
-    "isqr": false
+    "isqr": false,
+    "isHint": false
   },
   {
     "id": 7,
@@ -79,7 +85,8 @@
     "question": "삼각형의 세 꼭짓점까지 이르는 거리가 같은 점을 찾아보자. 그 점의 이름은 무엇일까?",
     "answer": ["페르마 포인트"],
     "hint": "비눗방울이 그 답을 알려줄 것이다.",
-    "isqr": false
+    "isqr": false,
+    "isHint": false
   },
   {
     "id": 8,
@@ -90,7 +97,8 @@
     "question": "유한한 것으로 무한한 것을 만들 수 있는 공간이 있다. 이 공간을 찾아서 그 이름을 쓰시오",
     "answer": ["공간 무한"],
     "hint": "역설, 혹은 모호함_C 로 연결",
-    "isqr": false
+    "isqr": false,
+    "isHint": false
   },
 
   {
@@ -102,7 +110,8 @@
     "question": "",
     "answer": ["2002"],
     "hint": "숫자를 배열해서 만든 삼각형 안에 답이 있다.",
-    "isqr": false
+    "isqr": false,
+    "isHint": true
   },
   {
     "id": 10,
@@ -113,7 +122,8 @@
     "question": "",
     "answer": ["1"],
     "hint": "",
-    "isqr": false
+    "isqr": false,
+    "isHint": false
   }
 
 ]

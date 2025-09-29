@@ -71,7 +71,6 @@ class MiddleMissionViewModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     } catch (e) {
-      print("Error loading mission data: $e");
       _isLoading = false;
       notifyListeners();
     }
@@ -183,7 +182,6 @@ class MiddleMissionViewModel extends ChangeNotifier {
   // Coordinator가 호출하는 메서드들
   void setFinalConversationByCoordinator(bool show) {
     _showFinalConversation = show;
-    print('DEBUG: Middle ViewModel - setFinalConversationByCoordinator: $_showFinalConversation');
     notifyListeners();
   }
 

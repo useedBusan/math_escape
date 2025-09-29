@@ -41,13 +41,11 @@ class ElementaryLowMissionCoordinator extends ChangeNotifier implements Coordina
   
   void toIntro() {
     _history.add(FlowStep(FlowStepType.intro, 1));
-    print('DEBUG: Coordinator - toIntro(), history: ${_history.map((e) => e.toString()).toList()}');
     notifyListeners();
   }
 
   void toConversation(int stage) {
     _history.add(FlowStep(FlowStepType.conversation, stage));
-    print('DEBUG: Coordinator - toConversation(stage: $stage), history: ${_history.map((e) => e.toString()).toList()}');
     notifyListeners();
   }
 
@@ -58,16 +56,12 @@ class ElementaryLowMissionCoordinator extends ChangeNotifier implements Coordina
     // question(1) = index 0, question(2) = index 1, question(3) = index 2
     final questionIndex = stage - 1; // stage는 1-based, index는 0-based
     _viewModel?.setCurrentIndexByCoordinator(questionIndex);
-    print('DEBUG: Coordinator - toQuestion: Set VM currentIndex to $questionIndex (stage: $stage)');
     
-    
-    print('DEBUG: Coordinator - toQuestion(stage: $stage), history: ${_history.map((e) => e.toString()).toList()}');
     notifyListeners();
   }
 
   bool popStepInternal() {
     if (_history.length <= 1) {
-      print('DEBUG: Coordinator - popStepInternal: No more steps, allowing route pop');
       return true; // 더 이상 이전 없음 → Route pop 허용
     }
     final removed = _history.removeLast();
@@ -84,10 +78,8 @@ class ElementaryLowMissionCoordinator extends ChangeNotifier implements Coordina
       }
       final questionIndex = lastQuestionStage - 1; // stage는 1-based, index는 0-based
       _viewModel?.setCurrentIndexByCoordinator(questionIndex);
-      print('DEBUG: Coordinator - popStepInternal: Set VM currentIndex to $questionIndex (from last question stage: $lastQuestionStage)');
     }
     
-    print('DEBUG: Coordinator - popStepInternal: Removed $removed, history: ${_history.map((e) => e.toString()).toList()}');
     notifyListeners();
     return false; // Route pop 하지 않음
   }

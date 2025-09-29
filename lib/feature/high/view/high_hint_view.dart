@@ -10,18 +10,18 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../core/utils/view/answer_popup.dart';
 import '../../../core/utils/view/qr_scan_screen.dart';
 import '../../../Feature/high/view/high_answer.dart';
-import '../view_model/high_mission_view_model.dart';
+import '../view_model/high_hint_view_model.dart';
 import 'base_high_view.dart';
 import '../view_model/base_high_view_model.dart';
-import 'high_hint_view.dart';
+import '../../../app/theme/app_colors.dart';
 import '../../../core/utils/view/home_alert.dart';
 
-class HighMission extends StatelessWidget {
+class HighHintView extends StatelessWidget {
   final List<MissionQuestion> questionList;
   final int currentIndex;
   final DateTime gameStartTime;
 
-  const HighMission({
+  const HighHintView({
     super.key,
     required this.questionList,
     required this.currentIndex,
@@ -32,10 +32,14 @@ class HighMission extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: HighMissionViewModel.instance),
-        ChangeNotifierProvider(create: (_) => BaseHighViewModel()),
+        ChangeNotifierProvider.value(
+          value: HighHintViewModel.instance,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => BaseHighViewModel(),
+        ),
       ],
-      child: _HighMissionContent(
+      child: _HighHintContent(
         currentIndex: currentIndex,
         gameStartTime: gameStartTime,
         questionList: questionList,
@@ -44,33 +48,36 @@ class HighMission extends StatelessWidget {
   }
 }
 
-class _HighMissionContent extends StatefulWidget {
+class _HighHintContent extends StatefulWidget {
   final int currentIndex;
   final DateTime gameStartTime;
   final List<MissionQuestion> questionList;
 
-  const _HighMissionContent({
+  const _HighHintContent({
     required this.currentIndex,
     required this.gameStartTime,
     required this.questionList,
   });
 
   @override
-  State<_HighMissionContent> createState() => _HighMissionContentState();
+  State<_HighHintContent> createState() => _HighHintContentState();
 }
 
-class _HighMissionContentState extends State<_HighMissionContent> {
+class _HighHintContentState extends State<_HighHintContent> {
   final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    // initState에서 startGame 호출 (타이머는 이미 시작된 경우 재시작하지 않음)
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      HighMissionViewModel.instance.startGame(
-        widget.questionList,
-        initialIndex: widget.currentIndex,
-      );
+    // HighHintView에서는 힌트 문제 데이터 로드 및 시작
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await HighHintViewModel.instance.loadHintQuestions();
+      // 현재 문제의 stage에 맞는 힌트 문제로 이동
+      final currentQuestion = widget.questionList[widget.currentIndex];
+      print('DEBUG: HighHintView initState - currentIndex: ${widget.currentIndex}');
+      print('DEBUG: HighHintView initState - currentQuestion.id: ${currentQuestion.id}, stage: ${currentQuestion.stage}');
+      HighHintViewModel.instance.goToHintByStage(currentQuestion.stage);
+      HighHintViewModel.instance.startHintGame();
     });
   }
 
@@ -80,14 +87,14 @@ class _HighMissionContentState extends State<_HighMissionContent> {
     super.dispose();
   }
 
-  Future<MissionAnswer> loadAnswerById(int id) async {
+  Future<MissionAnswer> loadHintAnswerByStage(int stage) async {
     final String jsonString = await rootBundle.loadString(
-      'assets/data/high/high_level_answer.json',
+      'assets/data/high/high_hint_answer.json',
     );
     final List<dynamic> jsonData = json.decode(jsonString);
     return jsonData
         .map((e) => MissionAnswer.fromJson(e))
-        .firstWhere((a) => a.id == id);
+        .firstWhere((a) => a.stage == stage);
   }
 
   Future<List<MissionQuestion>> loadQuestionList() async {
@@ -98,49 +105,35 @@ class _HighMissionContentState extends State<_HighMissionContent> {
     return jsonList.map((e) => MissionQuestion.fromJson(e)).toList();
   }
 
-  void _showHintDialog(HighMissionViewModel vm) {
-    final q = vm.currentQuestion;
+  void _showHintDialog(HighHintViewModel vm) {
+    final q = vm.currentHintQuestion;
     if (q == null) return;
 
-    if (q.isHint) {
-      // isHint = true인 경우 HighHintView로 이동
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => HighHintView(
-            questionList: vm.questionList,
-            currentIndex: vm.currentIndex,
-            gameStartTime: widget.gameStartTime,
-          ),
-        ),
-      );
-    } else {
-      // isHint = false인 경우 힌트 팝업 표시
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('힌트'),
-            content: Text(q?.hint ?? ''),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('확인'),
-              ),
-            ],
-          );
-        },
-      );
-    }
+    // HighHintView에서는 항상 힌트 팝업 표시
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('힌트'),
+          content: Text(q.hint),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> showAnswerPopup(
-    BuildContext context, {
-    required bool isCorrect,
-  }) async {
+      BuildContext context, {
+        required bool isCorrect,
+      }) async {
     showGeneralDialog(
       context: context,
       barrierDismissible: false,
@@ -168,8 +161,8 @@ class _HighMissionContentState extends State<_HighMissionContent> {
     }
   }
 
-  void _submitAnswer(HighMissionViewModel vm) {
-    final q = vm.currentQuestion;
+  void _submitAnswer(HighHintViewModel vm) {
+    final q = vm.currentHintQuestion;
     if (q == null) return;
     
     final input = _controller.text.trim().toLowerCase();
@@ -178,16 +171,16 @@ class _HighMissionContentState extends State<_HighMissionContent> {
 
     showAnswerPopup(context, isCorrect: isCorrect).then((_) async {
       if (isCorrect) {
-        final answerData = await loadAnswerById(q.id);
+        final answerData = await loadHintAnswerByStage(q.stage);
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => HighAnswer(
               answer: answerData,
               gameStartTime: widget.gameStartTime,
-              questionList: vm.questionList,
-              currentIndex: vm.currentIndex,
-              isFromHint: false,
+              questionList: widget.questionList, // 원래 문제 리스트 사용
+              currentIndex: widget.currentIndex, // 원래 인덱스 사용
+              isFromHint: true, // 힌트에서 온 것임을 표시
             ),
           ),
         );
@@ -197,34 +190,34 @@ class _HighMissionContentState extends State<_HighMissionContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<HighMissionViewModel, BaseHighViewModel>(
+    return Consumer2<HighHintViewModel, BaseHighViewModel>(
       builder: (context, vm, baseVm, child) {
         return WillPopScope(
           onWillPop: () async {
             final result = await HomeAlert.show(context);
             if (result == true) {
               // 타이머 초기화
-              HighMissionViewModel.instance.endGame();
+              HighHintViewModel.instance.endHintGame();
               Navigator.of(context).popUntil((route) => route.isFirst);
             }
             return false; // 기본 뒤로가기 동작 방지
           },
           child: BaseHighView(
             title: '역설, 혹은 모호함',
-            background: Container(color: const Color(0xFFE8F0FE)),
-            paneBuilder: (context, pane) => _buildMissionContent(vm),
+            background: Container(color: CustomGray.lightGray),
+            paneBuilder: (context, pane) => _buildHintContent(vm),
           ),
         );
       },
     );
   }
 
-  Widget _buildMissionContent(HighMissionViewModel vm) {
-    return Consumer<HighMissionViewModel>(
+  Widget _buildHintContent(HighHintViewModel vm) {
+    return Consumer<HighHintViewModel>(
       builder: (context, vm, child) {
         final screenWidth = MediaQuery.of(context).size.width;
         final screenHeight = MediaQuery.of(context).size.height;
-        final q = vm.currentQuestion;
+        final q = vm.currentHintQuestion;
         final Color mainColor = const Color(0xFF3F55A7);
         
         // 데이터가 로드되지 않은 경우 로딩 표시
@@ -260,9 +253,10 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                     '인류의 처음 정수의 정수는 한 개인의 처음 정수를 만들기 위해 가장 기본이 되는 것. 곧, 정수!',
                     style: TextStyle(
                       fontFamily: "Pretendard",
-                      fontSize: screenWidth * (13 / 360),
+                      fontSize: screenWidth * (14 / 360),
                       fontWeight: FontWeight.w400,
                       color: const Color(0xFF1A1A1A),
+                      // height: 1.3,
                     ),
                   ),
                 ),
@@ -278,9 +272,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                 padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
                 decoration: BoxDecoration(
                   image: const DecorationImage(
-                    image: AssetImage(
-                      'assets/images/high/highQuestionBackground.png',
-                    ),
+                    image: AssetImage('assets/images/high/highHintBackground.png'),
                     fit: BoxFit.contain,
                   ),
                   borderRadius: BorderRadius.circular(12),
@@ -351,7 +343,9 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                         decoration: BoxDecoration(
                           color: const Color(0xFFFFFFFF),
                           borderRadius: BorderRadius.circular(8.0),
-                          border: Border.all(color: const Color(0xffdcdcdc)),
+                          border: Border.all(
+                            color: const Color(0xffdcdcdc),
+                          ),
                         ),
                         child: Row(
                           children: [
@@ -417,7 +411,14 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                       const SizedBox(height: 16),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: ElevatedButton(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.qr_code_scanner),
+                          label: Text(
+                            'QR코드 촬영',
+                            style: TextStyle(
+                              fontSize: screenWidth * (14 / 360),
+                            ),
+                          ),
                           onPressed: () async {
                             final status = await Permission.camera.request();
                             if (status.isGranted) {
@@ -429,41 +430,19 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                               );
                               if (result != null && result is String) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('QR 코드 결과: $result')),
+                                  SnackBar(
+                                    content: Text('QR 코드 결과: $result'),
+                                  ),
                                 );
                               }
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('카메라 권한이 필요합니다.')),
+                                const SnackBar(
+                                  content: Text('카메라 권한이 필요합니다.'),
+                                ),
                               );
                             }
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: mainColor,
-                            foregroundColor: Colors.white,
-                            elevation: 2,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.qr_code_scanner,
-                                size: 24,
-                                color: Colors.white,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                'QR코드 스캔',
-                                style: TextStyle(
-                                  fontSize: MediaQuery.of(context).size.width * (16 / 360),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                     ],

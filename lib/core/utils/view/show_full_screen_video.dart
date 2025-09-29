@@ -89,7 +89,6 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage>
       }
     } catch (e) {
       // 앱 생명주기 변경 중 에러 발생 시 무시
-      debugPrint('Video player lifecycle error: $e');
     }
   }
 
@@ -103,7 +102,6 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage>
         ]);
       }
     } catch (e) {
-      debugPrint('Error entering fullscreen mode: $e');
       // 전체화면 모드 설정 실패해도 비디오 재생은 계속 진행
     }
   }
@@ -115,7 +113,6 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage>
         await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
       }
     } catch (e) {
-      debugPrint('Error exiting fullscreen mode: $e');
       // 전체화면 모드 해제 실패해도 앱이 크래시되지 않도록 처리
     }
   }
@@ -130,7 +127,6 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage>
         await _controller.pause();
       }
     } catch (e) {
-      debugPrint('Error pausing video on close: $e');
     }
     
     // 나머지는 dispose에서 정리
@@ -147,7 +143,6 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage>
       // Controller가 Surface/Codec 해제까지 담당
       _controller.dispose();
     } catch (e) {
-      debugPrint('Error disposing video controller: $e');
     }
     
     super.dispose();
@@ -252,7 +247,6 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage>
                     }
                     if (mounted) setState(() {});
                   } catch (e) {
-                    debugPrint('Error toggling video playback: $e');
                   }
                 },
                 icon: Icon(_controller.value.isPlaying
@@ -274,7 +268,6 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage>
                         : pos - const Duration(seconds: 10);
                     _controller.seekTo(target);
                   } catch (e) {
-                    debugPrint('Error seeking backward: $e');
                   }
                 },
                 icon: const Icon(Icons.replay_10),
@@ -294,7 +287,6 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage>
                         : pos + const Duration(seconds: 10);
                     _controller.seekTo(target);
                   } catch (e) {
-                    debugPrint('Error seeking forward: $e');
                   }
                 },
                 icon: const Icon(Icons.forward_10),

@@ -1,66 +1,52 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../app/theme/app_colors.dart';
+import 'high_timer_service.dart';
 
 
 enum HighPane { problem, solution, custom }
 
 class BaseHighViewModel extends ChangeNotifier {
-  static const _limit = Duration(minutes: 90);
-  final Stopwatch _think = Stopwatch();
-  final Stopwatch _body = Stopwatch();
-  Timer? _ticker;
-
   HighPane _pane = HighPane.problem;
   HighPane get pane => _pane;
 
   BaseHighViewModel() {
-    _think.start();
-    _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
-      notifyListeners();
-    });
+    // HighTimerService를 통해 타이머 상태 변경을 감지
+    HighTimerService.instance.addListener(_onTimerUpdate);
+  }
+
+  void _onTimerUpdate() {
+    notifyListeners();
   }
 
   void toProblem() { _pane = HighPane.problem; notifyListeners(); }
   void toSolution() { _pane = HighPane.solution; notifyListeners(); }
   void toCustom()  { _pane = HighPane.custom;  notifyListeners(); }
 
-  void startThink() => _think.start();
-  void pauseThink() => _think.stop();
-  void resetThink() { _think.reset(); notifyListeners(); }
+  void startThink() => HighTimerService.instance.resumeTimers();
+  void pauseThink() => HighTimerService.instance.pauseTimers();
+  void resetThink() => HighTimerService.instance.resetGame();
 
-  void startBody() => _body.start();
-  void pauseBody() => _body.stop();
-  void resetBody() { _body.reset(); notifyListeners(); }
+  void startBody() => HighTimerService.instance.resumeTimers();
+  void pauseBody() => HighTimerService.instance.pauseTimers();
+  void resetBody() => HighTimerService.instance.resetGame();
 
-  Duration get thinkElapsed => _think.elapsed;
-  Duration get bodyElapsed  => _body.elapsed;
-
-  double get thinkProgress {
-    final ratio = thinkElapsed.inSeconds / _limit.inSeconds;
-    return ratio.clamp(0.0, 1.0);
-  }
-
+  // HighTimerService에서 타이머 데이터 가져오기
+  Duration get thinkElapsed => HighTimerService.instance.thinkElapsed;
+  Duration get bodyElapsed => HighTimerService.instance.bodyElapsed;
+  double get thinkProgress => HighTimerService.instance.thinkProgress;
   Color get progressColor {
     if (thinkProgress >= 0.75) {
       return CustomPink.s500;
     }
     return CustomBlue.s500;
   }
-
-  String _fmt(Duration d) {
-    final m = d.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final s = d.inSeconds.remainder(60).toString().padLeft(2, '0');
-    return '$m:$s';
-  }
-
-  String get thinkText => _fmt(thinkElapsed);
-  String get bodyText  => _fmt(bodyElapsed);
-  bool get isTimeOver => thinkElapsed >= _limit;
+  String get thinkText => HighTimerService.instance.thinkText;
+  String get bodyText => HighTimerService.instance.bodyText;
+  bool get isTimeOver => HighTimerService.instance.isTimeOver;
 
   @override
   void dispose() {
-    _ticker?.cancel();
+    HighTimerService.instance.removeListener(_onTimerUpdate);
     super.dispose();
   }
 }

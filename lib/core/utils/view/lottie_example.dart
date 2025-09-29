@@ -42,10 +42,8 @@ class LottieExample extends StatelessWidget {
               width: 100,
               height: 100,
               onLoaded: () {
-                print('애니메이션 로드 완료');
               },
               onCompleted: () {
-                print('애니메이션 완료');
               },
             ),
           ],

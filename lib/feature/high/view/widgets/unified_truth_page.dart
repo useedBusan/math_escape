@@ -26,12 +26,8 @@ class UnifiedTruthPage extends StatelessWidget {
   });
 
   String _getButtonText() {
-    // 진리3 페이지인지 확인 (문제 3번의 진리 페이지)
-    if (answer.title.endsWith('_3') || answer.title == '진리_3') {
-      return '다음 문제로';
-    }
-    // 힌트 문제인지 확인 (A, B 등으로 끝나는 경우)
-    else if (answer.title.endsWith('_A') || answer.title.endsWith('_B')) {
+    // 힌트 문제인지 확인
+    if (answer.title.endsWith('_A') || answer.title.endsWith('_B')) {
       return '돌아가기';
     } else {
       // 일반 문제의 경우

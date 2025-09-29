@@ -50,9 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
             // 로고: 화면 중앙
             Center(
               child: Image.asset(
-                'assets/images/logo_icon.png', // 로고 이미지 경로
-                width: 150,
-                height: 150,
+                'assets/images/common/mainLogo.png', // 로고 이미지 경로
               ),
             ),
             // 이어폰 안내: 화면 하단

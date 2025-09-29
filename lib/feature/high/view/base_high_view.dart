@@ -113,7 +113,7 @@ class _BottomTimerBar extends StatelessWidget {
     required this.think,
     required this.body,
     this.progress = 0.0,
-    this.hourglassAsset = 'assets/images/hourglass.png',
+    this.hourglassAsset = 'assets/images/high/highHourglass.png',
   });
 
   final Color mainColor;

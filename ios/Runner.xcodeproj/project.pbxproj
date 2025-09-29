@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -192,6 +192,7 @@
 			buildPhases = (
 				2CB9B312D3A453E0F55B34A5 /* [CP] Check Pods Manifest.lock */,
 				97C146EA1CF9000F007C117D /* Sources */,
+				C4E24B112E8A436A00E5FBD1 /* ShellScript */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
@@ -305,7 +306,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# guard for embedNativeAssets (Base Configuration이 없어도 안전)\nif [ -f \"${SRCROOT}/Flutter/flutter_export_environment.sh\" ]; then\n  . \"${SRCROOT}/Flutter/flutter_export_environment.sh\"\nfi\nexport FLUTTER_ROOT=\"${FLUTTER_ROOT:-$(flutter sdk-path)}\"\nexport FLUTTER_APPLICATION_PATH=\"${FLUTTER_APPLICATION_PATH:-${SRCROOT}/..}\"\nexport FLUTTER_TARGET=\"${FLUTTER_TARGET:-lib/main.dart}\"\nexport FLUTTER_BUILD_DIR=\"${FLUTTER_BUILD_DIR:-build}\"\nexport FLUTTER_ASSET_DIR=\"${FLUTTER_ASSET_DIR:-${SRCROOT}/Flutter/flutter_assets}\"\n\n# 기존 호출(최신 템플릿)\n\"/bin/sh\" \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin\n";
+			shellScript = "#!/bin/sh\n\n# --- Flutter env for Xcode ---\nexport PATH=\"$PATH:/Users/aebgaebal/Documents/development/flutter/bin:/opt/homebrew/bin:/usr/local/bin\"\nexport FLUTTER_ROOT=\"/Users/aebgaebal/Documents/development/flutter\"\n# --- end ---\n\n# guard for embedNativeAssets (Base Configuration이 없어도 안전)\nif [ -f \"${SRCROOT}/Flutter/flutter_export_environment.sh\" ]; then\n  . \"${SRCROOT}/Flutter/flutter_export_environment.sh\"\nfi\n\n# 기본값 보강(없을 때만 채움)\nexport FLUTTER_APPLICATION_PATH=\"${FLUTTER_APPLICATION_PATH:-${SRCROOT}/..}\"\nexport FLUTTER_TARGET=\"${FLUTTER_TARGET:-lib/main.dart}\"\nexport FLUTTER_BUILD_DIR=\"${FLUTTER_BUILD_DIR:-build}\"\nexport FLUTTER_ASSET_DIR=\"${FLUTTER_ASSET_DIR:-${SRCROOT}/Flutter/flutter_assets}\"\n\n# 임베드 및 슬리밍\n\"/bin/sh\" \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin\n";
 		};
 		66FE789A3E4EF265B52491BA /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -340,6 +341,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		C4E24B112E8A436A00E5FBD1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n\n# --- Flutter env for Xcode ---\n# 1) flutter/bin 경로를 PATH에 추가 (Xcode는 로그인 쉘 PATH를 안 불러옴)\nexport PATH=\"$PATH:/Users/aebgaebal/Documents/development/flutter/bin:/opt/homebrew/bin:/usr/local/bin\"\n\n# 2) Flutter SDK 루트 고정\nexport FLUTTER_ROOT=\"/Users/aebgaebal/Documents/development/flutter\"\n\n# 3) (있다면) 프로젝트의 환경 스크립트 로드\nif [ -f \"${SRCROOT}/Flutter/flutter_export_environment.sh\" ]; then\n  . \"${SRCROOT}/Flutter/flutter_export_environment.sh\"\nfi\n# --- end ---\n\n# Flutter 빌드 단계\n\"/bin/sh\" \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
 		};
 		CAB2C7CDF3AAE01E98DE5221 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

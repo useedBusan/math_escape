@@ -78,7 +78,6 @@ class ElementaryHighMissionScreen extends StatelessWidget {
         stage: coordinator.current.stage,
         isFinalConversation: coordinator.current.stage == 10,
         onComplete: () {
-          print('DEBUG: Conversation completed');
           // 대화 종료 후 다음 문제 이동
           context.read<HintPopupViewModel>().reset();
           
@@ -136,7 +135,6 @@ class ElementaryHighMissionScreen extends StatelessWidget {
         // 문제1 정답 → conversation(1), 문제2 정답 → conversation(2) 등
         // 코디네이터의 현재 question stage를 사용하여 정확한 대화 stage 계산
         final int currentStage = coordinator.current.stage;
-        print('DEBUG: onCorrect called, currentStage=$currentStage, coordinator.currentQuestionIndex=${coordinator.currentQuestionIndex}, coordinator.current=${coordinator.current}');
         coordinator.toConversation(currentStage);
       },
     );

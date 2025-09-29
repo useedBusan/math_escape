@@ -38,12 +38,10 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
       viewModel = IntroViewModel();
       await viewModel.loadTalks('assets/data/elem_high/elem_high_conversation.json');
       viewModel.setStageTalks(widget.stage);
-      print('DEBUG: Conversation loaded for stage ${widget.stage}, talks count: ${viewModel.talks.length}');
       setState(() {
         isLoading = false;
       });
     } catch (e) {
-      print('DEBUG: Error loading conversation: $e');
       setState(() {
         isLoading = false;
       });

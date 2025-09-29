@@ -182,7 +182,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         isLoading = false;
       });
     } catch (e) {
-      print("Error loading mission data: $e");
       setState(() {
         isLoading = false;
       });
@@ -305,7 +304,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         ),
       );
     } catch (e) {
-      print("Error finding talk for question ${currentQuestionIndex + 1}: $e");
       // 대화가 없는 경우 바로 다음 문제로
       if (currentQuestionIndex + 1 == totalQuestions) {
         Navigator.of(context).pop(); // 메인화면으로

@@ -25,7 +25,6 @@ class HintPopupViewModel extends ChangeNotifier {
   HintEntry? consumeNext() {
     if (_hints.isEmpty) return null;
     _index = (_index + 1) % _hints.length;
-    print('HintPopupViewModel: consumeNext() called, index: $_index, total: ${_hints.length}');
     return _hints[_index];
   }
 

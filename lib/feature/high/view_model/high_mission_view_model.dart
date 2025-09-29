@@ -1,12 +1,10 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../app/theme/app_colors.dart';
 import 'package:math_escape/Feature/high/model/high_mission_question.dart';
+import 'high_timer_service.dart';
 
 /// 고등학교 미션 통합 ViewModel
 class HighMissionViewModel extends ChangeNotifier {
-  static const _limit = Duration(minutes: 90);
-  Timer? _ticker;
 
   // 싱글톤 인스턴스
   static final HighMissionViewModel _instance =
@@ -22,7 +20,8 @@ class HighMissionViewModel extends ChangeNotifier {
   int _currentIndex = 0;
   int get currentIndex => _currentIndex;
 
-  MissionQuestion get currentQuestion => _questionList[_currentIndex];
+  MissionQuestion? get currentQuestion => 
+      _questionList.isNotEmpty ? _questionList[_currentIndex] : null;
 
   // 게임 완료 상태
   bool get isGameCompleted => _gameCompleted;
@@ -35,48 +34,23 @@ class HighMissionViewModel extends ChangeNotifier {
   // 답변 입력 컨트롤러
   final TextEditingController answerController = TextEditingController();
 
-  // 타이머 상태
-  Duration get thinkElapsed {
-    if (_gameStartTime == null) return Duration.zero;
-    return DateTime.now().difference(_gameStartTime!);
-  }
-
-  Duration get bodyElapsed => thinkElapsed;
-
-  double get thinkProgress {
-    final ratio = thinkElapsed.inSeconds / _limit.inSeconds;
-    return ratio.clamp(0.0, 1.0);
-  }
-
+  // 타이머 서비스 위임
+  Duration get thinkElapsed => HighTimerService.instance.thinkElapsed;
+  Duration get bodyElapsed => HighTimerService.instance.bodyElapsed;
+  double get thinkProgress => HighTimerService.instance.thinkProgress;
   Color get progressColor {
     if (thinkProgress >= 0.75) {
       return CustomPink.s500;
     }
     return CustomBlue.s500;
   }
-
-  String _fmt(Duration d) {
-    final m = d.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final s = d.inSeconds.remainder(60).toString().padLeft(2, '0');
-    return '$m:$s';
-  }
-
-  String get thinkText => _fmt(thinkElapsed);
-  String get bodyText => _fmt(bodyElapsed);
-  bool get isTimeOver => thinkElapsed >= _limit;
-
-  // UI에서 사용하는 getter들
-  String get thinkingTime => thinkText;
-  String get bodyTime => bodyTimeText;
-  double get progress => thinkProgress;
-
-  // 몸의 시간 계산 (1분 = 1년, 5초 = 1개월)
-  String get bodyTimeText {
-    final totalSeconds = thinkElapsed.inSeconds;
-    final years = totalSeconds ~/ 60;
-    final months = (totalSeconds % 60) ~/ 5;
-    return '$years년, $months개월';
-  }
+  String get thinkText => HighTimerService.instance.thinkText;
+  String get bodyText => HighTimerService.instance.bodyText;
+  bool get isTimeOver => HighTimerService.instance.isTimeOver;
+  String get thinkingTime => HighTimerService.instance.thinkingTime;
+  String get bodyTime => HighTimerService.instance.bodyTime;
+  double get progress => HighTimerService.instance.progress;
+  String get bodyTimeText => HighTimerService.instance.bodyTimeText;
 
   /// 게임 시작, timer 초기화 로직
   void startGame(List<MissionQuestion> questions, {int initialIndex = 0}) {
@@ -86,9 +60,12 @@ class HighMissionViewModel extends ChangeNotifier {
     // 게임이 이미 시작되지 않은 경우에만 시작 시간 설정
     if (_gameStartTime == null) {
       _gameStartTime = DateTime.now();
+      HighTimerService.instance.startGame(_gameStartTime!);
+    } else {
+      // 이미 게임이 시작된 경우, 타이머 서비스의 시작 시간을 유지
+      // HighTimerService는 싱글톤이므로 이미 시작된 타이머를 유지
     }
 
-    _startTicker();
     notifyListeners();
   }
 
@@ -117,42 +94,34 @@ class HighMissionViewModel extends ChangeNotifier {
   }
 
   /// 마지막 문제인지 확인
-  bool isLastQuestion(int questionId) {
-    // 문제 리스트에서 가장 높은 ID를 찾아서 마지막 문제인지 확인
-    final maxId = _questionList
-        .map((q) => q.id)
+  bool isLastQuestion(int stage) {
+    // 문제 리스트에서 가장 높은 stage를 찾아서 마지막 문제인지 확인
+    final maxStage = _questionList
+        .map((q) => q.stage)
         .reduce((a, b) => a > b ? a : b);
-    return questionId == maxId;
+    return stage == maxStage;
   }
 
   /// 게임 완료 처리
   void completeGame() {
     _gameCompleted = true;
-    pauseTimers();
+    HighTimerService.instance.pauseTimers();
     notifyListeners();
-  }
-
-  /// 타이머 시작
-  void _startTicker() {
-    _ticker?.cancel();
-    _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
-      notifyListeners();
-    });
   }
 
   /// 타이머 일시정지
   void pauseTimers() {
-    _ticker?.cancel();
+    HighTimerService.instance.pauseTimers();
   }
 
   /// 타이머 재시작
   void resumeTimers() {
-    _startTicker();
+    HighTimerService.instance.resumeTimers();
   }
 
   /// 게임 종료
   void endGame() {
-    pauseTimers();
+    HighTimerService.instance.endGame();
     _gameStartTime = null;
     answerController.dispose();
     _currentIndex = 0;
@@ -162,7 +131,7 @@ class HighMissionViewModel extends ChangeNotifier {
 
   /// 게임 완전 리셋 (새 게임 시작 시 사용)
   void resetGame() {
-    pauseTimers();
+    HighTimerService.instance.resetGame();
     _gameStartTime = null;
     _currentIndex = 0;
     _gameCompleted = false;
@@ -170,9 +139,4 @@ class HighMissionViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  @override
-  void dispose() {
-    _ticker?.cancel();
-    super.dispose();
-  }
 }

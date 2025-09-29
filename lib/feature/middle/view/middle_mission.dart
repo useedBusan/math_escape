@@ -188,7 +188,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         isLoading = false;
       });
     } catch (e) {
-      print("Error loading mission data: $e");
       setState(() {
         isLoading = false;
       });
@@ -255,7 +254,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         showHint2 = false;
       } else {
         // 모든 문제 완료 - 메인 화면으로 이동
-        print('DEBUG: Middle - All questions completed, navigating to main');
         Navigator.pop(context);
       }
     });
@@ -269,14 +267,11 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
       );
 
       // 정답 후 대화 표시 → Coordinator로 대화 단계 이동
-      print('DEBUG: Middle - Answer correct! currentQuestionId=$currentQuestionId');
       coordinator.toConversation(currentQuestionId);
     } catch (e) {
-      print("Error finding talk for question ${currentQuestionIndex + 1}: $e");
       // 대화가 없는 경우 바로 다음 문제로 또는 완료 처리
       if (currentQuestionIndex + 1 >= totalQuestions) {
         // 모든 문제 완료 - 메인화면으로
-        print('DEBUG: Middle - All questions completed (no talk), navigating to main');
         Navigator.of(context).pop();
       } else {
         _goToNextQuestion();
@@ -313,14 +308,12 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         stage: coordinator.current.stage,
         isFinalConversation: false,
         onComplete: () {
-          print('DEBUG: Middle - Conversation completed, stage=${coordinator.current.stage}');
           // 대화 종료 후 다음 문제 이동 또는 완료 처리
           final int nextStage = coordinator.current.stage + 1;
           if (nextStage <= totalQuestions) {
             coordinator.toQuestion(nextStage);
           } else {
             // 모든 문제 완료 - 메인 화면으로 이동
-            print('DEBUG: Middle - All questions completed, navigating to main');
             Navigator.of(context).pop();
           }
         },

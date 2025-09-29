@@ -40,11 +40,8 @@ class ElementaryLowMissionView extends StatelessWidget {
   }
   
   Widget _buildCurrentStep(BuildContext context, ElementaryLowMissionViewModel vm, ElementaryLowMissionCoordinator coordinator, StudentGrade grade) {
-    print('DEBUG: Mission View - showFinalConversation: ${vm.showFinalConversation}, coordinator.current: ${coordinator.current}');
-    
     // 최종 대화가 표시되어야 하는 경우 (가장 우선순위)
     if (vm.showFinalConversation) {
-      print('DEBUG: Mission View - Showing final conversation');
       return ConversationOverlay(
         stage: 7, // stage 7 (id: 27)에서 애니메이션 표시
         isFinalConversation: true, // 최종 완료 화면임을 표시
@@ -66,14 +63,12 @@ class ElementaryLowMissionView extends StatelessWidget {
         stage: coordinator.current.stage,
         isFinalConversation: coordinator.current.stage == 7,
         onComplete: () {
-          print('DEBUG: Elementary Low - Conversation completed, stage=${coordinator.current.stage}');
           // 대화 종료 후 문제 이동
           context.read<HintPopupViewModel>().reset();
           
           // 첫 번째 대화 완료 후 첫 번째 문제로 이동
           if (coordinator.current.stage == 1) {
             // 첫 번째 대화 완료 → 첫 번째 문제
-            print('DEBUG: Elementary Low - First conversation completed, moving to question(1)');
             coordinator.toQuestion(1);
           } else {
             // 다른 대화 완료 → 다음 문제 또는 최종 대화
@@ -81,10 +76,8 @@ class ElementaryLowMissionView extends StatelessWidget {
             // conversation(6) 완료 → 최종 대화 (conversation 7)
             if (coordinator.current.stage == 6) {
               // 마지막 대화 완료 → Question6으로 이동
-              print('DEBUG: Elementary Low - Last conversation completed, moving to Question(6)');
               coordinator.toQuestion(6);
             } else {
-              print('DEBUG: Elementary Low - Conversation completed, moving to next question');
               coordinator.toQuestion(coordinator.current.stage);
             }
           }
@@ -139,12 +132,10 @@ class ElementaryLowMissionView extends StatelessWidget {
         
         if (currentStage == 6) {
           // Q6 정답 → Conv7(최종)
-          print('DEBUG: Elementary Low - Answer correct at last question, moving to final conversation');
           vm.setFinalConversationByCoordinator(true);
           coordinator.toConversation(7);
         } else {
           final int nextConversationStage = currentStage + 1; // 다음 대화 stage
-          print('DEBUG: Elementary Low - Answer correct! currentStage=$currentStage, nextConversationStage=$nextConversationStage, coordinator.currentQuestionIndex=${coordinator.currentQuestionIndex}, coordinator.current=${coordinator.current}');
           coordinator.toConversation(nextConversationStage);
         }
       },
