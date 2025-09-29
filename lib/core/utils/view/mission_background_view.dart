@@ -294,7 +294,9 @@ class MissionBackgroundView extends StatelessWidget {
       final correctQRAnswer = serviceLocator.qrAnswerService
           .getCorrectAnswerByGrade(gradeCode, currentMission.id);
 
-      final isCorrect = correctQRAnswer != null && qrResult == correctQRAnswer;
+      final isCorrect = correctQRAnswer != null &&
+          qrResult.trim().toUpperCase() == correctQRAnswer.trim().toUpperCase();
+
 
       print('초등학교 QR 스캔 결과: $qrResult');
       print('정답: $correctQRAnswer, 맞음: $isCorrect');
