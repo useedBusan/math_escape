@@ -24,6 +24,8 @@ class _QRScanScreenState extends State<QRScanScreen> {
       // torchEnabled: false,
       formats: [BarcodeFormat.qrCode],
     );
+
+    // QR 스캔 데이터는 _onDetect에서 처리됩니다
   }
 
   @override
@@ -43,9 +45,20 @@ class _QRScanScreenState extends State<QRScanScreen> {
   void _onDetect(BarcodeCapture capture) {
     if (_scanned) return;
 
+    print(
+      "📷 QR Detection Attempt: ${capture.barcodes.length} barcodes detected",
+    );
+
     for (final barcode in capture.barcodes) {
       final value = barcode.rawValue;
+      final rawBytes = barcode.rawBytes;
+      print(
+        "📷 QR Scan Raw Value: '$value' (length: ${value?.length}, format: ${barcode.format})",
+      );
+      print("📷 QR Scan Raw Bytes: $rawBytes (length: ${rawBytes?.length})");
+
       if (value != null && value.isNotEmpty) {
+        print("🎯 QR Detection Success: '$value' (format: ${barcode.format})");
         _scanned = true;
         Navigator.of(context).pop(value);
         break;
@@ -73,9 +86,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
 
           // 오버레이 (qr_code_scanner의 QrScannerOverlayShape 대체)
           IgnorePointer(
-            child: Container(
-              color: Colors.black.withOpacity(0.35),
-            ),
+            child: Container(color: Colors.black.withOpacity(0.35)),
           ),
           IgnorePointer(
             child: SizedBox(

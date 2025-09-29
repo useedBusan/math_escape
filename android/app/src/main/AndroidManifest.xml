@@ -19,7 +19,7 @@
         android:label="부산수학문화관 방탈출"
         android:icon="@mipmap/app_icon"
         android:usesCleartextTraffic="true"
-        android:theme="@style/NormalTheme">>
+        android:theme="@style/NormalTheme">
 
         <activity
             android:name=".MainActivity"
