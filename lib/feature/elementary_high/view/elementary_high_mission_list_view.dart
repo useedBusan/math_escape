@@ -2,9 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../app/theme/app_colors.dart';
 import '../view_model/elementary_high_mission_view_model.dart';
+import '../../../core/utils/view/qr_scan_screen.dart';
+import '../../../core/services/service_locator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ElementaryHighMissionListView extends StatelessWidget {
   const ElementaryHighMissionListView({super.key});
+
+  void _handleQRScanResult(ElementaryHighMissionViewModel vm, String qrResult) {
+    // QR 스캔 결과가 정답인지 확인
+    final correctQRAnswer = serviceLocator.qrAnswerService
+        .getCorrectAnswerByGrade('elementary_high', vm.currentMission!.id);
+    final isCorrect = correctQRAnswer != null && qrResult == correctQRAnswer;
+    
+    print('초등학교 고학년 QR 스캔 결과: $qrResult');
+    print('정답: $correctQRAnswer, 맞음: $isCorrect');
+    
+    if (isCorrect) {
+      // 정답 처리 - 다음 문제로 이동
+      vm.nextMission();
+    } else {
+      // 오답 처리 - 오답 팝업 표시 (구현 예정)
+      print('오답입니다. 다시 시도해주세요.');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +171,50 @@ class ElementaryHighMissionListView extends StatelessWidget {
                   onTap: () => vm.selectChoice(i),
                 );
               },
+            ),
+          ] else ...[
+            // QR 문제일 때 QR 스캔 버튼 표시
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.qr_code_scanner),
+                label: Text(
+                  'QR코드 스캔',
+                  style: TextStyle(
+                    fontSize: width * (16 / 360),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onPressed: () async {
+                  final status = await Permission.camera.request();
+                  if (status.isGranted) {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const QRScanScreen(),
+                      ),
+                    );
+                    if (result != null && result is String) {
+                      _handleQRScanResult(vm, result);
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('카메라 권한이 필요합니다.'),
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xffD95276),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
             ),
           ],
         ],
