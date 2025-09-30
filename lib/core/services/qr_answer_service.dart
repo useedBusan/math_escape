@@ -115,7 +115,8 @@ class QRAnswerService {
       for (var question in jsonData) {
         if (question['isqr'] == true) {
           final questionId = question['id'] as int;
-          final correctAnswer = question['answer'] as String;
+          final int answerIndex = question['answer'] as int;
+          final correctAnswer = question['choices'][answerIndex - 1] as String;
           _qrAnswersByGrade['elementary_high']![questionId] = correctAnswer;
         }
       }
@@ -155,7 +156,8 @@ class QRAnswerService {
       for (var question in jsonData) {
         if (question['isqr'] == true) {
           final questionId = question['id'] as int;
-          final correctAnswer = question['answer'][0] as String;
+          final correctAnswer =
+              (question['answer'] as List<dynamic>)[0] as String;
           _qrAnswersByGrade['high']![questionId] = correctAnswer;
         }
       }

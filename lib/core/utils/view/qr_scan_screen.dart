@@ -17,6 +17,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
   @override
   void initState() {
     super.initState();
+    _scanned = false; // 스캔 플래그 초기화
     _controller = MobileScannerController(
       // 필요 시 옵션들:
       // facing: CameraFacing.back,
@@ -32,6 +33,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
   void reassemble() {
     super.reassemble();
     // hot reload 시 카메라 재시작
+    _scanned = false; // Hot reload 시 스캔 플래그 리셋
     _controller.stop();
     _controller.start();
   }
