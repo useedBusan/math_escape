@@ -258,15 +258,12 @@ class MissionBackgroundView extends StatelessWidget {
   /// QR 스캔 결과를 정답과 비교하는 함수
   Future<bool> _validateQRAnswer(BuildContext context, String qrResult) async {
     try {
-      // 학년에 따라 적절한 ViewModel과 학년 코드 사용
-      String gradeCode;
+      // 학년에 따라 적절한 ViewModel 사용
       dynamic vm;
 
       if (grade == StudentGrade.elementaryLow) {
-        gradeCode = 'elementary_low';
         vm = context.read<ElementaryLowMissionViewModel>();
       } else if (grade == StudentGrade.elementaryHigh) {
-        gradeCode = 'elementary_high';
         vm = context.read<ElementaryHighMissionViewModel>();
       } else {
         print('지원하지 않는 학년입니다: $grade');
@@ -287,8 +284,15 @@ class MissionBackgroundView extends StatelessWidget {
       }
 
       // QR 정답 서비스를 통해 정답 확인
-      final correctQRAnswer = serviceLocator.qrAnswerService
-          .getCorrectAnswerByGrade(gradeCode, currentMission.id);
+      String? correctQRAnswer;
+      if (grade == StudentGrade.elementaryLow) {
+        correctQRAnswer = serviceLocator.qrAnswerService.getElementaryLowAnswer(
+          currentMission.id,
+        );
+      } else if (grade == StudentGrade.elementaryHigh) {
+        correctQRAnswer = serviceLocator.qrAnswerService
+            .getElementaryHighAnswer(currentMission.id);
+      }
 
       final isCorrect =
           correctQRAnswer != null &&

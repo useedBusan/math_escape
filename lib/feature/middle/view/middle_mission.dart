@@ -229,8 +229,9 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
   void _handleQRScanResult(String qrResult) {
     final MissionItem currentMission = missionList[currentQuestionIndex];
     // QR 스캔 결과가 정답인지 확인
-    final correctQRAnswer = serviceLocator.qrAnswerService
-        .getCorrectAnswerByGrade('middle', currentMission.id);
+    final correctQRAnswer = serviceLocator.qrAnswerService.getMiddleAnswer(
+      currentMission.id,
+    );
     final isCorrect = correctQRAnswer != null && qrResult == correctQRAnswer;
 
     showDialog(

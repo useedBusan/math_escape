@@ -164,29 +164,101 @@ class QRAnswerService {
     }
   }
 
-  // ==================== 통합 API ====================
+  // ==================== 각 학년별 QR 정답 검색 API ====================
 
-  /// 학년과 문제 ID로 QR 정답 검색 (메인 API)
-  String? getCorrectAnswerByGrade(String grade, int questionId) {
+  /// 초등학교 저학년 QR 정답 검색
+  String? getElementaryLowAnswer(int questionId) {
     try {
-      final answer = _qrAnswersByGrade[grade]?[questionId];
+      final answer = _qrAnswersByGrade['elementary_low']?[questionId];
       if (answer == null) {
-        print('QR 정답 찾기 오류: 학년 "$grade", 문제 $questionId를 찾을 수 없음');
+        print('초등학교 저학년 QR 정답 찾기 오류: 문제 $questionId를 찾을 수 없음');
       }
       return answer;
     } catch (e) {
-      print('QR 정답 찾기 오류 (Grade: $grade, ID: $questionId): $e');
+      print('초등학교 저학년 QR 정답 찾기 오류 (ID: $questionId): $e');
       return null;
     }
   }
 
-  /// 특정 학년의 모든 QR 답안 반환
-  Map<int, String> getQrAnswersByGrade(String grade) {
-    return _qrAnswersByGrade[grade] ?? {};
+  /// 초등학교 고학년 QR 정답 검색
+  String? getElementaryHighAnswer(int questionId) {
+    try {
+      final answer = _qrAnswersByGrade['elementary_high']?[questionId];
+      if (answer == null) {
+        print('초등학교 고학년 QR 정답 찾기 오류: 문제 $questionId를 찾을 수 없음');
+      }
+      return answer;
+    } catch (e) {
+      print('초등학교 고학년 QR 정답 찾기 오류 (ID: $questionId): $e');
+      return null;
+    }
   }
 
-  /// 특정 학년의 QR 문제 개수 반환
-  int getQrProblemCount(String grade) {
-    return _qrAnswersByGrade[grade]?.length ?? 0;
+  /// 중학교 QR 정답 검색
+  String? getMiddleAnswer(int questionId) {
+    try {
+      final answer = _qrAnswersByGrade['middle']?[questionId];
+      if (answer == null) {
+        print('중학교 QR 정답 찾기 오류: 문제 $questionId를 찾을 수 없음');
+      }
+      return answer;
+    } catch (e) {
+      print('중학교 QR 정답 찾기 오류 (ID: $questionId): $e');
+      return null;
+    }
+  }
+
+  /// 고등학교 QR 정답 검색
+  String? getHighAnswer(int questionId) {
+    try {
+      final answer = _qrAnswersByGrade['high']?[questionId];
+      if (answer == null) {
+        print('고등학교 QR 정답 찾기 오류: 문제 $questionId를 찾을 수 없음');
+      }
+      return answer;
+    } catch (e) {
+      print('고등학교 QR 정답 찾기 오류 (ID: $questionId): $e');
+      return null;
+    }
+  }
+
+  /// 초등학교 저학년의 모든 QR 답안 반환
+  Map<int, String> getElementaryLowAnswers() {
+    return _qrAnswersByGrade['elementary_low'] ?? {};
+  }
+
+  /// 초등학교 고학년의 모든 QR 답안 반환
+  Map<int, String> getElementaryHighAnswers() {
+    return _qrAnswersByGrade['elementary_high'] ?? {};
+  }
+
+  /// 중학교의 모든 QR 답안 반환
+  Map<int, String> getMiddleAnswers() {
+    return _qrAnswersByGrade['middle'] ?? {};
+  }
+
+  /// 고등학교의 모든 QR 답안 반환
+  Map<int, String> getHighAnswers() {
+    return _qrAnswersByGrade['high'] ?? {};
+  }
+
+  /// 초등학교 저학년 QR 문제 개수 반환
+  int getElementaryLowProblemCount() {
+    return _qrAnswersByGrade['elementary_low']?.length ?? 0;
+  }
+
+  /// 초등학교 고학년 QR 문제 개수 반환
+  int getElementaryHighProblemCount() {
+    return _qrAnswersByGrade['elementary_high']?.length ?? 0;
+  }
+
+  /// 중학교 QR 문제 개수 반환
+  int getMiddleProblemCount() {
+    return _qrAnswersByGrade['middle']?.length ?? 0;
+  }
+
+  /// 고등학교 QR 문제 개수 반환
+  int getHighProblemCount() {
+    return _qrAnswersByGrade['high']?.length ?? 0;
   }
 }
