@@ -71,6 +71,7 @@ class BaseHighView extends StatelessWidget {
         if (background != null) Positioned.fill(child: background!),
         Scaffold(
           backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false, // 키보드가 올라와도 하단바가 고정되도록
           appBar: appBar,
           body: Stack(
             children: [

@@ -1,3 +1,5 @@
+// 사용하지 않는 파일 - BaseHighView가 대신 사용됨
+/*
 import 'package:flutter/material.dart';
 
 class HighMissionConstants {
@@ -10,4 +12,5 @@ class HighMissionConstants {
   static const Color questionBalloonBorder = Color(0xFFFFD54F);
   static const Color timerBoxColor = Color(0xFFF5F5F5);
   static const Color timerBoxShadow = Color(0x1A000000);
-} 
+}
+*/ 

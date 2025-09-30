@@ -15,7 +15,7 @@ void main() async {
     // 안드로이드: 하단바 숨기기
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.edgeToEdge,
-      overlays: [SystemUiOverlay.top], // 상단바만 표시
+      overlays: [SystemUiOverlay.top],
     );
   } else if (Platform.isIOS) {
     // iOS: 런치 스크린 최적화

@@ -1,3 +1,5 @@
+// 사용하지 않는 파일 - UnifiedTruthPage가 대신 사용됨
+/*
 import 'package:flutter/material.dart';
 import '../../high_answer_constants.dart';
 
@@ -42,7 +44,9 @@ class DescriptionLevelBox extends StatelessWidget {
     );
   }
 }
+*/
 
+/*
 class ExplanationBox extends StatelessWidget {
   final List<InlineSpan> explanationSpans;
   final String? answerImage;
@@ -82,7 +86,9 @@ class ExplanationBox extends StatelessWidget {
     );
   }
 }
+*/
 
+/*
 class ClueBox extends StatelessWidget {
   final String clueTitle;
   final String clue;
@@ -131,7 +137,9 @@ class ClueBox extends StatelessWidget {
     );
   }
 }
+*/
 
+/*
 class TimerInfoBox extends StatelessWidget {
   final String thinkingTime;
   final String bodyTime;
@@ -191,3 +199,4 @@ class TimerInfoBox extends StatelessWidget {
     );
   }
 }
+*/

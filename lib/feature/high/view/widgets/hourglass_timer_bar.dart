@@ -1,3 +1,5 @@
+/*
+
 import 'package:flutter/material.dart';
 
 /// 모래시계 타이머 바 위젯
@@ -241,3 +243,5 @@ class _RingPainter extends CustomPainter {
       old.foreground != foreground ||
       old.strokeWidth != strokeWidth;
 }
+
+*/

@@ -151,7 +151,6 @@ Paratruth Space, PS라고 불리는 이 공간에서,
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                         //builder: (_) => HighMissionView()
                           builder: (_) => HighMission(
                             questionList: questionList,
                             currentIndex: 0,
