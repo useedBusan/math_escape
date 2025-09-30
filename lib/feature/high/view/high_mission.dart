@@ -207,10 +207,6 @@ class _HighMissionContentState extends State<_HighMissionContent> {
     final isCorrect = correctQRAnswer != null && qrResult == correctQRAnswer;
 
     // 디버그 정보 출력
-    print('QR 스캔 결과: $qrResult');
-    print('문제 제목: ${q.title}');
-    print('정답: $correctQRAnswer');
-    print('정답 여부: $isCorrect');
 
     showAnswerPopup(context, isCorrect: isCorrect).then((_) async {
       if (isCorrect) {

@@ -29,15 +29,12 @@ class QRAnswerService {
       );
       final List<dynamic> jsonData = json.decode(jsonString);
       _qrAnswers = jsonData.map((e) => HighQRAnswer.fromJson(e)).toList();
-      print('고등학교 QR 정답 로드 완료: ${_qrAnswers.length}개');
 
       // 각 학년별 질문 데이터에서 QR 정보 추출
       await _loadElementaryLowQrAnswers();
       await _loadElementaryHighQrAnswers();
       await _loadMiddleQrAnswers();
       await _loadHighQrAnswers();
-
-      print('모든 학년 QR 정답 로드 완료');
     } catch (e) {
       print('QR 정답 로드 오류: $e');
       _qrAnswers = [];
@@ -100,7 +97,6 @@ class QRAnswerService {
           final questionId = question['id'] as int;
           final correctAnswer = question['choices'][0] as String;
           _qrAnswersByGrade['elementary_low']![questionId] = correctAnswer;
-          print('초등학교 저학년 QR 정답 로드: 문제 $questionId -> $correctAnswer');
         }
       }
     } catch (e) {
@@ -121,7 +117,6 @@ class QRAnswerService {
           final questionId = question['id'] as int;
           final correctAnswer = question['answer'] as String;
           _qrAnswersByGrade['elementary_high']![questionId] = correctAnswer;
-          print('초등학교 고학년 QR 정답 로드: 문제 $questionId -> $correctAnswer');
         }
       }
     } catch (e) {
@@ -142,7 +137,6 @@ class QRAnswerService {
           final questionId = question['id'] as int;
           final correctAnswer = question['answer'] as String;
           _qrAnswersByGrade['middle']![questionId] = correctAnswer;
-          print('중학교 QR 정답 로드: 문제 $questionId -> $correctAnswer');
         }
       }
     } catch (e) {
@@ -163,7 +157,6 @@ class QRAnswerService {
           final questionId = question['id'] as int;
           final correctAnswer = question['answer'][0] as String;
           _qrAnswersByGrade['high']![questionId] = correctAnswer;
-          print('고등학교 QR 정답 로드: 문제 $questionId -> $correctAnswer');
         }
       }
     } catch (e) {

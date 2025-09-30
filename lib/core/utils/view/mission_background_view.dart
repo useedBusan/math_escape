@@ -214,8 +214,6 @@ class MissionBackgroundView extends StatelessWidget {
 
       // 🔧 개선된 결과 처리
       if (result != null && result is String && result.isNotEmpty) {
-        print('🔍 QR 스캔 결과: "$result" (길이: ${result.length})');
-
         // QR 스캔 결과를 정답과 비교
         final isCorrect = await _validateQRAnswer(context, result);
 
@@ -236,7 +234,6 @@ class MissionBackgroundView extends StatelessWidget {
           ),
         );
       } else {
-        print('🔍 QR 스캔 결과가 비어있거나 null입니다: $result');
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -247,7 +244,6 @@ class MissionBackgroundView extends StatelessWidget {
         }
       }
     } catch (e) {
-      print('QR 스캔 오류: $e');
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -281,7 +277,7 @@ class MissionBackgroundView extends StatelessWidget {
       dynamic currentMission;
       if (grade == StudentGrade.elementaryLow) {
         currentMission = vm.currentMission;
-      } else {
+      } else if (grade == StudentGrade.elementaryHigh) {
         currentMission = vm.currentMission;
       }
 
@@ -297,9 +293,6 @@ class MissionBackgroundView extends StatelessWidget {
       final isCorrect =
           correctQRAnswer != null &&
           qrResult.trim().toUpperCase() == correctQRAnswer.trim().toUpperCase();
-
-      print('초등학교 QR 스캔 결과: $qrResult');
-      print('정답: $correctQRAnswer, 맞음: $isCorrect');
 
       return isCorrect;
     } catch (e) {

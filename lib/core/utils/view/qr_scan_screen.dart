@@ -12,7 +12,7 @@ class QRScanScreen extends StatefulWidget {
 
 class _QRScanScreenState extends State<QRScanScreen> {
   late final MobileScannerController _controller;
-  bool _scanned = false;  //scan되었는지 확인하는 부분
+  bool _scanned = false; //scan되었는지 확인하는 부분
 
   @override
   void initState() {
@@ -45,21 +45,10 @@ class _QRScanScreenState extends State<QRScanScreen> {
   void _onDetect(BarcodeCapture capture) {
     if (_scanned) return;
 
-    print(
-      "📷 QR Detection Attempt: ${capture.barcodes.length} barcodes detected",
-    );
+    for (final barcode in capture.barcodes) {
+      final value = barcode.rawValue;
 
-    for (final barcode in capture.barcodes) { //카에라 캡쳐에 인식된 모든 바코드/QR리스트 순회
-      final value = barcode.rawValue; //QR코드의 원시값 추출, 인코딩된 문자열 값
-      final rawBytes = barcode.rawBytes;  //QR코드의 바이너리 데이터 원본(문자열로 디코딩되기 전 상태)
-      //디버그 로그 출력
-      print(
-        "📷 QR Scan Raw Value: '$value' (length: ${value?.length}, format: ${barcode.format})",
-      );
-      print("📷 QR Scan Raw Bytes: $rawBytes (length: ${rawBytes?.length})");
-
-      if (value != null && value.isNotEmpty) {  //값이 유효하다면
-        print("🎯 QR Detection Success: '$value' (format: ${barcode.format})");  //로그 출력
+      if (value != null && value.isNotEmpty) {
         _scanned = true;
         Navigator.of(context).pop(value); //현재 화면 닫으면서 스캔결과를 호출한 쪽에 반환
         break;

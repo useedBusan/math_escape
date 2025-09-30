@@ -106,7 +106,7 @@ class MissionItem {
   }
 }
 
-  // 기존 TalkScreen은 공통 인트로 뷰로 대체됨
+// 기존 TalkScreen은 공통 인트로 뷰로 대체됨
 
 // MiddleMissionScreen
 class MiddleMissionScreen extends StatefulWidget {
@@ -133,8 +133,9 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
   bool showHint2 = false;
 
   // QR 인식 여부
-  bool get isqr => missionList.isNotEmpty && currentQuestionIndex < missionList.length 
-      ? missionList[currentQuestionIndex].isqr 
+  bool get isqr =>
+      missionList.isNotEmpty && currentQuestionIndex < missionList.length
+      ? missionList[currentQuestionIndex].isqr
       : false;
 
   @override
@@ -204,7 +205,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     }
   }
 
-
   void _submitAnswer() {
     final MissionItem currentMission = missionList[currentQuestionIndex];
     final String userAnswer = _answerController.text.trim();
@@ -220,7 +220,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
           if (correct) {
             _showCorrectAnswerDialog();
           }
-        }, grade: StudentGrade.middle,
+        },
+        grade: StudentGrade.middle,
       ),
     );
   }
@@ -231,10 +232,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     final correctQRAnswer = serviceLocator.qrAnswerService
         .getCorrectAnswerByGrade('middle', currentMission.id);
     final isCorrect = correctQRAnswer != null && qrResult == correctQRAnswer;
-    
-    print('중학교 QR 스캔 결과: $qrResult');
-    print('정답: $correctQRAnswer, 맞음: $isCorrect');
-    
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -245,7 +243,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
           if (isCorrect) {
             _showCorrectAnswerDialog();
           }
-        }, 
+        },
         grade: StudentGrade.middle,
       ),
     );
@@ -281,7 +279,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
 
       // IntroViewModel을 사용해서 대화 시퀀스 관리
       final conversationVM = IntroViewModel();
-      
+
       // CorrectTalkItem의 talks를 Talk 모델로 변환
       final List<Talk> talks = correctTalk.talks.asMap().entries.map((entry) {
         final index = entry.key;
@@ -290,11 +288,13 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
           id: currentQuestionId * 100 + index, // 고유 ID 생성
           speaker: Speaker.puri, // middle은 항상 푸리
           speakerImg: talkItem.puri_image,
-          backImg: talkItem.back_image.isNotEmpty ? talkItem.back_image : ImageAssets.background.path,
+          backImg: talkItem.back_image.isNotEmpty
+              ? talkItem.back_image
+              : ImageAssets.background.path,
           talk: talkItem.talk,
         );
       }).toList();
-      
+
       conversationVM.talks = talks;
       conversationVM.currentIdx = 0;
 
@@ -609,7 +609,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                 height: 60,
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    final status = await Permission.camera.request();
+                                    final status = await Permission.camera
+                                        .request();
                                     if (status.isGranted) {
                                       final result = await Navigator.push(
                                         context,
@@ -621,7 +622,9 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                         _handleQRScanResult(result);
                                       }
                                     } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
                                         const SnackBar(
                                           content: Text('카메라 권한이 필요합니다.'),
                                           duration: Duration(seconds: 3),
@@ -649,7 +652,11 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                       Text(
                                         'QR코드 스캔',
                                         style: TextStyle(
-                                          fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                                          fontSize:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.width *
+                                              (16 / 360),
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -674,7 +681,9 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                       child: TextField(
                                         style: TextStyle(
                                           fontSize:
-                                              MediaQuery.of(context).size.width *
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.width *
                                               (15 / 360),
                                         ),
                                         controller: _answerController,
@@ -723,7 +732,11 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                         child: Text(
                                           '제출',
                                           style: TextStyle(
-                                            fontSize: MediaQuery.of(context).size.width * (12 / 360),
+                                            fontSize:
+                                                MediaQuery.of(
+                                                  context,
+                                                ).size.width *
+                                                (12 / 360),
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
@@ -913,7 +926,8 @@ class _MiddleConversationView extends StatefulWidget {
   });
 
   @override
-  State<_MiddleConversationView> createState() => _MiddleConversationViewState();
+  State<_MiddleConversationView> createState() =>
+      _MiddleConversationViewState();
 }
 
 class _MiddleConversationViewState extends State<_MiddleConversationView> {
