@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/services.dart';
+import 'package:math_escape/core/services/service_locator.dart';
 import 'package:math_escape/main.dart';
-import 'package:math_escape/services/service_locator.dart';
 
 void main() {
   group('Main Screen Integration Tests', () {
-    setUp(() {
+    setUp(() async {
       // 서비스 초기화
-      serviceLocator.initialize();
+      await serviceLocator.initialize();
     });
 
     tearDown(() {

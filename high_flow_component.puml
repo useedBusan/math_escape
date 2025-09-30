@@ -1,0 +1,73 @@
+@startuml
+title High School Quiz Feature - MVVM Architecture & Flow
+skinparam shadowing false
+skinparam componentStyle rectangle
+
+actor User
+
+package "View Layer (UI)" {
+  component HighIntroScreen
+  component HighMission
+  component HighAnswer
+  component UnifiedTruthPage
+  component HighHintPopup
+  component HighAnswerPopup
+}
+
+package "ViewModel Layer" {
+  component BaseHighViewModel
+  component HighMissionViewModel
+}
+
+package "Service Layer" {
+  component DataService
+  component QRAnswerService
+  component ServiceLocator
+}
+
+package "Model Layer" {
+  component HighMissionQuestion
+  component HighMissionAnswer
+  component HighQRAnswer
+}
+
+package "Data Layer (JSON)" {
+  component "high_level_question.json"
+  component "high_level_answer.json"
+  component "high_qr_answers.json"
+}
+
+' Relationships between layers
+ServiceLocator --> DataService : resolve
+ServiceLocator --> QRAnswerService : resolve
+
+' Data loading for questions
+HighIntroScreen --> HighMission : start game
+HighMission --> DataService : load question list
+DataService --> "high_level_question.json" : read JSON
+DataService --> HighMissionQuestion : parse to list
+
+' ViewModel initialization
+HighMission --> HighMissionViewModel : init with questions
+HighMissionViewModel --> BaseHighViewModel : start timer & state
+
+' Answer flow
+HighMissionViewModel --> DataService : load answer
+DataService --> "high_level_answer.json" : read JSON
+DataService --> HighMissionAnswer : parse answer
+HighMissionViewModel --> HighAnswer : show answer & clue
+HighAnswer --> UnifiedTruthPage : navigate after completion
+
+' Hint flow
+HighMission --> HighHintPopup : show hint dialog
+
+' QR scan flow (if isqr == true)
+HighMissionViewModel --> QRAnswerService : get QR answer
+QRAnswerService --> "high_qr_answers.json" : read JSON
+QRAnswerService --> HighQRAnswer : parse QR answer
+HighMissionViewModel --> HighAnswerPopup : show QR result
+
+' Final completion flow
+HighMissionViewModel --> UnifiedTruthPage : complete game
+
+@enduml

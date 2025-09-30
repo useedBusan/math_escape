@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:math_escape/screens/splash_screen.dart';
-import 'package:math_escape/constants/app_constants.dart';
-import 'package:math_escape/theme/app_theme.dart';
-import 'package:math_escape/services/service_locator.dart';
+import 'package:math_escape/app/splash_screen.dart';
+import 'app/theme/app_theme.dart';
+import 'core/services/service_locator.dart';
+import 'constants/app_constants.dart';
+import 'core/utils/image_path_validation_tool.dart';
 
-void main() {
-  // 서비스 초기화
-  serviceLocator.initialize();
+void main() async {
+  // 서비스 초기화 (QR 정답 데이터 로드 포함)
+  await serviceLocator.initialize();
+  // 개발 모드에서 이미지 경로 검증 실행
+  ImagePathValidationTool.runValidationOnStartup();
 
   runApp(const MyApp());
 }
