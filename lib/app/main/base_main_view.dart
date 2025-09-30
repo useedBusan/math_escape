@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../constants/enum/grade_enums.dart';
 import '../theme/app_colors.dart';
+import '../../core/utils/platform_utils.dart';
 import 'base_main_view_model.dart';
 
 class BaseMainView extends StatelessWidget {
@@ -112,12 +113,17 @@ class BaseMainView extends StatelessWidget {
                     ),
                   ),
 
-                  // 하단 배너 (바닥에 고정)
-                  SizedBox(
-                    width: double.infinity,
-                    child: Image.asset(
-                      'assets/images/common/bannerMain.png',
-                      fit: BoxFit.cover,
+                  // 하단 배너 (바닥에 고정) - 클릭 가능
+                  GestureDetector(
+                    onTap: () async {
+                      await PlatformUtils.openStoreLink();
+                    },
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Image.asset(
+                        'assets/images/common/bannerMain.png',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ],

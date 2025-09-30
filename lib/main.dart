@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:io';
 import 'package:math_escape/app/splash_screen.dart';
 import 'app/theme/app_theme.dart';
 import 'core/services/service_locator.dart';
@@ -6,6 +8,25 @@ import 'constants/app_constants.dart';
 import 'core/utils/image_path_validation_tool.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // 플랫폼별 시스템 UI 설정
+  if (Platform.isAndroid) {
+    // 안드로이드: 하단바 숨기기
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.edgeToEdge,
+      overlays: [SystemUiOverlay.top], // 상단바만 표시
+    );
+  } else if (Platform.isIOS) {
+    // iOS: 런치 스크린 최적화
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+  }
+  
   // 서비스 초기화
   serviceLocator.initialize();
   // QR 정답 데이터 로드

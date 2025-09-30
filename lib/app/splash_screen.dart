@@ -1,5 +1,3 @@
-//스플래시 로딩 화면
-
 import 'package:flutter/material.dart';
 import 'package:math_escape/App/main_screen.dart';
 
@@ -11,29 +9,24 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  double opacity = 0.0;
+  double opacity = 1.0; // 시작부터 보이도록 1.0으로 설정
 
   @override
-  void initState() {  //_SplashScreenState 클래스가 생성시 initState() 메서드가 자동 호출
+  void initState() {
     super.initState();
-    // 1초 후 페이드 인
-    Future.delayed(const Duration(seconds: 1), () { //앱 시작후 1초 뒤 setState()실행
+    // 2.5초 뒤 페이드 아웃 시작
+    Future.delayed(const Duration(seconds: 2), () {
+      if (!mounted) return;
       setState(() {
-        opacity = 1.0;  //opacity변수 값 변경
+        opacity = 0.0;
       });
-      // 2초 후(페이드 인 끝) → 페이드 아웃 시작
-      Future.delayed(const Duration(seconds: 3), () {
-        setState(() {
-          opacity = 0.0;
-        });
-        // 0.7초 후(페이드 아웃 끝) → MainScreen 이동
-        Future.delayed(const Duration(milliseconds: 700), () {
-          if (!mounted) return;
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const MainScreen()),
-          );
-        });
+      // 0.7초 후 → MainScreen 이동
+      Future.delayed(const Duration(milliseconds: 700), () {
+        if (!mounted) return;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const MainScreen()),
+        );
       });
     });
   }
@@ -41,46 +34,30 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // 전체 배경색
+      backgroundColor: Colors.white,
       body: AnimatedOpacity(
         opacity: opacity,
-        duration: const Duration(milliseconds: 700),
+        duration: const Duration(milliseconds: 1000),
         child: Stack(
           children: [
-            // 로고: 화면 중앙
+            // 중앙 로고
             Center(
               child: Image.asset(
-                'assets/images/common/mainLogo.png', // 로고 이미지 경로
+                'assets/images/common/mainLogo.png',
+                width: 172,
+                height: 28,
+                fit: BoxFit.contain,
               ),
             ),
-            // 이어폰 안내: 화면 하단
+            // 맨 밑 배경 이미지
             Positioned(
               left: 0,
               right: 0,
-              bottom: 80, // 하단 여백 조절
-              child: AnimatedOpacity(
-                opacity: opacity,
-                duration: const Duration(seconds: 2),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.headphones, // 이어폰 아이콘
-                      size: 64,
-                      color: Colors.lightBlue,
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      '원활한 체험을 위해\n이어폰 착용을 권장드립니다',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.lightBlue,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+              bottom: 0,
+              child: Image.asset(
+                'assets/images/common/launchBottom.png',
+                height: 268,
+                fit: BoxFit.cover, // 좌우 꽉 채우기
               ),
             ),
           ],
