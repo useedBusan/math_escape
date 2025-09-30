@@ -71,7 +71,7 @@ flutter:
     - assets/images/
     - assets/images/common/
     - assets/images/elementary_low/
-    - assets/images/elementary_high//
+    - assets/images/elementary_high/
     - assets/images/middle/
     - assets/images/high/
     - assets/video/
@@ -117,12 +117,12 @@ flutter:
             weight: 900
     - family: SBAggroB
       fonts:
-        - asset: assets/fonts/SB 어그로 B.ttf
+        - asset: assets/fonts/SBAggroB.ttf
     - family: SBAggroM
       fonts:
-          - asset: assets/fonts/SB 어그로 M.ttf
+          - asset: assets/fonts/SBAggroM.ttf
     - family: SBAggroL
       fonts:
-        - asset: assets/fonts/SB 어그로 L.ttf
+        - asset: assets/fonts/SBAggroL.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
