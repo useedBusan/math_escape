@@ -9,6 +9,7 @@ import 'package:math_escape/feature/high/model/high_mission_answer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../core/utils/view/answer_popup.dart';
 import '../../../core/utils/view/qr_scan_screen.dart';
+import '../../../core/utils/view/layered_card.dart';
 import '../../../feature/high/view/high_answer.dart';
 import '../view_model/high_hint_view_model.dart';
 import '../view_model/high_mission_view_model.dart';
@@ -265,227 +266,217 @@ class _HighHintContentState extends State<_HighHintContent> {
         ),
         const SizedBox(height: 10),
         // 최적화된 배경 이미지 카드
-        Center(
-          child: Container(
-            width: screenWidth - 20,
-            height: screenHeight * 0.5,
-            padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
-            decoration: BoxDecoration(
-              image: const DecorationImage(
-                image: AssetImage('assets/images/high/highHintBackground.png'),
-                fit: BoxFit.contain,
-              ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 44),
-                // 문제 번호 + 힌트 버튼
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      q.title,
-                      style: TextStyle(
-                        fontFamily: "SBAggroM",
-                        fontSize: screenWidth * (18 / 360),
-                        fontWeight: FontWeight.w400,
-                        color: const Color(0xff202020),
-                      ),
+        LayeredCard(
+          firstLayerColor: CustomBlue.s300,
+          secondLayerColor: CustomBlue.s500,
+          thirdLayerColor: const Color(0xFFDEE5FF),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 문제 번호 + 힌트 버튼
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    q.title,
+                    style: TextStyle(
+                      fontFamily: "SBAggroM",
+                      fontSize: screenWidth * (18 / 360),
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xff202020),
                     ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.help_outline,
-                            color: Color(0xFF3F55A7),
-                          ),
-                          onPressed: () => _showHintDialog(vm),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                          iconSize: 28,
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.help_outline,
+                          color: Color(0xFF3F55A7),
                         ),
-                        const SizedBox(height: 4),
-                        Transform.translate(
-                          offset: const Offset(0, -15),
+                        onPressed: () => _showHintDialog(vm),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        iconSize: 28,
+                      ),
+                      const SizedBox(height: 4),
+                      Transform.translate(
+                        offset: const Offset(0, -15),
+                        child: Text(
+                          '힌트',
+                          style: TextStyle(
+                            color: const Color(0xFF3F55A7),
+                            fontSize: screenWidth * (12 / 360),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              // 문제 영역
+              Text(
+                q.question,
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                  fontFamily: "Pretendard",
+                  fontWeight: FontWeight.w400,
+                  fontSize: screenWidth * (16 / 360),
+                  height: 1.4,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 16),
+              // 답변 입력 영역 (isqr가 false인 경우에만)
+              if (!q.isqr) ...[
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFFFFF),
+                    borderRadius: BorderRadius.circular(8.0),
+                    border: Border.all(
+                      color: const Color(0xffdcdcdc),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: TextField(
+                          style: TextStyle(
+                            fontSize: screenWidth * (15 / 360),
+                          ),
+                          controller: _controller,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                            hintText: '정답을 입력해 주세요.',
+                            hintStyle: TextStyle(
+                              fontSize: screenWidth * (14 / 360),
+                              color: const Color(0xffaaaaaa),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12.0,
+                              vertical: 12.0,
+                            ),
+                            border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 60,
+                        height: 52,
+                        child: ElevatedButton(
+                          onPressed: () => _submitAnswer(vm),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: mainColor,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                            ),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(8),
+                                bottomRight: Radius.circular(8),
+                              ),
+                            ),
+                          ),
                           child: Text(
-                            '힌트',
+                            '확인',
                             style: TextStyle(
-                              color: const Color(0xFF3F55A7),
-                              fontSize: screenWidth * (12 / 360),
-                              fontWeight: FontWeight.w500,
+                              fontSize: screenWidth * (14 / 360),
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                // 문제 영역
-                Text(
-                  q.question,
-                  textAlign: TextAlign.justify,
-                  style: TextStyle(
-                    fontFamily: "Pretendard",
-                    fontWeight: FontWeight.w400,
-                    fontSize: screenWidth * (16 / 360),
-                    height: 1.4,
-                    color: Colors.black87,
+                      ),
+                    ],
                   ),
                 ),
-                const Expanded(child: SizedBox()),
-                // 답변 입력 영역 (isqr가 false인 경우에만)
-                if (!q.isqr) ...[
-                  Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFFFFF),
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(
-                        color: const Color(0xffdcdcdc),
+              ],
+              // QR 코드 버튼 (isqr가 true인 문제에서만)
+              if (q.isqr) ...[
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  height: 60,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => QRScanScreen(),
+                        ),
+                      );
+                      if (result != null && result is String) {
+                        final isCorrect = q.validateQRAnswer(result);
+                        
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) => AnswerPopup(
+                            isCorrect: isCorrect,
+                            grade: StudentGrade.high,
+                            onNext: () async {
+                              Navigator.pop(context);
+                              if (isCorrect) {
+                                // 정답인 경우 다음 단계로 진행
+                                final answerData = await loadHintAnswerByStage(q.stage);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    settings: const RouteSettings(name: 'HighAnswer'),
+                                    builder: (_) => HighAnswer(
+                                      answer: answerData,
+                                      gameStartTime: widget.gameStartTime,
+                                      questionList: widget.questionList,
+                                      currentIndex: widget.currentIndex,
+                                      isFromHint: true,
+                                    ),
+                                  ),
+                                );
+                              }
+                              // 오답일 때는 팝업만 닫고 현재 화면 유지
+                            },
+                          ),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: mainColor,
+                      foregroundColor: Colors.white,
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          flex: 2,
-                          child: TextField(
-                            style: TextStyle(
-                              fontSize: screenWidth * (15 / 360),
-                            ),
-                            controller: _controller,
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.done,
-                            decoration: InputDecoration(
-                              hintText: '정답을 입력해 주세요.',
-                              hintStyle: TextStyle(
-                                fontSize: screenWidth * (14 / 360),
-                                color: const Color(0xffaaaaaa),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 12.0,
-                                vertical: 12.0,
-                              ),
-                              border: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                            ),
-                          ),
+                        Icon(
+                          Icons.qr_code_scanner,
+                          size: 24,
+                          color: Colors.white,
                         ),
-                        SizedBox(
-                          width: 60,
-                          height: 52,
-                          child: ElevatedButton(
-                            onPressed: () => _submitAnswer(vm),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: mainColor,
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 12,
-                              ),
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(8),
-                                  bottomRight: Radius.circular(8),
-                                ),
-                              ),
-                            ),
-                            child: Text(
-                              '확인',
-                              style: TextStyle(
-                                fontSize: screenWidth * (14 / 360),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'QR코드 스캔',
+                          style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
                     ),
                   ),
-                ],
-                // QR 코드 버튼 (isqr가 true인 문제에서만)
-                if (q.isqr) ...[
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 60,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => QRScanScreen(),
-                          ),
-                        );
-                        if (result != null && result is String) {
-                          final isCorrect = q.validateQRAnswer(result);
-                          
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (_) => AnswerPopup(
-                              isCorrect: isCorrect,
-                              grade: StudentGrade.high,
-                              onNext: () async {
-                                Navigator.pop(context);
-                                if (isCorrect) {
-                                  // 정답인 경우 다음 단계로 진행
-                                  final answerData = await loadHintAnswerByStage(q.stage);
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      settings: const RouteSettings(name: 'HighAnswer'),
-                                      builder: (_) => HighAnswer(
-                                        answer: answerData,
-                                        gameStartTime: widget.gameStartTime,
-                                        questionList: widget.questionList,
-                                        currentIndex: widget.currentIndex,
-                                        isFromHint: true,
-                                      ),
-                                    ),
-                                  );
-                                }
-                                // 오답일 때는 팝업만 닫고 현재 화면 유지
-                              },
-                            ),
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: mainColor,
-                        foregroundColor: Colors.white,
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.qr_code_scanner,
-                            size: 24,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'QR코드 스캔',
-                            style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width * (16 / 360),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-                const SizedBox(height: 24),
+                ),
               ],
-            ),
+              const SizedBox(height: 24),
+            ],
           ),
         ),
         ],

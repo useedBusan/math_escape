@@ -5,6 +5,7 @@ import '../../../core/utils/view/answer_popup.dart';
 import '../../../core/utils/view/common_intro_view.dart';
 import '../../../core/utils/viewmodel/intro_view_model.dart';
 import '../../../constants/enum/image_enums.dart';
+import '../../../core/utils/view/layered_card.dart';
 import '../../../core/utils/view/qr_scan_screen.dart';
 import '../coordinator/middle_mission_coordinator.dart';
 import '../model/middle_mission_model.dart';
@@ -287,307 +288,221 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                   ],
                 ),
                 const SizedBox(height: 20),
-                Center(
-                  child: Stack(
-                    alignment: Alignment.topCenter,
+                LayeredCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 첫번째 레이어
-                      Container(
-                        width: MediaQuery.of(context).size.width - 60,
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        margin: const EdgeInsets.only(top: 5),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF192243),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: const Color(0xFF192243),
-                            width: 1,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.3),
-                              blurRadius: 8,
-                              offset: const Offset(0, 4),
+                      // 문제 번호 + 힌트 버튼
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '문제 ${viewModel.currentIndex + 1} / ${viewModel.totalCount}',
+                            style: TextStyle(
+                              fontFamily: "SBAggroM",
+                              fontSize:
+                                  MediaQuery.of(context).size.width *
+                                  (18 / 360),
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xff202020),
                             ),
-                          ],
-                        ),
-                      ),
-                      // 두번째 레이어
-                      Container(
-                        width: MediaQuery.of(context).size.width - 40,
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        margin: const EdgeInsets.only(top: 15),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF3F55A7),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: const Color(0xFF192243),
-                            width: 1,
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.2),
-                              blurRadius: 6,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // 세번째 레이어 (실제 콘텐츠 카드)
-                      Container(
-                        width: MediaQuery.of(context).size.width - 20,
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
-                        margin: const EdgeInsets.only(top: 25),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: const Color(0xFF192243),
-                            width: 1,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.15),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            // 스크롤 가능한 상단 영역
-                            Expanded(
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // 문제 번호 + 힌트 버튼
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          '문제 ${viewModel.currentIndex + 1} / ${viewModel.totalCount}',
-                                          style: TextStyle(
-                                            fontFamily: "SBAggroM",
-                                            fontSize:
-                                                MediaQuery.of(context).size.width *
-                                                (18 / 360),
-                                            fontWeight: FontWeight.w400,
-                                            color: const Color(0xff202020),
-                                          ),
-                                        ),
-                                        Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            AnimatedBuilder(
-                                              animation: _hintColorAnimation,
-                                              builder: (context, child) {
-                                                final color = Color.lerp(
-                                                  const Color(0xFF3F55A7),
-                                                  const Color(0xFFB2BBDC),
-                                                  _hintColorAnimation.value,
-                                                )!;
-                                                return IconButton(
-                                                  icon: Icon(
-                                                    Icons.help_outline,
-                                                    color: color,
-                                                  ),
-                                                  onPressed: () => viewModel.showHintDialog(),
-                                                  padding: EdgeInsets.zero,
-                                                  constraints: const BoxConstraints(),
-                                                  iconSize: 28,
-                                                );
-                                              },
-                                            ),
-                                            const SizedBox(height: 4),
-                                            AnimatedBuilder(
-                                              animation: _hintColorAnimation,
-                                              builder: (context, child) {
-                                                final color = Color.lerp(
-                                                  const Color(0xFF3F55A7),
-                                                  const Color(0xFFB2BBDC),
-                                                  _hintColorAnimation.value,
-                                                )!;
-                                                return Transform.translate(
-                                                  offset: const Offset(0, -15),
-                                                  child: Text(
-                                                    '힌트',
-                                                    style: TextStyle(
-                                                      color: color,
-                                                      fontSize:
-                                                          MediaQuery.of(
-                                                            context,
-                                                          ).size.width *
-                                                          (12 / 360),
-                                                      fontWeight: FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              AnimatedBuilder(
+                                animation: _hintColorAnimation,
+                                builder: (context, child) {
+                                  final color = Color.lerp(
+                                    const Color(0xFF3F55A7),
+                                    const Color(0xFFB2BBDC),
+                                    _hintColorAnimation.value,
+                                  )!;
+                                  return IconButton(
+                                    icon: Icon(
+                                      Icons.help_outline,
+                                      color: color,
                                     ),
-                                    // 이미지가 없을 때 간격 줄이기, 있을 때는 기본 간격
-                                    SizedBox(height: mission.questionImage.isEmpty ? 4 : 8),
-                                    // 문제 영역
-                                    Text(
-                                      mission.question,
-                                      textAlign: TextAlign.justify,
+                                    onPressed: () => viewModel.showHintDialog(),
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                    iconSize: 28,
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 4),
+                              AnimatedBuilder(
+                                animation: _hintColorAnimation,
+                                builder: (context, child) {
+                                  final color = Color.lerp(
+                                    const Color(0xFF3F55A7),
+                                    const Color(0xFFB2BBDC),
+                                    _hintColorAnimation.value,
+                                  )!;
+                                  return Transform.translate(
+                                    offset: const Offset(0, -15),
+                                    child: Text(
+                                      '힌트',
                                       style: TextStyle(
-                                        fontFamily: "Pretendard",
-                                        fontWeight: FontWeight.w400,
+                                        color: color,
                                         fontSize:
-                                            MediaQuery.of(context).size.width *
-                                            (16 / 360),
-                                        height: 1.4,
-                                        color: Colors.black87,
+                                            MediaQuery.of(
+                                              context,
+                                            ).size.width *
+                                            (12 / 360),
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                    const SizedBox(height: 16),
-                                    // 이미지 영역 (이미지가 있을때만) - 가운데 정렬 및 유동적 높이
-                                    if (mission.questionImage.isNotEmpty)
-                                      SizedBox(
-                                        height: 200, // 고정 높이로 설정하여 비율 유지
-                                        child: Center(
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(8),
-                                            child: Image.asset(
-                                              mission.questionImage,
-                                              fit: BoxFit.contain,
-                                            ),
-                                          ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      // 이미지가 없을 때 간격 줄이기, 있을 때는 기본 간격
+                      SizedBox(height: mission.questionImage.isEmpty ? 4 : 8),
+                      // 문제 영역
+                      Text(
+                        mission.question,
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontFamily: "Pretendard",
+                          fontWeight: FontWeight.w400,
+                          fontSize:
+                              MediaQuery.of(context).size.width *
+                              (16 / 360),
+                          height: 1.4,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      // 이미지 영역 (이미지가 있을때만) - 가운데 정렬 및 유동적 높이
+                      if (mission.questionImage.isNotEmpty)
+                        SizedBox(
+                          height: 200, // 고정 높이로 설정하여 비율 유지
+                          child: Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.asset(
+                                mission.questionImage,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: 16),
+                      // QR 문제일 때 QR 스캔 버튼 표시
+                      if (mission.isqr) ...[
+                        SizedBox(
+                          width: double.infinity,
+                          height: 60,
+                          child: ElevatedButton(
+                            onPressed: () => _submitAnswer(coordinator, viewModel),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: mainColor,
+                              foregroundColor: Colors.white,
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.qr_code_scanner,
+                                  size: 24,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'QR코드 스캔',
+                                  style: TextStyle(
+                                    fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ] else ...[
+                        // 일반 문제일 때 텍스트필드 표시
+                        Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFFFFF),
+                            borderRadius: BorderRadius.circular(8.0),
+                            border: Border.all(
+                              color: const Color(0xffdcdcdc),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: TextField(
+                                  style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                        (15 / 360),
+                                  ),
+                                  controller: viewModel.answerController,
+                                  keyboardType: TextInputType.text,
+                                  textInputAction: TextInputAction.done,
+                                  decoration: InputDecoration(
+                                    hintText: '정답을 입력해 주세요.',
+                                    hintStyle: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(
+                                            context,
+                                          ).size.width *
+                                          (14 / 360),
+                                      color: const Color(0xffaaaaaa),
+                                    ),
+                                    contentPadding:
+                                        const EdgeInsets.symmetric(
+                                          horizontal: 12.0,
+                                          vertical: 12.0,
                                         ),
-                                      ),
-                                    
-                                  ],
+                                    border: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                  ),
                                 ),
                               ),
-                            ),
-                            // 하단 고정 영역 (제출 버튼/텍스트필드)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 16),
-                              child: Column(
-                                children: [
-                                  // QR 문제일 때 QR 스캔 버튼 표시
-                                  if (mission.isqr) ...[
-                                    SizedBox(
-                                      width: double.infinity,
-                                      height: 60,
-                                      child: ElevatedButton(
-                                        onPressed: () => _submitAnswer(coordinator, viewModel),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: mainColor,
-                                          foregroundColor: Colors.white,
-                                          elevation: 2,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.qr_code_scanner,
-                                              size: 24,
-                                              color: Colors.white,
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Text(
-                                              'QR코드 스캔',
-                                              style: TextStyle(
-                                                fontSize: MediaQuery.of(context).size.width * (16 / 360),
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                              SizedBox(
+                                width: 60,
+                                height: 52,
+                                child: ElevatedButton(
+                                  onPressed: () => _submitAnswer(coordinator, viewModel),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: mainColor,
+                                    foregroundColor: Colors.white,
+                                    elevation: 0,
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 12,
+                                    ),
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(8),
+                                        bottomRight: Radius.circular(8),
                                       ),
                                     ),
-                                  ] else ...[
-                                    // 일반 문제일 때 텍스트필드 표시
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFFFFFFF),
-                                        borderRadius: BorderRadius.circular(8.0),
-                                        border: Border.all(
-                                          color: const Color(0xffdcdcdc),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 2,
-                                            child: TextField(
-                                              style: TextStyle(
-                                                fontSize:
-                                                    MediaQuery.of(context).size.width *
-                                                    (15 / 360),
-                                              ),
-                                              controller: viewModel.answerController,
-                                              keyboardType: TextInputType.text,
-                                              textInputAction: TextInputAction.done,
-                                              decoration: InputDecoration(
-                                                hintText: '정답을 입력해 주세요.',
-                                                hintStyle: TextStyle(
-                                                  fontSize:
-                                                      MediaQuery.of(
-                                                        context,
-                                                      ).size.width *
-                                                      (14 / 360),
-                                                  color: const Color(0xffaaaaaa),
-                                                ),
-                                                contentPadding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 12.0,
-                                                      vertical: 12.0,
-                                                    ),
-                                                border: InputBorder.none,
-                                                enabledBorder: InputBorder.none,
-                                                focusedBorder: InputBorder.none,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 60,
-                                            height: 52,
-                                            child: ElevatedButton(
-                                              onPressed: () => _submitAnswer(coordinator, viewModel),
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: mainColor,
-                                                foregroundColor: Colors.white,
-                                                elevation: 0,
-                                                padding: const EdgeInsets.symmetric(
-                                                  vertical: 12,
-                                                ),
-                                                shape: const RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.only(
-                                                    topRight: Radius.circular(8),
-                                                    bottomRight: Radius.circular(8),
-                                                  ),
-                                                ),
-                                              ),
-                                              child: Text(
-                                                '제출',
-                                                style: TextStyle(
-                                                  fontSize: MediaQuery.of(context).size.width * (12 / 360),
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                  ),
+                                  child: Text(
+                                    '제출',
+                                    style: TextStyle(
+                                      fontSize: MediaQuery.of(context).size.width * (12 / 360),
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                  ],
-                                ],
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ),
