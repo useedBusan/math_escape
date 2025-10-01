@@ -32,7 +32,7 @@ class MiddleMissionListView extends StatelessWidget {
               value: vm.progress,
               minHeight: 10,
               backgroundColor: const Color(0xFFEDEDED),
-              valueColor: AlwaysStoppedAnimation<Color>(const Color(0xFF3F55A7)),
+              valueColor: AlwaysStoppedAnimation<Color>(CustomBlue.s500),
             ),
           ),
           const SizedBox(height: 20),
