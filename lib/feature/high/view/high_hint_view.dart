@@ -136,32 +136,17 @@ class _HighHintContentState extends State<_HighHintContent> {
   Future<void> showAnswerPopup(
       BuildContext context, {
         required bool isCorrect,
+        required VoidCallback onNext,
       }) async {
-    showGeneralDialog(
+    showDialog(
       context: context,
       barrierDismissible: false,
-      barrierLabel: '',
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return Center(
-          child: AnswerPopup(
-            isCorrect: isCorrect,
-            grade: StudentGrade.elementaryHigh,
-            onNext: () {},
-          ),
-        );
-      },
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        return ScaleTransition(
-          scale: CurvedAnimation(parent: animation, curve: Curves.easeOutBack),
-          child: child,
-        );
-      },
+      builder: (_) => AnswerPopup(
+        isCorrect: isCorrect,
+        grade: StudentGrade.high,
+        onNext: onNext,
+      ),
     );
-    await Future.delayed(const Duration(milliseconds: 1500));
-    if (Navigator.of(context).canPop()) {
-      Navigator.of(context).pop();
-    }
   }
 
   void _submitAnswer(HighHintViewModel vm) {
@@ -172,23 +157,29 @@ class _HighHintContentState extends State<_HighHintContent> {
     final answers = q.answer.map((a) => a.trim().toLowerCase()).toList();
     final isCorrect = answers.contains(input);
 
-    showAnswerPopup(context, isCorrect: isCorrect).then((_) async {
-      if (isCorrect) {
-        final answerData = await loadHintAnswerByStage(q.stage);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => HighAnswer(
-              answer: answerData,
-              gameStartTime: widget.gameStartTime,
-              questionList: widget.questionList, // 원래 문제 리스트 사용
-              currentIndex: widget.currentIndex, // 원래 인덱스 사용
-              isFromHint: true, // 힌트에서 온 것임을 표시
+    showAnswerPopup(
+      context, 
+      isCorrect: isCorrect,
+      onNext: () async {
+        if (isCorrect) {
+          final answerData = await loadHintAnswerByStage(q.stage);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HighAnswer(
+                answer: answerData,
+                gameStartTime: widget.gameStartTime,
+                questionList: widget.questionList,
+                currentIndex: widget.currentIndex,
+                isFromHint: true,
+              ),
             ),
-          ),
-        );
-      }
-    });
+          );
+        } else {
+          Navigator.of(context).pop();
+        }
+      },
+    );
   }
 
   @override
@@ -451,6 +442,7 @@ class _HighHintContentState extends State<_HighHintContent> {
                                     ),
                                   );
                                 }
+                                // 오답일 때는 팝업만 닫고 현재 화면 유지
                               },
                             ),
                           );

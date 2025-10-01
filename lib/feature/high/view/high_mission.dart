@@ -182,6 +182,8 @@ class _HighMissionContentState extends State<_HighMissionContent> {
               ),
             ),
           );
+        } else {
+          Navigator.of(context).pop();
         }
       },
     );
@@ -444,6 +446,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                                     ),
                                   );
                                 }
+                                // 오답일 때는 팝업만 닫고 현재 화면 유지
                               },
                               grade: StudentGrade.high,
                             ),
