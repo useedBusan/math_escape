@@ -5,6 +5,8 @@ import 'package:flutter_math_fork/flutter_math.dart';
 import '../../../App/theme/app_colors.dart';
 import '../../../feature/high/view/high_mission.dart';
 import '../view_model/high_answer_view_model.dart';
+import '../view_model/high_mission_view_model.dart';
+import '../view_model/high_hint_view_model.dart';
 import 'package:provider/provider.dart';
 import '../../../core/utils/view/home_alert.dart';
 import 'base_high_view.dart';
@@ -126,6 +128,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
+            settings: const RouteSettings(name: 'HighMission'),
             builder: (_) => HighMission(
               questionList: widget.questionList,
               currentIndex: widget.currentIndex + 1,
@@ -135,8 +138,8 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
         );
       },
       onNavigateBack: () {
-        Navigator.pop(context); // HighAnswer pop
-        Navigator.pop(context); // HighHintView pop
+        // HighMission으로 돌아가기
+        Navigator.popUntil(context, (route) => route.settings.name == 'HighMission');
       },
       onComplete: () {
         // 마지막 문제인 경우 - HighClearView로 이동
@@ -160,8 +163,10 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
           onWillPop: () async {
             final result = await HomeAlert.show(context);
             if (result == true) {
-              // 타이머 초기화
-              HighAnswerViewModel.instance.endAnswer();
+              // 모든 상태 해제
+              HighMissionViewModel.instance.disposeAll();
+              HighHintViewModel.instance.disposeAll();
+              HighAnswerViewModel.instance.disposeAll();
               Navigator.of(context).popUntil((route) => route.isFirst);
             }
             return false; // 기본 뒤로가기 동작 방지

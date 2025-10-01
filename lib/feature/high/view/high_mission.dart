@@ -8,9 +8,11 @@ import '../model/high_mission_question.dart';
 import 'dart:async';
 import 'high_answer.dart';
 import '../view_model/high_mission_view_model.dart';
-import 'base_high_view.dart';
+import '../view_model/high_hint_view_model.dart';
+import '../view_model/high_answer_view_model.dart';
 import '../view_model/base_high_view_model.dart';
 import 'high_hint_view.dart';
+import 'base_high_view.dart';
 import '../../../core/utils/view/answer_popup.dart';
 import '../../../core/utils/view/qr_scan_screen.dart';
 import '../../../core/utils/view/home_alert.dart';
@@ -109,6 +111,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
       Navigator.push(
         context,
         MaterialPageRoute(
+          settings: const RouteSettings(name: 'HighHint'),
           builder: (_) => HighHintView(
             questionList: vm.questionList,
             currentIndex: vm.currentIndex,
@@ -173,6 +176,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
           Navigator.push(
             context,
             MaterialPageRoute(
+              settings: const RouteSettings(name: 'HighAnswer'),
               builder: (_) => HighAnswer(
                 answer: answerData,
                 gameStartTime: widget.gameStartTime,
@@ -197,8 +201,10 @@ class _HighMissionContentState extends State<_HighMissionContent> {
           onWillPop: () async {
             final result = await HomeAlert.show(context);
             if (result == true) {
-              // 타이머 초기화
-              HighMissionViewModel.instance.endGame();
+              // 모든 상태 해제
+              HighMissionViewModel.instance.disposeAll();
+              HighHintViewModel.instance.disposeAll();
+              HighAnswerViewModel.instance.disposeAll();
               Navigator.of(context).popUntil((route) => route.isFirst);
             }
             return false; // 기본 뒤로가기 동작 방지
@@ -437,6 +443,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
+                                      settings: const RouteSettings(name: 'HighAnswer'),
                                       builder: (_) => HighAnswer(
                                         answer: answerData,
                                         gameStartTime: widget.gameStartTime,

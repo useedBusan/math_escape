@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../app/theme/app_colors.dart';
+import '../../../feature/high/view_model/high_mission_view_model.dart';
+import '../../../feature/high/view_model/high_hint_view_model.dart';
+import '../../../feature/high/view_model/high_answer_view_model.dart';
 
 /// 홈화면 이동 확인을 위한 커스텀 Alert 모듈
 class HomeAlert {
@@ -27,6 +30,11 @@ class HomeAlert {
     final result = await show(context);
     
     if (result == true) {
+      // 모든 ViewModel 상태 해제
+      HighMissionViewModel.instance.disposeAll();
+      HighHintViewModel.instance.disposeAll();
+      HighAnswerViewModel.instance.disposeAll();
+      
       if (onHome != null) {
         onHome();
       } else {

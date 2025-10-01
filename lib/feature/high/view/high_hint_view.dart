@@ -11,8 +11,10 @@ import '../../../core/utils/view/answer_popup.dart';
 import '../../../core/utils/view/qr_scan_screen.dart';
 import '../../../feature/high/view/high_answer.dart';
 import '../view_model/high_hint_view_model.dart';
-import 'base_high_view.dart';
+import '../view_model/high_mission_view_model.dart';
+import '../view_model/high_answer_view_model.dart';
 import '../view_model/base_high_view_model.dart';
+import 'base_high_view.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../core/utils/view/home_alert.dart';
 import '../../../core/utils/view/hint_popup.dart';
@@ -166,6 +168,7 @@ class _HighHintContentState extends State<_HighHintContent> {
           Navigator.push(
             context,
             MaterialPageRoute(
+              settings: const RouteSettings(name: 'HighAnswer'),
               builder: (_) => HighAnswer(
                 answer: answerData,
                 gameStartTime: widget.gameStartTime,
@@ -190,8 +193,10 @@ class _HighHintContentState extends State<_HighHintContent> {
           onWillPop: () async {
             final result = await HomeAlert.show(context);
             if (result == true) {
-              // 타이머 초기화
-              HighHintViewModel.instance.endHintGame();
+              // 모든 상태 해제
+              HighMissionViewModel.instance.disposeAll();
+              HighHintViewModel.instance.disposeAll();
+              HighAnswerViewModel.instance.disposeAll();
               Navigator.of(context).popUntil((route) => route.isFirst);
             }
             return false; // 기본 뒤로가기 동작 방지
@@ -432,6 +437,7 @@ class _HighHintContentState extends State<_HighHintContent> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
+                                      settings: const RouteSettings(name: 'HighAnswer'),
                                       builder: (_) => HighAnswer(
                                         answer: answerData,
                                         gameStartTime: widget.gameStartTime,

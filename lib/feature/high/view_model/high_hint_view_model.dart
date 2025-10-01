@@ -183,4 +183,15 @@ class HighHintViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// 모든 상태 완전 해제 (홈으로 돌아갈 때 사용)
+  void disposeAll() {
+    HighTimerService.instance.endGame();
+    _gameStartTime = null;
+    _currentHintIndex = 0;
+    _gameCompleted = false;
+    _hintQuestionList.clear();
+    answerController.dispose();
+    notifyListeners();
+  }
+
 }

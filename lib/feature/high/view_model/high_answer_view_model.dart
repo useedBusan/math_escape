@@ -106,7 +106,7 @@ class HighAnswerViewModel extends ChangeNotifier {
     required VoidCallback onComplete,
   }) {
     if (_isFromHint) {
-      // 힌트에서 온 경우: HighAnswer + HighHintView pop → HighMissionView 복귀
+      // 힌트에서 온 경우: HighAnswer pop → HighMission으로 돌아가기
       onNavigateBack();
     } else {
       // 일반적인 경우: HighAnswer pop → HighMissionView에서 다음 문제
@@ -140,6 +140,15 @@ class HighAnswerViewModel extends ChangeNotifier {
   /// 답변 화면 완전 리셋
   void resetAnswer() {
     HighTimerService.instance.resetGame();
+    _currentAnswer = null;
+    _gameStartTime = null;
+    _isFromHint = false;
+    notifyListeners();
+  }
+
+  /// 모든 상태 완전 해제 (홈으로 돌아갈 때 사용)
+  void disposeAll() {
+    HighTimerService.instance.endGame();
     _currentAnswer = null;
     _gameStartTime = null;
     _isFromHint = false;
