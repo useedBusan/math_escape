@@ -180,11 +180,14 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
+    return Align(
+      alignment: Alignment.topCenter,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
           Row(
             children: [
               // 퓨리 이미지 공간 (왼쪽)
@@ -336,6 +339,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
           // 하단바 높이만큼 여백 추가 (모래시계 원 높이)
           SizedBox(height: screenHeight * 0.13),
         ],
+        ),
       ),
     );
   }

@@ -31,80 +31,87 @@ class BaseHighView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<BaseHighViewModel>();
-
-    Widget mid = Padding(
-      padding: const EdgeInsets.all(16),
-      child: useStack
-          ? Stack(children: [Positioned.fill(child: paneBuilder(context, vm.pane))])
-          : AnimatedSwitcher(
-        duration: transitionDuration,
-        switchInCurve: Curves.easeOutCubic,
-        switchOutCurve: Curves.easeInCubic,
-        child: KeyedSubtree(
-          key: ValueKey(vm.pane),
-          child: paneBuilder(context, vm.pane),
-        ),
-      ),
-    );
-
-    final appBar = AppBar(
-      elevation: 0,
-      backgroundColor: Colors.white,
-      centerTitle: true,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back, color: mainColor),
-        onPressed: onBack ?? () => Navigator.of(context).maybePop(),
-      ),
-      title: Text(
-        title,
-        style: TextStyle(color: mainColor, fontWeight: FontWeight.w700, fontSize: 18),
-      ),
-      actions: [
-        if (onHome != null)
-          IconButton(icon: Icon(Icons.home_outlined, color: mainColor), onPressed: onHome),
-      ],
-    );
-
-    return Stack(
-      children: [
-        if (background != null) Positioned.fill(child: background!),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          resizeToAvoidBottomInset: false,
-          appBar: appBar,
-          body: Stack(
-            children: [
-              // 메인 컨텐츠
-              Positioned.fill(
-                child: SafeArea(
-                  top: false,
-                  bottom: false, // 하단바가 따로 SafeArea 처리
-                  child: Padding(
-                    padding: const EdgeInsets.all(0),
-                    child: mid,
-                  ),
-                ),
-              ),
-
-              // 하단바: 화면 좌우/아래 딱 붙게
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                  child: _BottomTimerBar(
-                    mainColor: vm.progressColor,
-                    think: vm.thinkText,
-                    body: vm.bodyText,
-                    progress: vm.thinkProgress,
-                    hourglassAsset: 'assets/images/high/highHourglass.png',
-                  ),
-
-              ),
-            ],
+    // BaseHighViewModel의 pane 정보만 필요하므로 Selector 사용
+    return Selector<BaseHighViewModel, HighPane>(
+      selector: (context, vm) => vm.pane,
+      builder: (context, pane, child) {
+        Widget mid = Padding(
+          padding: const EdgeInsets.all(16),
+          child: useStack
+              ? Stack(children: [Positioned.fill(child: paneBuilder(context, pane))])
+              : AnimatedSwitcher(
+            duration: transitionDuration,
+            switchInCurve: Curves.easeOutCubic,
+            switchOutCurve: Curves.easeInCubic,
+            child: KeyedSubtree(
+              key: ValueKey(pane),
+              child: paneBuilder(context, pane),
+            ),
           ),
-        ),
-      ],
+        );
+
+        final appBar = AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: mainColor),
+            onPressed: onBack ?? () => Navigator.of(context).maybePop(),
+          ),
+          title: Text(
+            title,
+            style: TextStyle(color: mainColor, fontWeight: FontWeight.w700, fontSize: 18),
+          ),
+          actions: [
+            if (onHome != null)
+              IconButton(icon: Icon(Icons.home_outlined, color: mainColor), onPressed: onHome),
+          ],
+        );
+
+        return Stack(
+          children: [
+            if (background != null) Positioned.fill(child: background!),
+            Scaffold(
+              backgroundColor: Colors.transparent,
+              resizeToAvoidBottomInset: false,
+              appBar: appBar,
+              body: Stack(
+                children: [
+                  // 메인 컨텐츠
+                  Positioned.fill(
+                    child: SafeArea(
+                      top: false,
+                      bottom: false, // 하단바가 따로 SafeArea 처리
+                      child: Padding(
+                        padding: const EdgeInsets.all(0),
+                        child: mid,
+                      ),
+                    ),
+                  ),
+
+                  // 하단바: 화면 좌우/아래 딱 붙게 (타이머만 별도 Consumer로 분리)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Consumer<BaseHighViewModel>(
+                      builder: (context, vm, child) {
+                        return _BottomTimerBar(
+                          mainColor: vm.progressColor,
+                          think: vm.thinkText,
+                          body: vm.bodyText,
+                          progress: vm.thinkProgress,
+                          hourglassAsset: 'assets/images/high/highHourglass.png',
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
