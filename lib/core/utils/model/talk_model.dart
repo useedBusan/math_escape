@@ -49,8 +49,8 @@ class Talk {
       id: json['id'],
       stage: json['stage'] as int?,
       speaker: speaker,
-      speakerImg: json['speakerImg'] as String? ?? json['puri_image'] as String? ?? ImageAssets.furiStanding.path,
-      backImg: json['backImg'] as String? ?? json['back_image'] as String? ?? ImageAssets.background.path,
+      speakerImg: json['speakerImg'] as String? ?? json['furiImage'] as String? ?? ImageAssets.furiStanding.path,
+      backImg: json['backImg'] as String? ?? json['backImage'] as String? ?? ImageAssets.background.path,
       talk: json['talk'],
     );
   }

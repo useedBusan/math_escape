@@ -19,20 +19,20 @@ class CorrectTalkItem {
 
 class TalkItem {
   final String talk;
-  final String puri_image;
-  final String back_image;
+  final String furiImage;
+  final String backImage;
 
   TalkItem({
     required this.talk,
-    required this.puri_image,
-    required this.back_image,
+    required this.furiImage,
+    required this.backImage,
   });
 
   factory TalkItem.fromJson(Map<String, dynamic> json) {
     return TalkItem(
       talk: json['talk'],
-      puri_image: json['puri_image'] as String? ?? ImageAssets.furiGood.path,
-      back_image: json['back_image'] as String? ?? ImageAssets.background.path,
+      furiImage: json['furiImage'] as String? ?? ImageAssets.furiGood.path,
+      backImage: json['backImage'] as String? ?? ImageAssets.background.path,
     );
   }
 }
@@ -44,7 +44,7 @@ class MissionItem {
   final List<String> answer;
   final String hint1;
   final String hint2;
-  final String back_image;
+  final String backImage;
   final String questionImage;
   final bool isqr;
 
@@ -55,7 +55,7 @@ class MissionItem {
     required this.answer,
     required this.hint1,
     required this.hint2,
-    required this.back_image,
+    required this.backImage,
     required this.questionImage,
     this.isqr = false,
   });
@@ -77,7 +77,7 @@ class MissionItem {
       answer: parsedAnswer,
       hint1: json['hint1'],
       hint2: json['hint2'],
-      back_image: json['back_image'] ?? '',
+      backImage: json['backImage'] ?? '',
       questionImage: json['questionImage'] ?? '',
       isqr: json['isqr'] as bool? ?? false,
     );

@@ -148,7 +148,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen>
     return CommonIntroView(
       appBarTitle: '미션! 수사모의 수학 보물을 찾아서',
       backgroundAssetPath: ImageAssets.background.path,
-      characterImageAssetPath: talk.puri_image,
+      characterImageAssetPath: talk.furiImage,
       speakerName: '푸리',
       talkText: talk.talk,
       buttonText: talk.answer,

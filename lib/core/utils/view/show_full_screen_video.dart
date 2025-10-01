@@ -279,7 +279,7 @@ class _FullscreenVideoPageState extends State<FullscreenVideoPage>
                 onPressed: () {
                   try {
                     final v = _controller.value;
-                    final duration = v.duration ?? Duration.zero;
+                    final duration = v.duration;
                     final pos = v.position;
                     final target = (pos + const Duration(seconds: 10)) > duration
                         ? duration

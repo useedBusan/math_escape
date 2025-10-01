@@ -102,7 +102,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
   }
 
   void _showHintDialog() {
-    final MissionItem currentMission = missionList[currentQuestionIndex];
     hintCounter++;
 
     switch (hintCounter) {
@@ -202,9 +201,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
   void _showCorrectAnswerDialog(MiddleMissionCoordinator coordinator) async {
     try {
       final int currentQuestionId = currentQuestionIndex + 1;
-      final CorrectTalkItem correctTalk = talkList.firstWhere(
-        (talk) => talk.id == currentQuestionId,
-      );
 
       // 정답 후 대화 표시 → Coordinator로 대화 단계 이동
       coordinator.toConversation(currentQuestionId);
@@ -307,8 +303,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         children: [
           Positioned.fill(
             child: Image.asset(
-              mission.back_image.isNotEmpty
-                  ? mission.back_image
+              mission.backImage.isNotEmpty
+                  ? mission.backImage
                   : ImageAssets.background.path,
               fit: BoxFit.cover,
             ),

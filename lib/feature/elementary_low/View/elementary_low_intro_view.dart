@@ -47,8 +47,6 @@ class _ElementaryLowIntroViewState extends State<ElementaryLowIntroView> {
           return "푸리 & 매매";
         case Speaker.book:
           return "수첩";
-        default:
-          return "";
       }
     }
 

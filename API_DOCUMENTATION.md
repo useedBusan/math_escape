@@ -28,7 +28,7 @@
     answer: List<String>,
     hint1: String,
     hint2: String,
-    back_image: String,
+    backImage: String,
     questionImage: String
   }
   ```
@@ -43,8 +43,8 @@
   ```dart
   {
     talk: String,
-    puri_image: String,
-    back_image: String
+    furiImage: String,
+    backImage: String
   }
   ```
 

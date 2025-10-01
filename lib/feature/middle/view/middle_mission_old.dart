@@ -36,25 +36,25 @@ class CorrectTalkItem {
 
 class TalkItem {
   final String talk;
-  final String puri_image;
-  final String back_image;
+  final String furiImage;
+  final String backImage;
 
   TalkItem({
     required this.talk,
-    required this.puri_image,
-    required this.back_image,
+    required this.furiImage,
+    required this.backImage,
   });
 
   factory TalkItem.fromJson(Map<String, dynamic> json) {
     return TalkItem(
       talk: json['talk'],
-      puri_image: ImagePathValidator.validate(
-        json['puri_image'] as String?,
+      furiImage: ImagePathValidator.validate(
+        json['furiImage'] as String?,
         ImageAssets.furiGood.path,
         logInvalid: true,
       ),
-      back_image: ImagePathValidator.validate(
-        json['back_image'] as String?,
+      backImage: ImagePathValidator.validate(
+        json['backImage'] as String?,
         ImageAssets.background.path,
         logInvalid: true,
       ),
@@ -69,7 +69,7 @@ class MissionItem {
   final List<String> answer;
   final String hint1;
   final String hint2;
-  final String back_image;
+  final String backImage;
   final String questionImage;
   final bool isqr;
 
@@ -80,7 +80,7 @@ class MissionItem {
     required this.answer,
     required this.hint1,
     required this.hint2,
-    required this.back_image,
+    required this.backImage,
     required this.questionImage,
     this.isqr = false,
   });
@@ -102,7 +102,7 @@ class MissionItem {
       answer: parsedAnswer,
       hint1: json['hint1'],
       hint2: json['hint2'],
-      back_image: json['back_image'] ?? '',
+      backImage: json['backImage'] ?? '',
       questionImage: json['questionImage'] ?? '',
       isqr: json['isqr'] as bool? ?? false,
     );
@@ -274,8 +274,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         return Talk(
           id: currentQuestionId * 100 + index, // 고유 ID 생성
           speaker: Speaker.puri, // middle은 항상 푸리
-          speakerImg: talkItem.puri_image,
-          backImg: talkItem.back_image.isNotEmpty ? talkItem.back_image : ImageAssets.background.path,
+          speakerImg: talkItem.furiImage,
+          backImg: talkItem.backImage.isNotEmpty ? talkItem.backImage : ImageAssets.background.path,
           talk: talkItem.talk,
         );
       }).toList();
@@ -392,8 +392,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         children: [
           Positioned.fill(
             child: Image.asset(
-              mission.back_image.isNotEmpty
-                  ? mission.back_image
+              mission.backImage.isNotEmpty
+                  ? mission.backImage
                   : ImageAssets.background.path,
               fit: BoxFit.cover,
             ),

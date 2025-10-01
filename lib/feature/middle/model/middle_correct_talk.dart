@@ -1,16 +1,16 @@
 class CorrectTalkItem {
   final int id;
   final String talk;
-  final String puri_image;
-  final String back_image;
+  final String furiImage;
+  final String backImage;
   final String answer;
   final int? nextId;
 
   CorrectTalkItem({
     required this.id,
     required this.talk,
-    required this.puri_image,
-    required this.back_image,
+    required this.furiImage,
+    required this.backImage,
     required this.answer,
     this.nextId
   });
@@ -19,8 +19,8 @@ class CorrectTalkItem {
     return CorrectTalkItem(
       id: json['id'],
       talk: json['talk'],
-      puri_image: json['puri_image'],
-      back_image: json['back_image'] ?? '',
+      furiImage: json['furiImage'],
+      backImage: json['backImage'] ?? '',
       answer: json['answer'],
       nextId: json['next_id'],
     );

@@ -120,7 +120,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('힌트'),
-            content: Text(q.hint ?? ''),
+            content: Text(q.hint),
             actions: [
               TextButton(
                 onPressed: () {

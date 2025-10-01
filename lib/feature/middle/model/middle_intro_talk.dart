@@ -17,8 +17,8 @@ class IntroTalkItem {
     return IntroTalkItem(
       id: json['id'],
       talk: json['talk'],
-      puriImage: json['puri_image'],
-      backImage: json['back_image'] ?? '',
+      puriImage: json['furiImage'],
+      backImage: json['backImage'] ?? '',
       nextId: json['next_id'],
     );
   }

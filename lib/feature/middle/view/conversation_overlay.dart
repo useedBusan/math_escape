@@ -54,8 +54,8 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
             talks.add(Talk(
               id: widget.stage * 100 + i,
               speaker: Speaker.puri, // Middle은 항상 푸리
-              speakerImg: talkData['puri_image'] ?? 'assets/images/common/furiStanding.png',
-              backImg: talkData['back_image'] ?? 'assets/images/common/bsbackground.png',
+              speakerImg: talkData['furiImage'] ?? 'assets/images/common/furiStanding.png',
+              backImg: talkData['backImage'] ?? 'assets/images/common/bsbackground.png',
               talk: talkData['talk'] ?? '',
             ));
           }
