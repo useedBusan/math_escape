@@ -344,7 +344,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
 
     return Scaffold(
       backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -362,7 +362,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         ),
         centerTitle: true,
       ),
-      body: Stack(
+      body: SingleChildScrollView(
+        child: Stack(
         children: [
           Positioned.fill(
             child: Image.asset(
@@ -913,6 +914,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
             ),
           ),
         ],
+        ),
       ),
     );
   }

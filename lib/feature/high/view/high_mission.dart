@@ -234,9 +234,12 @@ class _HighMissionContentState extends State<_HighMissionContent> {
           );
         }
 
-        return Column(
-          children: [
-            const SizedBox(height: 14),
+        return SingleChildScrollView(
+          child: SizedBox(
+            height: screenHeight * 1.5, // 충분한 고정 높이
+            child: Column(
+              children: [
+                const SizedBox(height: 14),
             // 설명 텍스트 (퓨리 이미지 + 텍스트)
             Row(
               children: [
@@ -472,7 +475,9 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                 ),
               ),
             ),
-          ],
+            ],
+            ),
+          ),
         );
       },
     );
