@@ -179,7 +179,6 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
   Widget _buildAnswerContent(HighAnswerViewModel vm) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final fontSize = screenWidth * 17/360;
 
     return SingleChildScrollView(
       child: Column(
@@ -239,7 +238,6 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 진리 A 타이틀
                 Text(
                   vm.currentAnswer?.title ?? widget.answer.title,
                   style: TextStyle(
@@ -335,8 +333,8 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
               ),
             ),
           ),
-          // 모래시계 원까지 올라가도록 여백 추가
-          SizedBox(height: screenHeight * 0.15),
+          // 하단바 높이만큼 여백 추가 (모래시계 원 높이)
+          SizedBox(height: screenHeight * 0.13),
         ],
       ),
     );

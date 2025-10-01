@@ -138,32 +138,17 @@ class _HighMissionContentState extends State<_HighMissionContent> {
   Future<void> showAnswerPopup(
     BuildContext context, {
     required bool isCorrect,
+    required VoidCallback onNext,
   }) async {
-    showGeneralDialog(
+    showDialog(
       context: context,
       barrierDismissible: false,
-      barrierLabel: '',
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return Center(
-          child: AnswerPopup(
-            isCorrect: isCorrect,
-            grade: StudentGrade.elementaryHigh,
-            onNext: () {},
-          ),
-        );
-      },
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        return ScaleTransition(
-          scale: CurvedAnimation(parent: animation, curve: Curves.easeOutBack),
-          child: child,
-        );
-      },
+      builder: (_) => AnswerPopup(
+        isCorrect: isCorrect,
+        grade: StudentGrade.high,
+        onNext: onNext,
+      ),
     );
-    await Future.delayed(const Duration(milliseconds: 1500));
-    if (Navigator.of(context).canPop()) {
-      Navigator.of(context).pop();
-    }
   }
 
   void _submitAnswer(HighMissionViewModel vm) {
@@ -174,23 +159,27 @@ class _HighMissionContentState extends State<_HighMissionContent> {
     final answers = q.answer.map((a) => a.trim().toLowerCase()).toList();
     final isCorrect = answers.contains(input);
 
-    showAnswerPopup(context, isCorrect: isCorrect).then((_) async {
-      if (isCorrect) {
-        final answerData = await loadAnswerById(q.id);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => HighAnswer(
-              answer: answerData,
-              gameStartTime: widget.gameStartTime,
-              questionList: vm.questionList,
-              currentIndex: vm.currentIndex,
-              isFromHint: false,
+    showAnswerPopup(
+      context, 
+      isCorrect: isCorrect,
+      onNext: () async {
+        if (isCorrect) {
+          final answerData = await loadAnswerById(q.id);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HighAnswer(
+                answer: answerData,
+                gameStartTime: widget.gameStartTime,
+                questionList: vm.questionList,
+                currentIndex: vm.currentIndex,
+                isFromHint: false,
+              ),
             ),
-          ),
-        );
-      }
-    });
+          );
+        }
+      },
+    );
   }
 
   @override
@@ -434,11 +423,22 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                                 barrierDismissible: false,
                                 builder: (_) => AnswerPopup(
                                   isCorrect: isCorrect,
-                                  onNext: () {
+                                  onNext: () async {
                                     Navigator.pop(context);
                                     if (isCorrect) {
-                                      // 정답일 때 다음 문제로 이동하거나 완료 처리
-                                      // 기존 정답 처리 로직 사용
+                                      // 정답일 때 기존 로직과 동일하게 처리
+                                      final answerData = await loadAnswerById(q.id);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => HighAnswer(
+                                            answer: answerData,
+                                            gameStartTime: widget.gameStartTime,
+                                            questionList: vm.questionList,
+                                            currentIndex: vm.currentIndex,
+                                          ),
+                                        ),
+                                      );
                                     }
                                   },
                                   grade: StudentGrade.high,

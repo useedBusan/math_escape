@@ -71,7 +71,7 @@ class BaseHighView extends StatelessWidget {
         if (background != null) Positioned.fill(child: background!),
         Scaffold(
           backgroundColor: Colors.transparent,
-          resizeToAvoidBottomInset: false, // 하단바가 올라오지 않도록
+          resizeToAvoidBottomInset: false,
           appBar: appBar,
           body: Stack(
             children: [
