@@ -7,6 +7,7 @@ import '../../../core/utils/viewmodel/intro_view_model.dart';
 import '../../../constants/enum/image_enums.dart';
 import '../../../core/utils/view/layered_card.dart';
 import '../../../core/utils/view/qr_scan_screen.dart';
+import '../../../core/utils/view/home_alert.dart';
 import '../coordinator/middle_mission_coordinator.dart';
 import '../model/middle_mission_model.dart';
 import '../view_model/middle_mission_view_model.dart';
@@ -142,22 +143,27 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         ChangeNotifierProvider(create: (_) => MiddleMissionViewModel()),
       ],
       child: Consumer2<MiddleMissionCoordinator, MiddleMissionViewModel>(
-        builder: (context, coordinator, viewModel, child) {
-          // Coordinator와 동기화 설정 (한 번만)
-          coordinator.setQuestionIndexCallback(
-            (index) => _syncWithCoordinator(index, viewModel),
-          );
+          builder: (context, coordinator, viewModel, child) {
+            // Coordinator와 동기화 설정 (한 번만)
+            coordinator.setQuestionIndexCallback(
+              (index) => _syncWithCoordinator(index, viewModel),
+            );
 
-          // 데이터 로드
-          if (viewModel.isLoading) {
-            viewModel.loadMissionData();
-          }
+            // 데이터 로드 (build 완료 후 실행)
+            if (viewModel.isLoading) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                viewModel.loadMissionData();
+              });
+            }
 
           return PopScope(
             canPop: false,
-            onPopInvokedWithResult: (didPop, result) {
+            onPopInvokedWithResult: (didPop, result) async {
               if (!didPop) {
-                coordinator.handleBack();
+                final alertResult = await HomeAlert.show(context);
+                if (alertResult == true) {
+                  Navigator.of(context).pop();
+                }
               }
             },
             child: _buildCurrentStep(context, coordinator, viewModel),
@@ -228,7 +234,12 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFF3F55A7)),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () async {
+            final alertResult = await HomeAlert.show(context);
+            if (alertResult == true && context.mounted) {
+              Navigator.of(context).pop();
+            }
+          },
         ),
         title: Text(
           '수학자의 비밀 노트를 찾아라!',
