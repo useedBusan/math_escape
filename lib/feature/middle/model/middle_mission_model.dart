@@ -42,6 +42,7 @@ class MissionItem {
   final String title;
   final String question;
   final List<String> answer;
+  final List<String>? options;
   final String hint1;
   final String hint2;
   final String backImage;
@@ -53,6 +54,7 @@ class MissionItem {
     required this.title,
     required this.question,
     required this.answer,
+    this.options,
     required this.hint1,
     required this.hint2,
     required this.backImage,
@@ -70,11 +72,19 @@ class MissionItem {
       parsedAnswer = [''];
     }
 
+    List<String> parsedOptions;
+    if (json['options'] is List) {
+      parsedOptions = List<String>.from(json['options']);
+    } else {
+      parsedOptions = [];
+    }
+
     return MissionItem(
       id: json['id'],
       title: json['title'],
       question: json['question'],
       answer: parsedAnswer,
+      options: parsedOptions,
       hint1: json['hint1'],
       hint2: json['hint2'],
       backImage: json['backImage'] ?? '',

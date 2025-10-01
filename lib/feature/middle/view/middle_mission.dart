@@ -387,20 +387,36 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                         ),
                         // 이미지가 없을 때 간격 줄이기, 있을 때는 기본 간격
                         SizedBox(height: mission.questionImage.isEmpty ? 4 : 8),
-                        // 문제 영역
-                        Text(
-                          mission.question,
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(
-                            fontFamily: "Pretendard",
-                            fontWeight: FontWeight.w400,
-                            fontSize:
-                                MediaQuery.of(context).size.width * (16 / 360),
-                            height: 1.4,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
+                         // 문제 영역
+                         Text(
+                           mission.question,
+                           textAlign: TextAlign.justify,
+                           style: TextStyle(
+                             fontFamily: "Pretendard",
+                             fontWeight: FontWeight.w400,
+                             fontSize:
+                                 MediaQuery.of(context).size.width * (16 / 360),
+                             height: 1.4,
+                             color: Colors.black87,
+                           ),
+                         ),
+                         const SizedBox(height: 16),
+                         // 선택지 영역 (options가 있을 때만)
+                         if (mission.options != null && mission.options!.isNotEmpty) ...[
+                           ...mission.options!.map((option) => Padding(
+                             padding: const EdgeInsets.only(bottom: 8),
+                             child: Text(
+                               option,
+                               style: TextStyle(
+                                 fontFamily: "Pretendard",
+                                 fontWeight: FontWeight.w400,
+                                 fontSize: MediaQuery.of(context).size.width * (15 / 360),
+                                 color: Colors.black87,
+                               ),
+                             ),
+                           )),
+                           const SizedBox(height: 16),
+                         ],
                         // 이미지 영역 (이미지가 있을때만) - 가운데 정렬 및 유동적 높이
                         if (mission.questionImage.isNotEmpty)
                           SizedBox(
