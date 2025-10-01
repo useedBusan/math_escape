@@ -1,5 +1,4 @@
 import '../../../constants/enum/image_enums.dart';
-import '../../../core/utils/image_path_validator.dart';
 import '../../../core/utils/qr_answer_validator.dart';
 
 class CorrectTalkItem {
@@ -32,16 +31,8 @@ class TalkItem {
   factory TalkItem.fromJson(Map<String, dynamic> json) {
     return TalkItem(
       talk: json['talk'],
-      puri_image: ImagePathValidator.validate(
-        json['puri_image'] as String?,
-        ImageAssets.furiGood.path,
-        logInvalid: true,
-      ),
-      back_image: ImagePathValidator.validate(
-        json['back_image'] as String?,
-        ImageAssets.background.path,
-        logInvalid: true,
-      ),
+      puri_image: json['puri_image'] as String? ?? ImageAssets.furiGood.path,
+      back_image: json['back_image'] as String? ?? ImageAssets.background.path,
     );
   }
 }

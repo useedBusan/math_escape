@@ -1,6 +1,5 @@
 import '../../../constants/enum/speaker_enums.dart';
 import '../../../constants/enum/image_enums.dart';
-import '../image_path_validator.dart';
 
 class Talk {
   final int id;
@@ -50,16 +49,8 @@ class Talk {
       id: json['id'],
       stage: json['stage'] as int?,
       speaker: speaker,
-      speakerImg: ImagePathValidator.validate(
-        json['speakerImg'] as String? ?? json['puri_image'] as String?,
-        ImageAssets.furiStanding.path,
-        logInvalid: true,
-      ),
-      backImg: ImagePathValidator.validate(
-        json['backImg'] as String? ?? json['back_image'] as String?,
-        ImageAssets.background.path,
-        logInvalid: true,
-      ),
+      speakerImg: json['speakerImg'] as String? ?? json['puri_image'] as String? ?? ImageAssets.furiStanding.path,
+      backImg: json['backImg'] as String? ?? json['back_image'] as String? ?? ImageAssets.background.path,
       talk: json['talk'],
     );
   }

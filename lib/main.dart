@@ -5,7 +5,6 @@ import 'package:math_escape/app/splash_screen.dart';
 import 'app/theme/app_theme.dart';
 import 'core/services/service_locator.dart';
 import 'constants/app_constants.dart';
-import 'core/utils/image_path_validation_tool.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,8 +28,6 @@ void main() async {
   
   // 서비스 초기화
   serviceLocator.initialize();
-  // 개발 모드에서 이미지 경로 검증 실행
-  ImagePathValidationTool.runValidationOnStartup();
 
   runApp(const MyApp());
 }
