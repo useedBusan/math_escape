@@ -101,7 +101,7 @@ math_escape/
 │   │   └── high_intro_sound.mp3
 │   └── fonts/
 │       ├── Pretendard (9 weights)
-│       └── SBAggro (B, M, L)
+│       └── SBAggroM (B, M, L)
 └── android/ ios/ web/ windows/ linux/ macos/
 ```
 
@@ -257,7 +257,7 @@ math_escape/
 
 ### 폰트
 - **Pretendard**: 9가지 굵기 (Thin ~ Black)
-- **SBAggro**: B/M/L 굵기
+- **SBAggroM**: B/M/L 굵기
 
 ## 📝 라이선스
 

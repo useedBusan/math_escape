@@ -1,0 +1,94 @@
+import '../../../constants/enum/image_enums.dart';
+import '../../../core/utils/image_path_validator.dart';
+
+class CorrectTalkItem {
+  final int id;
+  final List<TalkItem> talks;
+
+  CorrectTalkItem({required this.id, required this.talks});
+
+  factory CorrectTalkItem.fromJson(Map<String, dynamic> json) {
+    return CorrectTalkItem(
+      id: json['id'],
+      talks: (json['talks'] as List)
+          .map((talk) => TalkItem.fromJson(talk))
+          .toList(),
+    );
+  }
+}
+
+class TalkItem {
+  final String talk;
+  final String puri_image;
+  final String back_image;
+
+  TalkItem({
+    required this.talk,
+    required this.puri_image,
+    required this.back_image,
+  });
+
+  factory TalkItem.fromJson(Map<String, dynamic> json) {
+    return TalkItem(
+      talk: json['talk'],
+      puri_image: ImagePathValidator.validate(
+        json['puri_image'] as String?,
+        ImageAssets.furiGood.path,
+        logInvalid: true,
+      ),
+      back_image: ImagePathValidator.validate(
+        json['back_image'] as String?,
+        ImageAssets.background.path,
+        logInvalid: true,
+      ),
+    );
+  }
+}
+
+class MissionItem {
+  final int id;
+  final String title;
+  final String question;
+  final List<String> answer;
+  final String hint1;
+  final String hint2;
+  final String back_image;
+  final String questionImage;
+  final bool isqr;
+
+  MissionItem({
+    required this.id,
+    required this.title,
+    required this.question,
+    required this.answer,
+    required this.hint1,
+    required this.hint2,
+    required this.back_image,
+    required this.questionImage,
+    this.isqr = false,
+  });
+
+  factory MissionItem.fromJson(Map<String, dynamic> json) {
+    List<String> parsedAnswer;
+    if (json['answer'] is List) {
+      parsedAnswer = List<String>.from(json['answer']);
+    } else if (json['answer'] is String) {
+      parsedAnswer = [json['answer'].toString().trim()];
+    } else {
+      parsedAnswer = [''];
+    }
+
+    return MissionItem(
+      id: json['id'],
+      title: json['title'],
+      question: json['question'],
+      answer: parsedAnswer,
+      hint1: json['hint1'],
+      hint2: json['hint2'],
+      back_image: json['back_image'] ?? '',
+      questionImage: json['questionImage'] ?? '',
+      isqr: json['isqr'] as bool? ?? false,
+    );
+  }
+}
+
