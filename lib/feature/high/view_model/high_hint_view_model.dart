@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../app/theme/app_colors.dart';
-import 'package:math_escape/Feature/high/model/high_mission_question.dart';
+import 'package:math_escape/feature/high/model/high_mission_question.dart';
 import 'high_timer_service.dart';
 
 /// 고등학교 힌트 미션 ViewModel

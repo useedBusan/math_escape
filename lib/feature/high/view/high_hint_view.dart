@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../../constants/enum/grade_enums.dart';
-import 'package:math_escape/Feature/high/model/high_mission_question.dart';
+import 'package:math_escape/feature/high/model/high_mission_question.dart';
 import 'dart:async';
-import 'package:math_escape/Feature/high/model/high_mission_answer.dart';
+import 'package:math_escape/feature/high/model/high_mission_answer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../core/utils/view/answer_popup.dart';
 import '../../../core/utils/view/qr_scan_screen.dart';
-import '../../../Feature/high/view/high_answer.dart';
+import '../../../feature/high/view/high_answer.dart';
 import '../view_model/high_hint_view_model.dart';
 import 'base_high_view.dart';
 import '../view_model/base_high_view_model.dart';
@@ -237,7 +237,7 @@ class _HighHintContentState extends State<_HighHintContent> {
             Row(
               children: [
                 // 퓨리 이미지 공간 (왼쪽)
-                Container(
+                SizedBox(
                   width: 60,
                   height: 60,
                   child: Center(

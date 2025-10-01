@@ -38,7 +38,7 @@ class CommonIntroView extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final mainColor = grade?.mainColor ?? CustomPink.s500;
-    final gradientColors = grade?.gradientColors ?? [CustomPink.s500.withOpacity(0.6), const Color(0x99FFFFFF)];
+    final gradientColors = grade?.gradientColors ?? [CustomPink.s500.withValues(alpha: 0.6), const Color(0x99FFFFFF)];
     final bubbleBorderColor = grade?.bubbleBorderColor ?? CustomPink.s700;
     final speakerLabelColor = grade?.speakerLabelColor ?? CustomPink.s600;
 

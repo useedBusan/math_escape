@@ -159,7 +159,7 @@ class _VideoPreviewButton extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Icon(Icons.play_circle_fill, size: 64, color: Colors.white.withOpacity(0.95)),
+            Icon(Icons.play_circle_fill, size: 64, color: Colors.white.withValues(alpha: 0.95)),
             const Positioned(
               bottom: 10,
               child: Text('영상 보기', style: TextStyle(color: Colors.white)),

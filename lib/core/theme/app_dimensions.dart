@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 /// 앱 전체에서 사용하는 여백, 반경, 폰트 크기 상수
 class AppDimensions {

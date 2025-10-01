@@ -72,25 +72,25 @@ class MiddleMissionListView extends StatelessWidget {
           ),
           
           // 이미지가 있을 때 표시
-          if (mission.questionImage != null) ...[
-            const SizedBox(height: 12),
-            Flexible(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return Center(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(
-                        mission.questionImage!,
-                        fit: BoxFit.contain,
-                        width: constraints.maxWidth,
-                      ),
+          ...[
+          const SizedBox(height: 12),
+          Flexible(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      mission.questionImage,
+                      fit: BoxFit.contain,
+                      width: constraints.maxWidth,
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
-          ],
+          ),
+        ],
           
           // QR 문제가 아닐 때만 입력 필드 표시
           if (!mission.isqr) ...[

@@ -1,7 +1,7 @@
 /*
 import 'package:flutter/material.dart';
-import 'package:math_escape/Feature/high/model/high_mission_answer.dart';
-import 'package:math_escape/Feature/high/model/high_mission_question.dart';
+import 'package:math_escape/feature/high/model/high_mission_answer.dart';
+import 'package:math_escape/feature/high/model/high_mission_question.dart';
 import 'hourglass_timer_bar.dart';
 
 class UnifiedTruthPage extends StatelessWidget {

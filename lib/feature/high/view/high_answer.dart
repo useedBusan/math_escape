@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:math_escape/Feature/high/model/high_mission_answer.dart';
-import 'package:math_escape/Feature/high/model/high_mission_question.dart';
+import 'package:math_escape/feature/high/model/high_mission_answer.dart';
+import 'package:math_escape/feature/high/model/high_mission_question.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import '../../../App/theme/app_colors.dart';
-import '../../../Feature/high/view/high_mission.dart';
+import '../../../feature/high/view/high_mission.dart';
 import '../view_model/high_answer_view_model.dart';
 import 'package:provider/provider.dart';
 import '../../../core/utils/view/home_alert.dart';
@@ -189,7 +189,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
           Row(
             children: [
               // 퓨리 이미지 공간 (왼쪽)
-              Container(
+              SizedBox(
                 width: 60,
                 height: 60,
                 child: Center(
@@ -230,7 +230,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
               border: Border.all(color: Colors.grey.shade300),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../core/utils/view/answer_popup.dart';
 import '../../../core/utils/view/home_alert.dart';
+import '../../../core/utils/view/qr_scan_screen.dart';
 
 class MissionBackgroundView extends StatelessWidget {
   // 외부에서 주입받는 parameters
@@ -17,6 +18,7 @@ class MissionBackgroundView extends StatelessWidget {
     this.onWrong,
     this.onBack,
     this.onHome,
+    this.onQRScanned,
     this.isqr = false, // QR 인식 여부 추가
   });
 
@@ -33,6 +35,7 @@ class MissionBackgroundView extends StatelessWidget {
   final VoidCallback? onWrong;
   final VoidCallback? onBack;
   final VoidCallback? onHome;
+  final Future<bool> Function(String)? onQRScanned; // QR 스캔 결과 처리 콜백
 
   // view
   @override
@@ -130,19 +133,35 @@ class MissionBackgroundView extends StatelessWidget {
                       ),
                       onPressed: () async {
                         if (isqr) {
-                          // QR 문제일 때는 바로 정답으로 처리
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (context) => AnswerPopup(
-                              isCorrect: true,
-                              grade: grade,
-                              onNext: () {
-                                Navigator.of(context).pop();
-                                onCorrect?.call();
-                              },
+                          // QR 문제일 때는 QR 스캔 화면으로 이동
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => QRScanScreen(),
                             ),
                           );
+                          
+                          if (result != null && result is String && onQRScanned != null) {
+                            // 외부에서 QR 스캔 결과 처리
+                            final isCorrect = await onQRScanned!(result);
+                            
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => AnswerPopup(
+                                isCorrect: isCorrect,
+                                grade: grade,
+                                onNext: () {
+                                  Navigator.of(context).pop();
+                                  if (isCorrect) {
+                                    onCorrect?.call();
+                                  } else {
+                                    onWrong?.call();
+                                  }
+                                },
+                              ),
+                            );
+                          }
                         } else {
                           // 일반 문제일 때는 기존 로직 사용
                           final ok = await onSubmitAnswer(context);

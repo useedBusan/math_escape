@@ -1,3 +1,5 @@
+import '../../../core/utils/qr_answer_validator.dart';
+
 class MissionQuestion {
   final int id;
   final int stage;
@@ -39,5 +41,19 @@ class MissionQuestion {
       isqr: json['isqr'] ?? false,
       isHint: json['isHint'] ?? false,
     );
+  }
+
+  /// QR 정답 제공자로 변환
+  QRAnswerProvider toQRAnswerProvider() {
+    return HighQRAnswerProvider(
+      id: id,
+      isqr: isqr,
+      answer: answer,
+    );
+  }
+
+  /// QR 스캔 결과 검증
+  bool validateQRAnswer(String scannedValue) {
+    return QRAnswerValidator.validateQRAnswer(scannedValue, toQRAnswerProvider());
   }
 }

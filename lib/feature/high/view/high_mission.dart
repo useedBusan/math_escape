@@ -2,18 +2,17 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import '../../../feature/high/model/high_mission_answer.dart';
 import '../../../constants/enum/grade_enums.dart';
-import 'package:math_escape/Feature/high/model/high_mission_question.dart';
+import '../model/high_mission_question.dart';
 import 'dart:async';
-import 'package:math_escape/Feature/high/model/high_mission_answer.dart';
-import 'package:permission_handler/permission_handler.dart';
-import '../../../core/utils/view/answer_popup.dart';
-import '../../../core/utils/view/qr_scan_screen.dart';
-import '../../../Feature/high/view/high_answer.dart';
+import 'high_answer.dart';
 import '../view_model/high_mission_view_model.dart';
 import 'base_high_view.dart';
 import '../view_model/base_high_view_model.dart';
 import 'high_hint_view.dart';
+import '../../../core/utils/view/answer_popup.dart';
+import '../../../core/utils/view/qr_scan_screen.dart';
 import '../../../core/utils/view/home_alert.dart';
 
 class HighMission extends StatelessWidget {
@@ -65,7 +64,6 @@ class _HighMissionContentState extends State<_HighMissionContent> {
   @override
   void initState() {
     super.initState();
-    // initState에서 startGame 호출 (타이머는 이미 시작된 경우 재시작하지 않음)
     WidgetsBinding.instance.addPostFrameCallback((_) {
       HighMissionViewModel.instance.startGame(
         widget.questionList,
@@ -122,7 +120,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('힌트'),
-            content: Text(q?.hint ?? ''),
+            content: Text(q.hint ?? ''),
             actions: [
               TextButton(
                 onPressed: () {
@@ -244,7 +242,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
             Row(
               children: [
                 // 퓨리 이미지 공간 (왼쪽)
-                Container(
+                SizedBox(
                   width: 60,
                   height: 60,
                   child: Center(
@@ -422,22 +420,29 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                         alignment: Alignment.centerRight,
                         child: ElevatedButton(
                           onPressed: () async {
-                            final status = await Permission.camera.request();
-                            if (status.isGranted) {
-                              final result = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => QRScanScreen(),
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => QRScanScreen(),
+                              ),
+                            );
+                            if (result != null && result is String) {
+                              final isCorrect = q.validateQRAnswer(result);
+                              
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (_) => AnswerPopup(
+                                  isCorrect: isCorrect,
+                                  onNext: () {
+                                    Navigator.pop(context);
+                                    if (isCorrect) {
+                                      // 정답일 때 다음 문제로 이동하거나 완료 처리
+                                      // 기존 정답 처리 로직 사용
+                                    }
+                                  },
+                                  grade: StudentGrade.high,
                                 ),
-                              );
-                              if (result != null && result is String) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('QR 코드 결과: $result')),
-                                );
-                              }
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('카메라 권한이 필요합니다.')),
                               );
                             }
                           },

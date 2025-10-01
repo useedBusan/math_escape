@@ -154,7 +154,7 @@ class BaseMainView extends StatelessWidget {
           boxShadow: [
             if (isSelected)
               BoxShadow(
-                color: CustomBlue.s500.withOpacity(0.3),
+                color: CustomBlue.s500.withValues(alpha: 0.3),
                 blurRadius: 6,
                 offset: const Offset(0, 3),
               ),

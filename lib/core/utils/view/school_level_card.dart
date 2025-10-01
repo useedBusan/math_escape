@@ -15,7 +15,7 @@ class SchoolLevelCard extends StatelessWidget {
     return Card(
       color: Colors.white,
       elevation: 4,
-      shadowColor: Colors.lightBlueAccent.withOpacity(0.2),
+      shadowColor: Colors.lightBlueAccent.withValues(alpha: 0.2),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(color: Colors.lightBlue.shade100),

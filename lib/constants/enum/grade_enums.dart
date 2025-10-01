@@ -45,10 +45,10 @@ extension GradeTheme on StudentGrade {
     switch (this) {
       case StudentGrade.elementaryLow:
       case StudentGrade.elementaryHigh:
-        return [CustomBlue.s900.withOpacity(0.75), CustomBlue.s800.withOpacity(0.5)];
+        return [CustomBlue.s900.withValues(alpha: 0.75), CustomBlue.s800.withValues(alpha: 0.5)];
       case StudentGrade.middle:
       case StudentGrade.high:
-        return [CustomBlue.s900.withOpacity(0.75), CustomBlue.s800.withOpacity(0.5)];
+        return [CustomBlue.s900.withValues(alpha: 0.75), CustomBlue.s800.withValues(alpha: 0.5)];
     }
   }
 

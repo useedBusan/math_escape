@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../view_model/high_timer_service.dart';
 
 class HighClearView extends StatelessWidget {

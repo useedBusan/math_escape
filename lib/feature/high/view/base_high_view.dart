@@ -97,6 +97,7 @@ class BaseHighView extends StatelessWidget {
                     think: vm.thinkText,
                     body: vm.bodyText,
                     progress: vm.thinkProgress,
+                    hourglassAsset: 'assets/images/high/highHourglass.png',
                   ),
 
               ),
@@ -114,7 +115,7 @@ class _BottomTimerBar extends StatelessWidget {
     required this.think,
     required this.body,
     this.progress = 0.0,
-    this.hourglassAsset = 'assets/images/high/highHourglass.png',
+    required this.hourglassAsset,
   });
 
   final Color mainColor;

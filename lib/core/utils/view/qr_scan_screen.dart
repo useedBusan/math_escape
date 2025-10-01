@@ -74,7 +74,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
           // 오버레이 (qr_code_scanner의 QrScannerOverlayShape 대체)
           IgnorePointer(
             child: Container(
-              color: Colors.black.withOpacity(0.35),
+              color: Colors.black.withValues(alpha: 0.7),
             ),
           ),
           IgnorePointer(
@@ -83,7 +83,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
               height: cutOut,
               child: CustomPaint(
                 painter: _CornerBorderPainter(
-                  borderColor: Colors.blue,
+                  borderColor: Colors.white,
                   borderWidth: 6,
                   cornerLen: 28,
                   radius: 12,
@@ -98,7 +98,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Text(

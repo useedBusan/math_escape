@@ -1,5 +1,6 @@
 import '../../../constants/enum/image_enums.dart';
 import '../../../core/utils/image_path_validator.dart';
+import '../../../core/utils/qr_answer_validator.dart';
 
 class CorrectTalkItem {
   final int id;
@@ -90,5 +91,18 @@ class MissionItem {
       isqr: json['isqr'] as bool? ?? false,
     );
   }
-}
 
+  /// QR 정답 제공자로 변환
+  QRAnswerProvider toQRAnswerProvider() {
+    return MiddleQRAnswerProvider(
+      id: id,
+      isqr: isqr,
+      answer: answer,
+    );
+  }
+
+  /// QR 스캔 결과 검증
+  bool validateQRAnswer(String scannedValue) {
+    return QRAnswerValidator.validateQRAnswer(scannedValue, toQRAnswerProvider());
+  }
+}

@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
 // import 'package:math_escape/feature/high/view/high_mission_view.dart'; // 사용하지 않는 파일
 import '../../../App/theme/app_colors.dart';
-import '../../../Feature/high/model/high_mission_question.dart';
-import '../../../Feature/high/view/high_mission.dart';
+import '../../../feature/high/model/high_mission_question.dart';
+import '../../../feature/high/view/high_mission.dart';
 
 Future<List<MissionQuestion>> loadQuestionList() async {
   final String jsonString = await rootBundle.loadString('assets/data/high/high_level_question.json');

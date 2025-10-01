@@ -463,7 +463,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
+                              color: Colors.black.withValues(alpha: 0.3),
                               blurRadius: 8,
                               offset: const Offset(0, 4),
                             ),
@@ -484,7 +484,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Colors.black.withValues(alpha: 0.2),
                               blurRadius: 6,
                               offset: const Offset(0, 3),
                             ),
@@ -506,7 +506,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.15),
+                              color: Colors.black.withValues(alpha: 0.15),
                               blurRadius: 4,
                               offset: const Offset(0, 2),
                             ),

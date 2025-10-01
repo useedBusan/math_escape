@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
-import '../../../app/theme/app_colors.dart';
 
 Future<void> showFullscreenVideo(BuildContext context, String source) {
   return Navigator.of(context).push(

@@ -19,7 +19,7 @@ class ContentCard extends StatelessWidget {
       child: Card(
         color: Colors.white,
         elevation: 6,
-        shadowColor: Colors.lightBlueAccent.withOpacity(0.15),
+        shadowColor: Colors.lightBlueAccent.withValues(alpha: 0.15),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: BorderSide(color: Colors.blue.shade100),

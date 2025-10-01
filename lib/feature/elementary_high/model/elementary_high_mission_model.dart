@@ -1,3 +1,5 @@
+import '../../../core/utils/qr_answer_validator.dart';
+
 class ElementaryHighMissionModel {
   final int id;
   final String title;
@@ -32,6 +34,20 @@ class ElementaryHighMissionModel {
       isqr: json['isqr'] as bool? ?? false,
       hintModel: ElementaryHighMissionHintModel.fromJson(json),
     );
+  }
+
+  /// QR 정답 제공자로 변환
+  QRAnswerProvider toQRAnswerProvider() {
+    return ElementaryHighQRAnswerProvider(
+      id: id,
+      isqr: isqr,
+      answer: answer,
+    );
+  }
+
+  /// QR 스캔 결과 검증
+  bool validateQRAnswer(String scannedValue) {
+    return QRAnswerValidator.validateQRAnswer(scannedValue, toQRAnswerProvider());
   }
 }
 

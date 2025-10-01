@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import '../../../core/utils/model/hint_model.dart';
+import '../../../core/utils/qr_answer_validator.dart';
 
 @immutable
 class ElementaryLowMissionModel {
@@ -62,6 +63,21 @@ class ElementaryLowMissionModel {
   }
 
   HintEntry? get firstHint => hints.isNotEmpty ? hints.first : null;
+
+  /// QR 정답 제공자로 변환
+  QRAnswerProvider toQRAnswerProvider() {
+    return ElementaryLowQRAnswerProvider(
+      id: id,
+      isqr: isqr,
+      choices: choices,
+      answerIndex: answerIndex,
+    );
+  }
+
+  /// QR 스캔 결과 검증
+  bool validateQRAnswer(String scannedValue) {
+    return QRAnswerValidator.validateQRAnswer(scannedValue, toQRAnswerProvider());
+  }
 
   static bool _isEmptyHint(HintEntry e) =>
       e.text.trim().isEmpty && e.image == null && e.video == null;

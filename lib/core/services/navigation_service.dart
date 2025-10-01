@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../core/utils/view/qr_scan_screen.dart';
-import '../../Feature/elementary_high/view/elementary_high_talk.dart';
-import '../../Feature/elementary_low/View/elementary_low_intro_view.dart';
-import '../../Feature/middle/view/middle_talk.dart';
+import '../../feature/elementary_high/view/elementary_high_talk.dart';
+import '../../feature/elementary_low/View/elementary_low_intro_view.dart';
+import '../../feature/middle/view/middle_talk.dart';
 import '../../feature/high/view/high_intro_screen.dart';
 
 /// 네비게이션을 담당하는 서비스

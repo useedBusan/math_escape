@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../Feature/elementary_high/model/elementary_high_intro_talk.dart';
+import '../../../feature/elementary_high/model/elementary_high_intro_talk.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../constants/enum/image_enums.dart';
 import 'elementary_high_mission.dart';

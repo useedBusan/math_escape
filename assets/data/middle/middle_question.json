@@ -57,10 +57,10 @@
     "back_image": "assets/images/middle/middleBG456.png",
     "questionImage": "",
     "answer": [
-      "10773",
-      "10,773",
-      "10773개",
-      "10,773개"
+      "11172",
+      "11,172",
+      "11172개",
+      "11,172개"
     ],
     "hint1": "수학문화관의 3층 구석구석을 살펴보자",
     "hint2": "한글의 자음과 모음을 초성, 중성, 종성으로 조합해 보자",
@@ -72,7 +72,7 @@
     "title": "문제 5 / 10",
     "back_image": "assets/images/middle/middleBG456.png",
     "questionImage": "",
-    "answer": "",
+    "answer": ["125Q"],
     "hint1": "3층 연결 복도를 살펴보자",
     "hint2": "황금비가 적용된 나선형 구조를 찾아보자",
     "isqr": true

@@ -8,7 +8,6 @@ import '../ViewModel/elementary_low_mission_view_model.dart';
 import 'elementary_low_mission_list_view.dart';
 import 'conversation_overlay.dart';
 import '../coordinator/elementary_low_mission_coordinator.dart';
-import '../coordinator/flow_step.dart';
 
 class ElementaryLowMissionView extends StatelessWidget {
   const ElementaryLowMissionView({super.key});
@@ -123,6 +122,12 @@ class ElementaryLowMissionView extends StatelessWidget {
       },
       onSubmitAnswer: (c) async {
         return await vm.submitAnswer();
+      },
+      onQRScanned: (scannedValue) async {
+        // QR 스캔 결과 검증
+        final mission = vm.currentMission;
+        if (mission == null) return false;
+        return mission.validateQRAnswer(scannedValue);
       },
       onCorrect: () async {
         // 정답 후 대화 표시 → stage 기반으로 대화 찾기

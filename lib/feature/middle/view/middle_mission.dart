@@ -7,104 +7,11 @@ import '../../../core/utils/view/answer_popup.dart';
 import '../../../core/utils/view/common_intro_view.dart';
 import '../../../core/utils/viewmodel/intro_view_model.dart';
 import '../../../constants/enum/image_enums.dart';
-import '../../../core/utils/image_path_validator.dart';
+import '../../../core/utils/view/qr_scan_screen.dart';
 import '../coordinator/middle_mission_coordinator.dart';
+import '../model/middle_mission_model.dart';
 import 'conversation_overlay.dart';
 
-// 새로운 모델 클래스 추가
-class CorrectTalkItem {
-  final int id;
-  final List<TalkItem> talks;
-
-  CorrectTalkItem({required this.id, required this.talks});
-
-  factory CorrectTalkItem.fromJson(Map<String, dynamic> json) {
-    return CorrectTalkItem(
-      id: json['id'],
-      talks: (json['talks'] as List)
-          .map((talk) => TalkItem.fromJson(talk))
-          .toList(),
-    );
-  }
-}
-
-class TalkItem {
-  final String talk;
-  final String puri_image;
-  final String back_image;
-
-  TalkItem({
-    required this.talk,
-    required this.puri_image,
-    required this.back_image,
-  });
-
-  factory TalkItem.fromJson(Map<String, dynamic> json) {
-    return TalkItem(
-      talk: json['talk'],
-      puri_image: ImagePathValidator.validate(
-        json['puri_image'] as String?,
-        ImageAssets.furiGood.path,
-        logInvalid: true,
-      ),
-      back_image: ImagePathValidator.validate(
-        json['back_image'] as String?,
-        ImageAssets.background.path,
-        logInvalid: true,
-      ),
-    );
-  }
-}
-
-class MissionItem {
-  final int id;
-  final String title;
-  final String question;
-  final List<String> answer;
-  final String hint1;
-  final String hint2;
-  final String back_image;
-  final String questionImage;
-  final List<String> options;
-  final bool isqr;
-
-  MissionItem({
-    required this.id,
-    required this.title,
-    required this.question,
-    required this.answer,
-    required this.hint1,
-    required this.hint2,
-    required this.back_image,
-    required this.questionImage,
-    required this.options,
-    this.isqr = false,
-  });
-
-  factory MissionItem.fromJson(Map<String, dynamic> json) {
-    List<String> parsedAnswer;
-    if (json['answer'] is List) {
-      parsedAnswer = List<String>.from(json['answer']);
-    } else if (json['answer'] is String) {
-      parsedAnswer = [json['answer'].toString().trim()];
-    } else {
-      parsedAnswer = [''];
-    }
-
-    return MissionItem(
-      id: json['id'],
-      title: json['title'],
-      question: json['question'],
-      answer: parsedAnswer,
-      hint1: json['hint1'],
-      hint2: json['hint2'],
-      back_image: json['back_image'] ?? '',
-      questionImage: json['questionImage'] ?? '',
-      options: List<String>.from(json['options'] ?? []),
-      isqr: json['isqr'] as bool? ?? false,
-    );
-  }
-}
 
   // 기존 TalkScreen은 공통 인트로 뷰로 대체됨
 
@@ -217,24 +124,57 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
   }
 
 
-  void _submitAnswer(MiddleMissionCoordinator coordinator) {
+  void _submitAnswer(MiddleMissionCoordinator coordinator) async {
     final MissionItem currentMission = missionList[currentQuestionIndex];
-    final String userAnswer = _answerController.text.trim();
-    final bool correct = currentMission.answer.contains(userAnswer);
+    
+    if (currentMission.isqr) {
+      // QR 문제일 때는 QR 스캔 화면으로 이동
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => QRScanScreen(),
+        ),
+      );
+      
+      if (result != null && result is String) {
+        // 스캔된 값으로 정답 검증
+        final isCorrect = currentMission.validateQRAnswer(result);
+        
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AnswerPopup(
+            isCorrect: isCorrect,
+            onNext: () {
+              Navigator.pop(context);
+              if (isCorrect) {
+                _showCorrectAnswerDialog(coordinator);
+              }
+            }, 
+            grade: StudentGrade.middle,
+          ),
+        );
+      }
+    } else {
+      // 일반 문제일 때는 기존 로직 사용
+      final String userAnswer = _answerController.text.trim();
+      final bool correct = currentMission.answer.contains(userAnswer);
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => AnswerPopup(
-        isCorrect: correct,
-        onNext: () {
-          Navigator.pop(context);
-          if (correct) {
-            _showCorrectAnswerDialog(coordinator);
-          }
-        }, grade: StudentGrade.middle,
-      ),
-    );
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => AnswerPopup(
+          isCorrect: correct,
+          onNext: () {
+            Navigator.pop(context);
+            if (correct) {
+              _showCorrectAnswerDialog(coordinator);
+            }
+          }, 
+          grade: StudentGrade.middle,
+        ),
+      );
+    }
   }
 
   @override
@@ -438,7 +378,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
+                              color: Colors.black.withValues(alpha: 0.3),
                               blurRadius: 8,
                               offset: const Offset(0, 4),
                             ),
@@ -459,7 +399,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Colors.black.withValues(alpha: 0.2),
                               blurRadius: 6,
                               offset: const Offset(0, 3),
                             ),
@@ -481,7 +421,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.15),
+                              color: Colors.black.withValues(alpha: 0.15),
                               blurRadius: 4,
                               offset: const Offset(0, 2),
                             ),
@@ -595,38 +535,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                         ),
                                       ),
                                     
-                                    // 옵션 영역 (옵션이 있을때만)
-                                    if (mission.options.isNotEmpty) ...[
-                                      const SizedBox(height: 16),
-                                      Container(
-                                        width: double.infinity,
-                                        padding: const EdgeInsets.all(16),
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFFFFFFFF),
-                                          borderRadius: BorderRadius.circular(8),
-                                          border: Border.all(
-                                            color: const Color(0xFFE0E0E0),
-                                          ),
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: mission.options.map((option) => 
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 4),
-                                              child: Text(
-                                                option,
-                                                style: TextStyle(
-                                                  fontFeatures: [FontFeature.fractions()],
-                                                  fontSize: MediaQuery.of(context).size.width * (16 / 360),
-                                                  color: Colors.black87,
-                                                  height: 1.4,
-                                                ),
-                                              ),
-                                            ),
-                                          ).toList(),
-                                        ),
-                                      ),
-                                    ],
                                   ],
                                 ),
                               ),
