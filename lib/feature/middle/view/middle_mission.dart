@@ -523,14 +523,10 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                       ],
                     ),
                   ),
-                  // 힌트 카드
-                  // if (showHint1 || showHint2) ...[
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    height: 200, // 명시적 높이 설정
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
+                   // 힌트 카드
+                   const SizedBox(height: 20),
+                   Column(
+                     children: [
                           // 힌트 1
                           AnimatedSlide(
                             duration: viewModel.showHint1
@@ -679,8 +675,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                           ),
                         ],
                       ),
-                    ),
-                  ),
                 ],
               ),
             ),
