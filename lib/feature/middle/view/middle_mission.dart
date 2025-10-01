@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'dart:convert';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../core/utils/view/answer_popup.dart';
 import '../../../core/utils/view/common_intro_view.dart';
@@ -10,6 +8,7 @@ import '../../../constants/enum/image_enums.dart';
 import '../../../core/utils/view/qr_scan_screen.dart';
 import '../coordinator/middle_mission_coordinator.dart';
 import '../model/middle_mission_model.dart';
+import '../view_model/middle_mission_view_model.dart';
 import 'conversation_overlay.dart';
 
 
@@ -25,30 +24,13 @@ class MiddleMissionScreen extends StatefulWidget {
 
 class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     with TickerProviderStateMixin {
-  List<MissionItem> missionList = [];
-  List<CorrectTalkItem> talkList = [];
-  bool isLoading = true;
-  final TextEditingController _answerController = TextEditingController();
-  int currentQuestionIndex = 0;
-  final int totalQuestions = 10;
-  int hintCounter = 0;
   late AnimationController _hintColorController;
   late Animation<double> _hintColorAnimation;
-
-  // 힌트 카드 표시 상태 추가
-  bool showHint1 = false;
-  bool showHint2 = false;
-
-  // QR 인식 여부
-  bool get isqr => missionList.isNotEmpty && currentQuestionIndex < missionList.length 
-      ? missionList[currentQuestionIndex].isqr 
-      : false;
 
   @override
   void initState() {
     super.initState();
-    loadMissionData();
-
+    
     _hintColorController = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
@@ -61,70 +43,16 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     _hintColorController.repeat(reverse: true);
   }
 
-  void _syncWithCoordinator(int coordinatorIndex) {
-    if (coordinatorIndex != currentQuestionIndex) {
-      setState(() {
-        currentQuestionIndex = coordinatorIndex;
-        _answerController.clear();
-        hintCounter = 0;
-        showHint1 = false;
-        showHint2 = false;
-      });
-    }
-  }
-
-  Future<void> loadMissionData() async {
-    try {
-      final String missionJsonString = await rootBundle.loadString(
-        'assets/data/middle/middle_question.json',
-      );
-      final List<dynamic> missionJsonList = json.decode(missionJsonString);
-
-      final String talkJsonString = await rootBundle.loadString(
-        'assets/data/middle/middle_conversation.json',
-      );
-      final List<dynamic> talkJsonList = json.decode(talkJsonString);
-
-      setState(() {
-        missionList = missionJsonList
-            .map((e) => MissionItem.fromJson(e))
-            .toList();
-        talkList = talkJsonList
-            .map((e) => CorrectTalkItem.fromJson(e))
-            .toList();
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  void _showHintDialog() {
-    hintCounter++;
-
-    switch (hintCounter) {
-      case 1:
-        setState(() {
-          showHint1 = true;
-        });
-        break;
-      case 2:
-        setState(() {
-          showHint2 = true;
-        });
-        break;
-      default:
-        setState(() {
-          hintCounter = 0;
-        });
+  void _syncWithCoordinator(int coordinatorIndex, MiddleMissionViewModel viewModel) {
+    if (coordinatorIndex != viewModel.currentIndex) {
+      viewModel.setCurrentIndex(coordinatorIndex);
     }
   }
 
 
-  void _submitAnswer(MiddleMissionCoordinator coordinator) async {
-    final MissionItem currentMission = missionList[currentQuestionIndex];
+  void _submitAnswer(MiddleMissionCoordinator coordinator, MiddleMissionViewModel viewModel) async {
+    final MissionItem? currentMission = viewModel.currentMission;
+    if (currentMission == null) return;
     
     if (currentMission.isqr) {
       // QR 문제일 때는 QR 스캔 화면으로 이동
@@ -137,42 +65,45 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
       
       if (result != null && result is String) {
         // 스캔된 값으로 정답 검증
-        final isCorrect = currentMission.validateQRAnswer(result);
+        final isCorrect = viewModel.validateQRAnswer(result);
         
+        if (mounted) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => AnswerPopup(
+              isCorrect: isCorrect,
+              onNext: () {
+                Navigator.pop(context);
+                if (isCorrect) {
+                  _showCorrectAnswerDialog(coordinator, viewModel);
+                }
+              }, 
+              grade: StudentGrade.middle,
+            ),
+          );
+        }
+      }
+    } else {
+      // 일반 문제일 때는 기존 로직 사용
+      final bool correct = await viewModel.submitAnswer();
+
+      if (mounted) {
         showDialog(
           context: context,
           barrierDismissible: false,
           builder: (_) => AnswerPopup(
-            isCorrect: isCorrect,
+            isCorrect: correct,
             onNext: () {
               Navigator.pop(context);
-              if (isCorrect) {
-                _showCorrectAnswerDialog(coordinator);
+              if (correct) {
+                _showCorrectAnswerDialog(coordinator, viewModel);
               }
             }, 
             grade: StudentGrade.middle,
           ),
         );
       }
-    } else {
-      // 일반 문제일 때는 기존 로직 사용
-      final String userAnswer = _answerController.text.trim();
-      final bool correct = currentMission.answer.contains(userAnswer);
-
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => AnswerPopup(
-          isCorrect: correct,
-          onNext: () {
-            Navigator.pop(context);
-            if (correct) {
-              _showCorrectAnswerDialog(coordinator);
-            }
-          }, 
-          grade: StudentGrade.middle,
-        ),
-      );
     }
   }
 
@@ -182,35 +113,20 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     super.dispose();
   }
 
-  void _goToNextQuestion() {
-    setState(() {
-      if (currentQuestionIndex < missionList.length - 1) {
-        currentQuestionIndex++;
-        _answerController.clear();
-        hintCounter = 0;
-        // 다음 문제로 넘어갈 때 힌트 카드 상태 초기화
-        showHint1 = false;
-        showHint2 = false;
-      } else {
-        // 모든 문제 완료 - 메인 화면으로 이동
-        Navigator.pop(context);
-      }
-    });
-  }
 
-  void _showCorrectAnswerDialog(MiddleMissionCoordinator coordinator) async {
+  void _showCorrectAnswerDialog(MiddleMissionCoordinator coordinator, MiddleMissionViewModel viewModel) async {
     try {
-      final int currentQuestionId = currentQuestionIndex + 1;
+      final int currentQuestionId = viewModel.currentIndex + 1;
 
       // 정답 후 대화 표시 → Coordinator로 대화 단계 이동
       coordinator.toConversation(currentQuestionId);
     } catch (e) {
       // 대화가 없는 경우 바로 다음 문제로 또는 완료 처리
-      if (currentQuestionIndex + 1 >= totalQuestions) {
+      if (viewModel.currentIndex + 1 >= viewModel.totalCount) {
         // 모든 문제 완료 - 메인화면으로
         Navigator.of(context).pop();
       } else {
-        _goToNextQuestion();
+        viewModel.goToNextQuestion();
       }
     }
   }
@@ -220,24 +136,33 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => MiddleMissionCoordinator()),
+        ChangeNotifierProvider(create: (_) => MiddleMissionViewModel()),
       ],
-      child: Consumer<MiddleMissionCoordinator>(
-        builder: (context, coordinator, child) {
+      child: Consumer2<MiddleMissionCoordinator, MiddleMissionViewModel>(
+        builder: (context, coordinator, viewModel, child) {
           // Coordinator와 동기화 설정 (한 번만)
-          coordinator.setQuestionIndexCallback(_syncWithCoordinator);
+          coordinator.setQuestionIndexCallback((index) => _syncWithCoordinator(index, viewModel));
           
-          return WillPopScope(
-            onWillPop: () async {
-              return !coordinator.handleBack();
+          // 데이터 로드
+          if (viewModel.isLoading) {
+            viewModel.loadMissionData();
+          }
+          
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) {
+              if (!didPop) {
+                coordinator.handleBack();
+              }
             },
-            child: _buildCurrentStep(context, coordinator),
+            child: _buildCurrentStep(context, coordinator, viewModel),
           );
         },
       ),
     );
   }
 
-  Widget _buildCurrentStep(BuildContext context, MiddleMissionCoordinator coordinator) {
+  Widget _buildCurrentStep(BuildContext context, MiddleMissionCoordinator coordinator, MiddleMissionViewModel viewModel) {
     // 현재 단계에 따라 화면 결정
     if (coordinator.isInConversation) {
       return ConversationOverlay(
@@ -246,7 +171,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         onComplete: () {
           // 대화 종료 후 다음 문제 이동 또는 완료 처리
           final int nextStage = coordinator.current.stage + 1;
-          if (nextStage <= totalQuestions) {
+          if (nextStage <= viewModel.totalCount) {
             coordinator.toQuestion(nextStage);
           } else {
             // 모든 문제 완료 - 메인 화면으로 이동
@@ -261,21 +186,27 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     }
 
     // 기본: 질문 화면 (question 단계)
-    return _buildQuestionScreen(context, coordinator);
+    return _buildQuestionScreen(context, coordinator, viewModel);
   }
 
-  Widget _buildQuestionScreen(BuildContext context, MiddleMissionCoordinator coordinator) {
-    if (isLoading) {
+  Widget _buildQuestionScreen(BuildContext context, MiddleMissionCoordinator coordinator, MiddleMissionViewModel viewModel) {
+    if (viewModel.isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    if (missionList.isEmpty) {
+    if (viewModel.missions.isEmpty) {
       return const Scaffold(
         body: Center(child: Text("미션 데이터를 불러오는 데 실패했습니다.")),
       );
     }
 
-    final MissionItem mission = missionList[currentQuestionIndex];
+    final MissionItem? mission = viewModel.currentMission;
+    if (mission == null) {
+      return const Scaffold(
+        body: Center(child: Text("현재 미션을 불러올 수 없습니다.")),
+      );
+    }
+
     final Color mainColor = const Color(0xFF3F55A7);
 
     return Scaffold(
@@ -298,8 +229,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Stack(
+      body: Stack(
         children: [
           Positioned.fill(
             child: Image.asset(
@@ -323,11 +253,12 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                const SizedBox(height: 14),
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  const SizedBox(height: 14),
                 Column(
                   children: [
                     Text(
@@ -436,7 +367,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          '문제 ${currentQuestionIndex + 1} / $totalQuestions',
+                                          '문제 ${viewModel.currentIndex + 1} / ${viewModel.totalCount}',
                                           style: TextStyle(
                                             fontFamily: "SBAggroM",
                                             fontSize:
@@ -462,7 +393,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                                     Icons.help_outline,
                                                     color: color,
                                                   ),
-                                                  onPressed: _showHintDialog,
+                                                  onPressed: () => viewModel.showHintDialog(),
                                                   padding: EdgeInsets.zero,
                                                   constraints: const BoxConstraints(),
                                                   iconSize: 28,
@@ -546,7 +477,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                       width: double.infinity,
                                       height: 60,
                                       child: ElevatedButton(
-                                        onPressed: () => _submitAnswer(coordinator),
+                                        onPressed: () => _submitAnswer(coordinator, viewModel),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: mainColor,
                                           foregroundColor: Colors.white,
@@ -595,7 +526,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                                     MediaQuery.of(context).size.width *
                                                     (15 / 360),
                                               ),
-                                              controller: _answerController,
+                                              controller: viewModel.answerController,
                                               keyboardType: TextInputType.text,
                                               textInputAction: TextInputAction.done,
                                               decoration: InputDecoration(
@@ -623,7 +554,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                             width: 60,
                                             height: 52,
                                             child: ElevatedButton(
-                                              onPressed: () => _submitAnswer(coordinator),
+                                              onPressed: () => _submitAnswer(coordinator, viewModel),
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor: mainColor,
                                                 foregroundColor: Colors.white,
@@ -663,24 +594,25 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                 // 힌트 카드
                 // if (showHint1 || showHint2) ...[
                 const SizedBox(height: 20),
-                Flexible(
+                SizedBox(
+                  height: 200, // 명시적 높이 설정
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
                         // 힌트 1
                         AnimatedSlide(
-                          duration: showHint1
+                          duration: viewModel.showHint1
                               ? const Duration(milliseconds: 300)
                               : Duration.zero,
                           curve: Curves.easeOut,
-                          offset: showHint1
+                          offset: viewModel.showHint1
                               ? Offset.zero
                               : const Offset(0, 0.1),
                           child: AnimatedOpacity(
-                            duration: showHint1
+                            duration: viewModel.showHint1
                                 ? const Duration(milliseconds: 300)
                                 : Duration.zero,
-                            opacity: showHint1 ? 1.0 : 0.0,
+                            opacity: viewModel.showHint1 ? 1.0 : 0.0,
                             child: Container(
                               width: double.infinity,
                               padding: EdgeInsets.all(
@@ -736,7 +668,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                           ),
                         ),
 
-                        if (showHint1 && showHint2)
+                        if (viewModel.showHint1 && viewModel.showHint2)
                           SizedBox(
                             height:
                                 MediaQuery.of(context).size.width * (12 / 360),
@@ -744,18 +676,18 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
 
                         // 힌트 2
                         AnimatedSlide(
-                          duration: showHint2
+                          duration: viewModel.showHint2
                               ? const Duration(milliseconds: 300)
                               : Duration.zero,
                           curve: Curves.easeOut,
-                          offset: showHint2
+                          offset: viewModel.showHint2
                               ? Offset.zero
                               : const Offset(0, 0.1),
                           child: AnimatedOpacity(
-                            duration: showHint2
+                            duration: viewModel.showHint2
                                 ? const Duration(milliseconds: 300)
                                 : Duration.zero,
-                            opacity: showHint2 ? 1.0 : 0.0,
+                            opacity: viewModel.showHint2 ? 1.0 : 0.0,
                             child: Container(
                               width: double.infinity,
                               padding: EdgeInsets.all(
@@ -817,8 +749,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
               ],
             ),
           ),
+          )
         ],
-        ),
       ),
     );
   }

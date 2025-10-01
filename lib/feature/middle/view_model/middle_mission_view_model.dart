@@ -104,6 +104,30 @@ class MiddleMissionViewModel extends ChangeNotifier {
     return correct;
   }
 
+  // QR 답변 검증
+  bool validateQRAnswer(String scannedValue) {
+    final currentMission = this.currentMission;
+    if (currentMission == null) return false;
+    
+    return currentMission.validateQRAnswer(scannedValue);
+  }
+
+  // 정답 후 대화 표시를 위한 메서드
+  void showCorrectAnswerDialog() {
+    // 정답 후 대화 표시 로직
+    notifyListeners();
+  }
+
+  // 다음 문제로 이동
+  void goToNextQuestionOrComplete() {
+    if (_currentIndex < _missions.length - 1) {
+      goToNextQuestion();
+    } else {
+      // 모든 문제 완료
+      notifyListeners();
+    }
+  }
+
   void goToNextQuestion() {
     if (_currentIndex < _missions.length - 1) {
       _currentIndex++;
