@@ -1,5 +1,3 @@
-// QR 코드 인식 (mobile_scanner 기반)
-
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -13,36 +11,21 @@ class QRScanScreen extends StatefulWidget {
 class _QRScanScreenState extends State<QRScanScreen> {
   late final MobileScannerController _controller;
   bool _scanned = false;
+  bool _showHelper = true; // QR 헬퍼 이미지 표시 여부
 
   @override
   void initState() {
     super.initState();
-    _controller = MobileScannerController(
-      // 필요 시 옵션들:
-      // facing: CameraFacing.back,
-      // detectionSpeed: DetectionSpeed.normal, // or noDuplicates
-      // torchEnabled: false,
-      formats: [BarcodeFormat.qrCode],
-    );
-  }
+    _controller = MobileScannerController(formats: [BarcodeFormat.qrCode]);
 
-  @override
-  void reassemble() {
-    super.reassemble();
-    // hot reload 시 카메라 재시작
-    _controller.stop();
-    _controller.start();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    // 1초 뒤 QR 헬퍼 이미지 숨기기
+    Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) setState(() => _showHelper = false);
+    });
   }
 
   void _onDetect(BarcodeCapture capture) {
     if (_scanned) return;
-
     for (final barcode in capture.barcodes) {
       final value = barcode.rawValue;
       if (value != null && value.isNotEmpty) {
@@ -54,57 +37,56 @@ class _QRScanScreenState extends State<QRScanScreen> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final cutOut = MediaQuery.of(context).size.width * 0.8;
+    final cutOut = MediaQuery.of(context).size.width * 0.7;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('QR 코드 스캔')),
+      appBar: AppBar(title: const Text('QR코드 스캔')),
       body: Stack(
         alignment: Alignment.center,
         children: [
           // 카메라 뷰
-          MobileScanner(
-            controller: _controller,
-            onDetect: _onDetect,
-            errorBuilder: (context, error, child) {
-              return Center(child: Text('카메라 오류: $error'));
-            },
-          ),
+          MobileScanner(controller: _controller, onDetect: _onDetect),
 
-          // 오버레이 (qr_code_scanner의 QrScannerOverlayShape 대체)
-          IgnorePointer(
-            child: Container(
-              color: Colors.black.withValues(alpha: 0.7),
-            ),
-          ),
-          IgnorePointer(
-            child: SizedBox(
-              width: cutOut,
-              height: cutOut,
-              child: CustomPaint(
-                painter: _CornerBorderPainter(
-                  borderColor: Colors.white,
-                  borderWidth: 6,
-                  cornerLen: 28,
-                  radius: 12,
-                ),
+          // 가운데 뚫린 반투명 배경
+          ScannerOverlay(cutOut: cutOut),
+
+          // 모서리 프레임
+          SizedBox(
+            width: cutOut,
+            height: cutOut,
+            child: CustomPaint(
+              painter: _CornerBorderPainter(
+                borderColor: Colors.white,
+                borderWidth: 4,
+                cornerLen: 24,
+                radius: 12,
               ),
             ),
           ),
 
-          // 하단 안내
+          // 중앙 QR 헬퍼 이미지 (1초 뒤 사라짐)
+          AnimatedOpacity(
+            opacity: _showHelper ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 500),
+            child: Image.asset(
+              'assets/images/sample_qr.png', // QR 헬퍼 이미지 경로
+              width: cutOut * 0.5,
+            ),
+          ),
+
+          // 안내 문구
           Positioned(
-            bottom: 24,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Text(
-                'QR 코드를 사각형 안에 맞춰주세요',
-                style: TextStyle(color: Colors.white),
-              ),
+            bottom: 32,
+            child: const Text(
+              'QR코드를 잘 보이도록 화면 안에 맞춰주세요!',
+              style: TextStyle(color: Colors.white, fontSize: 16),
             ),
           ),
         ],
@@ -113,7 +95,51 @@ class _QRScanScreenState extends State<QRScanScreen> {
   }
 }
 
-/// 모서리 테두리만 그려주는 페인터 (간단 오버레이)
+/// 배경을 반투명 검정으로 덮고, 가운데 사각형만 뚫는 오버레이
+class ScannerOverlay extends StatelessWidget {
+  const ScannerOverlay({super.key, required this.cutOut});
+  final double cutOut;
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: CustomPaint(
+        size: MediaQuery.of(context).size,
+        painter: _ScannerOverlayPainter(cutOut: cutOut),
+      ),
+    );
+  }
+}
+
+class _ScannerOverlayPainter extends CustomPainter {
+  _ScannerOverlayPainter({required this.cutOut});
+  final double cutOut;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = Colors.black.withOpacity(0.7);
+
+    final full = Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height));
+    final hole = Path()
+      ..addRRect(RRect.fromRectAndRadius(
+        Rect.fromCenter(
+          center: Offset(size.width / 2, size.height / 2),
+          width: cutOut,
+          height: cutOut,
+        ),
+        const Radius.circular(12),
+      ));
+
+    // 전체에서 중앙 부분 빼기
+    final overlay = Path.combine(PathOperation.difference, full, hole);
+    canvas.drawPath(overlay, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
+}
+
+/// 흰색 모서리 프레임 (ㄱ, ㄴ 모양)
 class _CornerBorderPainter extends CustomPainter {
   _CornerBorderPainter({
     required this.borderColor,
@@ -139,7 +165,6 @@ class _CornerBorderPainter extends CustomPainter {
       ..strokeWidth = borderWidth
       ..strokeCap = StrokeCap.round;
 
-    // 모서리만 그리기
     final path = Path();
 
     // 좌상
