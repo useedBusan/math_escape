@@ -2,25 +2,25 @@
   {
     "id" : 1,
     "talk" : "안녕? 수학문화관 방문을 환영해! 나는 수학문화관의 마스코트 푸리라고 해.",
-    "puri_image": "assets/images/puri_appear.gif",
-    "back_image" : ""
+    "furiImage": "assets/images/common/puri_appear.gif",
+    "backImage" : "assets/images/common/bsbackground.png"
   },
   {
     "id" : 2,
     "talk" : "너 혹시 수학문화관에 전해 내려오는 전설에 대해 알고 있니? 수학문화관 어딘가에 천재 수학자가 남긴 비밀 노트가 숨겨져 있어.",
-    "puri_image" : "assets/images/puri_invite.png",
-    "back_image" : ""
+    "furiImage" : "assets/images/common/furiExplaining.png",
+    "backImage" : "assets/images/common/bsbackground.png"
   },
   {
     "id" : 3,
     "talk" : "그 노트를 찾으려면 곳곳에 숨겨진 미션을 모두 해결해야 해. 우리 함께 수학자의 비밀 노트를 찾는 모험을 하지 않을래?",
-    "puri_image" : "assets/images/puri_invite.png",
-    "back_image" : ""
+    "furiImage" : "assets/images/common/furiExplaining.png",
+    "backImage" : "assets/images/common/bsbackground.png"
   },
   {
     "id" : 4,
     "talk" : "좋아! 그럼 우리 같이 비밀 노트를 찾아보자. 첫 단서는 소마큐브 안에 떨어진 노트 한 장이야, 도형의 특징을 잘 살펴보면 다음 장소로 가는 힌트를 얻을 수 있어!",
-    "puri_image" : "assets/images/puri_manse.png",
-    "back_image" : ""
+    "furiImage" : "assets/images/common/furiHurray.png",
+    "backImage" : "assets/images/common/bsbackground.png"
   }
 ]

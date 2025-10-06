@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:math_escape/screens/splash_screen.dart';
-import 'package:math_escape/constants/app_constants.dart';
-import 'package:math_escape/theme/app_theme.dart';
-import 'package:math_escape/services/service_locator.dart';
+import 'package:flutter/services.dart';
+import 'dart:io';
+import 'package:math_escape/app/splash_screen.dart';
+import 'app/theme/app_theme.dart';
+import 'core/services/service_locator.dart';
+import 'constants/app_constants.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // 플랫폼별 시스템 UI 설정
+  if (Platform.isAndroid) {
+    // 안드로이드: 하단바 숨기기
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.edgeToEdge,
+      overlays: [SystemUiOverlay.top],
+    );
+  } else if (Platform.isIOS) {
+    // iOS: 런치 스크린 최적화
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+  }
+  
   // 서비스 초기화
   serviceLocator.initialize();
 

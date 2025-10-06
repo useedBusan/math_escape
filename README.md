@@ -101,7 +101,7 @@ math_escape/
 │   │   └── high_intro_sound.mp3
 │   └── fonts/
 │       ├── Pretendard (9 weights)
-│       └── SBAggro (B, M, L)
+│       └── SBAggroM (B, M, L)
 └── android/ ios/ web/ windows/ linux/ macos/
 ```
 
@@ -176,7 +176,7 @@ math_escape/
   "answer": ["정답1", "정답2"],
   "hint1": "첫 번째 힌트",
   "hint2": "두 번째 힌트",
-  "back_image": "배경 이미지 경로",
+  "backImage": "배경 이미지 경로",
   "questionImage": "문제 이미지 경로 (선택)"
 }
 ```
@@ -188,8 +188,8 @@ math_escape/
   "talks": [
     {
       "talk": "대화 내용",
-      "puri_image": "푸리 캐릭터 이미지",
-      "back_image": "배경 이미지"
+      "furiImage": "푸리 캐릭터 이미지",
+      "backImage": "배경 이미지"
     }
   ]
 }
@@ -257,7 +257,7 @@ math_escape/
 
 ### 폰트
 - **Pretendard**: 9가지 굵기 (Thin ~ Black)
-- **SBAggro**: B/M/L 굵기
+- **SBAggroM**: B/M/L 굵기
 
 ## 📝 라이선스
 
