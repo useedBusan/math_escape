@@ -1,8 +1,7 @@
-import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle;
-import '../../../core/utils/view_model/base_viewmodel.dart';
-import '../../../core/utils/viewmodel/intro_view_model.dart';
-import '../Model/elementary_low_mission_model.dart';
+import '../../../core/viewmodels/base_viewmodel.dart';
+import '../../../core/viewmodels/intro_view_model.dart';
+import '../../../core/services/service_locator.dart';
+import '../model/elementary_low_mission_model.dart';
 
 class ElementaryLowMissionViewModel extends BaseViewModel {
   ElementaryLowMissionViewModel() {
@@ -161,14 +160,13 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
   // Load
   Future<void> _loadMissions() async {
     try {
-      final jsonStr = await rootBundle.loadString(
+      final jsonList = await serviceLocator.dataService.loadJsonList(
         'assets/data/elem_low/elem_low_question.json',
       );
-      final list = json.decode(jsonStr) as List<dynamic>;
 
       _missions
         ..clear()
-        ..addAll(list.map(
+        ..addAll(jsonList.map(
               (e) => ElementaryLowMissionModel.fromJson(e as Map<String, dynamic>),
         ));
 

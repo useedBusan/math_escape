@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import '../../../core/utils/model/hint_model.dart';
+import '../../../core/models/hint_model.dart';
 import '../../../core/utils/qr_answer_validator.dart';
 
 @immutable

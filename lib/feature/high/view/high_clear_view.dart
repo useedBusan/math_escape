@@ -3,7 +3,7 @@ import '../view_model/high_timer_service.dart';
 import '../view_model/high_mission_view_model.dart';
 import '../view_model/high_hint_view_model.dart';
 import '../view_model/high_answer_view_model.dart';
-import '../../../core/utils/view/home_alert.dart';
+import '../../../core/views/home_alert.dart';
 
 class HighClearView extends StatelessWidget {
   final DateTime gameStartTime;

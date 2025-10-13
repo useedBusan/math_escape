@@ -2,7 +2,7 @@
 /*
 import "dart:convert";
 import "package:flutter/services.dart";
-import "../../../core/utils/model/talk_model.dart";
+import "../../../core/models/talk_model.dart";
 
 class ElementaryLowIntroViewModel {
   List<Talk> talks = [];

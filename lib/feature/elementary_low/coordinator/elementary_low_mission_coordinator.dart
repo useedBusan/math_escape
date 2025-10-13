@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'flow_step.dart';
-import '../ViewModel/elementary_low_mission_view_model.dart';
+import '../view_model/elementary_low_mission_view_model.dart';
 
 abstract class Coordinator {
   Coordinator? parent;

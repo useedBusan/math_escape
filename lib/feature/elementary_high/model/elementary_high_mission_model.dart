@@ -1,4 +1,5 @@
 import '../../../core/utils/qr_answer_validator.dart';
+import '../../../core/models/hint_model.dart';
 
 class ElementaryHighMissionModel {
   final int id;
@@ -50,8 +51,6 @@ class ElementaryHighMissionModel {
     return QRAnswerValidator.validateQRAnswer(scannedValue, toQRAnswerProvider());
   }
 }
-
-typedef HintEntry = ({String text, String? image, String? video});
 
 class ElementaryHighMissionHintModel {
   final List<HintEntry> hints;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../constants/enum/grade_enums.dart';
-import '../../../core/utils/view/hint_popup.dart';
-import '../../../core/utils/view/mission_background_view.dart';
-import '../../../core/utils/view_model/hint_popup_view_model.dart';
+import '../../../core/views/hint_popup.dart';
+import '../../../core/views/mission_background_view.dart';
+import '../../../core/viewmodels/hint_popup_view_model.dart';
 import '../view_model/elementary_high_mission_view_model.dart';
 import 'elementary_high_mission_list_view.dart';
 import 'conversation_overlay.dart';
@@ -27,7 +27,7 @@ class ElementaryHighMissionScreen extends StatelessWidget {
       ],
       child: Consumer2<ElementaryHighMissionViewModel, ElementaryHighMissionCoordinator>(
         builder: (context, vm, coordinator, child) {
-          // Coordinator와 ViewModel 동기화 설정 (한 번만)
+          // Coordinator와 view_model 동기화 설정 (한 번만)
           if (!vm.hasIndexCallback) {
             vm.setIndexChangedCallback((index) {
               // Coordinator에서 VM으로 인덱스 변경 알림
@@ -100,6 +100,19 @@ class ElementaryHighMissionScreen extends StatelessWidget {
       title: '미션! 수사모의 수학 보물을 찾아서',
       missionBuilder: (_) => const ElementaryHighMissionListView(),
       isqr: vm.isqr,
+      onBack: () {
+        // Coordinator의 handleBack을 호출하여 플로우 관리
+        if (!coordinator.handleBack()) {
+          // Coordinator가 처리하지 못한 경우에만 Navigator pop
+          Navigator.of(context).pop();
+        }
+      },
+      onHome: () {
+        // 초등 고학년 ViewModel 상태 해제
+        vm.reset();
+        // 홈으로 이동
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      },
       hintDialogueBuilder: (_) {
         final mission = vm.currentMission;
         if (mission == null) return const SizedBox.shrink();

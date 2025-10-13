@@ -12,6 +12,7 @@ class ElementaryHighMissionViewModel extends ChangeNotifier {
   bool _isBusy = false;
   String _typedAnswer = '';
   final TextEditingController textController = TextEditingController();
+  bool _isTextControllerDisposed = false;
   bool _showConversation = true; // 첫 번째 문제 전에 대화를 보여줄지 여부
   bool _showFinalConversation = false; // 마지막 스테이지 대화를 보여줄지 여부
   
@@ -144,10 +145,32 @@ class ElementaryHighMissionViewModel extends ChangeNotifier {
   }
 
 
+  /// 화면 빠져나갈 때 초기화가 필요하면 외부에서 호출
+  void reset() {
+    _missions.clear();
+    _currentIndex = 0;
+    _selectedChoiceIndex = null;
+    _typedAnswer = '';
+    textController.clear();
+    _isLoading = true;
+    _isBusy = false;
+    _showConversation = true;
+    _showFinalConversation = false;
+    notifyListeners();
+  }
+
+  /// 안전한 textController dispose
+  void _safeDisposeTextController() {
+    if (!_isTextControllerDisposed) {
+      textController.removeListener(_onTextChanged);
+      textController.dispose();
+      _isTextControllerDisposed = true;
+    }
+  }
+
   @override
   void dispose() {
-    textController.removeListener(_onTextChanged);
-    textController.dispose();
+    _safeDisposeTextController();
     super.dispose();
   }
 }

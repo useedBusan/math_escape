@@ -5,7 +5,7 @@ import '../../../app/theme/app_colors.dart';
 import 'package:math_escape/feature/high/model/high_mission_answer.dart';
 import 'high_timer_service.dart';
 
-/// 고등학교 답변 화면 ViewModel
+/// 고등학교 답변 화면 view_model
 class HighAnswerViewModel extends ChangeNotifier {
 
   // 싱글톤 인스턴스

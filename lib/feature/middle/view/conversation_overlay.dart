@@ -4,9 +4,9 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../constants/enum/speaker_enums.dart';
-import '../../../core/utils/view/common_intro_view.dart';
-import '../../../core/utils/viewmodel/intro_view_model.dart';
-import '../../../core/utils/model/talk_model.dart';
+import '../../../core/views/common_intro_view.dart';
+import '../../../core/viewmodels/intro_view_model.dart';
+import '../../../core/models/talk_model.dart';
 
 class ConversationOverlay extends StatefulWidget {
   final int stage;

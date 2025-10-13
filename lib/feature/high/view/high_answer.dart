@@ -8,7 +8,7 @@ import '../view_model/high_answer_view_model.dart';
 import '../view_model/high_mission_view_model.dart';
 import '../view_model/high_hint_view_model.dart';
 import 'package:provider/provider.dart';
-import '../../../core/utils/view/home_alert.dart';
+import '../../../core/views/home_alert.dart';
 import 'base_high_view.dart';
 import '../view_model/base_high_view_model.dart';
 import 'high_clear_view.dart';
@@ -74,7 +74,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
   @override
   void initState() {
     super.initState();
-    // ViewModel 초기화
+    // view_model 초기화
     WidgetsBinding.instance.addPostFrameCallback((_) {
       HighAnswerViewModel.instance.initializeAnswer(
         answer: widget.answer,

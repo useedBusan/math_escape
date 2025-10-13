@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../constants/enum/grade_enums.dart';
-import '../../../core/utils/view/common_intro_view.dart';
+import '../../../core/views/common_intro_view.dart';
 import '../../../constants/enum/speaker_enums.dart';
-import '../../../core/utils/viewmodel/intro_view_model.dart';
+import '../../../core/viewmodels/intro_view_model.dart';
 import 'elementary_low_mission_view.dart';
 
 class ElementaryLowIntroView extends StatefulWidget {

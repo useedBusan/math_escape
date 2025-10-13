@@ -13,13 +13,12 @@ import '../view_model/high_answer_view_model.dart';
 import '../view_model/base_high_view_model.dart';
 import 'high_hint_view.dart';
 import 'base_high_view.dart';
-import '../../../core/utils/view/answer_popup.dart';
-import '../../../core/utils/view/qr_scan_screen.dart';
-import '../../../core/utils/view/layered_card.dart';
-import '../../../core/utils/view/home_alert.dart';
-import '../../../core/utils/view/hint_popup.dart';
-import '../../../core/utils/view_model/hint_popup_view_model.dart';
-import '../../../core/utils/model/hint_model.dart';
+import '../../../core/views/answer_popup.dart';
+import '../../../core/views/qr_scan_screen.dart';
+import '../../../core/views/layered_card.dart';
+import '../../../core/views/home_alert.dart';
+import '../../../core/views/hint_popup.dart';
+import '../../../core/models/hint_model.dart';
 import '../../../app/theme/app_colors.dart';
 
 class HighMission extends StatelessWidget {

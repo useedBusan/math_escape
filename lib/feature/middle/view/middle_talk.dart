@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../constants/enum/grade_enums.dart';
-import '../../../core/utils/view/custom_intro_alert.dart';
+import '../../../core/views/custom_intro_alert.dart';
 import 'middle_mission.dart';
-import '../../../core/utils/view/common_intro_view.dart';
+import '../../../core/views/common_intro_view.dart';
 import '../model/middle_intro_talk.dart';
 
 class MiddleIntroScreen extends StatefulWidget {

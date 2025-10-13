@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../constants/enum/speaker_enums.dart';
-import '../../../core/utils/view/common_intro_view.dart';
-import '../../../core/utils/viewmodel/intro_view_model.dart';
+import '../../../core/views/common_intro_view.dart';
+import '../../../core/viewmodels/intro_view_model.dart';
 
 class ConversationOverlay extends StatefulWidget {
   final int stage;

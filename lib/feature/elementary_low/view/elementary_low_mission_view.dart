@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../constants/enum/grade_enums.dart';
-import '../../../core/utils/view/hint_popup.dart';
-import '../../../core/utils/view/mission_background_view.dart';
-import '../../../core/utils/view_model/hint_popup_view_model.dart';
-import '../ViewModel/elementary_low_mission_view_model.dart';
+import '../../../core/views/hint_popup.dart';
+import '../../../core/views/mission_background_view.dart';
+import '../../../core/viewmodels/hint_popup_view_model.dart';
+import '../view_model/elementary_low_mission_view_model.dart';
 import 'elementary_low_mission_list_view.dart';
 import 'conversation_overlay.dart';
 import '../coordinator/elementary_low_mission_coordinator.dart';
@@ -95,6 +95,19 @@ class ElementaryLowMissionView extends StatelessWidget {
       title: '미션! 수사모의 수학 보물을 찾아서',
       missionBuilder: (_) => const ElementaryLowMissionListView(),
       isqr: vm.isqr,
+      onBack: () {
+        // Coordinator의 handleBack을 호출하여 플로우 관리
+        if (!coordinator.handleBack()) {
+          // Coordinator가 처리하지 못한 경우에만 Navigator pop
+          Navigator.of(context).pop();
+        }
+      },
+      onHome: () {
+        // 초등 저학년 ViewModel 상태 해제
+        vm.reset();
+        // 홈으로 이동
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      },
       hintDialogueBuilder: (_) {
         final mission = vm.currentMission;
         if (mission == null) return const SizedBox.shrink();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Model/elementary_low_mission_model.dart';
-import '../ViewModel/elementary_low_mission_view_model.dart';
+import '../model/elementary_low_mission_model.dart';
+import '../view_model/elementary_low_mission_view_model.dart';
 import '../../../app/theme/app_colors.dart';
 
 class ElementaryLowMissionListView extends StatelessWidget {
