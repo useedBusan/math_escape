@@ -159,17 +159,19 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
   Widget build(BuildContext context) {
     return Consumer2<HighAnswerViewModel, BaseHighViewModel>(
       builder: (context, vm, baseVm, child) {
-        return WillPopScope(
-          onWillPop: () async {
-            final result = await HomeAlert.show(context);
-            if (result == true) {
-              // 모든 상태 해제
-              HighMissionViewModel.instance.disposeAll();
-              HighHintViewModel.instance.disposeAll();
-              HighAnswerViewModel.instance.disposeAll();
-              Navigator.of(context).popUntil((route) => route.isFirst);
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) async {
+            if (!didPop) {
+              final alertResult = await HomeAlert.show(context);
+              if (alertResult == true && context.mounted) {
+                // 모든 상태 해제
+                HighMissionViewModel.instance.disposeAll();
+                HighHintViewModel.instance.disposeAll();
+                HighAnswerViewModel.instance.disposeAll();
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }
             }
-            return false; // 기본 뒤로가기 동작 방지
           },
           child: BaseHighView(
             title: '역설, 혹은 모호함',

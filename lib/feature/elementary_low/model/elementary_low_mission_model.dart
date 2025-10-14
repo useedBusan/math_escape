@@ -26,10 +26,10 @@ class ElementaryLowMissionModel {
 
   factory ElementaryLowMissionModel.fromJson(Map<String, dynamic> json) {
     final hintText  = (json['hintText'] as String?) ?? '';
-    final hintImage = json['hintImage'] as String?;
-    final hintVideo = json['hintVideo'] as String?;
+    final hintImages = (json['hintImage'] as List?)?.map((e) => e.toString()).toList();
+    final hintVideos = (json['hintVideo'] as List?)?.map((e) => e.toString()).toList();
 
-    final entry = (text: hintText, image: hintImage, video: hintVideo);
+    final entry = (text: hintText, images: hintImages, videos: hintVideos);
     final list  = _isEmptyHint(entry) ? <HintEntry>[] : <HintEntry>[entry];
 
     final rawAnswer = (json['answer'] as num?)?.toInt() ?? 1;
@@ -57,8 +57,8 @@ class ElementaryLowMissionModel {
       'answer': answerIndex + 1,
       'images': questionImage,
       'hintText': first?.text,
-      'hintImage': first?.image,
-      'hintVideo': first?.video,
+      'hintImage': first?.images ?? [],
+      'hintVideo': first?.videos ?? [],
     };
   }
 
@@ -80,5 +80,5 @@ class ElementaryLowMissionModel {
   }
 
   static bool _isEmptyHint(HintEntry e) =>
-      e.text.trim().isEmpty && e.image == null && e.video == null;
+      e.text.trim().isEmpty && (e.images == null || e.images!.isEmpty) && (e.videos == null || e.videos!.isEmpty);
 }

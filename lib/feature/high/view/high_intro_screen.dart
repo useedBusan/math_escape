@@ -148,17 +148,19 @@ Paratruth Space, PS라고 불리는 이 공간에서,
                     final questionList = await loadQuestionList();
                     stopAudio();
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        settings: const RouteSettings(name: 'HighMission'),
-                        builder: (_) => HighMission(
-                          questionList: questionList,
-                          currentIndex: 0,
-                          gameStartTime: DateTime.now(),
+                    if (context.mounted) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          settings: const RouteSettings(name: 'HighMission'),
+                          builder: (_) => HighMission(
+                            questionList: questionList,
+                            currentIndex: 0,
+                            gameStartTime: DateTime.now(),
+                          ),
                         ),
-                      )
-                    );
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: CustomBlue.s500,

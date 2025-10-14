@@ -60,10 +60,6 @@ class ElementaryLowMissionViewModel extends BaseViewModel {
     setLoading(true);
     try {
       final mission = currentMission!;
-      final String answerCandidate = _selectedChoiceIndex != null &&
-          _selectedChoiceIndex! < mission.choices.length
-          ? mission.choices[_selectedChoiceIndex!]
-          : '';
       final ok = mission.answerIndex == _selectedChoiceIndex;
       
       setLoading(false);

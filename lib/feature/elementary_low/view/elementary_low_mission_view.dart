@@ -27,9 +27,12 @@ class ElementaryLowMissionView extends StatelessWidget {
           // Coordinator에 VM 참조 설정 (한 번만)
           coordinator.setViewModel(vm);
           
-          return WillPopScope(
-            onWillPop: () async {
-              return !coordinator.handleBack();
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) async {
+              if (!didPop) {
+                coordinator.handleBack();
+              }
             },
             child: _buildCurrentStep(ctx, vm, coordinator, grade),
           );
@@ -38,7 +41,11 @@ class ElementaryLowMissionView extends StatelessWidget {
     );
   }
   
-  Widget _buildCurrentStep(BuildContext context, ElementaryLowMissionViewModel vm, ElementaryLowMissionCoordinator coordinator, StudentGrade grade) {
+  Widget _buildCurrentStep(
+      BuildContext context,
+      ElementaryLowMissionViewModel vm,
+      ElementaryLowMissionCoordinator coordinator,
+      StudentGrade grade) {
     // 최종 대화가 표시되어야 하는 경우 (가장 우선순위)
     if (vm.showFinalConversation) {
       return ConversationOverlay(
@@ -92,20 +99,16 @@ class ElementaryLowMissionView extends StatelessWidget {
     // 기본: 질문 화면 (intro 또는 question 단계)
     return MissionBackgroundView(
       grade: grade,
-      title: '미션! 수사모의 수학 보물을 찾아서',
+      title: grade.title,
       missionBuilder: (_) => const ElementaryLowMissionListView(),
       isqr: vm.isqr,
       onBack: () {
-        // Coordinator의 handleBack을 호출하여 플로우 관리
         if (!coordinator.handleBack()) {
-          // Coordinator가 처리하지 못한 경우에만 Navigator pop
           Navigator.of(context).pop();
         }
       },
       onHome: () {
-        // 초등 저학년 ViewModel 상태 해제
         vm.reset();
-        // 홈으로 이동
         Navigator.of(context).popUntil((route) => route.isFirst);
       },
       hintDialogueBuilder: (_) {
@@ -114,13 +117,10 @@ class ElementaryLowMissionView extends StatelessWidget {
 
         final hintVM = context.read<HintPopupViewModel>();
         final hints = mission.hints;
-
         if (hints.isEmpty) return const SizedBox.shrink();
 
-        // 힌트가 설정되지 않았거나 다른 문제의 힌트인 경우에만 새로 설정
         hintVM.setHints(hints, missionId: mission.id);
 
-        // 다음 힌트 가져오기 (순환)
         final content = hintVM.consumeNext();
         if (content == null) return const SizedBox.shrink();
 
@@ -131,7 +131,9 @@ class ElementaryLowMissionView extends StatelessWidget {
 
         return HintPopup(
           model: model,
-          onConfirm: () => Navigator.of(context).pop(),
+          onConfirm: () {
+            Navigator.of(context).pop();
+          },
         );
       },
       onSubmitAnswer: (c) async {

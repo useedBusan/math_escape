@@ -14,17 +14,19 @@ class HighClearView extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return WillPopScope(
-      onWillPop: () async {
-        final result = await HomeAlert.show(context);
-        if (result == true) {
-          // 모든 상태 해제
-          HighMissionViewModel.instance.disposeAll();
-          HighHintViewModel.instance.disposeAll();
-          HighAnswerViewModel.instance.disposeAll();
-          Navigator.of(context).popUntil((route) => route.isFirst);
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (!didPop) {
+          final alertResult = await HomeAlert.show(context);
+          if (alertResult == true && context.mounted) {
+            // 모든 상태 해제
+            HighMissionViewModel.instance.disposeAll();
+            HighHintViewModel.instance.disposeAll();
+            HighAnswerViewModel.instance.disposeAll();
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          }
         }
-        return false; // 기본 뒤로가기 동작 방지
       },
       child: Scaffold(
         appBar: AppBar(
@@ -32,7 +34,7 @@ class HighClearView extends StatelessWidget {
             icon: const Icon(Icons.home),
             onPressed: () async {
               final result = await HomeAlert.show(context);
-              if (result == true) {
+              if (result == true && context.mounted) {
                 // 모든 상태 해제
                 HighMissionViewModel.instance.disposeAll();
                 HighHintViewModel.instance.disposeAll();

@@ -118,6 +118,8 @@ class _HighHintContentState extends State<_HighHintContent> {
       hintIcon: 'assets/images/middle/middleHint.png',
       upString: '힌트',
       downString: q.hint,
+      hintImg: null,
+      hintVideo: null,
       mainColor: CustomBlue.s500,
     );
     
@@ -154,17 +156,18 @@ class _HighHintContentState extends State<_HighHintContent> {
   void _submitAnswer(HighHintViewModel vm) {
     final q = vm.currentHintQuestion;
     if (q == null) return;
-    
+
     final input = _controller.text.trim().toLowerCase();
     final answers = q.answer.map((a) => a.trim().toLowerCase()).toList();
     final isCorrect = answers.contains(input);
 
     showAnswerPopup(
-      context, 
+      context,
       isCorrect: isCorrect,
       onNext: () async {
         if (isCorrect) {
           final answerData = await loadHintAnswerByStage(q.stage);
+          if (!mounted) return; // ✅ context 안전 확인
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -179,6 +182,7 @@ class _HighHintContentState extends State<_HighHintContent> {
             ),
           );
         } else {
+          if (!mounted) return; // ✅ context 안전 확인
           Navigator.of(context).pop();
         }
       },
@@ -189,17 +193,19 @@ class _HighHintContentState extends State<_HighHintContent> {
   Widget build(BuildContext context) {
     return Consumer2<HighHintViewModel, BaseHighViewModel>(
       builder: (context, vm, baseVm, child) {
-        return WillPopScope(
-          onWillPop: () async {
-            final result = await HomeAlert.show(context);
-            if (result == true) {
-              // 모든 상태 해제
-              HighMissionViewModel.instance.disposeAll();
-              HighHintViewModel.instance.disposeAll();
-              HighAnswerViewModel.instance.disposeAll();
-              Navigator.of(context).popUntil((route) => route.isFirst);
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) async {
+            if (!didPop) {
+              final alertResult = await HomeAlert.show(context);
+              if (alertResult == true && context.mounted) {
+                // 모든 상태 해제
+                HighMissionViewModel.instance.disposeAll();
+                HighHintViewModel.instance.disposeAll();
+                HighAnswerViewModel.instance.disposeAll();
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }
             }
-            return false; // 기본 뒤로가기 동작 방지
           },
           child: BaseHighView(
             title: '역설, 혹은 모호함',
@@ -407,13 +413,13 @@ class _HighHintContentState extends State<_HighHintContent> {
                     onPressed: () async {
                       final result = await Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => QRScanScreen(),
-                        ),
+                        MaterialPageRoute(builder: (_) => QRScanScreen()),
                       );
+
                       if (result != null && result is String) {
                         final isCorrect = q.validateQRAnswer(result);
-                        
+
+                        if (!mounted) return; // ✅ context 안전 확인
                         showDialog(
                           context: context,
                           barrierDismissible: false,
@@ -423,8 +429,8 @@ class _HighHintContentState extends State<_HighHintContent> {
                             onNext: () async {
                               Navigator.pop(context);
                               if (isCorrect) {
-                                // 정답인 경우 다음 단계로 진행
                                 final answerData = await loadHintAnswerByStage(q.stage);
+                                if (!mounted) return; // ✅ context 안전 확인
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -439,7 +445,6 @@ class _HighHintContentState extends State<_HighHintContent> {
                                   ),
                                 );
                               }
-                              // 오답일 때는 팝업만 닫고 현재 화면 유지
                             },
                           ),
                         );

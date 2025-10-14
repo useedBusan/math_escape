@@ -42,9 +42,12 @@ class ElementaryHighMissionScreen extends StatelessWidget {
           // VM의 currentIndex를 코디네이터와 동기화
           vm.syncWithCoordinator(coordinator.currentQuestionIndex);
           
-          return WillPopScope(
-            onWillPop: () async {
-              return !coordinator.handleBack();
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) async {
+              if (!didPop) {
+                coordinator.handleBack();
+              }
             },
             child: _buildCurrentStep(context, vm, coordinator, grade),
           );

@@ -48,6 +48,14 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
   ) {
     if (coordinatorIndex != viewModel.currentIndex) {
       viewModel.setCurrentIndex(coordinatorIndex);
+      // After index changes, precache heavy images next frame to avoid jank
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final mission = viewModel.currentMission;
+        final imagePath = mission?.questionImage;
+        if (imagePath != null && imagePath.isNotEmpty && mounted) {
+          precacheImage(AssetImage(imagePath), context);
+        }
+      });
     }
   }
 
@@ -161,7 +169,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
             onPopInvokedWithResult: (didPop, result) async {
               if (!didPop) {
                 final alertResult = await HomeAlert.show(context);
-                if (alertResult == true) {
+                if (alertResult == true && context.mounted) {
                   Navigator.of(context).pop();
                 }
               }
