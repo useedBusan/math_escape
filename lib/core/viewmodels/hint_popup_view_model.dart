@@ -15,7 +15,9 @@ class HintPopupViewModel extends ChangeNotifier {
       _hints = hints;
       _index = -1;
       _currentMissionId = missionId;
-      notifyListeners();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (hasListeners) notifyListeners();
+      });
     }
   }
 
@@ -34,7 +36,10 @@ class HintPopupViewModel extends ChangeNotifier {
       _hints = const [];
       _currentMissionId = null;
     }
-    notifyListeners();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (hasListeners) notifyListeners();
+    });
   }
 
   ({String icon, Color color}) paletteOf(StudentGrade grade) {

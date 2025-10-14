@@ -45,6 +45,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
   @override
   Widget build(BuildContext context) {
     final cutOut = MediaQuery.of(context).size.width * 0.7;
+    final helperImgW = cutOut * 0.7;
 
     return Scaffold(
       appBar: AppBar(title: const Text('QR코드 스캔')),
@@ -76,14 +77,14 @@ class _QRScanScreenState extends State<QRScanScreen> {
             opacity: _showHelper ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 500),
             child: Image.asset(
-              'assets/images/sample_qr.png', // QR 헬퍼 이미지 경로
-              width: cutOut * 0.5,
+              'assets/images/common/qrCode.png',
+              width: helperImgW,
             ),
           ),
 
           // 안내 문구
           Positioned(
-            bottom: 32,
+            bottom: 50,
             child: const Text(
               'QR코드를 잘 보이도록 화면 안에 맞춰주세요!',
               style: TextStyle(color: Colors.white, fontSize: 16),
