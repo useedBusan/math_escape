@@ -51,7 +51,7 @@ class _ElementaryLowIntroViewState extends State<ElementaryLowIntroView> {
     }
 
     return CommonIntroView(
-      appBarTitle: "미션! 수학자의 수첩을 찾아서",
+      appBarTitle: StudentGrade.elementaryLow.appBarTitle,
       backgroundAssetPath: viewModel.currentTalk.backImg,
       characterImageAssetPath: viewModel.currentTalk.speakerImg,
       speakerName: speakerName(),

@@ -114,7 +114,7 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
     final talk = talkList[currentIndex];
 
     return CommonIntroView(
-      appBarTitle: '수학자의 비밀 노트를 찾아라!',
+      appBarTitle: StudentGrade.middle.appBarTitle,
       backgroundAssetPath: 'assets/images/common/bsbackground.png',
       characterImageAssetPath: talk.puriImage,
       speakerName: '푸리',

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
 // import 'package:math_escape/feature/high/view/high_mission_view.dart'; // 사용하지 않는 파일
-import '../../../App/theme/app_colors.dart';
+import '../../../app/theme/app_colors.dart';
+import '../../../constants/enum/grade_enums.dart';
+import '../../../core/views/home_alert.dart';
 import '../../../feature/high/model/high_mission_question.dart';
 import '../../../feature/high/view/high_mission.dart';
 
@@ -114,25 +116,30 @@ Paratruth Space, PS라고 불리는 이 공간에서,
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomGray.lightGray,
-      // appBar: AppBar(
-      //   title: Text(title),
-      //   centerTitle: true,
-      //   backgroundColor: Colors.white,
-      //   foregroundColor: mainColor,
-      //   elevation: 0,
-      //   leading: IconButton(
-      //     icon: Icon(Icons.arrow_back, color: mainColor, size: 28),
-      //     onPressed: onBack ?? () => Navigator.of(context).maybePop(),
-      //   ),
-      //   actions: [
-      //     IconButton(
-      //       icon: Icon(Icons.home_outlined, color: mainColor, size: 28),
-      //       onPressed: () {
-      //         HomeAlert.showAndNavigate(context, onHome: onHome);
-      //       },
-      //     ),
-      //   ],
-      // ),
+      appBar: AppBar(
+        title: Text(StudentGrade.high.appBarTitle),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        foregroundColor: StudentGrade.high.mainColor,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: StudentGrade.high.mainColor, size: 28),
+          onPressed: () async {
+            final alertResult = await HomeAlert.show(context);
+            if (alertResult == true && context.mounted) {
+              Navigator.of(context).pop();
+            }
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.home_outlined, color: StudentGrade.high.mainColor, size: 28),
+            onPressed: () {
+              HomeAlert.showAndNavigate(context);
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),

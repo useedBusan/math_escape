@@ -216,7 +216,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
             }
           },
           child: BaseHighView(
-            title: '역설, 혹은 모호함',
+          title: StudentGrade.high.appBarTitle,
             background: Container(color: const Color(0xFFE8F0FE)),
             paneBuilder: (context, pane) => _buildMissionContent(vm),
           ),

@@ -99,28 +99,35 @@ class ElementaryLowMissionView extends StatelessWidget {
     // 기본: 질문 화면 (intro 또는 question 단계)
     return MissionBackgroundView(
       grade: grade,
-      title: grade.title,
+      title: grade.appBarTitle,
       missionBuilder: (_) => const ElementaryLowMissionListView(),
       isqr: vm.isqr,
       onBack: () {
+        // Coordinator의 handleBack을 호출하여 플로우 관리
         if (!coordinator.handleBack()) {
+          // Coordinator가 처리하지 못한 경우에만 Navigator pop
           Navigator.of(context).pop();
         }
       },
       onHome: () {
+        // 초등 저학년 ViewModel 상태 해제
         vm.reset();
+        // 홈으로 이동
         Navigator.of(context).popUntil((route) => route.isFirst);
       },
-      hintDialogueBuilder: (_) {
+      hintDialogueBuilder: (dialogContext) {
         final mission = vm.currentMission;
         if (mission == null) return const SizedBox.shrink();
 
+        // Use the outer context (under MultiProvider) to access Provider
         final hintVM = context.read<HintPopupViewModel>();
         final hints = mission.hints;
         if (hints.isEmpty) return const SizedBox.shrink();
 
+        // 힌트가 설정되지 않았거나 다른 문제의 힌트인 경우에만 새로 설정
         hintVM.setHints(hints, missionId: mission.id);
 
+        // 다음 힌트 가져오기 (순환)
         final content = hintVM.consumeNext();
         if (content == null) return const SizedBox.shrink();
 
@@ -129,11 +136,10 @@ class ElementaryLowMissionView extends StatelessWidget {
           content: content,
         );
 
+        // MissionBackgroundView에서 showDialog를 호출하므로 여기서는 위젯만 반환
         return HintPopup(
           model: model,
-          onConfirm: () {
-            Navigator.of(context).pop();
-          },
+          onConfirm: () => Navigator.of(dialogContext).pop(),
         );
       },
       onSubmitAnswer: (c) async {

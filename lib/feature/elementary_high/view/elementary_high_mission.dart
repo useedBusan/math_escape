@@ -100,7 +100,7 @@ class ElementaryHighMissionScreen extends StatelessWidget {
     // 기본: 질문 화면 (intro 또는 question 단계)
     return MissionBackgroundView(
       grade: grade,
-      title: '미션! 수사모의 수학 보물을 찾아서',
+      title: grade.appBarTitle,
       missionBuilder: (_) => const ElementaryHighMissionListView(),
       isqr: vm.isqr,
       onBack: () {

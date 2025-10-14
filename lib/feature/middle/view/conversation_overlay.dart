@@ -104,7 +104,7 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
                     }
 
                     return CommonIntroView(
-                      appBarTitle: "수학자의 비밀노트를 찾아라!",
+                      appBarTitle: StudentGrade.middle.appBarTitle,
                       backgroundAssetPath: talk.backImg,
                       characterImageAssetPath: widget.isFinalConversation 
                           ? 'assets/images/common/puri_clear.png' 

@@ -76,7 +76,7 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
                     }
 
                     return CommonIntroView(
-                      appBarTitle: "미션! 수사모의 수학 보물을 찾아서",
+                      appBarTitle: StudentGrade.elementaryLow.appBarTitle,
                       backgroundAssetPath: talk.backImg,
                       characterImageAssetPath: widget.isFinalConversation 
                           ? 'assets/images/common/puri_clear.png' 

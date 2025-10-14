@@ -250,7 +250,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
           },
         ),
         title: Text(
-          '수학자의 비밀 노트를 찾아라!',
+          StudentGrade.middle.appBarTitle,
           style: TextStyle(
             color: const Color(0xFF3F55A7),
             fontSize: MediaQuery.of(context).size.width * (16 / 360),
