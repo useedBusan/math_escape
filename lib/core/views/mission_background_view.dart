@@ -44,6 +44,7 @@ class MissionBackgroundView extends StatelessWidget {
     final bannerImgPath = grade.bannerImg;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(title),
         centerTitle: true,

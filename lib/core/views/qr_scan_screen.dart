@@ -45,7 +45,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
   @override
   Widget build(BuildContext context) {
     final cutOut = MediaQuery.of(context).size.width * 0.7;
-    final helperImgW = cutOut * 0.7;
+    final helperImgW = cutOut * 0.9;
 
     return Scaffold(
       appBar: AppBar(title: const Text('QR코드 스캔')),
@@ -86,7 +86,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
           Positioned(
             bottom: 50,
             child: const Text(
-              'QR코드를 잘 보이도록 화면 안에 맞춰주세요!',
+              'QR코드가 잘 보이도록 화면 안에 맞춰주세요!',
               style: TextStyle(color: Colors.white, fontSize: 16),
             ),
           ),

@@ -236,7 +236,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
 
     return Scaffold(
       backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
