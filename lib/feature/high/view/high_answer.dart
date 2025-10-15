@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:math_escape/core/extensions/string_extension.dart';
 import 'package:math_escape/feature/high/model/high_mission_answer.dart';
 import 'package:math_escape/feature/high/model/high_mission_question.dart';
-import 'package:flutter_math_fork/flutter_math.dart';
 import '../../../App/theme/app_colors.dart';
 import '../../../feature/high/view/high_mission.dart';
 import '../view_model/high_answer_view_model.dart';
 import '../view_model/high_mission_view_model.dart';
 import '../view_model/high_hint_view_model.dart';
 import 'package:provider/provider.dart';
-import '../../../core/utils/view/home_alert.dart';
+import '../../../core/views/home_alert.dart';
+import '../../../core/views/integer_phase_banner.dart';
 import 'base_high_view.dart';
 import '../view_model/base_high_view_model.dart';
 import 'high_clear_view.dart';
@@ -74,7 +75,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
   @override
   void initState() {
     super.initState();
-    // ViewModel 초기화
+    // view_model 초기화
     WidgetsBinding.instance.addPostFrameCallback((_) {
       HighAnswerViewModel.instance.initializeAnswer(
         answer: widget.answer,
@@ -84,47 +85,15 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
     });
   }
 
-  List<InlineSpan> parseExplanation(String explanation, double fontSize) {
-    final regex = RegExp(r'\$(.+?)\$');
-    final matches = regex.allMatches(explanation);
-    List<InlineSpan> spans = [];
-    int lastEnd = 0;
-
-    for (final match in matches) {
-      if (lastEnd < match.start) {
-        spans.add(
-          TextSpan(
-            text: explanation.substring(lastEnd, match.start).replaceAll('\\\\', '\\'),
-            style: TextStyle(fontSize: fontSize, color: Colors.black87),
-          ),
-        );
-      }
-      spans.add(
-        WidgetSpan(
-          child: Math.tex(
-            match.group(1)!,
-            textStyle: TextStyle(fontSize: fontSize),
-          ),
-        ),
-      );
-      lastEnd = match.end;
-    }
-    if (lastEnd < explanation.length) {
-      spans.add(
-        TextSpan(
-          text: explanation.substring(lastEnd).replaceAll('\\\\', '\\'),
-          style: TextStyle(fontSize: fontSize, color: Colors.black87),
-        ),
-      );
-    }
-    return spans;
-  }
 
   void handleNextButton() {
+    print('DEBUG: handleNextButton called - currentIndex: ${widget.currentIndex}, questionListLength: ${widget.questionList.length}');
+    
     HighAnswerViewModel.instance.handleNextButton(
       currentIndex: widget.currentIndex,
       questionListLength: widget.questionList.length,
       onNavigateToNext: () {
+        print('DEBUG: onNavigateToNext callback called');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -138,10 +107,12 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
         );
       },
       onNavigateBack: () {
+        print('DEBUG: onNavigateBack callback called');
         // HighMission으로 돌아가기
         Navigator.popUntil(context, (route) => route.settings.name == 'HighMission');
       },
       onComplete: () {
+        print('DEBUG: onComplete callback called - navigating to HighClearView');
         // 마지막 문제인 경우 - HighClearView로 이동
         Navigator.pushReplacement(
           context,
@@ -159,21 +130,37 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
   Widget build(BuildContext context) {
     return Consumer2<HighAnswerViewModel, BaseHighViewModel>(
       builder: (context, vm, baseVm, child) {
-        return WillPopScope(
-          onWillPop: () async {
-            final result = await HomeAlert.show(context);
-            if (result == true) {
-              // 모든 상태 해제
-              HighMissionViewModel.instance.disposeAll();
-              HighHintViewModel.instance.disposeAll();
-              HighAnswerViewModel.instance.disposeAll();
-              Navigator.of(context).popUntil((route) => route.isFirst);
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) async {
+            if (!didPop) {
+              final alertResult = await HomeAlert.show(context);
+              if (alertResult == true && context.mounted) {
+                // 모든 상태 해제
+                HighMissionViewModel.instance.disposeAll();
+                HighHintViewModel.instance.disposeAll();
+                HighAnswerViewModel.instance.disposeAll();
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }
             }
-            return false; // 기본 뒤로가기 동작 방지
           },
           child: BaseHighView(
             title: '역설, 혹은 모호함',
             background: Container(color: Color(0xFFF5F5F5)),
+            onBack: () {
+              // 한 단계만 뒤로가기 또는 HighMission까지 복귀
+              Navigator.popUntil(context, (route) => route.settings.name == 'HighMission');
+            },
+            onHome: () async {
+              // 홈으로: 확인 후 상태 해제 및 루트로 이동
+              final alertResult = await HomeAlert.show(context);
+              if (alertResult == true && context.mounted) {
+                HighMissionViewModel.instance.disposeAll();
+                HighHintViewModel.instance.disposeAll();
+                HighAnswerViewModel.instance.disposeAll();
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }
+            },
             paneBuilder: (context, pane) => _buildAnswerContent(vm),
           ),
         );
@@ -182,7 +169,6 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
   }
 
   Widget _buildAnswerContent(HighAnswerViewModel vm) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Align(
@@ -193,37 +179,10 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-          Row(
-            children: [
-              // 퓨리 이미지 공간 (왼쪽)
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: Center(
-                  child: Image.asset(
-                    "assets/images/high/highFuri.png",
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              // 텍스트 (오른쪽)
-              Expanded(
-                child: Text(
-                  '인류의 처음 정수의 정수는 한 개인의 처음 정수를 만들기 위해 가장 기본이 되는 것. 곧, 정수!',
-                  style: TextStyle(
-                    fontFamily: "Pretendard",
-                    fontSize: screenWidth * (13 / 360),
-                    fontWeight: FontWeight.w400,
-                    color: const Color(0xFF1A1A1A),
-                    // height: 1.3,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 20),
-            ],
+          IntegerPhaseBanner(
+            questionNumber: widget.currentIndex + 1,
+            furiImagePath: "assets/images/high/highFuri.png",
+            fontSize: 14,
           ),
           SizedBox(height: screenHeight * 0.025),
 
@@ -250,17 +209,20 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
                   vm.currentAnswer?.title ?? widget.answer.title,
                   style: TextStyle(
                     fontFamily: "SBAggroM",
-                    fontSize: screenWidth * 18/360,
+                    fontSize: 18,
                     color: Colors.black,
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.015),
+                //진리 박스
                 RichText(
                   text: TextSpan(
-                    children: parseExplanation(
-                      vm.currentAnswer?.explanation ?? widget.answer.explanation,
-                      screenWidth * 14/360,
+                    style: TextStyle(
+                        fontFamily: "Pretendard",
+                        height: 1.5,
+                        color: AppColors.body
                     ),
+                    children: (vm.currentAnswer?.explanation ?? widget.answer.explanation).toStyledSpans(fontSize: 18),
                   ),
                 ),
                 if ((vm.currentAnswer?.answerImage ?? widget.answer.answerImage) != null) ...[
@@ -291,21 +253,25 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  vm.currentAnswer?.clueTitle ?? widget.answer.clueTitle,
-                  style: TextStyle(
-                    fontFamily: "SBAggroM",
-                    fontSize: screenWidth * 18/360,
-                    color: AppColors.head
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontFamily: "SBAggroM",
+                      fontSize: 18,
+                      color: AppColors.head
+                    ),
+                    children: (vm.currentAnswer?.clueTitle ?? widget.answer.clueTitle).toStyledSpans(fontSize: 18),
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  vm.currentAnswer?.clue ?? widget.answer.clue,
-                  style: TextStyle(
-                    fontFamily: "Pretendard",
-                    fontSize: screenWidth * 14/360,
-                    color: AppColors.body
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontFamily: "Pretendard",
+                      height: 1.5,
+                      color: AppColors.body
+                    ),
+                    children: (vm.currentAnswer?.clue ?? widget.answer.clue).toStyledSpans(fontSize: 18),
                   ),
                 ),
               ],
@@ -333,7 +299,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
                       ? '다음 문제'
                       : '마지막 문제'),
                   style: TextStyle(
-                    fontSize: screenWidth * 16/360,
+                    fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),

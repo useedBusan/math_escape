@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:math_escape/App/theme/app_colors.dart';
 import '../view_model/high_timer_service.dart';
 import '../view_model/high_mission_view_model.dart';
 import '../view_model/high_hint_view_model.dart';
 import '../view_model/high_answer_view_model.dart';
-import '../../../core/utils/view/home_alert.dart';
+import '../../../core/views/home_alert.dart';
 
 class HighClearView extends StatelessWidget {
   final DateTime gameStartTime;
@@ -12,19 +13,19 @@ class HighClearView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return WillPopScope(
-      onWillPop: () async {
-        final result = await HomeAlert.show(context);
-        if (result == true) {
-          // 모든 상태 해제
-          HighMissionViewModel.instance.disposeAll();
-          HighHintViewModel.instance.disposeAll();
-          HighAnswerViewModel.instance.disposeAll();
-          Navigator.of(context).popUntil((route) => route.isFirst);
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (!didPop) {
+          final alertResult = await HomeAlert.show(context);
+          if (alertResult == true && context.mounted) {
+            // 모든 상태 해제
+            HighMissionViewModel.instance.disposeAll();
+            HighHintViewModel.instance.disposeAll();
+            HighAnswerViewModel.instance.disposeAll();
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          }
         }
-        return false; // 기본 뒤로가기 동작 방지
       },
       child: Scaffold(
         appBar: AppBar(
@@ -32,7 +33,7 @@ class HighClearView extends StatelessWidget {
             icon: const Icon(Icons.home),
             onPressed: () async {
               final result = await HomeAlert.show(context);
-              if (result == true) {
+              if (result == true && context.mounted) {
                 // 모든 상태 해제
                 HighMissionViewModel.instance.disposeAll();
                 HighHintViewModel.instance.disposeAll();
@@ -48,120 +49,77 @@ class HighClearView extends StatelessWidget {
           centerTitle: true,
         ),
         body: SafeArea(
-          child: Stack(
-            children: [
-              // 배경 이미지
-              Positioned.fill(
-                child: Image.asset(
-                  "assets/images/high/highComplete.png",
-                  fit: BoxFit.cover,
-                  alignment: Alignment.center,
-                  gaplessPlayback: true,
-                  cacheWidth:
-                      (size.width * MediaQuery.of(context).devicePixelRatio)
-                          .toInt(),
-                  cacheHeight:
-                      (size.height * MediaQuery.of(context).devicePixelRatio)
-                          .toInt(),
-                  filterQuality: FilterQuality.high,
-                  isAntiAlias: true,
-                ),
-              ),
-              // 그라데이션 오버레이
-              Positioned.fill(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0x00000000),
-                        Color(0x20000000),
-                        Color(0x40000000),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                ),
-              ),
-              // 메인 콘텐츠
-              Positioned.fill(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    // 캐릭터 + 말풍선 이미지
-                    Center(
-                      child: Image.asset(
-                        "assets/images/high/highFuriClear.png",
+          child: Container(
+            color: const Color(0xFFE8F0FE),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // 상단 콘텐츠 영역
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center, // 화면 중간에 위치
+                    children: [
+                      const SizedBox(height: 20),
+                      Image.asset(
+                        "assets/images/high/highComplete.png",
                         width: 200,
                         height: 200,
                         fit: BoxFit.contain,
                       ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    const Text(
-                      "Paratruth Space, PS를 탈출하는데 걸린 시간",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // 생각의 시간 & 몸의 시간
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _TimeBox(
-                          title: "생각의 시간",
-                          value: HighTimerService.instance.thinkingTime,
-                        ),
-                        _TimeBox(
-                          title: "몸의 시간",
-                          value: HighTimerService.instance.bodyTime,
-                        ),
-                      ],
-                    ),
-
-                    const Spacer(),
-
-                    // 수료증 다운로드 버튼
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 16,
-                      ),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF3F55A7),
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          onPressed: () {
-                            // 수료증 다운로드 기능 (추후 구현)
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('수료증 다운로드 기능은 준비 중입니다.'),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.download),
-                          label: const Text("수료증 다운로드"),
+                      const SizedBox(height: 24),
+                      Text(
+                        "Paratruth Space, PS를 탈출하는데 걸린 시간",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontFamily: "Pretendard",
+                          color: CustomBlue.s700,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 24),
+                      _InfoCard(
+                        title: "생각의 시간",
+                        value: HighTimerService.instance.thinkingTime,
+                      ),
+                      const SizedBox(height: 12),
+                      _InfoCard(
+                        title: "몸의 시간",
+                        value: HighTimerService.instance.bodyTime,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+
+                // 하단 버튼
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: CustomBlue.s500,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () {
+                        HighMissionViewModel.instance.disposeAll();
+                        HighHintViewModel.instance.disposeAll();
+                        HighAnswerViewModel.instance.disposeAll();
+                        Navigator.of(
+                          context,
+                        ).popUntil((route) => route.isFirst);
+                      },
+                      label: const Text("메인화면으로"),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -169,30 +127,43 @@ class HighClearView extends StatelessWidget {
   }
 }
 
-class _TimeBox extends StatelessWidget {
+class _InfoCard extends StatelessWidget {
   final String title;
   final String value;
 
-  const _TimeBox({required this.title, required this.value});
+  const _InfoCard({required this.title, required this.value});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      width: double.infinity,
+      height: 52,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade400),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFE5E5E5)),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0x4DFFFFFF),
+            blurRadius: 2,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: const TextStyle(fontSize: 14)),
-          const SizedBox(height: 4),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 13, color: Color(0xFF777777)),
+          ),
           Text(
             value,
             style: const TextStyle(
               fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.blue,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2E2E2E),
             ),
           ),
         ],

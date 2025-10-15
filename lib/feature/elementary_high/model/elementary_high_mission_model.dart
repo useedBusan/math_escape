@@ -1,4 +1,5 @@
 import '../../../core/utils/qr_answer_validator.dart';
+import '../../../core/models/hint_model.dart';
 
 class ElementaryHighMissionModel {
   final int id;
@@ -51,8 +52,6 @@ class ElementaryHighMissionModel {
   }
 }
 
-typedef HintEntry = ({String text, String? image, String? video});
-
 class ElementaryHighMissionHintModel {
   final List<HintEntry> hints;
 
@@ -62,10 +61,10 @@ class ElementaryHighMissionHintModel {
     final List<HintEntry> list = [];
 
     if (json['hint1'] != null && (json['hint1'] as String).isNotEmpty) {
-      list.add((text: json['hint1'], image: null, video: null));
+      list.add((text: json['hint1'], images: null, videos: null));
     }
     if (json['hint2'] != null && (json['hint2'] as String).isNotEmpty) {
-      list.add((text: json['hint2'], image: null, video: null));
+      list.add((text: json['hint2'], images: null, videos: null));
     }
 
     return ElementaryHighMissionHintModel(hints: list);

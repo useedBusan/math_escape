@@ -1,7 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import '../../../core/utils/viewmodel/intro_view_model.dart';
+import '../../../core/viewmodels/intro_view_model.dart';
+import '../../../core/services/service_locator.dart';
 import '../model/middle_mission_model.dart';
 
 class MiddleMissionViewModel extends ChangeNotifier {
@@ -50,15 +49,11 @@ class MiddleMissionViewModel extends ChangeNotifier {
     notifyListeners();
     
     try {
-      final String missionJsonString = await rootBundle.loadString(
-        'assets/data/middle/middle_question.json',
-      );
-      final List<dynamic> missionJsonList = json.decode(missionJsonString);
-
-      final String talkJsonString = await rootBundle.loadString(
-        'assets/data/middle/middle_conversation.json',
-      );
-      final List<dynamic> talkJsonList = json.decode(talkJsonString);
+      // DataService를 사용하여 미션 데이터와 대화 데이터를 병렬로 로드
+      final missionData = await serviceLocator.dataService.loadMissionData('middle');
+      
+      final List<dynamic> missionJsonList = missionData['missions'];
+      final List<dynamic> talkJsonList = missionData['talks'];
 
       _missions
         ..clear()

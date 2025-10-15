@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:math_escape/core/extensions/string_extension.dart';
 import 'package:provider/provider.dart';
 import '../../../constants/enum/grade_enums.dart';
 import 'package:math_escape/feature/high/model/high_mission_question.dart';
 import 'dart:async';
 import 'package:math_escape/feature/high/model/high_mission_answer.dart';
-import 'package:permission_handler/permission_handler.dart';
-import '../../../core/utils/view/answer_popup.dart';
-import '../../../core/utils/view/qr_scan_screen.dart';
-import '../../../core/utils/view/layered_card.dart';
+import '../../../core/views/answer_popup.dart';
+import '../../../core/views/qr_scan_screen.dart';
+import '../../../core/views/layered_card.dart';
 import '../../../feature/high/view/high_answer.dart';
 import '../view_model/high_hint_view_model.dart';
 import '../view_model/high_mission_view_model.dart';
@@ -17,9 +17,10 @@ import '../view_model/high_answer_view_model.dart';
 import '../view_model/base_high_view_model.dart';
 import 'base_high_view.dart';
 import '../../../app/theme/app_colors.dart';
-import '../../../core/utils/view/home_alert.dart';
-import '../../../core/utils/view/hint_popup.dart';
-import '../../../core/utils/model/hint_model.dart';
+import '../../../core/views/home_alert.dart';
+import '../../../core/views/hint_popup.dart';
+import '../../../core/views/integer_phase_banner.dart';
+import '../../../core/models/hint_model.dart';
 
 class HighHintView extends StatelessWidget {
   final List<MissionQuestion> questionList;
@@ -68,12 +69,23 @@ class _HighHintContent extends StatefulWidget {
   State<_HighHintContent> createState() => _HighHintContentState();
 }
 
-class _HighHintContentState extends State<_HighHintContent> {
+class _HighHintContentState extends State<_HighHintContent>
+    with SingleTickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
+  late AnimationController _hintColorController;
+  late Animation<double> _hintColorAnimation;
 
   @override
   void initState() {
     super.initState();
+    _hintColorController = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+    _hintColorAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _hintColorController, curve: Curves.easeInOut),
+    );
+    _hintColorController.repeat(reverse: true);
     // HighHintView에서는 힌트 문제 데이터 로드 및 시작
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await HighHintViewModel.instance.loadHintQuestions();
@@ -81,6 +93,7 @@ class _HighHintContentState extends State<_HighHintContent> {
       final currentQuestion = widget.questionList[widget.currentIndex];
       print('DEBUG: HighHintView initState - currentIndex: ${widget.currentIndex}');
       print('DEBUG: HighHintView initState - currentQuestion.id: ${currentQuestion.id}, stage: ${currentQuestion.stage}');
+      print('DEBUG: HighHintView initState - currentQuestion.title: ${currentQuestion.title}');
       HighHintViewModel.instance.goToHintByStage(currentQuestion.stage);
       HighHintViewModel.instance.startHintGame();
     });
@@ -88,6 +101,7 @@ class _HighHintContentState extends State<_HighHintContent> {
 
   @override
   void dispose() {
+    _hintColorController.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -119,6 +133,8 @@ class _HighHintContentState extends State<_HighHintContent> {
       hintIcon: 'assets/images/middle/middleHint.png',
       upString: '힌트',
       downString: q.hint,
+      hintImg: null,
+      hintVideo: null,
       mainColor: CustomBlue.s500,
     );
     
@@ -155,17 +171,18 @@ class _HighHintContentState extends State<_HighHintContent> {
   void _submitAnswer(HighHintViewModel vm) {
     final q = vm.currentHintQuestion;
     if (q == null) return;
-    
+
     final input = _controller.text.trim().toLowerCase();
     final answers = q.answer.map((a) => a.trim().toLowerCase()).toList();
     final isCorrect = answers.contains(input);
 
     showAnswerPopup(
-      context, 
+      context,
       isCorrect: isCorrect,
       onNext: () async {
         if (isCorrect) {
           final answerData = await loadHintAnswerByStage(q.stage);
+          if (!mounted) return;
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -180,6 +197,7 @@ class _HighHintContentState extends State<_HighHintContent> {
             ),
           );
         } else {
+          if (!mounted) return;
           Navigator.of(context).pop();
         }
       },
@@ -190,21 +208,37 @@ class _HighHintContentState extends State<_HighHintContent> {
   Widget build(BuildContext context) {
     return Consumer2<HighHintViewModel, BaseHighViewModel>(
       builder: (context, vm, baseVm, child) {
-        return WillPopScope(
-          onWillPop: () async {
-            final result = await HomeAlert.show(context);
-            if (result == true) {
-              // 모든 상태 해제
-              HighMissionViewModel.instance.disposeAll();
-              HighHintViewModel.instance.disposeAll();
-              HighAnswerViewModel.instance.disposeAll();
-              Navigator.of(context).popUntil((route) => route.isFirst);
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) async {
+            if (!didPop) {
+              final alertResult = await HomeAlert.show(context);
+              if (alertResult == true && context.mounted) {
+                // 모든 상태 해제
+                HighMissionViewModel.instance.disposeAll();
+                HighHintViewModel.instance.disposeAll();
+                HighAnswerViewModel.instance.disposeAll();
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }
             }
-            return false; // 기본 뒤로가기 동작 방지
           },
           child: BaseHighView(
             title: '역설, 혹은 모호함',
             background: Container(color: CustomGray.lightGray),
+            onBack: () {
+              // 한 단계만 뒤로가기
+              Navigator.of(context).pop();
+            },
+            onHome: () async {
+              // 홈으로: 확인 후 상태 해제 및 루트로 이동
+              final alertResult = await HomeAlert.show(context);
+              if (alertResult == true && context.mounted) {
+                HighMissionViewModel.instance.disposeAll();
+                HighHintViewModel.instance.disposeAll();
+                HighAnswerViewModel.instance.disposeAll();
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }
+            },
             paneBuilder: (context, pane) => _buildHintContent(vm),
           ),
         );
@@ -213,7 +247,6 @@ class _HighHintContentState extends State<_HighHintContent> {
   }
 
   Widget _buildHintContent(HighHintViewModel vm) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final q = vm.currentHintQuestion;
     final Color mainColor = const Color(0xFF3F55A7);
@@ -231,41 +264,13 @@ class _HighHintContentState extends State<_HighHintContent> {
         child: Column(
           children: [
             const SizedBox(height: 14),
-        // 설명 텍스트 (퓨리 이미지 + 텍스트)
-        Row(
-          children: [
-            // 퓨리 이미지 공간 (왼쪽)
-            SizedBox(
-              width: 60,
-              height: 60,
-              child: Center(
-                child: Image.asset(
-                  "assets/images/high/highFuri.png",
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.contain,
-                ),
-              ),
+            IntegerPhaseBanner(
+              questionNumber: widget.currentIndex + 1,
+              furiImagePath: "assets/images/high/highFuri.png",
+              fontSize: 14,
             ),
-            const SizedBox(width: 16),
-            // 텍스트 (오른쪽)
-            Expanded(
-              child: Text(
-                '인류의 처음 정수의 정수는 한 개인의 처음 정수를 만들기 위해 가장 기본이 되는 것. 곧, 정수!',
-                style: TextStyle(
-                  fontFamily: "Pretendard",
-                  fontSize: screenWidth * (14 / 360),
-                  fontWeight: FontWeight.w400,
-                  color: const Color(0xFF1A1A1A),
-                  // height: 1.3,
-                ),
-              ),
-            ),
-            const SizedBox(width: 20),
-          ],
-        ),
-        const SizedBox(height: 10),
-        // 최적화된 배경 이미지 카드
+        const SizedBox(height: 14),
+        // 카드 색상은 기존 힌트뷰 스타일 유지
         LayeredCard(
           firstLayerColor: CustomBlue.s300,
           secondLayerColor: CustomBlue.s500,
@@ -281,7 +286,7 @@ class _HighHintContentState extends State<_HighHintContent> {
                     q.title,
                     style: TextStyle(
                       fontFamily: "SBAggroM",
-                      fontSize: screenWidth * (18 / 360),
+                      fontSize: 18,
                       fontWeight: FontWeight.w400,
                       color: const Color(0xff202020),
                     ),
@@ -289,27 +294,48 @@ class _HighHintContentState extends State<_HighHintContent> {
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.help_outline,
-                          color: Color(0xFF3F55A7),
-                        ),
-                        onPressed: () => _showHintDialog(vm),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        iconSize: 28,
+                      AnimatedBuilder(
+                        animation: _hintColorAnimation,
+                        builder: (context, child) {
+                          final color = Color.lerp(
+                            const Color(0xFF3F55A7),
+                            const Color(0xFFB2BBDC),
+                            _hintColorAnimation.value,
+                          )!;
+                          return IconButton(
+                            icon: Icon(
+                              Icons.help_outline,
+                              color: color,
+                            ),
+                            onPressed: () => _showHintDialog(vm),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            iconSize: 28,
+                          );
+                        },
                       ),
                       const SizedBox(height: 4),
-                      Transform.translate(
-                        offset: const Offset(0, -15),
-                        child: Text(
-                          '힌트',
-                          style: TextStyle(
-                            color: const Color(0xFF3F55A7),
-                            fontSize: screenWidth * (12 / 360),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                      AnimatedBuilder(
+                        animation: _hintColorAnimation,
+                        builder: (context, child) {
+                          final color = Color.lerp(
+                            const Color(0xFF3F55A7),
+                            const Color(0xFFB2BBDC),
+                            _hintColorAnimation.value,
+                          )!;
+                          return Transform.translate(
+                            offset: const Offset(0, -15),
+                            child: Text(
+                              '힌트',
+                              style: TextStyle(
+                                color: color,
+                                fontSize:
+                                    12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -317,27 +343,27 @@ class _HighHintContentState extends State<_HighHintContent> {
               ),
               const SizedBox(height: 8),
               // 문제 영역
-              Text(
-                q.question,
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                  fontFamily: "Pretendard",
-                  fontWeight: FontWeight.w400,
-                  fontSize: screenWidth * (16 / 360),
-                  height: 1.4,
-                  color: Colors.black87,
+              RichText(
+                textAlign: TextAlign.start,
+                text: TextSpan(
+                  style: TextStyle(
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                    height: 1.5,
+                    color: Colors.black,
+                  ),
+                  children: q.question.toStyledSpans(fontSize: 18),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 30),
               // 답변 입력 영역 (isqr가 false인 경우에만)
               if (!q.isqr) ...[
                 Container(
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFFFFF),
                     borderRadius: BorderRadius.circular(8.0),
-                    border: Border.all(
-                      color: const Color(0xffdcdcdc),
-                    ),
+                    border: Border.all(color: const Color(0xffdcdcdc)),
                   ),
                   child: Row(
                     children: [
@@ -345,7 +371,7 @@ class _HighHintContentState extends State<_HighHintContent> {
                         flex: 2,
                         child: TextField(
                           style: TextStyle(
-                            fontSize: screenWidth * (15 / 360),
+                            fontSize: 15,
                           ),
                           controller: _controller,
                           keyboardType: TextInputType.text,
@@ -353,7 +379,7 @@ class _HighHintContentState extends State<_HighHintContent> {
                           decoration: InputDecoration(
                             hintText: '정답을 입력해 주세요.',
                             hintStyle: TextStyle(
-                              fontSize: screenWidth * (14 / 360),
+                              fontSize: 14,
                               color: const Color(0xffaaaaaa),
                             ),
                             contentPadding: const EdgeInsets.symmetric(
@@ -388,8 +414,8 @@ class _HighHintContentState extends State<_HighHintContent> {
                           child: Text(
                             '확인',
                             style: TextStyle(
-                              fontSize: screenWidth * (14 / 360),
-                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800,
                             ),
                           ),
                         ),
@@ -408,13 +434,13 @@ class _HighHintContentState extends State<_HighHintContent> {
                     onPressed: () async {
                       final result = await Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => QRScanScreen(),
-                        ),
+                        MaterialPageRoute(builder: (_) => QRScanScreen()),
                       );
+
                       if (result != null && result is String) {
                         final isCorrect = q.validateQRAnswer(result);
-                        
+
+                        if (!mounted) return;
                         showDialog(
                           context: context,
                           barrierDismissible: false,
@@ -424,8 +450,8 @@ class _HighHintContentState extends State<_HighHintContent> {
                             onNext: () async {
                               Navigator.pop(context);
                               if (isCorrect) {
-                                // 정답인 경우 다음 단계로 진행
                                 final answerData = await loadHintAnswerByStage(q.stage);
+                                if (!mounted) return;
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -440,7 +466,6 @@ class _HighHintContentState extends State<_HighHintContent> {
                                   ),
                                 );
                               }
-                              // 오답일 때는 팝업만 닫고 현재 화면 유지
                             },
                           ),
                         );
@@ -466,7 +491,7 @@ class _HighHintContentState extends State<_HighHintContent> {
                         Text(
                           'QR코드 스캔',
                           style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                            fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -475,7 +500,6 @@ class _HighHintContentState extends State<_HighHintContent> {
                   ),
                 ),
               ],
-              const SizedBox(height: 24),
             ],
           ),
         ),
