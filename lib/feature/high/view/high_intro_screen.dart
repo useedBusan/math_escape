@@ -186,18 +186,20 @@ Paratruth Space, PS라고 불리는 이 공간에서,
                     }
                   },
                   style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     backgroundColor: CustomBlue.s500,
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    minimumSize: const Size(double.infinity, 56),
+                    elevation: 2,
                   ),
                   child: const Text(
                     '게임 시작',
                     style: TextStyle(
-                      color: Color(0xFFFFFFFF),
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Pretendard',
                     ),
                   ),
                 ),

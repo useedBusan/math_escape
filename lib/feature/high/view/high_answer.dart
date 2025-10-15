@@ -85,9 +85,6 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
     });
   }
 
-  List<InlineSpan> parseExplanation(String explanation, double fontSize) {
-    return explanation.toStyledSpans(fontSize: fontSize);
-  }
 
   void handleNextButton() {
     HighAnswerViewModel.instance.handleNextButton(
@@ -198,12 +195,15 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.015),
+                //진리 박스
                 RichText(
                   text: TextSpan(
-                    children: parseExplanation(
-                      vm.currentAnswer?.explanation ?? widget.answer.explanation,
-                      14,
+                    style: TextStyle(
+                        fontFamily: "Pretendard",
+                        height: 1.5,
+                        color: AppColors.body
                     ),
+                    children: (vm.currentAnswer?.explanation ?? widget.answer.explanation).toStyledSpans(fontSize: 15),
                   ),
                 ),
                 if ((vm.currentAnswer?.answerImage ?? widget.answer.answerImage) != null) ...[
@@ -234,21 +234,25 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  vm.currentAnswer?.clueTitle ?? widget.answer.clueTitle,
-                  style: TextStyle(
-                    fontFamily: "SBAggroM",
-                    fontSize: 18,
-                    color: AppColors.head
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontFamily: "SBAggroM",
+                      fontSize: 18,
+                      color: AppColors.head
+                    ),
+                    children: (vm.currentAnswer?.clueTitle ?? widget.answer.clueTitle).toStyledSpans(fontSize: 18),
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  vm.currentAnswer?.clue ?? widget.answer.clue,
-                  style: TextStyle(
-                    fontFamily: "Pretendard",
-                    fontSize: 14,
-                    color: AppColors.body
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontFamily: "Pretendard",
+                      height: 1.5,
+                      color: AppColors.body
+                    ),
+                    children: (vm.currentAnswer?.clue ?? widget.answer.clue).toStyledSpans(fontSize: 15),
                   ),
                 ),
               ],
