@@ -184,7 +184,6 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
   }
 
   Widget _buildAnswerContent(HighAnswerViewModel vm) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Align(

@@ -19,8 +19,6 @@ class ElementaryLowMissionListView extends StatelessWidget {
       return const Center(child: Text('불러올 미션이 없습니다.'));
     }
 
-    final w = MediaQuery.of(context).size.width;
-
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(

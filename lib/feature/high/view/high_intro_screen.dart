@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
-// import 'package:math_escape/feature/high/view/high_mission_view.dart'; // 사용하지 않는 파일
 import '../../../app/theme/app_colors.dart';
 import '../../../constants/enum/grade_enums.dart';
+import '../../../core/utils/styled_text_parser.dart';
 import '../../../core/views/home_alert.dart';
 import '../../../feature/high/model/high_mission_question.dart';
 import '../../../feature/high/view/high_mission.dart';
@@ -25,6 +25,7 @@ class HighIntroScreen extends StatefulWidget {
 class _HighIntroScreenState extends State<HighIntroScreen> {
   final AudioPlayer audioPlayer = AudioPlayer();
   bool isPlaying = false;
+  late final List<InlineSpan> parsedIntroText;
 
   final String introText = '''
 눈을 떴다.
@@ -44,9 +45,7 @@ Paratruth Space, PS라고 불리는 이 공간에서,
 이 곳을 벗어나는 유일한 방법은, 
 수수께끼같은 문구를 해석하는 것.
 
-'인류의 처음 정수의 정수는 한 개인의,
-처음 정수를 만들기 위해 가장 기본이 되는 것,  
-곧, 정수!'
+**‘인류의 처음 {#8352D9|정수}의 {#5298D9|정수}는 한 개인의 처음 {#D98A52|정수}를 만들기 위해 가장 기본이 되는 것, 곧 {#D95276|정수}!’**
 
 이 공간 안에 있는 역설, 혹은 모호함 안에서, 
 여러분들이 진리를 찾아낸다면, 각 '정수'에 대한 단서를 제공하겠습니다.
@@ -81,6 +80,11 @@ Paratruth Space, PS라고 불리는 이 공간에서,
         });
       }
     });
+
+    parsedIntroText = StyledTextParser.parse(
+      introText,
+      fontSize: 16,
+    );
   }
 
   Future<void> playIntro() async {
@@ -96,13 +100,13 @@ Paratruth Space, PS라고 불리는 이 공간에서,
   }
 
   Widget buildNarrationText() {
-    return Text(
-      introText,
-      style: const TextStyle(
-        fontSize: 16,
-        height: 1.6,
-        color: Color(0xFF000000),
-      ),
+    return RichText(
+        text: TextSpan(
+          style: const TextStyle(
+            height: 1.6
+          ),
+          children: parsedIntroText
+        )
     );
   }
 

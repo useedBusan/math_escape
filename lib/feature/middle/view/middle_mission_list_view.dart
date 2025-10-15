@@ -19,8 +19,6 @@ class MiddleMissionListView extends StatelessWidget {
       return const Center(child: Text('불러올 미션이 없습니다.'));
     }
 
-    final w = MediaQuery.of(context).size.width;
-
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -70,28 +68,28 @@ class MiddleMissionListView extends StatelessWidget {
               color: AppColors.body,
             ),
           ),
-          
+
           // 이미지가 있을 때 표시
           ...[
-          const SizedBox(height: 12),
-          Flexible(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      mission.questionImage,
-                      fit: BoxFit.contain,
-                      width: constraints.maxWidth,
+            const SizedBox(height: 12),
+            Flexible(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(
+                        mission.questionImage,
+                        fit: BoxFit.contain,
+                        width: constraints.maxWidth,
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
-          
+          ],
+
           // QR 문제가 아닐 때만 입력 필드 표시
           if (!mission.isqr) ...[
             const SizedBox(height: 12),
@@ -107,7 +105,10 @@ class MiddleMissionListView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(color: Color(0xFF3F55A7)),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
               ),
               style: TextStyle(
                 fontFamily: 'Pretendard',
@@ -124,4 +125,3 @@ class MiddleMissionListView extends StatelessWidget {
     );
   }
 }
-

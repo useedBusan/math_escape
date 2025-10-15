@@ -18,7 +18,6 @@ class ElementaryHighMissionListView extends StatelessWidget {
     }
 
     final mission = vm.currentMission!;
-    final width = MediaQuery.of(context).size.width;
 
     return Padding(
       padding: const EdgeInsets.all(24.0),
