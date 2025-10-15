@@ -3,6 +3,7 @@ import '../../../constants/enum/grade_enums.dart';
 import '../../../app/theme/app_colors.dart';
 import 'home_alert.dart';
 import 'lottie_animation_widget.dart';
+import '../extensions/string_extension.dart';
 
 class CommonIntroView extends StatelessWidget {
   final String appBarTitle;
@@ -38,7 +39,9 @@ class CommonIntroView extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final mainColor = grade?.mainColor ?? CustomPink.s500;
-    final gradientColors = grade?.gradientColors ?? [CustomPink.s500.withValues(alpha: 0.6), const Color(0x99FFFFFF)];
+    final gradientColors =
+        grade?.gradientColors ??
+        [CustomPink.s500.withValues(alpha: 0.6), const Color(0x99FFFFFF)];
     final bubbleBorderColor = grade?.bubbleBorderColor ?? CustomPink.s700;
     final speakerLabelColor = grade?.speakerLabelColor ?? CustomPink.s600;
 
@@ -74,20 +77,14 @@ class CommonIntroView extends StatelessWidget {
                   Positioned(
                     left: 0,
                     child: IconButton(
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: mainColor,
-                      ),
+                      icon: Icon(Icons.arrow_back, color: mainColor),
                       onPressed: onBack,
                     ),
                   ),
                   Positioned(
                     right: 0,
                     child: IconButton(
-                      icon: Icon(
-                        Icons.home_outlined,
-                        color: mainColor,
-                      ),
+                      icon: Icon(Icons.home_outlined, color: mainColor),
                       onPressed: () {
                         HomeAlert.showAndNavigate(context);
                       },
@@ -107,8 +104,6 @@ class CommonIntroView extends StatelessWidget {
                 fit: BoxFit.cover,
                 alignment: Alignment.center,
                 gaplessPlayback: true,
-                cacheWidth: (size.width * MediaQuery.of(context).devicePixelRatio).toInt(),
-                cacheHeight: (size.height * MediaQuery.of(context).devicePixelRatio).toInt(),
                 filterQuality: FilterQuality.high,
                 isAntiAlias: true,
               ),
@@ -132,29 +127,28 @@ class CommonIntroView extends StatelessWidget {
                   const SizedBox(height: 24),
                   Flexible(
                     flex: 6,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          bottom: 50, // 말풍선 위 50px
-                          left: 0,
-                          right: 0,
-                          child: Center(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final characterHeight = constraints.maxHeight * 0.6;
+
+                        return Center(
+                          child: SizedBox(
+                            height: characterHeight,
                             child: showLottieInsteadOfImage && lottieAnimationPath != null
                                 ? LottieAnimationWidget(
                                     assetPath: lottieAnimationPath!,
-                                    width: size.width * 0.6,
-                                    height: size.height * 0.3,
+                                    height: characterHeight,
                                     repeat: lottieRepeat,
                                   )
                                 : Image.asset(
                                     characterImageAssetPath,
-                                    gaplessPlayback: true,
+                                    fit: BoxFit.contain,
                                     filterQuality: FilterQuality.high,
                                     isAntiAlias: true,
                                   ),
                           ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -179,13 +173,15 @@ class CommonIntroView extends StatelessWidget {
                             ),
                           ),
                           child: SingleChildScrollView(
-                            child: Text(
-                              talkText,
-                              textAlign: TextAlign.justify,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black87,
-                                height: 1.5,
+                            child: RichText(
+                              textAlign: TextAlign.start,
+                              text: TextSpan(
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black87,
+                                  height: 1.5,
+                                ),
+                                children: talkText.toStyledSpans(fontSize: 15),
                               ),
                             ),
                           ),
@@ -254,5 +250,3 @@ class CommonIntroView extends StatelessWidget {
     );
   }
 }
-
-
