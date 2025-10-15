@@ -124,7 +124,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
   }
 
   void _showCorrectAnswerDialog(
-    MiddleMissionCoordinator coordinator,
+MiddleMissionCoordinator coordinator,
     MiddleMissionViewModel viewModel,
   ) async {
     try {
@@ -164,9 +164,14 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
             canPop: false,
             onPopInvokedWithResult: (didPop, result) async {
               if (!didPop) {
-                final alertResult = await HomeAlert.show(context);
-                if (alertResult == true && context.mounted) {
-                  Navigator.of(context).pop();
+                // 시스템 뒤로가기: Coordinator의 handleBack 호출
+                final handled = coordinator.handleBack();
+                if (handled && context.mounted) {
+                  // Coordinator가 더 이상 처리할 수 없으면 HomeAlert 표시
+                  final alertResult = await HomeAlert.show(context);
+                  if (alertResult == true && context.mounted) {
+                    Navigator.of(context).pop();
+                  }
                 }
               }
             },
@@ -681,6 +686,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                       ),
                     ],
                   ),
+                  // 하단 여백 추가
+                  const SizedBox(height: 100),
                 ],
               ),
             ),

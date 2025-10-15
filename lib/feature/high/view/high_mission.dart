@@ -256,6 +256,20 @@ class _HighMissionContentState extends State<_HighMissionContent>
           child: BaseHighView(
           title: StudentGrade.high.appBarTitle,
             background: Container(color: const Color(0xFFE8F0FE)),
+            onBack: () {
+              // 한 단계만 뒤로가기
+              Navigator.of(context).pop();
+            },
+            onHome: () async {
+              // 홈으로: 확인 후 상태 해제 및 루트로 이동
+              final alertResult = await HomeAlert.show(context);
+              if (alertResult == true && context.mounted) {
+                HighMissionViewModel.instance.disposeAll();
+                HighHintViewModel.instance.disposeAll();
+                HighAnswerViewModel.instance.disposeAll();
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }
+            },
             paneBuilder: (context, pane) => _buildMissionContent(vm),
           ),
         );

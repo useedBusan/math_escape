@@ -88,7 +88,7 @@ class UnifiedAnswerDialog extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: "Pretendard",
                       fontWeight: FontWeight.bold,
-                      fontSize: 17,
+                      fontSize: 20,
                       color: isCorrect ? AppColors.correct : AppColors.incorrect,
                     ),
                   ),
@@ -100,7 +100,7 @@ class UnifiedAnswerDialog extends StatelessWidget {
                     style: const TextStyle(
                       fontFamily: "Pretendard",
                       fontWeight: FontWeight.w400,
-                      fontSize: 16,
+                      fontSize: 18,
                       color: AppColors.head,
                     ),
                     textAlign: TextAlign.center,
@@ -131,7 +131,7 @@ class UnifiedAnswerDialog extends StatelessWidget {
                     "확인",
                     style: TextStyle(
                       fontFamily: "Pretendard",
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w800,
                       fontSize: 16,
                     ),
                   ),

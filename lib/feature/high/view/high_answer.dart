@@ -147,6 +147,20 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
           child: BaseHighView(
             title: '역설, 혹은 모호함',
             background: Container(color: Color(0xFFF5F5F5)),
+            onBack: () {
+              // 한 단계만 뒤로가기 또는 HighMission까지 복귀
+              Navigator.popUntil(context, (route) => route.settings.name == 'HighMission');
+            },
+            onHome: () async {
+              // 홈으로: 확인 후 상태 해제 및 루트로 이동
+              final alertResult = await HomeAlert.show(context);
+              if (alertResult == true && context.mounted) {
+                HighMissionViewModel.instance.disposeAll();
+                HighHintViewModel.instance.disposeAll();
+                HighAnswerViewModel.instance.disposeAll();
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }
+            },
             paneBuilder: (context, pane) => _buildAnswerContent(vm),
           ),
         );

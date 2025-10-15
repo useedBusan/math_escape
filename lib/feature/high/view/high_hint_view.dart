@@ -225,6 +225,20 @@ class _HighHintContentState extends State<_HighHintContent>
           child: BaseHighView(
             title: '역설, 혹은 모호함',
             background: Container(color: CustomGray.lightGray),
+            onBack: () {
+              // 한 단계만 뒤로가기
+              Navigator.of(context).pop();
+            },
+            onHome: () async {
+              // 홈으로: 확인 후 상태 해제 및 루트로 이동
+              final alertResult = await HomeAlert.show(context);
+              if (alertResult == true && context.mounted) {
+                HighMissionViewModel.instance.disposeAll();
+                HighHintViewModel.instance.disposeAll();
+                HighAnswerViewModel.instance.disposeAll();
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }
+            },
             paneBuilder: (context, pane) => _buildHintContent(vm),
           ),
         );
