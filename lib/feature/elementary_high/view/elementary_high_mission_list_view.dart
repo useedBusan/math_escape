@@ -42,7 +42,7 @@ class ElementaryHighMissionListView extends StatelessWidget {
                   text: '문제 ${vm.currentIndex + 1}',
                   style: TextStyle(
                     fontFamily: 'SBAggroM',
-                    fontSize: width * (18 / 360),
+                    fontSize: 18,
                     color: AppColors.head,
                   ),
                 ),
@@ -50,7 +50,7 @@ class ElementaryHighMissionListView extends StatelessWidget {
                   text: ' / ${vm.totalCount}',
                   style: TextStyle(
                     fontFamily: 'SBAggroM',
-                    fontSize: width * (15 / 360),
+                    fontSize: 15,
                     color: CustomGray.darkGray,
                   ),
                 ),
@@ -63,7 +63,7 @@ class ElementaryHighMissionListView extends StatelessWidget {
             textAlign: TextAlign.justify,
             style: TextStyle(
               height: 1.4,
-              fontSize: width * (16 / 360),
+              fontSize: 16,
               color: const Color(0xff333333),
             ),
           ),
@@ -81,14 +81,14 @@ class ElementaryHighMissionListView extends StatelessWidget {
                 controller: vm.textController,
                 onChanged: vm.setTypedAnswer,
                 style: TextStyle(
-                  fontSize: width * (15 / 360),
+                  fontSize: 15,
                 ),
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                   hintText: '정답을 입력해 주세요.',
                   hintStyle: TextStyle(
-                    fontSize: width * (14 / 360),
+                    fontSize: 14,
                     color: const Color(0xffaaaaaa),
                   ),
                   contentPadding: const EdgeInsets.symmetric(

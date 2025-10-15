@@ -43,7 +43,7 @@ class MiddleMissionListView extends StatelessWidget {
                   text: '문제 ${vm.currentIndex + 1}',
                   style: TextStyle(
                     fontFamily: 'SBAggroM',
-                    fontSize: w * (18 / 360),
+                    fontSize: 18,
                     color: AppColors.head,
                   ),
                 ),
@@ -51,7 +51,7 @@ class MiddleMissionListView extends StatelessWidget {
                   text: ' / ${vm.missions.length}',
                   style: TextStyle(
                     fontFamily: 'SBAggroM',
-                    fontSize: w * (15 / 360),
+                    fontSize: 15,
                     color: CustomGray.darkGray,
                   ),
                 ),
@@ -65,7 +65,7 @@ class MiddleMissionListView extends StatelessWidget {
             textAlign: TextAlign.justify,
             style: TextStyle(
               fontFamily: 'Pretendard',
-              fontSize: w * (17 / 360),
+              fontSize: 17,
               fontWeight: FontWeight.w400,
               color: AppColors.body,
             ),
@@ -111,7 +111,7 @@ class MiddleMissionListView extends StatelessWidget {
               ),
               style: TextStyle(
                 fontFamily: 'Pretendard',
-                fontSize: w * (16 / 360),
+                fontSize: 16,
                 fontWeight: FontWeight.w400,
               ),
             ),

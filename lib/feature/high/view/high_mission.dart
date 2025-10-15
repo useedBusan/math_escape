@@ -64,12 +64,27 @@ class _HighMissionContent extends StatefulWidget {
   State<_HighMissionContent> createState() => _HighMissionContentState();
 }
 
-class _HighMissionContentState extends State<_HighMissionContent> {
+class _HighMissionContentState extends State<_HighMissionContent>
+    with SingleTickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
+  late AnimationController _hintColorController;
+  late Animation<double> _hintColorAnimation;
 
   @override
   void initState() {
     super.initState();
+    _hintColorController = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+
+    _hintColorAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _hintColorController, curve: Curves.easeInOut),
+    );
+
+    // 반복 애니메이션 시작
+    _hintColorController.repeat(reverse: true);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       HighMissionViewModel.instance.startGame(
         widget.questionList,
@@ -80,6 +95,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
 
   @override
   void dispose() {
+    _hintColorController.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -175,7 +191,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
       onNext: () async {
         if (isCorrect) {
           final answerData = await loadAnswerById(q.id);
-          if (!mounted) return; // ✅ context 안전 확인
+          if (!mounted) return;
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -226,7 +242,6 @@ class _HighMissionContentState extends State<_HighMissionContent> {
   }
 
   Widget _buildMissionContent(HighMissionViewModel vm) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final q = vm.currentQuestion;
     final Color mainColor = const Color(0xFF3F55A7);
@@ -238,14 +253,12 @@ class _HighMissionContentState extends State<_HighMissionContent> {
 
     return SingleChildScrollView(
       child: SizedBox(
-        height: screenHeight * 1.5, // 충분한 고정 높이
+        height: screenHeight * 1.5,
         child: Column(
           children: [
             const SizedBox(height: 14),
-            // 설명 텍스트 (퓨리 이미지 + 텍스트)
             Row(
               children: [
-                // 퓨리 이미지 공간 (왼쪽)
                 SizedBox(
                   width: 60,
                   height: 60,
@@ -259,13 +272,12 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                // 텍스트 (오른쪽)
                 Expanded(
                   child: Text(
                     '인류의 처음 정수의 정수는 한 개인의 처음 정수를 만들기 위해 가장 기본이 되는 것. 곧, 정수!',
                     style: TextStyle(
                       fontFamily: "Pretendard",
-                      fontSize: screenWidth * (12 / 360),
+                      fontSize: 12,
                       fontWeight: FontWeight.w400,
                       color: const Color(0xFF1A1A1A),
                     ),
@@ -274,14 +286,12 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                 const SizedBox(width: 20),
               ],
             ),
-            const SizedBox(height: 20),
-            // 최적화된 배경 이미지 카드
+            const SizedBox(height: 14),
             LayeredCard(
               height: screenHeight * 0.5,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 문제 번호 + 힌트 버튼
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -289,7 +299,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                         q.title,
                         style: TextStyle(
                           fontFamily: "SBAggroM",
-                          fontSize: screenWidth * (18 / 360),
+                          fontSize: 18,
                           fontWeight: FontWeight.w400,
                           color: const Color(0xff202020),
                         ),
@@ -297,27 +307,51 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          IconButton(
-                            icon: const Icon(
-                              Icons.help_outline,
-                              color: Color(0xFF3F55A7),
-                            ),
-                            onPressed: () => _showHintDialog(vm),
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                            iconSize: 28,
+                          AnimatedBuilder(
+                            animation: _hintColorAnimation,
+                            builder: (context, child) {
+                              final color = Color.lerp(
+                                const Color(0xFF3F55A7),
+                                const Color(0xFFB2BBDC),
+                                _hintColorAnimation.value,
+                              )!;
+                              return IconButton(
+                                icon: Icon(
+                                  Icons.help_outline,
+                                  color: color,
+                                ),
+                                onPressed: () => _showHintDialog(vm),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                                iconSize: 28,
+                              );
+                            },
                           ),
                           const SizedBox(height: 4),
-                          Transform.translate(
-                            offset: const Offset(0, -15),
-                            child: Text(
-                              '힌트',
-                              style: TextStyle(
-                                color: const Color(0xFF3F55A7),
-                                fontSize: screenWidth * (12 / 360),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+                          AnimatedBuilder(
+                            animation: _hintColorAnimation,
+                            builder: (context, child) {
+                              final color = Color.lerp(
+                                const Color(0xFF3F55A7),
+                                const Color(0xFFB2BBDC),
+                                _hintColorAnimation.value,
+                              )!;
+                              return Transform.translate(
+                                offset: const Offset(0, -15),
+                                child: Text(
+                                  '힌트 문제',
+                                  style: TextStyle(
+                                    color: color,
+                                    fontSize:
+                                    MediaQuery.of(
+                                      context,
+                                    ).size.width *
+                                        (12 / 360),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -331,7 +365,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                     style: TextStyle(
                       fontFamily: "Pretendard",
                       fontWeight: FontWeight.w400,
-                      fontSize: screenWidth * (16 / 360),
+                      fontSize: 16,
                       height: 1.4,
                       color: Colors.black87,
                     ),
@@ -351,7 +385,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                             flex: 2,
                             child: TextField(
                               style: TextStyle(
-                                fontSize: screenWidth * (15 / 360),
+                                fontSize: 15,
                               ),
                               controller: _controller,
                               keyboardType: TextInputType.text,
@@ -359,7 +393,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                               decoration: InputDecoration(
                                 hintText: '정답을 입력해 주세요.',
                                 hintStyle: TextStyle(
-                                  fontSize: screenWidth * (14 / 360),
+                                  fontSize: 14,
                                   color: const Color(0xffaaaaaa),
                                 ),
                                 contentPadding: const EdgeInsets.symmetric(
@@ -394,7 +428,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                               child: Text(
                                 '확인',
                                 style: TextStyle(
-                                  fontSize: screenWidth * (14 / 360),
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -419,7 +453,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
 
                           if (result != null && result is String) {
                             final isCorrect = q.validateQRAnswer(result);
-                            if (!mounted) return; // ✅ context 안전 확인
+                            if (!mounted) return;
 
                             showDialog(
                               context: context,
@@ -433,7 +467,7 @@ class _HighMissionContentState extends State<_HighMissionContent> {
                                     final answerData = await loadAnswerById(
                                       q.id,
                                     );
-                                    if (!mounted) return; // ✅ context 안전 확인
+                                    if (!mounted) return;
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(

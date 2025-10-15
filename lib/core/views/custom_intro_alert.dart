@@ -75,7 +75,7 @@ class CustomIntroAlert extends StatelessWidget {
                     _mainText(),
                     style: TextStyle(
                       fontFamily: "Pretendard",
-                      fontSize: MediaQuery.of(context).size.width * (15 / 360),
+                      fontSize: 15,
                       fontWeight: FontWeight.w400,
                       color: const Color(0xff202020),
                     ),
@@ -109,7 +109,7 @@ class CustomIntroAlert extends StatelessWidget {
                 child: Text(
                   buttonText,
                   style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                    fontSize: 16,
                   ),
                 ),
               ),

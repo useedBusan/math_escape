@@ -217,7 +217,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
                   '인류의 처음 정수의 정수는 한 개인의 처음 정수를 만들기 위해 가장 기본이 되는 것. 곧, 정수!',
                   style: TextStyle(
                     fontFamily: "Pretendard",
-                    fontSize: screenWidth * (13 / 360),
+                    fontSize: 13,
                     fontWeight: FontWeight.w400,
                     color: const Color(0xFF1A1A1A),
                     // height: 1.3,
@@ -252,7 +252,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
                   vm.currentAnswer?.title ?? widget.answer.title,
                   style: TextStyle(
                     fontFamily: "SBAggroM",
-                    fontSize: screenWidth * 18/360,
+                    fontSize: 18,
                     color: Colors.black,
                   ),
                 ),
@@ -261,7 +261,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
                   text: TextSpan(
                     children: parseExplanation(
                       vm.currentAnswer?.explanation ?? widget.answer.explanation,
-                      screenWidth * 14/360,
+                      14,
                     ),
                   ),
                 ),
@@ -297,7 +297,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
                   vm.currentAnswer?.clueTitle ?? widget.answer.clueTitle,
                   style: TextStyle(
                     fontFamily: "SBAggroM",
-                    fontSize: screenWidth * 18/360,
+                    fontSize: 18,
                     color: AppColors.head
                   ),
                 ),
@@ -306,7 +306,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
                   vm.currentAnswer?.clue ?? widget.answer.clue,
                   style: TextStyle(
                     fontFamily: "Pretendard",
-                    fontSize: screenWidth * 14/360,
+                    fontSize: 14,
                     color: AppColors.body
                   ),
                 ),
@@ -335,7 +335,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
                       ? '다음 문제'
                       : '마지막 문제'),
                   style: TextStyle(
-                    fontSize: screenWidth * 16/360,
+                    fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),

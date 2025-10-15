@@ -253,7 +253,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
           StudentGrade.middle.appBarTitle,
           style: TextStyle(
             color: const Color(0xFF3F55A7),
-            fontSize: MediaQuery.of(context).size.width * (16 / 360),
+            fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -299,8 +299,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: "SBAggroM",
-                          fontSize:
-                              MediaQuery.of(context).size.width * (14 / 360),
+                          fontSize: 14,
                           fontWeight: FontWeight.w300,
                           color: const Color(0xFFF2F2F2),
                         ),
@@ -311,8 +310,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: "SBAggroM",
-                          fontSize:
-                              MediaQuery.of(context).size.width * (14 / 360),
+                          fontSize: 14,
                           fontWeight: FontWeight.w300,
                           color: const Color(0xFFF2F2F2),
                         ),
@@ -332,9 +330,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                               '문제 ${viewModel.currentIndex + 1} / ${viewModel.totalCount}',
                               style: TextStyle(
                                 fontFamily: "SBAggroM",
-                                fontSize:
-                                    MediaQuery.of(context).size.width *
-                                    (18 / 360),
+                                fontSize: 18,
                                 fontWeight: FontWeight.w400,
                                 color: const Color(0xff202020),
                               ),
@@ -374,18 +370,14 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                     )!;
                                     return Transform.translate(
                                       offset: const Offset(0, -15),
-                                      child: Text(
-                                        '힌트',
-                                        style: TextStyle(
-                                          color: color,
-                                          fontSize:
-                                              MediaQuery.of(
-                                                context,
-                                              ).size.width *
-                                              (12 / 360),
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
+                          child: Text(
+                            '힌트',
+                            style: TextStyle(
+                              color: color,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                                     );
                                   },
                                 ),
@@ -399,14 +391,13 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                          Text(
                            mission.question,
                            textAlign: TextAlign.justify,
-                           style: TextStyle(
-                             fontFamily: "Pretendard",
-                             fontWeight: FontWeight.w400,
-                             fontSize:
-                                 MediaQuery.of(context).size.width * (16 / 360),
-                             height: 1.4,
-                             color: Colors.black87,
-                           ),
+                         style: TextStyle(
+                           fontFamily: "Pretendard",
+                           fontWeight: FontWeight.w400,
+                           fontSize: 16,
+                           height: 1.4,
+                           color: Colors.black87,
+                         ),
                          ),
                          const SizedBox(height: 16),
                          // 선택지 영역 (options가 있을 때만)
@@ -415,12 +406,12 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                              padding: const EdgeInsets.only(bottom: 8),
                              child: Text(
                                option,
-                               style: TextStyle(
-                                 fontFamily: "Pretendard",
-                                 fontWeight: FontWeight.w400,
-                                 fontSize: MediaQuery.of(context).size.width * (15 / 360),
-                                 color: Colors.black87,
-                               ),
+                                  style: TextStyle(
+                                    fontFamily: "Pretendard",
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 15,
+                                    color: Colors.black87,
+                                  ),
                              ),
                            )),
                            const SizedBox(height: 16),
@@ -468,9 +459,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                   Text(
                                     'QR코드 스캔',
                                     style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                          (16 / 360),
+                                      fontSize: 16,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -494,9 +483,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                   flex: 2,
                                   child: TextField(
                                     style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                          (15 / 360),
+                                      fontSize: 15,
                                     ),
                                     controller: viewModel.answerController,
                                     keyboardType: TextInputType.text,
@@ -504,9 +491,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                     decoration: InputDecoration(
                                       hintText: '정답을 입력해 주세요.',
                                       hintStyle: TextStyle(
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                            (14 / 360),
+                                        fontSize: 14,
                                         color: const Color(0xffaaaaaa),
                                       ),
                                       contentPadding:
@@ -543,9 +528,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                     child: Text(
                                       '제출',
                                       style: TextStyle(
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                            (12 / 360),
+                                        fontSize: 12,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),

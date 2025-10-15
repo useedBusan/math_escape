@@ -46,10 +46,17 @@ class MissionBackgroundView extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(title),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontFamily: 'Pretendard',
+            color: mainColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
-        foregroundColor: mainColor,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: mainColor, size: 28),

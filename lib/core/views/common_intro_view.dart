@@ -66,7 +66,7 @@ class CommonIntroView extends StatelessWidget {
                       appBarTitle,
                       style: TextStyle(
                         color: mainColor,
-                        fontSize: size.width * (16 / 360),
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -183,7 +183,7 @@ class CommonIntroView extends StatelessWidget {
                               talkText,
                               textAlign: TextAlign.justify,
                               style: TextStyle(
-                                fontSize: size.width * (15 / 360),
+                                fontSize: 15,
                                 color: Colors.black87,
                                 height: 1.5,
                               ),
@@ -209,7 +209,7 @@ class CommonIntroView extends StatelessWidget {
                             child: Text(
                               speakerName,
                               style: TextStyle(
-                                fontSize: size.width * (16 / 360),
+                                fontSize: 16,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -237,7 +237,7 @@ class CommonIntroView extends StatelessWidget {
                         child: Text(
                           buttonText,
                           style: TextStyle(
-                            fontSize: size.width * (16 / 360),
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
