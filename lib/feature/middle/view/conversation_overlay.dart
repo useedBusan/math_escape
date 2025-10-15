@@ -53,7 +53,7 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
             final talkData = stageTalks[i];
             talks.add(Talk(
               id: widget.stage * 100 + i,
-              speaker: Speaker.puri, // Middle은 항상 푸리
+              speaker: Speaker.puri,
               speakerImg: talkData['furiImage'] ?? 'assets/images/common/furiStanding.png',
               backImg: talkData['backImage'] ?? 'assets/images/common/bsbackground.png',
               talk: talkData['talk'] ?? '',

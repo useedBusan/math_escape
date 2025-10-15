@@ -8,6 +8,7 @@ import '../../../constants/enum/image_enums.dart';
 import '../../../core/views/layered_card.dart';
 import '../../../core/views/qr_scan_screen.dart';
 import '../../../core/views/home_alert.dart';
+import '../../../core/extensions/string_extension.dart';
 import '../coordinator/middle_mission_coordinator.dart';
 import '../model/middle_mission_model.dart';
 import '../view_model/middle_mission_view_model.dart';
@@ -381,15 +382,17 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                         ),
                         SizedBox(height: mission.questionImage.isEmpty ? 4 : 8),
                         // 문제 영역
-                        Text(
-                          mission.question,
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(
-                            fontFamily: "Pretendard",
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                            height: 1.4,
-                            color: Colors.black87,
+                        RichText(
+                          textAlign: TextAlign.start,
+                          text: TextSpan(
+                            style: TextStyle(
+                              fontFamily: "Pretendard",
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                              height: 1.4,
+                              color: Colors.black87,
+                            ),
+                            children: mission.question.toStyledSpans(fontSize: 16),
                           ),
                         ),
                         const SizedBox(height: 16),

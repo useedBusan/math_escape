@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../constants/enum/grade_enums.dart';
-import '../../../core/utils/styled_text_parser.dart';
+import '../../../core/extensions/string_extension.dart';
 import '../../../core/views/home_alert.dart';
 import '../../../feature/high/model/high_mission_question.dart';
 import '../../../feature/high/view/high_mission.dart';
@@ -25,7 +25,6 @@ class HighIntroScreen extends StatefulWidget {
 class _HighIntroScreenState extends State<HighIntroScreen> {
   final AudioPlayer audioPlayer = AudioPlayer();
   bool isPlaying = false;
-  late final List<InlineSpan> parsedIntroText;
 
   final String introText = '''
 눈을 떴다.
@@ -81,10 +80,6 @@ Paratruth Space, PS라고 불리는 이 공간에서,
       }
     });
 
-    parsedIntroText = StyledTextParser.parse(
-      introText,
-      fontSize: 16,
-    );
   }
 
   Future<void> playIntro() async {
@@ -105,7 +100,7 @@ Paratruth Space, PS라고 불리는 이 공간에서,
           style: const TextStyle(
             height: 1.6
           ),
-          children: parsedIntroText
+          children: introText.toStyledSpans(fontSize: 16)
         )
     );
   }

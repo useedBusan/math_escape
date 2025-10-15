@@ -18,6 +18,7 @@ import 'base_high_view.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../core/views/home_alert.dart';
 import '../../../core/views/hint_popup.dart';
+import '../../../core/extensions/string_extension.dart';
 import '../../../core/models/hint_model.dart';
 
 class HighHintView extends StatelessWidget {
@@ -351,15 +352,17 @@ class _HighHintContentState extends State<_HighHintContent>
               ),
               const SizedBox(height: 8),
               // 문제 영역
-              Text(
-                q.question,
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                  fontFamily: "Pretendard",
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
-                  height: 1.4,
-                  color: Colors.black87,
+              RichText(
+                textAlign: TextAlign.start,
+                text: TextSpan(
+                  style: TextStyle(
+                    fontFamily: "Pretendard",
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                    height: 1.5,
+                    color: Colors.black,
+                  ),
+                  children: q.question.toStyledSpans(fontSize: 16),
                 ),
               ),
               const SizedBox(height: 30),
@@ -420,8 +423,8 @@ class _HighHintContentState extends State<_HighHintContent>
                           child: Text(
                             '확인',
                             style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800,
                             ),
                           ),
                         ),

@@ -4,6 +4,7 @@ import '../view_model/high_mission_view_model.dart';
 import '../view_model/high_hint_view_model.dart';
 import '../view_model/high_answer_view_model.dart';
 import '../../../core/views/home_alert.dart';
+import '../../../core/extensions/string_extension.dart';
 
 class HighClearView extends StatelessWidget {
   final DateTime gameStartTime;
@@ -101,14 +102,16 @@ class HighClearView extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
 
-                    const Text(
-                      "Paratruth Space, PS를 탈출하는데 걸린 시간",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    RichText(
                       textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        children: "Paratruth Space, PS를 탈출하는데 걸린 시간".toStyledSpans(fontSize: 14),
+                      ),
                     ),
 
                     const SizedBox(height: 16),
@@ -187,14 +190,23 @@ class _TimeBox extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(title, style: const TextStyle(fontSize: 14)),
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: TextStyle(fontSize: 14),
+              children: title.toStyledSpans(fontSize: 14),
+            ),
+          ),
           const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.blue,
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.blue,
+              ),
+              children: value.toStyledSpans(fontSize: 16),
             ),
           ),
         ],

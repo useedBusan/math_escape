@@ -46,7 +46,7 @@ class StyledTextParser {
     }
 
     for (int i = 0; i < text.length; i++) {
-      if (text[i] == r'$') {
+      if (text[i] == '\$') {
         if (inMath) {
           flushMathBuffer();
           inMath = false;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../app/theme/app_colors.dart';
 import '../view_model/elementary_high_mission_view_model.dart';
+import '../../../core/extensions/string_extension.dart';
 
 class ElementaryHighMissionListView extends StatelessWidget {
   const ElementaryHighMissionListView({super.key});
@@ -57,13 +58,15 @@ class ElementaryHighMissionListView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            mission.question,
-            textAlign: TextAlign.justify,
-            style: TextStyle(
-              height: 1.4,
-              fontSize: 16,
-              color: const Color(0xff333333),
+          RichText(
+            textAlign: TextAlign.start,
+            text: TextSpan(
+              style: TextStyle(
+                height: 1.5,
+                fontSize: 16,
+                color: const Color(0xff333333),
+              ),
+              children: mission.question.toStyledSpans(fontSize: 16),
             ),
           ),
           // QR 문제가 아닐 때만 텍스트 입력 표시

@@ -9,6 +9,7 @@ import '../view_model/high_mission_view_model.dart';
 import '../view_model/high_hint_view_model.dart';
 import 'package:provider/provider.dart';
 import '../../../core/views/home_alert.dart';
+import '../../../core/extensions/string_extension.dart';
 import 'base_high_view.dart';
 import '../view_model/base_high_view_model.dart';
 import 'high_clear_view.dart';
@@ -85,39 +86,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
   }
 
   List<InlineSpan> parseExplanation(String explanation, double fontSize) {
-    final regex = RegExp(r'\$(.+?)\$');
-    final matches = regex.allMatches(explanation);
-    List<InlineSpan> spans = [];
-    int lastEnd = 0;
-
-    for (final match in matches) {
-      if (lastEnd < match.start) {
-        spans.add(
-          TextSpan(
-            text: explanation.substring(lastEnd, match.start).replaceAll('\\\\', '\\'),
-            style: TextStyle(fontSize: fontSize, color: Colors.black87),
-          ),
-        );
-      }
-      spans.add(
-        WidgetSpan(
-          child: Math.tex(
-            match.group(1)!,
-            textStyle: TextStyle(fontSize: fontSize),
-          ),
-        ),
-      );
-      lastEnd = match.end;
-    }
-    if (lastEnd < explanation.length) {
-      spans.add(
-        TextSpan(
-          text: explanation.substring(lastEnd).replaceAll('\\\\', '\\'),
-          style: TextStyle(fontSize: fontSize, color: Colors.black87),
-        ),
-      );
-    }
-    return spans;
+    return explanation.toStyledSpans(fontSize: fontSize);
   }
 
   void handleNextButton() {
@@ -212,14 +181,16 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
               const SizedBox(width: 16),
               // 텍스트 (오른쪽)
               Expanded(
-                child: Text(
-                  '인류의 처음 정수의 정수는 한 개인의 처음 정수를 만들기 위해 가장 기본이 되는 것. 곧, 정수!',
-                  style: TextStyle(
-                    fontFamily: "Pretendard",
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: const Color(0xFF1A1A1A),
-                    // height: 1.3,
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontFamily: "Pretendard",
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFF1A1A1A),
+                      // height: 1.3,
+                    ),
+                    children: '인류의 처음 정수의 정수는 한 개인의 처음 정수를 만들기 위해 가장 기본이 되는 것. 곧, 정수!'.toStyledSpans(fontSize: 13),
                   ),
                 ),
               ),

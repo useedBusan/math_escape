@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../model/elementary_low_mission_model.dart';
 import '../view_model/elementary_low_mission_view_model.dart';
 import '../../../app/theme/app_colors.dart';
+import '../../../core/extensions/string_extension.dart';
 
 class ElementaryLowMissionListView extends StatelessWidget {
   const ElementaryLowMissionListView({super.key});
@@ -58,14 +59,17 @@ class ElementaryLowMissionListView extends StatelessWidget {
           ),
           const SizedBox(height: 4),
 
-          Text(
-            mission.question,
-            textAlign: TextAlign.justify,
-            style: TextStyle(
-              fontFamily: 'Pretendard',
-              fontSize: 17,
-              fontWeight: FontWeight.w400,
-              color: AppColors.body,
+          RichText(
+            textAlign: TextAlign.start,
+            text: TextSpan(
+              style: TextStyle(
+                fontFamily: 'Pretendard',
+                fontSize: 17,
+                fontWeight: FontWeight.w400,
+                height: 1.5,
+                color: AppColors.body,
+              ),
+              children: mission.question.toStyledSpans(fontSize: 17),
             ),
           ),
           // QR 문제가 아닐 때만 이미지와 선택 버튼 표시
