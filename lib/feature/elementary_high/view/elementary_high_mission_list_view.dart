@@ -197,7 +197,7 @@ class _ChoiceChipBox extends StatelessWidget {
             maxLines: null,
             style: TextStyle(
               fontFamily: 'Pretendard',
-              fontSize: MediaQuery.of(context).size.width * (16 / 360),
+              fontSize: 16,
               fontWeight: FontWeight.w400,
             ),
           ),

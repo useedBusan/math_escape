@@ -497,7 +497,7 @@ class _HighHintContentState extends State<_HighHintContent>
                         Text(
                           'QR코드 스캔',
                           style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * (16 / 360),
+                            fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
