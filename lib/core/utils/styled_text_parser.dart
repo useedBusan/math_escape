@@ -88,8 +88,11 @@ class StyledTextParser {
       buffer.write(text[i]);
     }
 
-    if (inMath) flushMathBuffer();
-    else flushBuffer();
+    if (inMath) {
+      flushMathBuffer();
+    } else {
+      flushBuffer();
+    }
 
     return spans;
   }

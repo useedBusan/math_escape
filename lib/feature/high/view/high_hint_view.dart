@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:math_escape/core/extensions/string_extension.dart';
 import 'package:provider/provider.dart';
 import '../../../constants/enum/grade_enums.dart';
 import 'package:math_escape/feature/high/model/high_mission_question.dart';
@@ -18,7 +19,7 @@ import 'base_high_view.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../core/views/home_alert.dart';
 import '../../../core/views/hint_popup.dart';
-import '../../../core/extensions/string_extension.dart';
+import '../../../core/views/integer_phase_banner.dart';
 import '../../../core/models/hint_model.dart';
 
 class HighHintView extends StatelessWidget {
@@ -248,36 +249,11 @@ class _HighHintContentState extends State<_HighHintContent>
         child: Column(
           children: [
             const SizedBox(height: 14),
-        Row(
-          children: [
-            SizedBox(
-              width: 60,
-              height: 60,
-              child: Center(
-                child: Image.asset(
-                  "assets/images/high/highFuri.png",
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.contain,
-                ),
-              ),
+            IntegerPhaseBanner(
+              questionNumber: widget.currentIndex + 1,
+              furiImagePath: "assets/images/high/highFuri.png",
+              fontSize: 14,
             ),
-            const SizedBox(width: 16),
-            // 텍스트 (오른쪽)
-            Expanded(
-              child: Text(
-                '인류의 처음 정수의 정수는 한 개인의 처음 정수를 만들기 위해 가장 기본이 되는 것. 곧, 정수!',
-                style: TextStyle(
-                  fontFamily: "Pretendard",
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  color: const Color(0xFF1A1A1A),
-                ),
-              ),
-            ),
-            const SizedBox(width: 20),
-          ],
-        ),
         const SizedBox(height: 14),
         // 카드 색상은 기존 힌트뷰 스타일 유지
         LayeredCard(

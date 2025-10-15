@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:math_escape/core/extensions/string_extension.dart';
 import 'package:provider/provider.dart';
 import '../../../feature/high/model/high_mission_answer.dart';
 import '../../../constants/enum/grade_enums.dart';
@@ -18,6 +19,7 @@ import '../../../core/views/qr_scan_screen.dart';
 import '../../../core/views/layered_card.dart';
 import '../../../core/views/home_alert.dart';
 import '../../../core/views/hint_popup.dart';
+import '../../../core/views/integer_phase_banner.dart';
 import '../../../core/models/hint_model.dart';
 import '../../../app/theme/app_colors.dart';
 
@@ -223,7 +225,6 @@ class _HighMissionContentState extends State<_HighMissionContent>
             if (!didPop) {
               final alertResult = await HomeAlert.show(context);
               if (alertResult == true && context.mounted) {
-                // 모든 상태 해제
                 HighMissionViewModel.instance.disposeAll();
                 HighHintViewModel.instance.disposeAll();
                 HighAnswerViewModel.instance.disposeAll();
@@ -257,34 +258,10 @@ class _HighMissionContentState extends State<_HighMissionContent>
         child: Column(
           children: [
             const SizedBox(height: 14),
-            Row(
-              children: [
-                SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: Center(
-                    child: Image.asset(
-                      "assets/images/high/highFuri.png",
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Text(
-                    '인류의 처음 정수의 정수는 한 개인의 처음 정수를 만들기 위해 가장 기본이 되는 것. 곧, 정수!',
-                    style: TextStyle(
-                      fontFamily: "Pretendard",
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xFF1A1A1A),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 20),
-              ],
+            IntegerPhaseBanner(
+              questionNumber: widget.currentIndex + 1,
+              furiImagePath: "assets/images/high/highFuri.png",
+              fontSize: 14,
             ),
             const SizedBox(height: 14),
             LayeredCard(
@@ -339,14 +316,10 @@ class _HighMissionContentState extends State<_HighMissionContent>
                               return Transform.translate(
                                 offset: const Offset(0, -15),
                                 child: Text(
-                                  '힌트 문제',
+                                  '힌트',
                                   style: TextStyle(
                                     color: color,
-                                    fontSize:
-                                    MediaQuery.of(
-                                      context,
-                                    ).size.width *
-                                        (12 / 360),
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -359,15 +332,17 @@ class _HighMissionContentState extends State<_HighMissionContent>
                   ),
                   const SizedBox(height: 8),
                   // 문제 영역
-                  Text(
-                    q.question,
-                    textAlign: TextAlign.justify,
-                    style: TextStyle(
-                      fontFamily: "Pretendard",
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
-                      height: 1.4,
-                      color: Colors.black87,
+                  RichText(
+                    textAlign: TextAlign.start,
+                    text: TextSpan(
+                      style: TextStyle(
+                        fontFamily: "Pretendard",
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                        height: 1.5,
+                        color: Colors.black87,
+                      ),
+                      children: q.question.toStyledSpans(fontSize: 16),
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -428,8 +403,8 @@ class _HighMissionContentState extends State<_HighMissionContent>
                               child: Text(
                                 '확인',
                                 style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w800,
                                 ),
                               ),
                             ),

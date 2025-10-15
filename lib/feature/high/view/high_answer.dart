@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:math_escape/core/extensions/string_extension.dart';
 import 'package:math_escape/feature/high/model/high_mission_answer.dart';
 import 'package:math_escape/feature/high/model/high_mission_question.dart';
-import 'package:flutter_math_fork/flutter_math.dart';
 import '../../../App/theme/app_colors.dart';
 import '../../../feature/high/view/high_mission.dart';
 import '../view_model/high_answer_view_model.dart';
@@ -9,7 +9,7 @@ import '../view_model/high_mission_view_model.dart';
 import '../view_model/high_hint_view_model.dart';
 import 'package:provider/provider.dart';
 import '../../../core/views/home_alert.dart';
-import '../../../core/extensions/string_extension.dart';
+import '../../../core/views/integer_phase_banner.dart';
 import 'base_high_view.dart';
 import '../view_model/base_high_view_model.dart';
 import 'high_clear_view.dart';
@@ -163,39 +163,10 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-          Row(
-            children: [
-              // 퓨리 이미지 공간 (왼쪽)
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: Center(
-                  child: Image.asset(
-                    "assets/images/high/highFuri.png",
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              // 텍스트 (오른쪽)
-              Expanded(
-                child: RichText(
-                  text: TextSpan(
-                    style: TextStyle(
-                      fontFamily: "Pretendard",
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xFF1A1A1A),
-                      // height: 1.3,
-                    ),
-                    children: '인류의 처음 정수의 정수는 한 개인의 처음 정수를 만들기 위해 가장 기본이 되는 것. 곧, 정수!'.toStyledSpans(fontSize: 13),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 20),
-            ],
+          IntegerPhaseBanner(
+            questionNumber: widget.currentIndex + 1,
+            furiImagePath: "assets/images/high/highFuri.png",
+            fontSize: 14,
           ),
           SizedBox(height: screenHeight * 0.025),
 
