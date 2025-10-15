@@ -3,9 +3,29 @@ import '../utils/styled_text_parser.dart';
 
 
 extension StringExtension on String {
-  /// 한글 단어 단위 줄바꿈 적용 (원래 insertZwj)
+  /// 한글 단어 단위 줄바꿈 적용 (이모지 안전)
   String applyKoreanWordBreak() {
-    return replaceAllMapped(RegExp(r'(\S)(?=\S)'), (m) => '${m[1]}\u200D');
+    final RegExp emoji = RegExp(
+      r'(\u00a9|\u00ae|[\u2000-\u3300]|'
+      r'\ud83c[\ud000-\udfff]|'
+      r'\ud83d[\ud000-\udfff]|'
+      r'\ud83e[\ud000-\udfff])',
+    );
+
+    String fullText = '';
+    List<String> words = split(' ');
+
+    for (var i = 0; i < words.length; i++) {
+      if (emoji.hasMatch(words[i])) {
+        fullText += words[i];
+      } else {
+        fullText += words[i]
+            .replaceAllMapped(RegExp(r'(\S)(?=\S)'), (m) => '${m[1]}\u200D');
+      }
+      if (i < words.length - 1) fullText += ' ';
+    }
+
+    return fullText;
   }
 
   /// 1) 먼저 스타일 파싱  2) 그 다음 일반 텍스트(TextSpan)에만 ZWJ 적용

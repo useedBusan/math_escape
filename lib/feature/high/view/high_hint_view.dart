@@ -93,6 +93,7 @@ class _HighHintContentState extends State<_HighHintContent>
       final currentQuestion = widget.questionList[widget.currentIndex];
       print('DEBUG: HighHintView initState - currentIndex: ${widget.currentIndex}');
       print('DEBUG: HighHintView initState - currentQuestion.id: ${currentQuestion.id}, stage: ${currentQuestion.stage}');
+      print('DEBUG: HighHintView initState - currentQuestion.title: ${currentQuestion.title}');
       HighHintViewModel.instance.goToHintByStage(currentQuestion.stage);
       HighHintViewModel.instance.startHintGame();
     });
@@ -315,7 +316,7 @@ class _HighHintContentState extends State<_HighHintContent>
                               style: TextStyle(
                                 color: color,
                                 fontSize:
-                                    MediaQuery.of(context).size.width * (12 / 360),
+                                    12,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -338,7 +339,7 @@ class _HighHintContentState extends State<_HighHintContent>
                     height: 1.5,
                     color: Colors.black,
                   ),
-                  children: q.question.toStyledSpans(fontSize: 16),
+                  children: q.question.toStyledSpans(fontSize: 18),
                 ),
               ),
               const SizedBox(height: 30),

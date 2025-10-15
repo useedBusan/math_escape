@@ -63,16 +63,15 @@ class ElementaryHighMissionListView extends StatelessWidget {
             text: TextSpan(
               style: TextStyle(
                 height: 1.5,
-                fontSize: 16,
+                fontSize: 18,
                 color: const Color(0xff333333),
               ),
-              children: mission.question.toStyledSpans(fontSize: 16),
+              children: mission.question.toStyledSpans(fontSize: 18),
             ),
           ),
           // QR 문제가 아닐 때만 텍스트 입력 표시
           if (!mission.isqr) ...[
             const SizedBox(height: 16),
-            // 텍스트 입력 (elemhigh 고유 입력)
             Container(
               decoration: BoxDecoration(
                 color: const Color(0xFFFFFFFF),
@@ -87,6 +86,7 @@ class ElementaryHighMissionListView extends StatelessWidget {
                 ),
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
+                scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                 decoration: InputDecoration(
                   hintText: '정답을 입력해 주세요.',
                   hintStyle: TextStyle(

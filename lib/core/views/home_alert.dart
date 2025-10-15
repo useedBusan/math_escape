@@ -68,7 +68,7 @@ class _CustomHomeAlertDialog extends StatelessWidget {
                               color: CustomPink.s500,
                               fontFamily: "Pretendard",
                               fontWeight: FontWeight.w600,
-                              fontSize: 16,
+                              fontSize: 20,
                             ),
                           ),
                           TextSpan(
@@ -77,7 +77,7 @@ class _CustomHomeAlertDialog extends StatelessWidget {
                               color: AppColors.head,
                               fontFamily: "Pretendard",
                               fontWeight: FontWeight.w400,
-                              fontSize: 15,
+                              fontSize: 18,
                               height: 1.4,
                             ),
                           ),
@@ -119,7 +119,7 @@ class _CustomHomeAlertDialog extends StatelessWidget {
                           style: TextStyle(
                             color: CustomBlue.s500,
                             fontFamily: "Pretendard",
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w800,
                             fontSize: 16,
                           ),
                         ),
@@ -154,7 +154,7 @@ class _CustomHomeAlertDialog extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.white,
                             fontFamily: "Pretendard",
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w800,
                             fontSize: 16,
                           ),
                         ),

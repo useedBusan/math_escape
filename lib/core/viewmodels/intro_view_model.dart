@@ -9,6 +9,8 @@ class IntroViewModel extends ChangeNotifier {
 
   bool canGoNext() => currentIdx < talks.length - 1;
   bool canGoPrevious() => currentIdx > 0;
+  
+  Talk get currentTalk => talks[currentIdx];
 
   Future<void> loadTalks(String assetJsonPath) async {
     try {
@@ -22,8 +24,13 @@ class IntroViewModel extends ChangeNotifier {
     }
   }
 
-  Talk get currentTalk => talks[currentIdx];
-  int get totalCount => talks.length;
+  int getMaxStage() {
+    if (talks.isEmpty) return 0;
+    return talks
+        .where((talk) => talk.stage != null)
+        .map((talk) => talk.stage!)
+        .reduce((a, b) => a > b ? a : b);
+  }
 
   void goToNextTalk() {
     if (canGoNext()) {

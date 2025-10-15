@@ -78,7 +78,7 @@
     "id": 6,
     "talks": [
       {
-        "talk": "각 손가락은 0 또는 1의 두 가지 상태여서, 1,024네! 나의 흔적이 남는 지문을 수로 환산할 수도 있구나!",
+        "talk": "각 손가락은 0 또는 1의 두 가지 상태여서, $2^{10}$ = 1,024네! 나의 흔적이 남는 지문을 수로 환산할 수도 있구나!",
         "furiImage": "assets/images/common/furiGood.png",
         "backImage": "assets/images/middle/middleBG456.png"
       },

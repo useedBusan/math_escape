@@ -392,7 +392,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                               height: 1.4,
                               color: Colors.black87,
                             ),
-                            children: mission.question.toStyledSpans(fontSize: 16),
+                            children: mission.question.toStyledSpans(fontSize: 18),
                           ),
                         ),
                         const SizedBox(height: 16),

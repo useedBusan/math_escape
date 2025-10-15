@@ -75,7 +75,7 @@ class CustomIntroAlert extends StatelessWidget {
                     _mainText(),
                     style: TextStyle(
                       fontFamily: "Pretendard",
-                      fontSize: 15,
+                      fontSize: 18,
                       fontWeight: FontWeight.w400,
                       color: const Color(0xff202020),
                     ),

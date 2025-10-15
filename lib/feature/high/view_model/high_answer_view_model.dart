@@ -90,6 +90,7 @@ class HighAnswerViewModel extends ChangeNotifier {
     required DateTime gameStartTime,
     required bool isFromHint,
   }) {
+    print('DEBUG: initializeAnswer - isFromHint: $isFromHint');
     _currentAnswer = answer;
     _gameStartTime = gameStartTime;
     _isFromHint = isFromHint;
@@ -105,14 +106,19 @@ class HighAnswerViewModel extends ChangeNotifier {
     required VoidCallback onNavigateBack,
     required VoidCallback onComplete,
   }) {
+    print('DEBUG: handleNextButton - currentIndex: $currentIndex, questionListLength: $questionListLength, isFromHint: $_isFromHint');
+    
     if (_isFromHint) {
       // 힌트에서 온 경우: HighAnswer pop → HighMission으로 돌아가기
+      print('DEBUG: Navigating back from hint');
       onNavigateBack();
     } else {
       // 일반적인 경우: HighAnswer pop → HighMissionView에서 다음 문제
       if (currentIndex + 1 < questionListLength) {
+        print('DEBUG: Navigating to next question');
         onNavigateToNext();
       } else {
+        print('DEBUG: Navigating to complete view');
         onComplete();
       }
     }

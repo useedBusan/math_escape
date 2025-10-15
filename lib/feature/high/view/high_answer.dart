@@ -87,10 +87,13 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
 
 
   void handleNextButton() {
+    print('DEBUG: handleNextButton called - currentIndex: ${widget.currentIndex}, questionListLength: ${widget.questionList.length}');
+    
     HighAnswerViewModel.instance.handleNextButton(
       currentIndex: widget.currentIndex,
       questionListLength: widget.questionList.length,
       onNavigateToNext: () {
+        print('DEBUG: onNavigateToNext callback called');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -104,10 +107,12 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
         );
       },
       onNavigateBack: () {
+        print('DEBUG: onNavigateBack callback called');
         // HighMission으로 돌아가기
         Navigator.popUntil(context, (route) => route.settings.name == 'HighMission');
       },
       onComplete: () {
+        print('DEBUG: onComplete callback called - navigating to HighClearView');
         // 마지막 문제인 경우 - HighClearView로 이동
         Navigator.pushReplacement(
           context,
@@ -203,7 +208,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
                         height: 1.5,
                         color: AppColors.body
                     ),
-                    children: (vm.currentAnswer?.explanation ?? widget.answer.explanation).toStyledSpans(fontSize: 15),
+                    children: (vm.currentAnswer?.explanation ?? widget.answer.explanation).toStyledSpans(fontSize: 18),
                   ),
                 ),
                 if ((vm.currentAnswer?.answerImage ?? widget.answer.answerImage) != null) ...[
@@ -252,7 +257,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
                       height: 1.5,
                       color: AppColors.body
                     ),
-                    children: (vm.currentAnswer?.clue ?? widget.answer.clue).toStyledSpans(fontSize: 15),
+                    children: (vm.currentAnswer?.clue ?? widget.answer.clue).toStyledSpans(fontSize: 18),
                   ),
                 ),
               ],

@@ -26,6 +26,7 @@ class ConversationOverlay extends StatefulWidget {
 class _ConversationOverlayState extends State<ConversationOverlay> {
   late IntroViewModel viewModel;
   bool isLoading = true;
+  int maxStage = 0;
 
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
     try {
       viewModel = IntroViewModel();
       await viewModel.loadTalks('assets/data/elem_high/elem_high_conversation.json');
+      maxStage = viewModel.getMaxStage(); // 최대 stage 번호 가져오기
       viewModel.setStageTalks(widget.stage);
       setState(() {
         isLoading = false;
@@ -85,11 +87,11 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
                       talkText: talk.talk,
                       buttonText: "다음",
                       grade: StudentGrade.elementaryHigh,
-                      // stage 10 (id: 11)에서만 furiClear 애니메이션 표시
-                      lottieAnimationPath: widget.stage == 10 
+                      // 마지막 stage에서만 furiClear 애니메이션 표시
+                      lottieAnimationPath: widget.stage == maxStage 
                           ? 'assets/animations/furiClear.json' 
                           : null,
-                      showLottieInsteadOfImage: widget.stage == 10,
+                      showLottieInsteadOfImage: widget.stage == maxStage,
                       onNext: () {
                         if (vm.canGoNext()) {
                           vm.goToNextTalk();

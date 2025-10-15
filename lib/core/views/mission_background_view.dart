@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 import '../../../constants/enum/grade_enums.dart';
 import '../../../core/views/answer_popup.dart';
 import '../../../core/views/home_alert.dart';
@@ -42,6 +43,8 @@ class MissionBackgroundView extends StatelessWidget {
   Widget build(BuildContext context) {
     final mainColor = grade.mainColor;
     final bannerImgPath = grade.bannerImg;
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    final bottomButtonHeight = 104.0; // 60 + 24*2 (padding)
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -51,7 +54,7 @@ class MissionBackgroundView extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Pretendard',
             color: mainColor,
-            fontSize: 16,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -71,151 +74,173 @@ class MissionBackgroundView extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          if (bannerImgPath != null)
-            SizedBox(
-              width: double.infinity,
-              child: Image.asset(bannerImgPath, fit: BoxFit.cover),
-            ),
-
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(0),
-              child: missionBuilder(context),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: SizedBox(
-              height: 60,
-              child: Row(
+          // Scrollable content area
+          Positioned.fill(
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(0, 52),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        side: BorderSide(color: mainColor),
-                        foregroundColor: mainColor,
-                        backgroundColor: Color(0xffFFEDFA),
-                      ),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: hintDialogueBuilder,
-                        );
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Image.asset(
-                            "assets/images/common/hintIcon.png",
-                            width: 24,
-                            height: 24,
-                          ),
-                          SizedBox(width: 4),
-                          Text('힌트'),
-                        ],
-                      ),
+                  if (bannerImgPath != null)
+                    SizedBox(
+                      width: double.infinity,
+                      child: Image.asset(bannerImgPath, fit: BoxFit.cover),
                     ),
+                  
+                  // Mission content with scrollPadding for keyboard handling
+                  Padding(
+                    padding: const EdgeInsets.all(0),
+                    child: missionBuilder(context),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(0, 52),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        side: BorderSide(color: mainColor),
-                        foregroundColor: Colors.white,
-                        backgroundColor: mainColor,
-                      ),
-                      onPressed: () async {
-                        final nav = Navigator.of(context);
-                        final dialogContext = context;
-
-                        if (isqr) {
-                          // QR 문제일 때
-                          final result = await nav.push(
-                            MaterialPageRoute(
-                              builder: (_) => const QRScanScreen(),
-                            ),
-                          );
-
-                          if (result != null &&
-                              result is String &&
-                              onQRScanned != null) {
-                            final isCorrect = await onQRScanned!(result);
-
-                            if (!dialogContext.mounted) return;
-
-                            showDialog(
-                              context: dialogContext,
-                              barrierDismissible: false,
-                              builder: (_) => AnswerPopup(
-                                isCorrect: isCorrect,
-                                grade: grade,
-                                onNext: () {
-                                  Navigator.of(dialogContext).pop();
-                                  if (isCorrect) {
-                                    onCorrect?.call();
-                                  } else {
-                                    onWrong?.call();
-                                  }
-                                },
-                              ),
-                            );
-                          }
-                        } else {
-                          // 일반 문제일 때
-                          final ok = await onSubmitAnswer(dialogContext);
-                          if (!dialogContext.mounted) return;
-
-                          showDialog(
-                            context: dialogContext,
-                            barrierDismissible: false,
-                            builder: (_) => AnswerPopup(
-                              isCorrect: ok,
-                              grade: grade,
-                              onNext: () {
-                                Navigator.of(dialogContext).pop();
-                                if (ok) {
-                                  onCorrect?.call();
-                                } else {
-                                  onWrong?.call();
-                                }
-                              },
-                            ),
-                          );
-                        }
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (isqr) ...[
-                            Icon(
-                              Icons.qr_code_scanner,
-                              size: 20,
-                              color: Colors.white,
-                            ),
-                            SizedBox(width: 4),
-                          ],
-                          Text(isqr ? 'QR 인식' : '정답 제출'),
-                        ],
-                      ),
-                    ),
+                  
+                  // Bottom spacing to prevent content from being hidden behind the sticky button
+                  SizedBox(
+                    height: math.max(keyboardHeight, bottomButtonHeight),
                   ),
                 ],
               ),
             ),
           ),
-          SizedBox(height: 20),
+          
+          // Sticky bottom button
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: SafeArea(
+              bottom: false,
+              child: Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(24),
+                child: SizedBox(
+                  height: 60,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: const Size(0, 52),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            side: BorderSide(color: mainColor),
+                            foregroundColor: mainColor,
+                            backgroundColor: Color(0xffFFEDFA),
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: hintDialogueBuilder,
+                            );
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(
+                                "assets/images/common/hintIcon.png",
+                                width: 24,
+                                height: 24,
+                              ),
+                              SizedBox(width: 4),
+                              Text('힌트'),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: const Size(0, 52),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            side: BorderSide(color: mainColor),
+                            foregroundColor: Colors.white,
+                            backgroundColor: mainColor,
+                          ),
+                          onPressed: () async {
+                            final nav = Navigator.of(context);
+                            final dialogContext = context;
+
+                            if (isqr) {
+                              // QR 문제일 때
+                              final result = await nav.push(
+                                MaterialPageRoute(
+                                  builder: (_) => const QRScanScreen(),
+                                ),
+                              );
+
+                              if (result != null &&
+                                  result is String &&
+                                  onQRScanned != null) {
+                                final isCorrect = await onQRScanned!(result);
+
+                                if (!dialogContext.mounted) return;
+
+                                showDialog(
+                                  context: dialogContext,
+                                  barrierDismissible: false,
+                                  builder: (_) => AnswerPopup(
+                                    isCorrect: isCorrect,
+                                    grade: grade,
+                                    onNext: () {
+                                      Navigator.of(dialogContext).pop();
+                                      if (isCorrect) {
+                                        onCorrect?.call();
+                                      } else {
+                                        onWrong?.call();
+                                      }
+                                    },
+                                  ),
+                                );
+                              }
+                            } else {
+                              // 일반 문제일 때
+                              final ok = await onSubmitAnswer(dialogContext);
+                              if (!dialogContext.mounted) return;
+
+                              showDialog(
+                                context: dialogContext,
+                                barrierDismissible: false,
+                                builder: (_) => AnswerPopup(
+                                  isCorrect: ok,
+                                  grade: grade,
+                                  onNext: () {
+                                    Navigator.of(dialogContext).pop();
+                                    if (ok) {
+                                      onCorrect?.call();
+                                    } else {
+                                      onWrong?.call();
+                                    }
+                                  },
+                                ),
+                              );
+                            }
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (isqr) ...[
+                                Icon(
+                                  Icons.qr_code_scanner,
+                                  size: 20,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(width: 4),
+                              ],
+                              Text(isqr ? 'QR 인식' : '정답 제출'),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

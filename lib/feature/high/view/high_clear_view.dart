@@ -133,7 +133,7 @@ class HighClearView extends StatelessWidget {
 
                     const Spacer(),
 
-                    // 수료증 다운로드 버튼
+                    // 메인화면으로 이동 버튼
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
@@ -151,15 +151,14 @@ class HighClearView extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            // 수료증 다운로드 기능 (추후 구현)
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('수료증 다운로드 기능은 준비 중입니다.'),
-                              ),
-                            );
+                            // 모든 상태 해제
+                            HighMissionViewModel.instance.disposeAll();
+                            HighHintViewModel.instance.disposeAll();
+                            HighAnswerViewModel.instance.disposeAll();
+                            Navigator.of(context).popUntil((route) => route.isFirst);
                           },
-                          icon: const Icon(Icons.download),
-                          label: const Text("수료증 다운로드"),
+                          icon: const Icon(Icons.home),
+                          label: const Text("메인화면으로"),
                         ),
                       ),
                     ),

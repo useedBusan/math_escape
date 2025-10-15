@@ -14,6 +14,7 @@ import '../view_model/high_answer_view_model.dart';
 import '../view_model/base_high_view_model.dart';
 import 'high_hint_view.dart';
 import 'base_high_view.dart';
+import 'high_clear_view.dart';
 import '../../../core/views/answer_popup.dart';
 import '../../../core/views/qr_scan_screen.dart';
 import '../../../core/views/layered_card.dart';
@@ -107,9 +108,14 @@ class _HighMissionContentState extends State<_HighMissionContent>
       'assets/data/high/high_level_answer.json',
     );
     final List<dynamic> jsonData = json.decode(jsonString);
-    return jsonData
-        .map((e) => MissionAnswer.fromJson(e))
-        .firstWhere((a) => a.id == id);
+    try {
+      return jsonData
+          .map((e) => MissionAnswer.fromJson(e))
+          .firstWhere((a) => a.id == id);
+    } catch (e) {
+      print('ERROR: Answer not found for id: $id');
+      rethrow;
+    }
   }
 
   Future<List<MissionQuestion>> loadQuestionList() async {
@@ -192,21 +198,36 @@ class _HighMissionContentState extends State<_HighMissionContent>
       isCorrect: isCorrect,
       onNext: () async {
         if (isCorrect) {
-          final answerData = await loadAnswerById(q.id);
-          if (!mounted) return;
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              settings: const RouteSettings(name: 'HighAnswer'),
-              builder: (_) => HighAnswer(
-                answer: answerData,
-                gameStartTime: widget.gameStartTime,
-                questionList: vm.questionList,
-                currentIndex: vm.currentIndex,
-                isFromHint: false,
+          // 마지막 문제인지 확인 (currentIndex가 0-based이므로 마지막 문제는 questionList.length - 1)
+          if (vm.currentIndex == vm.questionList.length - 1) {
+            // 마지막 문제인 경우 바로 HighClearView로 이동
+            if (!mounted) return;
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => HighClearView(
+                  gameStartTime: widget.gameStartTime,
+                ),
               ),
-            ),
-          );
+            );
+          } else {
+            // 일반 문제인 경우 HighAnswer로 이동
+            final answerData = await loadAnswerById(q.id);
+            if (!mounted) return;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                settings: const RouteSettings(name: 'HighAnswer'),
+                builder: (_) => HighAnswer(
+                  answer: answerData,
+                  gameStartTime: widget.gameStartTime,
+                  questionList: vm.questionList,
+                  currentIndex: vm.currentIndex,
+                  isFromHint: false,
+                ),
+              ),
+            );
+          }
         } else {
           if (!mounted) return;
           Navigator.of(context).pop();
@@ -342,7 +363,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
                         height: 1.5,
                         color: Colors.black87,
                       ),
-                      children: q.question.toStyledSpans(fontSize: 16),
+                      children: q.question.toStyledSpans(fontSize: 18),
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -439,24 +460,40 @@ class _HighMissionContentState extends State<_HighMissionContent>
                                 onNext: () async {
                                   Navigator.pop(context);
                                   if (isCorrect) {
-                                    final answerData = await loadAnswerById(
-                                      q.id,
-                                    );
-                                    if (!mounted) return;
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        settings: const RouteSettings(
-                                          name: 'HighAnswer',
+                                    // 마지막 문제인지 확인 (currentIndex가 0-based이므로 마지막 문제는 questionList.length - 1)
+                                    if (vm.currentIndex == vm.questionList.length - 1) {
+                                      // 마지막 문제인 경우 바로 HighClearView로 이동
+                                      if (!mounted) return;
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => HighClearView(
+                                            gameStartTime: widget.gameStartTime,
+                                          ),
                                         ),
-                                        builder: (_) => HighAnswer(
-                                          answer: answerData,
-                                          gameStartTime: widget.gameStartTime,
-                                          questionList: vm.questionList,
-                                          currentIndex: vm.currentIndex,
+                                      );
+                                    } else {
+                                      // 일반 문제인 경우 HighAnswer로 이동
+                                      final answerData = await loadAnswerById(
+                                        q.id,
+                                      );
+                                      if (!mounted) return;
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          settings: const RouteSettings(
+                                            name: 'HighAnswer',
+                                          ),
+                                          builder: (_) => HighAnswer(
+                                            answer: answerData,
+                                            gameStartTime: widget.gameStartTime,
+                                            questionList: vm.questionList,
+                                            currentIndex: vm.currentIndex,
+                                            isFromHint: false,
+                                          ),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    }
                                   }
                                 },
                               ),

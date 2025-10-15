@@ -64,12 +64,12 @@ class ElementaryLowMissionListView extends StatelessWidget {
             text: TextSpan(
               style: TextStyle(
                 fontFamily: 'Pretendard',
-                fontSize: 17,
+                fontSize: 18,
                 fontWeight: FontWeight.w400,
                 height: 1.5,
                 color: AppColors.body,
               ),
-              children: mission.question.toStyledSpans(fontSize: 17),
+              children: mission.question.toStyledSpans(fontSize: 18),
             ),
           ),
           // QR 문제가 아닐 때만 이미지와 선택 버튼 표시

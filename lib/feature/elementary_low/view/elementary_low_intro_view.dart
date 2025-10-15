@@ -58,10 +58,9 @@ class _ElementaryLowIntroViewState extends State<ElementaryLowIntroView> {
       talkText: viewModel.currentTalk.talk,
       buttonText: "다음",
       grade: StudentGrade.elementaryLow,
-      // 첫 번째 화면에만 furiAppearance 애니메이션 표시 (한 번만 재생)
       lottieAnimationPath: viewModel.currentIdx == 0 ? 'assets/animations/furiAppearance.json' : null,
       showLottieInsteadOfImage: viewModel.currentIdx == 0,
-      lottieRepeat: false, // furiAppearance는 한 번만 재생
+      lottieRepeat: false,
       onNext: () {
         if (viewModel.canGoNext()) {
           setState(() {
@@ -82,7 +81,6 @@ class _ElementaryLowIntroViewState extends State<ElementaryLowIntroView> {
             viewModel.goToPreviousTalk();
           });
         } else {
-          // Intro의 첫 번째 화면에서 뒤로가기 시 홈으로 이동
           Navigator.of(context).pop();
         }
       },
