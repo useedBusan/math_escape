@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../app/theme/app_colors.dart';
+import '../extensions/string_extension.dart';
 
 /// 홈화면 이동 확인을 위한 커스텀 Alert 모듈
 class HomeAlert {
@@ -61,27 +62,12 @@ class _CustomHomeAlertDialog extends StatelessWidget {
                     RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "잠깐! ",
-                            style: TextStyle(
-                              color: CustomPink.s500,
-                              fontFamily: "Pretendard",
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20,
-                            ),
-                          ),
-                          TextSpan(
-                            text: "지금 나가면 기록은 사라져.\n그래도 탐험을 중단할 거야?",
-                            style: TextStyle(
-                              color: AppColors.head,
-                              fontFamily: "Pretendard",
-                              fontWeight: FontWeight.w400,
-                              fontSize: 18,
-                              height: 1.4,
-                            ),
-                          ),
-                        ],
+                        style: TextStyle(
+                          fontFamily: "Pretendard",
+                          fontSize: 18,
+                          height: 1.4,
+                        ),
+                        children: "**{#D95276|잠깐!}** 지금 나가면 기록은 사라져.\n그래도 탐험을 중단할 거야?".toStyledSpans(fontSize: 18),
                       ),
                     ),
                     const SizedBox(height: 20),

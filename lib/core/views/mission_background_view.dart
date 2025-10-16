@@ -67,7 +67,7 @@ class MissionBackgroundView extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.home_outlined, color: mainColor, size: 28),
+            icon: Icon(Icons.home, color: mainColor, size: 28),
             onPressed: () {
               HomeAlert.showAndNavigate(context, onHome: onHome);
             },

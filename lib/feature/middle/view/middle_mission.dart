@@ -43,21 +43,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     _hintColorController.repeat(reverse: true);
   }
 
-  void _syncWithCoordinator(
-    int coordinatorIndex,
-    MiddleMissionViewModel viewModel,
-  ) {
-    if (coordinatorIndex != viewModel.currentIndex) {
-      viewModel.setCurrentIndex(coordinatorIndex);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final mission = viewModel.currentMission;
-        final imagePath = mission?.questionImage;
-        if (imagePath != null && imagePath.isNotEmpty && mounted) {
-          precacheImage(AssetImage(imagePath), context);
-        }
-      });
-    }
-  }
 
   void _submitAnswer(
     MiddleMissionCoordinator coordinator,
@@ -128,13 +113,10 @@ MiddleMissionCoordinator coordinator,
     MiddleMissionViewModel viewModel,
   ) async {
     try {
-      final int currentQuestionId = viewModel.currentIndex + 1;
-      coordinator.toConversation(currentQuestionId);
+      viewModel.completeQuestion();
     } catch (e) {
-      if (viewModel.currentIndex + 1 >= viewModel.totalCount) {
+      if (mounted) {
         Navigator.of(context).pop();
-      } else {
-        viewModel.goToNextQuestion();
       }
     }
   }
@@ -148,10 +130,8 @@ MiddleMissionCoordinator coordinator,
       ],
       child: Consumer2<MiddleMissionCoordinator, MiddleMissionViewModel>(
         builder: (context, coordinator, viewModel, child) {
-          // Coordinator와 동기화 설정 (한 번만)
-          coordinator.setQuestionIndexCallback(
-            (index) => _syncWithCoordinator(index, viewModel),
-          );
+          // Coordinator와 ViewModel 연결 설정 (한 번만)
+          coordinator.setViewModel(viewModel);
 
           // 데이터 로드 (build 완료 후 실행)
           if (viewModel.isLoading) {
@@ -166,7 +146,7 @@ MiddleMissionCoordinator coordinator,
               if (!didPop) {
                 // 시스템 뒤로가기: Coordinator의 handleBack 호출
                 final handled = coordinator.handleBack();
-                if (handled && context.mounted) {
+                if (!handled && context.mounted) {
                   // Coordinator가 더 이상 처리할 수 없으면 HomeAlert 표시
                   final alertResult = await HomeAlert.show(context);
                   if (alertResult == true && context.mounted) {
@@ -187,23 +167,17 @@ MiddleMissionCoordinator coordinator,
     MiddleMissionCoordinator coordinator,
     MiddleMissionViewModel viewModel,
   ) {
-    // 현재 단계에 따라 화면 결정
-    if (coordinator.isInConversation) {
+    // 현재 상태에 따라 화면 결정
+    if (viewModel.isInConversation) {
       return ConversationOverlay(
-        stage: coordinator.current.stage,
+        stage: viewModel.currentIndex + 1, // 0-based → 1-based 변환
         isFinalConversation: false,
         onComplete: () {
-          // 대화 종료 후 다음 문제 이동 또는 완료 처리
-          final int nextStage = coordinator.current.stage + 1;
-          if (nextStage <= viewModel.totalCount) {
-            coordinator.toQuestion(nextStage);
-          } else {
-            // 모든 문제 완료 - 메인 화면으로 이동
-            Navigator.of(context).pop();
-          }
+          // 대화 종료 후 같은 인덱스의 문제로 이동
+          viewModel.goToQuestion(viewModel.currentIndex);
         },
         onCloseByBack: () {
-          // 대화에서 뒤로가기할 때는 코디네이터에서만 히스토리를 관리
+          // 대화에서 뒤로가기할 때는 코디네이터의 handleBack 호출
           coordinator.handleBack();
         },
       );
@@ -243,11 +217,8 @@ MiddleMissionCoordinator coordinator,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFF3F55A7)),
-          onPressed: () async {
-            final alertResult = await HomeAlert.show(context);
-            if (alertResult == true && context.mounted) {
-              Navigator.of(context).pop();
-            }
+          onPressed: () {
+            coordinator.handleBack();
           },
         ),
         title: Text(
@@ -259,6 +230,14 @@ MiddleMissionCoordinator coordinator,
           ),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.home, color: Color(0xFF3F55A7)),
+            onPressed: () {
+              HomeAlert.showAndNavigate(context);
+            },
+          ),
+        ],
       ),
       body: Stack(
         children: [

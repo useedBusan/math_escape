@@ -180,7 +180,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
           mainAxisSize: MainAxisSize.min,
           children: [
           IntegerPhaseBanner(
-            questionNumber: widget.currentIndex + 1,
+            questionNumber: widget.currentIndex + 2, // 다음 문제의 phase 표시
             furiImagePath: "assets/images/high/highFuri.png",
             fontSize: 14,
           ),

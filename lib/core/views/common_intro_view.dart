@@ -84,7 +84,7 @@ class CommonIntroView extends StatelessWidget {
                   Positioned(
                     right: 0,
                     child: IconButton(
-                      icon: Icon(Icons.home_outlined, color: mainColor),
+                      icon: Icon(Icons.home, color: mainColor),
                       onPressed: () {
                         HomeAlert.showAndNavigate(context);
                       },
