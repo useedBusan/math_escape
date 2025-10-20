@@ -7,8 +7,8 @@
     "choices": ["7과 8", "1과 5", "3과 4"],
     "answer": 1,
     "hintText": "📍2층 수학도서관을 살펴보자.",
-    "hintImage": "assets/images/elementary_low/elemLowHint1.png",
-    "hintVideo": null,
+    "hintImage": ["assets/images/elementary_low/elemLowHint1.png"],
+    "hintVideo": [],
     "isqr": false
   },
   {
@@ -19,8 +19,8 @@
     "choices": ["72명", "84명", "96명"],
     "answer": 3,
     "hintText": "📍 2층 수학놀이관 입구를 살펴보자.",
-    "hintImage": "assets/images/elementary_low/elemLowHint2.png",
-    "hintVideo": null,
+    "hintImage": ["assets/images/elementary_low/elemLowHint2.png"],
+    "hintVideo": [],
     "isqr": false
   },
   {
@@ -31,8 +31,8 @@
     "choices": ["10개", "12개", "15개"],
     "answer": 3,
     "hintText": "📍 2층 미로놀이터 안내도를 살펴보자.",
-    "hintImage": "assets/images/elementary_low/elemLowHint3.png",
-    "hintVideo": null,
+    "hintImage": ["assets/images/elementary_low/elemLowHint3.png"],
+    "hintVideo": [],
     "isqr": false
   },
   {
@@ -42,9 +42,11 @@
     "images": null,
     "choices": ["120Q"],
     "answer": 1,
-    "hintText": "📍 수정 예정",
-    "hintImage": "assets/images/elementary_low/elemLowHint4.png",
-    "hintVideo": null,
+    "hintText": "📍 동영상을 잘 보고 다빈치 돔을 만들어봐!",
+    "hintImage": [],
+    "hintVideo": ["assets/video/elemLowHintSquare.mp4",
+      "assets/video/elemLowHintTriangle.mp4",
+      "assets/video/elemLowHintHexagon.mp4"],
     "isqr": true
   },
   {
@@ -55,8 +57,8 @@
     "choices": ["3시", "5시", "7시"],
     "answer": 3,
     "hintText": "📍 2층 복도 시계탑 패널을 확인해 봐!",
-    "hintImage": null,
-    "hintVideo": "assets/video/sampleVideo.mp4",
+    "hintImage": ["assets/images/elementary_low/elemLowHint5.png"],
+    "hintVideo": [],
     "isqr": false
   },
   {
@@ -67,8 +69,8 @@
     "choices": ["6칸", "8칸", "10칸"],
     "answer": 2,
     "hintText": "📍 2층 미로놀이터 ①에 가보자.",
-    "hintImage": "assets/images/elementary_low/elemLowHint6.png",
-    "hintVideo": null,
+    "hintImage": ["assets/images/elementary_low/elemLowHint6.png"],
+    "hintVideo": [],
     "isqr": false
   }
 ]

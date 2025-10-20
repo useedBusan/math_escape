@@ -108,6 +108,19 @@ extension GradeTheme on StudentGrade {
     }
   }
 
+  String get appBarTitle {
+    switch (this) {
+      case StudentGrade.elementaryLow:
+        return '미션! 수학자의 수첩을 따라서';
+      case StudentGrade.elementaryHigh:
+        return '미션! 수사모의 보물을 찾아서';
+      case StudentGrade.middle:
+        return '수학자의 비밀 노트를 찾아라!';
+      case StudentGrade.high:
+        return '역설, 혹은 모호함';
+    }
+  }
+
   String get imagePath {
     switch (this) {
       case StudentGrade.elementaryLow:

@@ -5,7 +5,7 @@ import '../../../feature/elementary_high/model/elementary_high_intro_talk.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../constants/enum/image_enums.dart';
 import 'elementary_high_mission.dart';
-import '../../../core/utils/view/common_intro_view.dart';
+import '../../../core/views/common_intro_view.dart';
 
 //intro page
 class PuriImage extends StatefulWidget {
@@ -146,7 +146,7 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen>
     final talk = talkList[currentIndex];
 
     return CommonIntroView(
-      appBarTitle: '미션! 수사모의 수학 보물을 찾아서',
+      appBarTitle: StudentGrade.elementaryHigh.appBarTitle,
       backgroundAssetPath: ImageAssets.background.path,
       characterImageAssetPath: talk.furiImage,
       speakerName: '푸리',
