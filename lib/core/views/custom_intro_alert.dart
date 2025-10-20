@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../constants/enum/grade_enums.dart';
+import '../extensions/string_extension.dart';
 
 class CustomIntroAlert extends StatelessWidget {
   final StudentGrade grade;
@@ -38,9 +39,9 @@ class CustomIntroAlert extends StatelessWidget {
   String _mainText() {
     switch(grade) {
       case StudentGrade.elementaryLow:
-        return '수학자가 남긴 보물을 찾는 탐험을\n시작하시겠습니까?';
+        return '수학자가 남긴 보물을 찾는 탐험을 시작하시겠습니까?';
       case StudentGrade.middle:
-        return '수학자의 비밀 노트를 찾는 여정을\n시작하시겠습니까?';
+        return '수학자의 비밀 노트를 찾는 여정을 시작하시겠습니까?';
       default:
         return '';
     }
@@ -71,15 +72,17 @@ class CustomIntroAlert extends StatelessWidget {
                     height: 80,
                   ),
                   const SizedBox(height: 18),
-                  Text(
-                    _mainText(),
-                    style: TextStyle(
-                      fontFamily: "Pretendard",
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xff202020),
-                    ),
+                  RichText(
                     textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: TextStyle(
+                        fontFamily: "Pretendard",
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff202020),
+                      ),
+                      children: _mainText().toStyledSpans(fontSize: 18),
+                    ),
                   ),
                   const SizedBox(height: 2),
                 ],

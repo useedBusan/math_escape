@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.math_escape">
+    >
 
     <queries>
         <intent>
@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:label="부산수학문화관 방탈출"
+        android:label="부산수학문화관 미션투어시리즈"
         android:icon="@mipmap/app_icon"
         android:usesCleartextTraffic="true"
         android:theme="@style/NormalTheme">>

@@ -72,14 +72,12 @@ class ElementaryLowMissionListView extends StatelessWidget {
               children: mission.question.toStyledSpans(fontSize: 18),
             ),
           ),
-          // QR 문제가 아닐 때만 이미지와 선택 버튼 표시
           if (!mission.isqr) ...[
             if (mission.questionImage != null) ...[
               const SizedBox(height: 12),
               Flexible(
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    // 이미지의 원본 비율을 유지하면서 사용 가능한 공간에 맞춤
                     return Center(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
@@ -87,16 +85,15 @@ class ElementaryLowMissionListView extends StatelessWidget {
                           mission.questionImage!,
                           fit: BoxFit.contain,
                           width: constraints.maxWidth,
-                          // 높이는 이미지의 원본 비율에 따라 자동으로 결정됨
                         ),
                       ),
                     );
                   },
                 ),
               ),
-              const SizedBox(height: 20), // 이미지와 버튼 사이 일정한 패딩
+              const SizedBox(height: 20),
             ],
-            const SizedBox(height: 12), // 버튼 위 일정한 패딩
+            const SizedBox(height: 12),
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -117,10 +114,7 @@ class ElementaryLowMissionListView extends StatelessWidget {
                 );
               },
             ),
-          ] else ...[
-            // QR 문제일 때는 빈 공간 확보
-            const Expanded(child: SizedBox()),
-          ],
+          ]
         ],
       ),
     );

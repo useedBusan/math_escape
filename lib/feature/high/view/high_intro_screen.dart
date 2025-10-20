@@ -132,7 +132,7 @@ Paratruth Space, PS라고 불리는 이 공간에서,
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.home_outlined, color: StudentGrade.high.mainColor, size: 28),
+            icon: Icon(Icons.home, color: StudentGrade.high.mainColor, size: 28),
             onPressed: () {
               HomeAlert.showAndNavigate(context);
             },

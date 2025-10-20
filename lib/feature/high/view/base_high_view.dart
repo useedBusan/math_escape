@@ -64,7 +64,7 @@ class BaseHighView extends StatelessWidget {
           ),
           actions: [
             if (onHome != null)
-              IconButton(icon: Icon(Icons.home_outlined, color: mainColor), onPressed: onHome),
+              IconButton(icon: Icon(Icons.home, color: mainColor), onPressed: onHome),
           ],
         );
 
