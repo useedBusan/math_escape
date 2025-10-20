@@ -69,10 +69,10 @@ class HighClearView extends StatelessWidget {
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        "Paratruth Space, PS를 탈출하는데 걸린 시간",
+                        "Paratruth Space,\nPS를 탈출하는 데 걸린 시간",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 18,
                           fontFamily: "Pretendard",
                           color: CustomBlue.s700,
                           fontWeight: FontWeight.w800,

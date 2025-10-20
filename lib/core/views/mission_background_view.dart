@@ -86,14 +86,11 @@ class MissionBackgroundView extends StatelessWidget {
                       width: double.infinity,
                       child: Image.asset(bannerImgPath, fit: BoxFit.cover),
                     ),
-                  
-                  // Mission content with scrollPadding for keyboard handling
+
                   Padding(
                     padding: const EdgeInsets.all(0),
                     child: missionBuilder(context),
                   ),
-                  
-                  // Bottom spacing to prevent content from being hidden behind the sticky button
                   SizedBox(
                     height: math.max(keyboardHeight, bottomButtonHeight),
                   ),
@@ -101,8 +98,7 @@ class MissionBackgroundView extends StatelessWidget {
               ),
             ),
           ),
-          
-          // Sticky bottom button
+
           Positioned(
             bottom: 0,
             left: 0,
