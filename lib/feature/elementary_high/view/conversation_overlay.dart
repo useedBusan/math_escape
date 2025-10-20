@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../constants/enum/speaker_enums.dart';
-import '../../../core/utils/view/common_intro_view.dart';
-import '../../../core/utils/viewmodel/intro_view_model.dart';
+import '../../../core/views/common_intro_view.dart';
+import '../../../core/viewmodels/intro_view_model.dart';
 
 class ConversationOverlay extends StatefulWidget {
   final int stage;
@@ -26,6 +26,7 @@ class ConversationOverlay extends StatefulWidget {
 class _ConversationOverlayState extends State<ConversationOverlay> {
   late IntroViewModel viewModel;
   bool isLoading = true;
+  int maxStage = 0;
 
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
     try {
       viewModel = IntroViewModel();
       await viewModel.loadTalks('assets/data/elem_high/elem_high_conversation.json');
+      maxStage = viewModel.getMaxStage(); // 최대 stage 번호 가져오기
       viewModel.setStageTalks(widget.stage);
       setState(() {
         isLoading = false;
@@ -76,7 +78,7 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
                     }
 
                     return CommonIntroView(
-                      appBarTitle: "미션! 수사모의 수학 보물을 찾아서",
+                      appBarTitle: StudentGrade.elementaryHigh.appBarTitle,
                       backgroundAssetPath: talk.backImg,
                       characterImageAssetPath: widget.isFinalConversation 
                           ? 'assets/images/common/puri_clear.png' 
@@ -85,11 +87,11 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
                       talkText: talk.talk,
                       buttonText: "다음",
                       grade: StudentGrade.elementaryHigh,
-                      // stage 10 (id: 11)에서만 furiClear 애니메이션 표시
-                      lottieAnimationPath: widget.stage == 10 
+                      // 마지막 stage에서만 furiClear 애니메이션 표시
+                      lottieAnimationPath: widget.stage == maxStage 
                           ? 'assets/animations/furiClear.json' 
                           : null,
-                      showLottieInsteadOfImage: widget.stage == 10,
+                      showLottieInsteadOfImage: widget.stage == maxStage,
                       onNext: () {
                         if (vm.canGoNext()) {
                           vm.goToNextTalk();

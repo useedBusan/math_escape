@@ -4,9 +4,9 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../constants/enum/speaker_enums.dart';
-import '../../../core/utils/view/common_intro_view.dart';
-import '../../../core/utils/viewmodel/intro_view_model.dart';
-import '../../../core/utils/model/talk_model.dart';
+import '../../../core/views/common_intro_view.dart';
+import '../../../core/viewmodels/intro_view_model.dart';
+import '../../../core/models/talk_model.dart';
 
 class ConversationOverlay extends StatefulWidget {
   final int stage;
@@ -29,6 +29,7 @@ class ConversationOverlay extends StatefulWidget {
 class _ConversationOverlayState extends State<ConversationOverlay> {
   late IntroViewModel viewModel;
   bool isLoading = true;
+  int maxStage = 0;
 
   @override
   void initState() {
@@ -39,12 +40,9 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
   Future<void> _loadConversation() async {
     try {
       viewModel = IntroViewModel();
-      
-      // Middle 대화 데이터를 직접 로드하고 변환
       final String jsonString = await rootBundle.loadString('assets/data/middle/middle_conversation.json');
       final List<dynamic> jsonList = json.decode(jsonString);
-      
-      // Middle 데이터 구조를 Elementary 형태로 변환
+
       final List<Talk> talks = [];
       for (final item in jsonList) {
         if (item['id'] == widget.stage && item['talks'] != null) {
@@ -53,7 +51,7 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
             final talkData = stageTalks[i];
             talks.add(Talk(
               id: widget.stage * 100 + i,
-              speaker: Speaker.puri, // Middle은 항상 푸리
+              speaker: Speaker.puri,
               speakerImg: talkData['furiImage'] ?? 'assets/images/common/furiStanding.png',
               backImg: talkData['backImage'] ?? 'assets/images/common/bsbackground.png',
               talk: talkData['talk'] ?? '',
@@ -104,7 +102,7 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
                     }
 
                     return CommonIntroView(
-                      appBarTitle: "수학자의 비밀노트를 찾아라!",
+                      appBarTitle: StudentGrade.middle.appBarTitle,
                       backgroundAssetPath: talk.backImg,
                       characterImageAssetPath: widget.isFinalConversation 
                           ? 'assets/images/common/puri_clear.png' 
@@ -113,11 +111,11 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
                       talkText: talk.talk,
                       buttonText: "다음",
                       grade: StudentGrade.middle,
-                      // 최종 대화에서만 furiClear 애니메이션 표시 (stage는 middle 데이터에 따라 조정)
-                      lottieAnimationPath: widget.isFinalConversation 
+                      // 마지막 stage에서만 furiClear 애니메이션 표시
+                      lottieAnimationPath: widget.stage == maxStage 
                           ? 'assets/animations/furiClear.json' 
                           : null,
-                      showLottieInsteadOfImage: widget.isFinalConversation,
+                      showLottieInsteadOfImage: widget.stage == maxStage,
                       onNext: () {
                         if (vm.canGoNext()) {
                           vm.goToNextTalk();

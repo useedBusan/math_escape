@@ -64,7 +64,7 @@ class BaseHighView extends StatelessWidget {
           ),
           actions: [
             if (onHome != null)
-              IconButton(icon: Icon(Icons.home_outlined, color: mainColor), onPressed: onHome),
+              IconButton(icon: Icon(Icons.home, color: mainColor), onPressed: onHome),
           ],
         );
 
@@ -135,7 +135,7 @@ class _BottomTimerBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final double circleSize = h * 0.13;
-    final double barHeight  = circleSize / 2;
+    final double barHeight  = circleSize * 0.7;
 
     return SizedBox(
       width: double.infinity,
@@ -143,7 +143,6 @@ class _BottomTimerBar extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // 1) 하단 바: 좌우/아래 꽉
           Positioned(
             left: 0,
             right: 0,
@@ -168,7 +167,6 @@ class _BottomTimerBar extends StatelessWidget {
             ),
           ),
 
-          // 2) 가운데 모래시계 원 (바와 살짝 겹치도록)
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
             child: SizedBox(

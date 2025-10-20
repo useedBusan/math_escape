@@ -5,7 +5,7 @@ import '../../../app/theme/app_colors.dart';
 import 'package:math_escape/feature/high/model/high_mission_answer.dart';
 import 'high_timer_service.dart';
 
-/// 고등학교 답변 화면 ViewModel
+/// 고등학교 답변 화면 view_model
 class HighAnswerViewModel extends ChangeNotifier {
 
   // 싱글톤 인스턴스
@@ -90,6 +90,7 @@ class HighAnswerViewModel extends ChangeNotifier {
     required DateTime gameStartTime,
     required bool isFromHint,
   }) {
+    print('DEBUG: initializeAnswer - isFromHint: $isFromHint');
     _currentAnswer = answer;
     _gameStartTime = gameStartTime;
     _isFromHint = isFromHint;
@@ -105,14 +106,19 @@ class HighAnswerViewModel extends ChangeNotifier {
     required VoidCallback onNavigateBack,
     required VoidCallback onComplete,
   }) {
+    print('DEBUG: handleNextButton - currentIndex: $currentIndex, questionListLength: $questionListLength, isFromHint: $_isFromHint');
+    
     if (_isFromHint) {
       // 힌트에서 온 경우: HighAnswer pop → HighMission으로 돌아가기
+      print('DEBUG: Navigating back from hint');
       onNavigateBack();
     } else {
       // 일반적인 경우: HighAnswer pop → HighMissionView에서 다음 문제
       if (currentIndex + 1 < questionListLength) {
+        print('DEBUG: Navigating to next question');
         onNavigateToNext();
       } else {
+        print('DEBUG: Navigating to complete view');
         onComplete();
       }
     }

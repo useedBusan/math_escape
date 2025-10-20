@@ -3,7 +3,7 @@ import '../../../app/theme/app_colors.dart';
 import 'package:math_escape/feature/high/model/high_mission_question.dart';
 import 'high_timer_service.dart';
 
-/// 고등학교 미션 통합 ViewModel
+/// 고등학교 미션 통합 view_model
 class HighMissionViewModel extends ChangeNotifier {
 
   // 싱글톤 인스턴스
@@ -33,6 +33,7 @@ class HighMissionViewModel extends ChangeNotifier {
 
   // 답변 입력 컨트롤러
   final TextEditingController answerController = TextEditingController();
+  bool _isAnswerControllerDisposed = false;
 
   // 타이머 서비스 위임
   Duration get thinkElapsed => HighTimerService.instance.thinkElapsed;
@@ -123,7 +124,7 @@ class HighMissionViewModel extends ChangeNotifier {
   void endGame() {
     HighTimerService.instance.endGame();
     _gameStartTime = null;
-    answerController.dispose();
+    _safeDisposeAnswerController();
     _currentIndex = 0;
     _gameCompleted = false;
     notifyListeners();
@@ -139,6 +140,14 @@ class HighMissionViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// 안전한 answerController dispose
+  void _safeDisposeAnswerController() {
+    if (!_isAnswerControllerDisposed) {
+      answerController.dispose();
+      _isAnswerControllerDisposed = true;
+    }
+  }
+
   /// 모든 상태 완전 해제 (홈으로 돌아갈 때 사용)
   void disposeAll() {
     HighTimerService.instance.endGame();
@@ -146,7 +155,7 @@ class HighMissionViewModel extends ChangeNotifier {
     _currentIndex = 0;
     _gameCompleted = false;
     _questionList.clear();
-    answerController.dispose();
+    _safeDisposeAnswerController();
     notifyListeners();
   }
 

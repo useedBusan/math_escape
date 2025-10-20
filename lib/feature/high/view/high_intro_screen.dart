@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
-// import 'package:math_escape/feature/high/view/high_mission_view.dart'; // 사용하지 않는 파일
-import '../../../App/theme/app_colors.dart';
+import '../../../app/theme/app_colors.dart';
+import '../../../constants/enum/grade_enums.dart';
+import '../../../core/extensions/string_extension.dart';
+import '../../../core/views/home_alert.dart';
 import '../../../feature/high/model/high_mission_question.dart';
 import '../../../feature/high/view/high_mission.dart';
 
@@ -33,29 +35,25 @@ class _HighIntroScreenState extends State<HighIntroScreen> {
 혼란스러운 마음을 정리하기도 전에 
 어디선가 목소리가 들린다.
 
-이곳은 '역설, 혹은 모호함… 그리고 진리의 공간.'
+이곳은 '역설, 혹은 모호함…
+그리고 진리의 공간.'
 
-Paratruth Space, PS라고 불리는 이 공간에서, 
-당신은 무엇이 진리인지, 무엇이 역설인지, 
-판단하기 어려울 것입니다.
+Paratruth Space, PS라고 불리는 이 공간에서,
+당신은 무엇이 진리인지, 무엇이 역설인지, 판단하기 어려울 것입니다.
 
 이 곳을 벗어나는 유일한 방법은, 
 수수께끼같은 문구를 해석하는 것.
 
-'인류의 처음 정수의 정수는 한 개인의 ,
-처음 정수를 만들기 위해 가장 기본이 되는 것,  
-곧, 정수!'
+**‘인류의 처음 {#8352D9|정수}의 {#5298D9|정수}는 한 개인의 처음 {#D98A52|정수}를 만들기 위해 가장 기본이 되는 것, 곧 {#D95276|정수}!’**
 
 이 공간 안에 있는 역설, 혹은 모호함 안에서, 
-여러분들이 진리를 찾아낸다면, 각 '정수'에 대한 
-단서를 제공하겠습니다.
+여러분들이 진리를 찾아낸다면, 각 '정수'에 대한 단서를 제공하겠습니다.
 
-부디 문구를 해석하여, 이 공간을 벗어나 
-여러분들이 행복하고, 평안한 일상으로 
-다시 돌아갈 수 있길 바랍니다.
+부디 문구를 해석하여,
+이 공간을 벗어나 행복하고, 평안한 일상으로 다시 돌아갈 수 있길 바랍니다.
 
 다만, 한 가지 알아둬야 할 사실이 있습니다.
-이 공간에서는, 당신의 생각의 속도에 비해, 
+이 공간에서는, 당신의 생각의 속도에 비해,
 몸은 빠르게 늙어갑니다.
 
 여기에서 1분간 생각하는 동안, 
@@ -81,13 +79,14 @@ Paratruth Space, PS라고 불리는 이 공간에서,
         });
       }
     });
+
   }
 
   Future<void> playIntro() async {
     try {
       await audioPlayer.play(AssetSource('audio/high_intro_sound.mp3'));
     } catch (e) {
-      // 오디오 재생 오류
+      print("오디오 재생 오류");
     }
   }
 
@@ -96,13 +95,13 @@ Paratruth Space, PS라고 불리는 이 공간에서,
   }
 
   Widget buildNarrationText() {
-    return Text(
-      introText,
-      style: const TextStyle(
-        fontSize: 18,
-        height: 1.6,
-        color: Color(0xFF000000),
-      ),
+    return RichText(
+        text: TextSpan(
+          style: const TextStyle(
+            height: 1.6
+          ),
+          children: introText.toStyledSpans(fontSize: 16)
+        )
     );
   }
 
@@ -115,7 +114,31 @@ Paratruth Space, PS라고 불리는 이 공간에서,
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFFFFF),
+      backgroundColor: CustomGray.lightGray,
+      appBar: AppBar(
+        title: Text(StudentGrade.high.appBarTitle),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        foregroundColor: StudentGrade.high.mainColor,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: StudentGrade.high.mainColor, size: 28),
+          onPressed: () async {
+            final alertResult = await HomeAlert.show(context);
+            if (alertResult == true && context.mounted) {
+              Navigator.of(context).pop();
+            }
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.home, color: StudentGrade.high.mainColor, size: 28),
+            onPressed: () {
+              HomeAlert.showAndNavigate(context);
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -148,31 +171,35 @@ Paratruth Space, PS라고 불리는 이 공간에서,
                     final questionList = await loadQuestionList();
                     stopAudio();
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        settings: const RouteSettings(name: 'HighMission'),
-                        builder: (_) => HighMission(
-                          questionList: questionList,
-                          currentIndex: 0,
-                          gameStartTime: DateTime.now(),
+                    if (context.mounted) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          settings: const RouteSettings(name: 'HighMission'),
+                          builder: (_) => HighMission(
+                            questionList: questionList,
+                            currentIndex: 0,
+                            gameStartTime: DateTime.now(),
+                          ),
                         ),
-                      )
-                    );
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     backgroundColor: CustomBlue.s500,
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    minimumSize: const Size(double.infinity, 56),
+                    elevation: 2,
                   ),
                   child: const Text(
                     '게임 시작',
                     style: TextStyle(
-                      color: Color(0xFFFFFFFF),
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Pretendard',
                     ),
                   ),
                 ),

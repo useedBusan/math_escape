@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../app/theme/app_colors.dart';
 import '../view_model/elementary_high_mission_view_model.dart';
+import '../../../core/extensions/string_extension.dart';
 
 class ElementaryHighMissionListView extends StatelessWidget {
   const ElementaryHighMissionListView({super.key});
@@ -18,7 +19,6 @@ class ElementaryHighMissionListView extends StatelessWidget {
     }
 
     final mission = vm.currentMission!;
-    final width = MediaQuery.of(context).size.width;
 
     return Padding(
       padding: const EdgeInsets.all(24.0),
@@ -42,7 +42,7 @@ class ElementaryHighMissionListView extends StatelessWidget {
                   text: '문제 ${vm.currentIndex + 1}',
                   style: TextStyle(
                     fontFamily: 'SBAggroM',
-                    fontSize: width * (18 / 360),
+                    fontSize: 18,
                     color: AppColors.head,
                   ),
                 ),
@@ -50,7 +50,7 @@ class ElementaryHighMissionListView extends StatelessWidget {
                   text: ' / ${vm.totalCount}',
                   style: TextStyle(
                     fontFamily: 'SBAggroM',
-                    fontSize: width * (15 / 360),
+                    fontSize: 15,
                     color: CustomGray.darkGray,
                   ),
                 ),
@@ -58,19 +58,20 @@ class ElementaryHighMissionListView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            mission.question,
-            textAlign: TextAlign.justify,
-            style: TextStyle(
-              height: 1.4,
-              fontSize: width * (16 / 360),
-              color: const Color(0xff333333),
+          RichText(
+            textAlign: TextAlign.start,
+            text: TextSpan(
+              style: TextStyle(
+                height: 1.5,
+                fontSize: 18,
+                color: const Color(0xff333333),
+              ),
+              children: mission.question.toStyledSpans(fontSize: 18),
             ),
           ),
           // QR 문제가 아닐 때만 텍스트 입력 표시
           if (!mission.isqr) ...[
             const SizedBox(height: 16),
-            // 텍스트 입력 (elemhigh 고유 입력)
             Container(
               decoration: BoxDecoration(
                 color: const Color(0xFFFFFFFF),
@@ -81,14 +82,15 @@ class ElementaryHighMissionListView extends StatelessWidget {
                 controller: vm.textController,
                 onChanged: vm.setTypedAnswer,
                 style: TextStyle(
-                  fontSize: width * (15 / 360),
+                  fontSize: 15,
                 ),
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
+                scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                 decoration: InputDecoration(
                   hintText: '정답을 입력해 주세요.',
                   hintStyle: TextStyle(
-                    fontSize: width * (14 / 360),
+                    fontSize: 14,
                     color: const Color(0xffaaaaaa),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
@@ -197,7 +199,7 @@ class _ChoiceChipBox extends StatelessWidget {
             maxLines: null,
             style: TextStyle(
               fontFamily: 'Pretendard',
-              fontSize: MediaQuery.of(context).size.width * (16 / 360),
+              fontSize: 16,
               fontWeight: FontWeight.w400,
             ),
           ),

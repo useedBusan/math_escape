@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../constants/enum/grade_enums.dart';
-import '../../../core/utils/view/custom_intro_alert.dart';
+import '../../../core/views/custom_intro_alert.dart';
 import 'middle_mission.dart';
-import '../../../core/utils/view/common_intro_view.dart';
+import '../../../core/views/common_intro_view.dart';
 import '../model/middle_intro_talk.dart';
 
 class MiddleIntroScreen extends StatefulWidget {
@@ -114,7 +114,7 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
     final talk = talkList[currentIndex];
 
     return CommonIntroView(
-      appBarTitle: '수학자의 비밀 노트를 찾아라!',
+      appBarTitle: StudentGrade.middle.appBarTitle,
       backgroundAssetPath: 'assets/images/common/bsbackground.png',
       characterImageAssetPath: talk.puriImage,
       speakerName: '푸리',

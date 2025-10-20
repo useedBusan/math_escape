@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'flow_step.dart';
-import '../ViewModel/elementary_low_mission_view_model.dart';
+import '../view_model/elementary_low_mission_view_model.dart';
 
 abstract class Coordinator {
   Coordinator? parent;
@@ -31,13 +31,6 @@ class ElementaryLowMissionCoordinator extends ChangeNotifier implements Coordina
   
   // VM의 currentIndex를 단일 소스로 사용
   int get currentQuestionIndex => _viewModel?.currentIndex ?? 0;
-  
-  // VM 참조를 위한 콜백
-  Function(int)? _onQuestionIndexChanged;
-  
-  void setQuestionIndexCallback(Function(int) callback) {
-    _onQuestionIndexChanged = callback;
-  }
   
   void toIntro() {
     _history.add(FlowStep(FlowStepType.intro, 1));

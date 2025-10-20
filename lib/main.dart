@@ -8,16 +8,20 @@ import 'constants/app_constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 가로모드 방지(세로모드 지원)
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   
   // 플랫폼별 시스템 UI 설정
   if (Platform.isAndroid) {
-    // 안드로이드: 하단바 숨기기
     SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.edgeToEdge,
+      SystemUiMode.manual,
       overlays: [SystemUiOverlay.top],
     );
   } else if (Platform.isIOS) {
-    // iOS: 런치 스크린 최적화
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.light,
