@@ -44,7 +44,7 @@ class HighClearView extends StatelessWidget {
           ),
           title: const Text(
             "역설, 혹은 모호함",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
         ),

@@ -54,46 +54,30 @@ class CommonIntroView extends StatelessWidget {
       },
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            automaticallyImplyLeading: false,
-            flexibleSpace: SafeArea(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Center(
-                    child: Text(
-                      appBarTitle,
-                      style: TextStyle(
-                        color: mainColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 0,
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_back, color: mainColor),
-                      onPressed: onBack,
-                    ),
-                  ),
-                  Positioned(
-                    right: 0,
-                    child: IconButton(
-                      icon: Icon(Icons.home, color: mainColor),
-                      onPressed: () {
-                        HomeAlert.showAndNavigate(context);
-                      },
-                    ),
-                  ),
-                ],
-              ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Text(
+            appBarTitle,
+            style: TextStyle(
+              color: mainColor,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: mainColor, size: 28),
+            onPressed: onBack,
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.home, color: mainColor, size: 28),
+              onPressed: () {
+                HomeAlert.showAndNavigate(context);
+              },
+            ),
+          ],
         ),
         backgroundColor: Colors.white,
         body: Stack(

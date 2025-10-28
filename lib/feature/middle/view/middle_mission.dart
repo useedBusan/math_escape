@@ -216,7 +216,7 @@ MiddleMissionCoordinator coordinator,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF3F55A7)),
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF3F55A7), size: 28),
           onPressed: () {
             coordinator.handleBack();
           },
@@ -225,14 +225,14 @@ MiddleMissionCoordinator coordinator,
           StudentGrade.middle.appBarTitle,
           style: TextStyle(
             color: const Color(0xFF3F55A7),
-            fontSize: 16,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.home, color: Color(0xFF3F55A7)),
+            icon: const Icon(Icons.home, color: Color(0xFF3F55A7), size: 28),
             onPressed: () {
               HomeAlert.showAndNavigate(context);
             },

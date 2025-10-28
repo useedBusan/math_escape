@@ -54,7 +54,7 @@ class MissionBackgroundView extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Pretendard',
             color: mainColor,
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),

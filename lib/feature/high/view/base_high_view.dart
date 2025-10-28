@@ -55,16 +55,16 @@ class BaseHighView extends StatelessWidget {
           backgroundColor: Colors.white,
           centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: mainColor),
+            icon: Icon(Icons.arrow_back, color: mainColor, size: 28),
             onPressed: onBack ?? () => Navigator.of(context).maybePop(),
           ),
           title: Text(
             title,
-            style: TextStyle(color: mainColor, fontWeight: FontWeight.w700, fontSize: 18),
+            style: TextStyle(color: mainColor, fontWeight: FontWeight.bold, fontSize: 18),
           ),
           actions: [
             if (onHome != null)
-              IconButton(icon: Icon(Icons.home, color: mainColor), onPressed: onHome),
+              IconButton(icon: Icon(Icons.home, color: mainColor, size: 28), onPressed: onHome),
           ],
         );
 

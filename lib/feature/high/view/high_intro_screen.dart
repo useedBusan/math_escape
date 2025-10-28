@@ -116,10 +116,16 @@ Paratruth Space, PS라고 불리는 이 공간에서,
     return Scaffold(
       backgroundColor: CustomGray.lightGray,
       appBar: AppBar(
-        title: Text(StudentGrade.high.appBarTitle),
+        title: Text(
+          StudentGrade.high.appBarTitle,
+          style: TextStyle(
+            color: StudentGrade.high.mainColor,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
-        foregroundColor: StudentGrade.high.mainColor,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: StudentGrade.high.mainColor, size: 28),
