@@ -197,6 +197,10 @@ class _HighMissionContentState extends State<_HighMissionContent>
       context,
       isCorrect: isCorrect,
       onNext: () async {
+        // 정답 팝업 닫기
+        Navigator.of(context).pop();
+        if (!mounted) return;
+        
         if (isCorrect) {
           // 마지막 문제인지 확인 (currentIndex가 0-based이므로 마지막 문제는 questionList.length - 1)
           if (vm.currentIndex == vm.questionList.length - 1) {
@@ -228,9 +232,6 @@ class _HighMissionContentState extends State<_HighMissionContent>
               ),
             );
           }
-        } else {
-          if (!mounted) return;
-          Navigator.of(context).pop();
         }
       },
     );
@@ -256,9 +257,20 @@ class _HighMissionContentState extends State<_HighMissionContent>
           child: BaseHighView(
           title: StudentGrade.high.appBarTitle,
             background: Container(color: const Color(0xFFE8F0FE)),
-            onBack: () {
-              // 한 단계만 뒤로가기
-              Navigator.of(context).pop();
+            onBack: () async {
+              // 첫 번째 미션이 아니면 이전 미션으로
+              if (vm.currentIndex > 0) {
+                vm.goToQuestion(vm.currentIndex - 1);
+              } else {
+                // 첫 번째 미션에서 뒤로가기하면 홈으로
+                final alertResult = await HomeAlert.show(context);
+                if (alertResult == true && context.mounted) {
+                  HighMissionViewModel.instance.disposeAll();
+                  HighHintViewModel.instance.disposeAll();
+                  HighAnswerViewModel.instance.disposeAll();
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                }
+              }
             },
             onHome: () async {
               // 홈으로: 확인 후 상태 해제 및 루트로 이동
@@ -294,7 +306,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
           children: [
             const SizedBox(height: 14),
             IntegerPhaseBanner(
-              questionNumber: widget.currentIndex + 1,
+              questionNumber: vm.currentIndex + 1,
               furiImagePath: "assets/images/high/highFuri.png",
               fontSize: 14,
             ),

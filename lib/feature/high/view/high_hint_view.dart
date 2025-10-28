@@ -180,6 +180,10 @@ class _HighHintContentState extends State<_HighHintContent>
       context,
       isCorrect: isCorrect,
       onNext: () async {
+        // 정답 팝업 닫기
+        Navigator.of(context).pop();
+        if (!mounted) return;
+        
         if (isCorrect) {
           final answerData = await loadHintAnswerByStage(q.stage);
           if (!mounted) return;
@@ -196,9 +200,6 @@ class _HighHintContentState extends State<_HighHintContent>
               ),
             ),
           );
-        } else {
-          if (!mounted) return;
-          Navigator.of(context).pop();
         }
       },
     );
