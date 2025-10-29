@@ -200,7 +200,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
         // 정답 팝업 닫기
         Navigator.of(context).pop();
         if (!mounted) return;
-        
+
         if (isCorrect) {
           // 마지막 문제인지 확인 (currentIndex가 0-based이므로 마지막 문제는 questionList.length - 1)
           if (vm.currentIndex == vm.questionList.length - 1) {
@@ -209,9 +209,8 @@ class _HighMissionContentState extends State<_HighMissionContent>
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (_) => HighClearView(
-                  gameStartTime: widget.gameStartTime,
-                ),
+                builder: (_) =>
+                    HighClearView(gameStartTime: widget.gameStartTime),
               ),
             );
           } else {
@@ -255,7 +254,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
             }
           },
           child: BaseHighView(
-          title: StudentGrade.high.appBarTitle,
+            title: StudentGrade.high.appBarTitle,
             background: Container(color: const Color(0xFFE8F0FE)),
             onBack: () async {
               // 첫 번째 미션이 아니면 이전 미션으로
@@ -330,47 +329,72 @@ class _HighMissionContentState extends State<_HighMissionContent>
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          AnimatedBuilder(
+                          q.isHint
+                              ? AnimatedBuilder(
                             animation: _hintColorAnimation,
                             builder: (context, child) {
-                              final color = Color.lerp(
-                                const Color(0xFF3F55A7),
-                                const Color(0xFFB2BBDC),
-                                _hintColorAnimation.value,
-                              )!;
-                              return IconButton(
-                                icon: Icon(
-                                  Icons.help_outline,
-                                  color: color,
-                                ),
-                                onPressed: () => _showHintDialog(vm),
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                                iconSize: 28,
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 4),
-                          AnimatedBuilder(
-                            animation: _hintColorAnimation,
-                            builder: (context, child) {
-                              final color = Color.lerp(
-                                const Color(0xFF3F55A7),
-                                const Color(0xFFB2BBDC),
-                                _hintColorAnimation.value,
-                              )!;
-                              return Transform.translate(
-                                offset: const Offset(0, -15),
-                                child: Text(
-                                  '힌트',
-                                  style: TextStyle(
-                                    color: color,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
+                              // 투명도를 1.0에서 0.1로 변화
+                              final opacity = 1.0 - (_hintColorAnimation.value * 0.9);
+                              return Opacity(
+                                opacity: opacity,
+                                child: IconButton(
+                                  icon: Image.asset(
+                                    "assets/images/high/hintHintIcon.png",
+                                    height: 40,
                                   ),
+                                  onPressed: () => _showHintDialog(vm),
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
                                 ),
                               );
                             },
+                          )
+                              : Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              AnimatedBuilder(
+                                animation: _hintColorAnimation,
+                                builder: (context, child) {
+                                  // 투명도를 1.0에서 0.1로 변화
+                                  final opacity = 1.0 - (_hintColorAnimation.value * 0.9);
+                                  return Opacity(
+                                    opacity: opacity,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.help_outline,
+                                        color: const Color(0xFF3F55A7),
+                                      ),
+                                      onPressed: () => _showHintDialog(vm),
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                      iconSize: 28,
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 4),
+                              AnimatedBuilder(
+                                animation: _hintColorAnimation,
+                                builder: (context, child) {
+                                  // 투명도를 1.0에서 0.1로 변화
+                                  final opacity = 1.0 - (_hintColorAnimation.value * 0.9);
+                                  return Transform.translate(
+                                    offset: const Offset(0, -15),
+                                    child: Opacity(
+                                      opacity: opacity,
+                                      child: Text(
+                                        '힌트',
+                                        style: TextStyle(
+                                          color: const Color(0xFF3F55A7),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -406,9 +430,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
                           Expanded(
                             flex: 2,
                             child: TextField(
-                              style: TextStyle(
-                                fontSize: 15,
-                              ),
+                              style: TextStyle(fontSize: 15),
                               controller: _controller,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.done,
@@ -487,7 +509,8 @@ class _HighMissionContentState extends State<_HighMissionContent>
                                   Navigator.pop(context);
                                   if (isCorrect) {
                                     // 마지막 문제인지 확인 (currentIndex가 0-based이므로 마지막 문제는 questionList.length - 1)
-                                    if (vm.currentIndex == vm.questionList.length - 1) {
+                                    if (vm.currentIndex ==
+                                        vm.questionList.length - 1) {
                                       // 마지막 문제인 경우 바로 HighClearView로 이동
                                       if (!mounted) return;
                                       Navigator.pushReplacement(
