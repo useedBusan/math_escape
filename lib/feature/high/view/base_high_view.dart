@@ -134,8 +134,8 @@ class _BottomTimerBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
-    final double circleSize = h * 0.13;
-    final double barHeight  = circleSize * 0.7;
+    final double circleSize = h * 0.1;
+    final double barHeight  = circleSize * 0.65;
 
     return SizedBox(
       width: double.infinity,
@@ -151,7 +151,7 @@ class _BottomTimerBar extends StatelessWidget {
               height: barHeight,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: const BoxDecoration(
-                color: Color(0xFFF5F6FA),
+                color: Color(0xFFFFFFFF),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
