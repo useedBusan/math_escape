@@ -81,8 +81,9 @@ class BaseMainView extends StatelessWidget {
                             ),
                           ),
 
-                          // 시작하기 버튼
                           const SizedBox(height: 20),
+
+                          // 시작하기 버튼
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: ElevatedButton(

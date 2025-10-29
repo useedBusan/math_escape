@@ -118,7 +118,9 @@ class CommonIntroView extends StatelessWidget {
                         return Center(
                           child: SizedBox(
                             height: characterHeight,
-                            child: showLottieInsteadOfImage && lottieAnimationPath != null
+                            child:
+                                showLottieInsteadOfImage &&
+                                    lottieAnimationPath != null
                                 ? LottieAnimationWidget(
                                     assetPath: lottieAnimationPath!,
                                     height: characterHeight,
@@ -204,7 +206,7 @@ class CommonIntroView extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: SizedBox(
                       width: size.width * 0.93,
-                      height: 56,
+                      height: 52,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: mainColor,
@@ -217,14 +219,15 @@ class CommonIntroView extends StatelessWidget {
                         child: Text(
                           buttonText,
                           style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Pretendard',
                           ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),

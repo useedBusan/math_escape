@@ -290,7 +290,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
           Center(
             child: SizedBox(
               width: double.infinity,
-              height: 48,
+              height: 52,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: CustomBlue.s500,

@@ -147,7 +147,7 @@ Paratruth Space, PS라고 불리는 이 공간에서,
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               Expanded(
@@ -210,6 +210,7 @@ Paratruth Space, PS라고 불리는 이 공간에서,
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),

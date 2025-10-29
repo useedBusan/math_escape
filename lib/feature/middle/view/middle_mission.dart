@@ -453,6 +453,7 @@ MiddleMissionCoordinator coordinator,
                         ] else ...[
                           // 일반 문제일 때 텍스트필드 표시
                           Container(
+                            height: 52,
                             decoration: BoxDecoration(
                               color: const Color(0xFFFFFFFF),
                               borderRadius: BorderRadius.circular(8.0),
@@ -487,8 +488,8 @@ MiddleMissionCoordinator coordinator,
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 60,
                                   height: 52,
+                                  width: 60,
                                   child: ElevatedButton(
                                     onPressed: () =>
                                         _submitAnswer(coordinator, viewModel),

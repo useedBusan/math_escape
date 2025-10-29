@@ -304,7 +304,6 @@ class _HighMissionContentState extends State<_HighMissionContent>
         height: screenHeight * 1.5,
         child: Column(
           children: [
-            const SizedBox(height: 14),
             IntegerPhaseBanner(
               questionNumber: vm.currentIndex + 1,
               furiImagePath: "assets/images/high/highFuri.png",
@@ -396,6 +395,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
                   // 답변 입력 영역 (isqr가 false인 경우에만)
                   if (!q.isqr) ...[
                     Container(
+                      height: 52,
                       decoration: BoxDecoration(
                         color: const Color(0xFFFFFFFF),
                         borderRadius: BorderRadius.circular(8.0),
@@ -465,7 +465,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
                     const SizedBox(height: 16),
                     SizedBox(
                       width: double.infinity,
-                      height: 60,
+                      height: 52,
                       child: ElevatedButton(
                         onPressed: () async {
                           final result = await Navigator.push(
@@ -546,9 +546,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
                             Text(
                               'QR코드 스캔',
                               style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.width *
-                                    (16 / 360),
+                                fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),

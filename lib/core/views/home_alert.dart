@@ -64,10 +64,9 @@ class _CustomHomeAlertDialog extends StatelessWidget {
                       text: TextSpan(
                         style: TextStyle(
                           fontFamily: "Pretendard",
-                          fontSize: 18,
                           height: 1.4,
                         ),
-                        children: "**{#D95276|잠깐!}** 지금 나가면 기록은 사라져.\n그래도 탐험을 중단할 거야?".toStyledSpans(fontSize: 18),
+                        children: "**{#D95276|잠깐!}** 지금 나가면 기록은 사라져.\n그래도 탐험을 중단할 거야?".toStyledSpans(fontSize: 17),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -104,9 +103,9 @@ class _CustomHomeAlertDialog extends StatelessWidget {
                           "탐험 중단",
                           style: TextStyle(
                             color: CustomBlue.s500,
-                            fontFamily: "Pretendard",
-                            fontWeight: FontWeight.w800,
                             fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Pretendard',
                           ),
                         ),
                       ),

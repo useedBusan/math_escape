@@ -264,7 +264,6 @@ class _HighHintContentState extends State<_HighHintContent>
         height: screenHeight * 1.5, // 충분한 고정 높이
         child: Column(
           children: [
-            const SizedBox(height: 14),
             IntegerPhaseBanner(
               questionNumber: widget.currentIndex + 1,
               furiImagePath: "assets/images/high/highFuri.png",
@@ -361,6 +360,7 @@ class _HighHintContentState extends State<_HighHintContent>
               // 답변 입력 영역 (isqr가 false인 경우에만)
               if (!q.isqr) ...[
                 Container(
+                  height: 52,
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFFFFF),
                     borderRadius: BorderRadius.circular(8.0),
@@ -430,7 +430,7 @@ class _HighHintContentState extends State<_HighHintContent>
                 const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,
-                  height: 60,
+                  height: 52,
                   child: ElevatedButton(
                     onPressed: () async {
                       final result = await Navigator.push(
