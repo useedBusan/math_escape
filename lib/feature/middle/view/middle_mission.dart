@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../App/theme/app_colors.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../core/views/answer_popup.dart';
 import '../../../core/views/common_intro_view.dart';
@@ -197,95 +198,90 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                         });
                       },
                       child: Container(
-                        color: Color(0xBB000000),
-                        child: Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 24,
+                        color: Color(0xCC000000),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 16),
+                            RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black87,
+                                  height: 1.5,
                                 ),
-                                padding: const EdgeInsets.all(24),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const SizedBox(height: 16),
-                                    RichText(
-                                      textAlign: TextAlign.center,
-                                      text: TextSpan(
-                                        style: TextStyle(
-                                          fontFamily: "Pretendard",
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.black87,
-                                          height: 1.5,
-                                        ),
-                                        children: [
-                                          const TextSpan(
-                                            text: '문제나 힌트가 보이지 않는다면,\n화면을 ',
-                                          ),
-                                          TextSpan(
-                                            text: '스크롤해서',
-                                            style: TextStyle(
-                                              color: Color(0xFF3F55A7),
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          const TextSpan(
-                                            text: ' 전부 확인할 수 있어요!',
-                                          ),
-                                        ],
-                                      ),
+                                children: [
+                                  const TextSpan(
+                                    text: '문제나 힌트가 보이지 않는다면,\n화면을 ',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
                                     ),
-                                    const SizedBox(height: 40),
-                                    SizedBox(
-                                      height: 80,
-                                      child: AnimatedBuilder(
-                                        animation: _scrollAnimationController,
-                                        builder: (context, child) {
-                                          return Opacity(
-                                            opacity: _scrollUpOpacity.value,
-                                            child: Transform.translate(
-                                              offset: Offset(
-                                                0,
-                                                _scrollUpAnimation.value,
-                                              ),
-                                              child: Image.asset(
-                                                "assets/images/common/scrollUp.png",
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
+                                  ),
+                                  TextSpan(
+                                    text: '스크롤해서',
+                                    style: TextStyle(
+                                      color: CustomBlue.s300,
+                                      fontWeight: FontWeight.w700,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  const TextSpan(
+                                    text: ' 전부 확인할 수 있어요!',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 20),
-                              Text(
+                            ),
+                            const SizedBox(height: 50),
+                            SizedBox(
+                              height: 80,
+                              child: AnimatedBuilder(
+                                animation: _scrollAnimationController,
+                                builder: (context, child) {
+                                  return Opacity(
+                                    opacity: _scrollUpOpacity.value,
+                                    child: Transform.translate(
+                                      offset: Offset(
+                                        0,
+                                        _scrollUpAnimation.value,
+                                      ),
+                                      child: Image.asset(
+                                        "assets/images/common/scrollGesture.png",
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 50),
+                            Material(
+                              type: MaterialType.transparency,
+                              child: Text(
                                 '화면을 터치하여 진행',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: "Pretendard",
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.w600,
                                   color: Colors.white,
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-              ],
-            ),
-          );
+                ],
+              ),
+            );
         },
       ),
     );
@@ -548,7 +544,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                           Center(
                             child: ConstrainedBox(
                               constraints: BoxConstraints(
-                                maxWidth: MediaQuery.of(context).size.width * 0.7,
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.7,
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
