@@ -73,9 +73,10 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     _scrollAnimationController.repeat(reverse: true);
   }
 
-
-  void _submitAnswer(MiddleMissionCoordinator coordinator,
-      MiddleMissionViewModel viewModel,) async {
+  void _submitAnswer(
+    MiddleMissionCoordinator coordinator,
+    MiddleMissionViewModel viewModel,
+  ) async {
     final MissionItem? currentMission = viewModel.currentMission;
     if (currentMission == null) return;
 
@@ -94,8 +95,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) =>
-                AnswerPopup(
+            builder: (_) => AnswerPopup(
               isCorrect: isCorrect,
               onNext: () {
                 Navigator.pop(context);
@@ -115,8 +115,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (_) =>
-              AnswerPopup(
+          builder: (_) => AnswerPopup(
             isCorrect: correct,
             onNext: () {
               Navigator.pop(context);
@@ -138,8 +137,10 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     super.dispose();
   }
 
-  void _showCorrectAnswerDialog(MiddleMissionCoordinator coordinator,
-      MiddleMissionViewModel viewModel,) async {
+  void _showCorrectAnswerDialog(
+    MiddleMissionCoordinator coordinator,
+    MiddleMissionViewModel viewModel,
+  ) async {
     try {
       viewModel.completeQuestion();
     } catch (e) {
@@ -202,7 +203,9 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 24),
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                ),
                                 padding: const EdgeInsets.all(24),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
@@ -223,7 +226,9 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                           height: 1.5,
                                         ),
                                         children: [
-                                          const TextSpan(text: '문제나 힌트가 보이지 않는다면,\n화면을 '),
+                                          const TextSpan(
+                                            text: '문제나 힌트가 보이지 않는다면,\n화면을 ',
+                                          ),
                                           TextSpan(
                                             text: '스크롤해서',
                                             style: TextStyle(
@@ -231,7 +236,9 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                               fontWeight: FontWeight.w700,
                                             ),
                                           ),
-                                          const TextSpan(text: ' 전부 확인할 수 있어요!'),
+                                          const TextSpan(
+                                            text: ' 전부 확인할 수 있어요!',
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -244,8 +251,13 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                           return Opacity(
                                             opacity: _scrollUpOpacity.value,
                                             child: Transform.translate(
-                                              offset: Offset(0, _scrollUpAnimation.value),
-                                              child: Image.asset("assets/images/common/scrollUp.png"),
+                                              offset: Offset(
+                                                0,
+                                                _scrollUpAnimation.value,
+                                              ),
+                                              child: Image.asset(
+                                                "assets/images/common/scrollUp.png",
+                                              ),
                                             ),
                                           );
                                         },
@@ -279,10 +291,14 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     );
   }
 
-  Widget _buildCurrentStep(BuildContext context,
+  Widget _buildCurrentStep(
+    BuildContext context,
     MiddleMissionCoordinator coordinator,
-      MiddleMissionViewModel viewModel,) {
-    if (!viewModel.isInConversation && !_hasShownConversation && !_showFirstOverlay) {
+    MiddleMissionViewModel viewModel,
+  ) {
+    if (!viewModel.isInConversation &&
+        !_hasShownConversation &&
+        !_showFirstOverlay) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           setState(() {
@@ -310,9 +326,11 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     return _buildQuestionScreen(context, coordinator, viewModel);
   }
 
-  Widget _buildQuestionScreen(BuildContext context,
+  Widget _buildQuestionScreen(
+    BuildContext context,
     MiddleMissionCoordinator coordinator,
-      MiddleMissionViewModel viewModel,) {
+    MiddleMissionViewModel viewModel,
+  ) {
     if (viewModel.isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
@@ -338,7 +356,10 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         elevation: 0,
         leading: IconButton(
           icon: const Icon(
-              Icons.arrow_back, color: Color(0xFF3F55A7), size: 28),
+            Icons.arrow_back,
+            color: Color(0xFF3F55A7),
+            size: 28,
+          ),
           onPressed: () {
             coordinator.handleBack();
           },
@@ -428,8 +449,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '문제 ${viewModel.currentIndex + 1} / ${viewModel
-                                  .totalCount}',
+                              '문제 ${viewModel.currentIndex + 1} / ${viewModel.totalCount}',
                               style: TextStyle(
                                 fontFamily: "SBAggroM",
                                 fontSize: 18,
@@ -487,7 +507,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                             ),
                           ],
                         ),
-                        SizedBox(height: mission.questionImage.isEmpty ? 4 : 8),
                         // 문제 영역
                         RichText(
                           textAlign: TextAlign.start,
@@ -500,7 +519,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                               color: Colors.black87,
                             ),
                             children: mission.question.toStyledSpans(
-                                fontSize: 18),
+                              fontSize: 18,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -508,27 +528,28 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                         if (mission.options != null &&
                             mission.options!.isNotEmpty) ...[
                           ...mission.options!.map(
-                                (option) =>
-                                Padding(
+                            (option) => Padding(
                               padding: const EdgeInsets.only(bottom: 8),
                               child: Text(
                                 option,
                                 style: TextStyle(
                                   fontFamily: "Pretendard",
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 15,
+                                  fontSize: 17,
                                   color: Colors.black87,
                                 ),
                               ),
                             ),
                           ),
-                          const SizedBox(height: 16),
                         ],
+                        const SizedBox(height: 16),
                         // 이미지 영역 (이미지가 있을때만) - 가운데 정렬 및 유동적 높이
                         if (mission.questionImage.isNotEmpty)
-                          SizedBox(
-                            height: 200, // 고정 높이로 설정하여 비율 유지
-                            child: Center(
+                          Center(
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth: MediaQuery.of(context).size.width * 0.7,
+                              ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
                                 child: Image.asset(
@@ -575,8 +596,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                               ),
                             ),
                           ),
-                        ] else
-                          ...[
+                        ] else ...[
                           // 일반 문제일 때 텍스트필드 표시
                           Container(
                             height: 52,
@@ -670,10 +690,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                           child: Container(
                             width: double.infinity,
                             padding: EdgeInsets.all(
-                              MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width * (16 / 360),
+                              MediaQuery.of(context).size.width * (16 / 360),
                             ),
                             decoration: BoxDecoration(
                               color: const Color(0xFFEBEBEB),
@@ -694,8 +711,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                 Text(
                                   '단서#1 : 목적지의 비밀',
                                   style: TextStyle(
-                                    fontSize:
-                                        16,
+                                    fontSize: 16,
                                     fontFamily: "SBAggroM",
                                     fontWeight: FontWeight.w400,
                                     color: const Color(0xFF101351),
@@ -703,10 +719,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                 ),
                                 SizedBox(
                                   height:
-                                  MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width *
+                                      MediaQuery.of(context).size.width *
                                       (8 / 360),
                                 ),
                                 Text(
@@ -714,8 +727,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
                                     fontWeight: FontWeight.w400,
-                                    fontSize:
-                                        16,
+                                    fontSize: 16,
                                     color: Colors.black87,
                                     height: 1.4,
                                   ),
@@ -729,10 +741,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                       if (viewModel.showHint1 && viewModel.showHint2)
                         SizedBox(
                           height:
-                          MediaQuery
-                              .of(context)
-                              .size
-                              .width * (12 / 360),
+                              MediaQuery.of(context).size.width * (12 / 360),
                         ),
 
                       // 힌트 2
@@ -752,10 +761,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                           child: Container(
                             width: double.infinity,
                             padding: EdgeInsets.all(
-                              MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width * (16 / 360),
+                              MediaQuery.of(context).size.width * (16 / 360),
                             ),
                             decoration: BoxDecoration(
                               color: const Color(0xFFEBEBEB),
@@ -784,10 +790,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                 ),
                                 SizedBox(
                                   height:
-                                  MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width *
+                                      MediaQuery.of(context).size.width *
                                       (8 / 360),
                                 ),
                                 Text(
