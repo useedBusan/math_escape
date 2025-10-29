@@ -564,7 +564,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                         if (mission.isqr) ...[
                           SizedBox(
                             width: double.infinity,
-                            height: 60,
+                            height: 52,
                             child: ElevatedButton(
                               onPressed: () =>
                                   _submitAnswer(coordinator, viewModel),
