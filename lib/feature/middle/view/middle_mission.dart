@@ -26,6 +26,11 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     with TickerProviderStateMixin {
   late AnimationController _hintColorController;
   late Animation<double> _hintColorAnimation;
+  late AnimationController _scrollAnimationController;
+  late Animation<double> _scrollUpAnimation;
+  late Animation<double> _scrollUpOpacity;
+  bool _showFirstOverlay = false; // 처음엔 false로 변경
+  bool _hasShownConversation = false; // 대화를 본 적 있는지 추적
 
   @override
   void initState() {
@@ -41,13 +46,36 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     );
 
     _hintColorController.repeat(reverse: true);
+
+    // 스크롤 애니메이션 컨트롤러 추가
+    _scrollAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    // 위로 올라가는 애니메이션 반복
+    _scrollUpAnimation = Tween<double>(begin: 0.0, end: -30.0).animate(
+      CurvedAnimation(
+        parent: _scrollAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    // 투명도 애니메이션 (위로 올라가면서 투명해짐)
+    _scrollUpOpacity = Tween<double>(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _scrollAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    // 애니메이션 반복 (위로 올라갔다가 다시 원래 위치로)
+    _scrollAnimationController.repeat(reverse: true);
   }
 
 
-  void _submitAnswer(
-    MiddleMissionCoordinator coordinator,
-    MiddleMissionViewModel viewModel,
-  ) async {
+  void _submitAnswer(MiddleMissionCoordinator coordinator,
+      MiddleMissionViewModel viewModel,) async {
     final MissionItem? currentMission = viewModel.currentMission;
     if (currentMission == null) return;
 
@@ -66,7 +94,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) => AnswerPopup(
+            builder: (_) =>
+                AnswerPopup(
               isCorrect: isCorrect,
               onNext: () {
                 Navigator.pop(context);
@@ -80,14 +109,14 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         }
       }
     } else {
-      // 일반 문제일 때는 기존 로직 사용
       final bool correct = await viewModel.submitAnswer();
 
       if (mounted) {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (_) => AnswerPopup(
+          builder: (_) =>
+              AnswerPopup(
             isCorrect: correct,
             onNext: () {
               Navigator.pop(context);
@@ -105,13 +134,12 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
   @override
   void dispose() {
     _hintColorController.dispose();
+    _scrollAnimationController.dispose();
     super.dispose();
   }
 
-  void _showCorrectAnswerDialog(
-MiddleMissionCoordinator coordinator,
-    MiddleMissionViewModel viewModel,
-  ) async {
+  void _showCorrectAnswerDialog(MiddleMissionCoordinator coordinator,
+      MiddleMissionViewModel viewModel,) async {
     try {
       viewModel.completeQuestion();
     } catch (e) {
@@ -155,43 +183,136 @@ MiddleMissionCoordinator coordinator,
                 }
               }
             },
-            child: _buildCurrentStep(context, coordinator, viewModel),
+            child: Stack(
+              children: [
+                _buildCurrentStep(context, coordinator, viewModel),
+                // 첫 진입 오버레이
+                if (_showFirstOverlay)
+                  Positioned.fill(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _showFirstOverlay = false;
+                        });
+                      },
+                      child: Container(
+                        color: Color(0xBB000000),
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 24),
+                                padding: const EdgeInsets.all(24),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const SizedBox(height: 16),
+                                    RichText(
+                                      textAlign: TextAlign.center,
+                                      text: TextSpan(
+                                        style: TextStyle(
+                                          fontFamily: "Pretendard",
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black87,
+                                          height: 1.5,
+                                        ),
+                                        children: [
+                                          const TextSpan(text: '문제나 힌트가 보이지 않는다면,\n화면을 '),
+                                          TextSpan(
+                                            text: '스크롤해서',
+                                            style: TextStyle(
+                                              color: Color(0xFF3F55A7),
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                          const TextSpan(text: ' 전부 확인할 수 있어요!'),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 40),
+                                    SizedBox(
+                                      height: 80,
+                                      child: AnimatedBuilder(
+                                        animation: _scrollAnimationController,
+                                        builder: (context, child) {
+                                          return Opacity(
+                                            opacity: _scrollUpOpacity.value,
+                                            child: Transform.translate(
+                                              offset: Offset(0, _scrollUpAnimation.value),
+                                              child: Image.asset("assets/images/common/scrollUp.png"),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              Text(
+                                '화면을 터치하여 진행',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           );
         },
       ),
     );
   }
 
-  Widget _buildCurrentStep(
-    BuildContext context,
+  Widget _buildCurrentStep(BuildContext context,
     MiddleMissionCoordinator coordinator,
-    MiddleMissionViewModel viewModel,
-  ) {
+      MiddleMissionViewModel viewModel,) {
+    if (!viewModel.isInConversation && !_hasShownConversation && !_showFirstOverlay) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            _showFirstOverlay = true;
+            _hasShownConversation = true;
+          });
+        }
+      });
+    }
+
     // 현재 상태에 따라 화면 결정
     if (viewModel.isInConversation) {
       return ConversationOverlay(
-        stage: viewModel.currentIndex + 1, // 0-based → 1-based 변환
+        stage: viewModel.currentIndex + 1,
         isFinalConversation: false,
         onComplete: () {
-          // 대화 종료 후 같은 인덱스의 문제로 이동
           viewModel.goToQuestion(viewModel.currentIndex);
         },
         onCloseByBack: () {
-          // 대화에서 뒤로가기할 때는 코디네이터의 handleBack 호출
           coordinator.handleBack();
         },
       );
     }
 
-    // 기본: 질문 화면 (question 단계)
     return _buildQuestionScreen(context, coordinator, viewModel);
   }
 
-  Widget _buildQuestionScreen(
-    BuildContext context,
+  Widget _buildQuestionScreen(BuildContext context,
     MiddleMissionCoordinator coordinator,
-    MiddleMissionViewModel viewModel,
-  ) {
+      MiddleMissionViewModel viewModel,) {
     if (viewModel.isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
@@ -216,7 +337,8 @@ MiddleMissionCoordinator coordinator,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF3F55A7), size: 28),
+          icon: const Icon(
+              Icons.arrow_back, color: Color(0xFF3F55A7), size: 28),
           onPressed: () {
             coordinator.handleBack();
           },
@@ -306,7 +428,8 @@ MiddleMissionCoordinator coordinator,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '문제 ${viewModel.currentIndex + 1} / ${viewModel.totalCount}',
+                              '문제 ${viewModel.currentIndex + 1} / ${viewModel
+                                  .totalCount}',
                               style: TextStyle(
                                 fontFamily: "SBAggroM",
                                 fontSize: 18,
@@ -376,7 +499,8 @@ MiddleMissionCoordinator coordinator,
                               height: 1.4,
                               color: Colors.black87,
                             ),
-                            children: mission.question.toStyledSpans(fontSize: 18),
+                            children: mission.question.toStyledSpans(
+                                fontSize: 18),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -384,7 +508,8 @@ MiddleMissionCoordinator coordinator,
                         if (mission.options != null &&
                             mission.options!.isNotEmpty) ...[
                           ...mission.options!.map(
-                            (option) => Padding(
+                                (option) =>
+                                Padding(
                               padding: const EdgeInsets.only(bottom: 8),
                               child: Text(
                                 option,
@@ -450,7 +575,8 @@ MiddleMissionCoordinator coordinator,
                               ),
                             ),
                           ),
-                        ] else ...[
+                        ] else
+                          ...[
                           // 일반 문제일 때 텍스트필드 표시
                           Container(
                             height: 52,
@@ -544,7 +670,10 @@ MiddleMissionCoordinator coordinator,
                           child: Container(
                             width: double.infinity,
                             padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width * (16 / 360),
+                              MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * (16 / 360),
                             ),
                             decoration: BoxDecoration(
                               color: const Color(0xFFEBEBEB),
@@ -574,7 +703,10 @@ MiddleMissionCoordinator coordinator,
                                 ),
                                 SizedBox(
                                   height:
-                                      MediaQuery.of(context).size.width *
+                                  MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width *
                                       (8 / 360),
                                 ),
                                 Text(
@@ -597,7 +729,10 @@ MiddleMissionCoordinator coordinator,
                       if (viewModel.showHint1 && viewModel.showHint2)
                         SizedBox(
                           height:
-                              MediaQuery.of(context).size.width * (12 / 360),
+                          MediaQuery
+                              .of(context)
+                              .size
+                              .width * (12 / 360),
                         ),
 
                       // 힌트 2
@@ -617,7 +752,10 @@ MiddleMissionCoordinator coordinator,
                           child: Container(
                             width: double.infinity,
                             padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width * (16 / 360),
+                              MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * (16 / 360),
                             ),
                             decoration: BoxDecoration(
                               color: const Color(0xFFEBEBEB),
@@ -646,7 +784,10 @@ MiddleMissionCoordinator coordinator,
                                 ),
                                 SizedBox(
                                   height:
-                                      MediaQuery.of(context).size.width *
+                                  MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width *
                                       (8 / 360),
                                 ),
                                 Text(
