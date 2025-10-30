@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:audioplayers/audioplayers.dart';
+import '../../../core/services/audio_service.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../core/extensions/string_extension.dart';
@@ -23,8 +23,7 @@ class HighIntroScreen extends StatefulWidget {
 }
 
 class _HighIntroScreenState extends State<HighIntroScreen> {
-  final AudioPlayer audioPlayer = AudioPlayer();
-  bool isPlaying = false;
+  final AudioService _audio = AudioService();
 
   final String introText = '''
 눈을 떴다.
@@ -68,30 +67,12 @@ Paratruth Space, PS라고 불리는 이 공간에서,
   @override
   void initState() {
     super.initState();
-    initAudioPlayer();
-  }
-
-  Future<void> initAudioPlayer() async {
-    audioPlayer.onPlayerStateChanged.listen((state) {
-      if (mounted) {
-        setState(() {
-          isPlaying = state == PlayerState.playing;
-        });
-      }
-    });
-
-  }
-
-  Future<void> playIntro() async {
-    try {
-      await audioPlayer.play(AssetSource('audio/high_intro_sound.mp3'));
-    } catch (e) {
-      print("오디오 재생 오류");
-    }
+    // 필요 시 인트로 BGM 재생 (자산 경로가 준비되었을 때 활성화)
+    // _audio.playBgm('assets/audio/high/intro_bgm.mp3');
   }
 
   Future<void> stopAudio() async {
-    await audioPlayer.stop();
+    await _audio.stopBgm();
   }
 
   Widget buildNarrationText() {
@@ -107,7 +88,8 @@ Paratruth Space, PS라고 불리는 이 공간에서,
 
   @override
   void dispose() {
-    audioPlayer.dispose();
+    // 화면 종료 시 BGM 정지만 수행 (플레이어는 싱글턴에서 관리)
+    _audio.stopBgm();
     super.dispose();
   }
 
@@ -210,7 +192,7 @@ Paratruth Space, PS라고 불리는 이 공간에서,
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 4),
             ],
           ),
         ),

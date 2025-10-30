@@ -87,13 +87,10 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
 
 
   void handleNextButton() {
-    print('DEBUG: handleNextButton called - currentIndex: ${widget.currentIndex}, questionListLength: ${widget.questionList.length}');
-    
     HighAnswerViewModel.instance.handleNextButton(
       currentIndex: widget.currentIndex,
       questionListLength: widget.questionList.length,
       onNavigateToNext: () async {
-        print('DEBUG: onNavigateToNext callback called');
         // Answer를 먼저 닫고
         Navigator.of(context).pop();
         if (!context.mounted) return;
@@ -112,12 +109,10 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
         );
       },
       onNavigateBack: () {
-        print('DEBUG: onNavigateBack callback called');
         // HighMission으로 돌아가기
         Navigator.popUntil(context, (route) => route.settings.name == 'HighMission');
       },
       onComplete: () {
-        print('DEBUG: onComplete callback called - navigating to HighClearView');
         // 마지막 문제인 경우 - HighClearView로 이동
         Navigator.pushReplacement(
           context,

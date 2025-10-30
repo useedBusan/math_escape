@@ -23,10 +23,8 @@ class HighHintViewModel extends ChangeNotifier {
 
   MissionQuestion? get currentHintQuestion {
     if (_hintQuestionList.isEmpty) return null;
-    print('DEBUG: currentHintQuestion getter - _currentHintIndex: $_currentHintIndex, list length: ${_hintQuestionList.length}');
     if (_currentHintIndex >= 0 && _currentHintIndex < _hintQuestionList.length) {
       final question = _hintQuestionList[_currentHintIndex];
-      print('DEBUG: currentHintQuestion getter - returning: id: ${question.id}, stage: ${question.stage}, title: ${question.title}');
       return question;
     }
     return null;
@@ -78,7 +76,6 @@ class HighHintViewModel extends ChangeNotifier {
 
   /// 힌트 게임 시작
   void startHintGame({int initialIndex = 0}) {
-    print('DEBUG: startHintGame called with initialIndex: $initialIndex, current _currentHintIndex: $_currentHintIndex');
     // startHintGame에서 _currentHintIndex를 덮어쓰지 않도록 수정
     // _currentHintIndex = initialIndex;
     
@@ -93,23 +90,14 @@ class HighHintViewModel extends ChangeNotifier {
 
   /// 특정 stage의 힌트 문제로 이동
   void goToHintByStage(int stage) {
-    print('DEBUG: goToHintByStage called with stage: $stage');
-    print('DEBUG: _hintQuestionList length: ${_hintQuestionList.length}');
-    for (int i = 0; i < _hintQuestionList.length; i++) {
-      print('DEBUG: hint[$i] - id: ${_hintQuestionList[i].id}, stage: ${_hintQuestionList[i].stage}, title: ${_hintQuestionList[i].title}');
-    }
-    
     final index = _hintQuestionList.indexWhere((q) => q.stage == stage);
-    print('DEBUG: found index: $index');
     
     if (index != -1) {
       _currentHintIndex = index;
-      print('DEBUG: set _currentHintIndex to: $index');
       notifyListeners();
     } else {
       // 해당 stage가 없으면 첫 번째 힌트로 이동
       _currentHintIndex = 0;
-      print('DEBUG: stage not found, set _currentHintIndex to: 0');
       notifyListeners();
     }
   }
