@@ -1,30 +1,34 @@
 [
   {
-    "id" : 1,
-    "talk" : "안녕? 수학문화관 방문을 환영해! 나는 수학문화관의 마스코트 푸리💖라고 해. 너 혹시 수학문화관에 전해 내려오는 전설에 대해 알고 있니?",
-    "answer" : "궁금해! 알려줘 푸리!",
+    "id": 1,
+    "talk": "안녕? 수학문화관 방문을 환영해! 나는 수학문화관의 마스코트 푸리💖라고 해. 너 혹시 수학문화관에 전해 내려오는 전설에 대해 알고 있니?",
+    "answer": "궁금해! 알려줘 푸리!",
     "furiImage": "assets/images/common/puri_appear.gif",
-    "backImage" : "assets/images/common/bsbackground.png"
+    "backImage": "assets/images/common/bsbackground.png",
+    "voice": "assets/audio/elemHigh/elemHighIntro1.wav"
   },
   {
-    "id" : 2,
-    "talk" : "옛날 수학문화관이 처음 지어질 때, 수학을 사랑하는 모임 일명 '수사모' 단체에서 수학을 사랑하고 좋아하는 친구들을 위해 보물✨을 숨겨 놓았다고 해.",
-    "answer" : "그 보물 내가 꼭 찾을래!",
+    "id": 2,
+    "talk": "옛날 수학문화관이 처음 지어질 때, 수학을 사랑하는 모임 일명 '수사모' 단체에서 수학을 사랑하고 좋아하는 친구들을 위해 보물✨을 숨겨 놓았다고 해.",
+    "answer": "그 보물 내가 꼭 찾을래!",
     "furiImage": "assets/images/common/furiStanding.png",
-    "backImage" : "assets/images/common/bsbackground.png"
+    "backImage": "assets/images/common/bsbackground.png",
+    "voice": "assets/audio/elemHigh/elemHighIntro2.wav"
   },
   {
-    "id" : 3,
-    "talk" : "보물은 수학문화관에 전해 내려오는 여러 단계의 퀴즈를 다 해결하면 마지막에 얻을 수 있어. 혹시 우리 함께 보물을 찾으러 가지 않을래?",
-    "answer" : "좋아! 당장 가보자!",
-    "furiImage" : "assets/images/common/furiExplaining.png",
-    "backImage" : "assets/images/common/bsbackground.png"
+    "id": 3,
+    "talk": "보물은 수학문화관에 전해 내려오는 여러 단계의 퀴즈를 다 해결하면 마지막에 얻을 수 있어. 혹시 우리 함께 보물을 찾으러 가지 않을래?",
+    "answer": "좋아! 당장 가보자!",
+    "furiImage": "assets/images/common/furiExplaining.png",
+    "backImage": "assets/images/common/bsbackground.png",
+    "voice": "assets/audio/elemHigh/elemHighIntro3.wav"
   },
   {
-    "id" : 4,
-    "talk" : "좋아! 그럼 우리 같이 보물을 찾아보자. 내가 듣기로는 처음 보물에 대한 힌트를 수학문화관의 수학 상가🏠에서 17.5미터 떨어진 곳에 힌트를 숨겼다고 했어.",
-    "answer" : "17.5미터? 어딜까? 찾아보자!",
-    "furiImage" : "assets/images/common/furiHurray.png",
-    "backImage" : "assets/images/common/bsbackground.png"
+    "id": 4,
+    "talk": "좋아! 그럼 우리 같이 보물을 찾아보자. 내가 듣기로는 처음 보물에 대한 힌트를 수학문화관의 수학 상가🏠에서 17.5미터 떨어진 곳에 힌트를 숨겼다고 했어.",
+    "answer": "17.5미터? 어딜까? 찾아보자!",
+    "furiImage": "assets/images/common/furiHurray.png",
+    "backImage": "assets/images/common/bsbackground.png",
+    "voice": "assets/audio/elemHigh/elemHighIntro4.wav"
   }
 ]

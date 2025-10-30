@@ -5,7 +5,8 @@
       {
         "talk": "수학자의 노트 한 장이 소마큐브 속에 떨어졌다는 제보가 있어. 도형의 특징을 파악하면 다음 장소의 힌트를 얻을 수 있을거야.",
         "furiImage": "assets/images/common/furiGood.png",
-        "backImage": "assets/images/middle/middleBG123.png"
+        "backImage": "assets/images/middle/middleBG123.png",
+        "voice": null
       }
     ]
   },
@@ -15,12 +16,14 @@
       {
         "talk": "우와! 첫 번째 미션을 성공했어! 그럼 다음 미션을 하러 가 보자!",
         "furiImage": "assets/images/common/furiGood.png",
-        "backImage": "assets/images/middle/middleBG123.png"
+        "backImage": "assets/images/middle/middleBG123.png",
+        "voice": "assets/audio/middle/middleConversation1.wav"
       },
       {
         "talk": "저기 다빈치가 여러 도형을 조합해서 만든 돔을 봐. 어떤 도형을 써야 잘 만들어질까?",
         "furiImage": "assets/images/common/furiStanding.png",
-        "backImage": "assets/images/middle/middleBG123.png"
+        "backImage": "assets/images/middle/middleBG123.png",
+        "voice": "assets/audio/middle/middleConversation2.wav"
       }
     ]
   },
@@ -30,12 +33,14 @@
       {
         "talk": "다빈치처럼 우리도 멋진 수학 예술가가 된 것 같아!",
         "furiImage": "assets/images/common/furiGood.png",
-        "backImage": "assets/images/middle/middleBG123.png"
+        "backImage": "assets/images/middle/middleBG123.png",
+        "voice": "assets/audio/middle/middleConversation3.wav"
       },
       {
         "talk": "수학자는 단위 변환과 추정을 잘 했다고 해, 그가 남긴 쌀 한 톨 단위를 사용해 무게를 계산해 보자!",
         "furiImage": "assets/images/common/furiStanding.png",
-        "backImage": "assets/images/middle/middleBG123.png"
+        "backImage": "assets/images/middle/middleBG123.png",
+        "voice": "assets/audio/middle/middleConversation4.wav"
       }
     ]
   },
@@ -45,12 +50,14 @@
       {
         "talk": "549,755,813,888이라... 작은 것이 모이면 상상을 초월하는구나!",
         "furiImage": "assets/images/common/furiGood.png",
-        "backImage": "assets/images/middle/middleBG123.png"
+        "backImage": "assets/images/middle/middleBG123.png",
+        "voice": "assets/audio/middle/middleConversation5.wav"
       },
       {
         "talk": "수학자가 서류를 넣어두는 서랍을 발견했어. 수를 맞추지 않으면 장치가 열리지 않아.",
         "furiImage": "assets/images/common/furiStanding.png",
-        "backImage": "assets/images/middle/middleBG123.png"
+        "backImage": "assets/images/middle/middleBG123.png",
+        "voice": "assets/audio/middle/middleConversation6.wav"
       }
     ]
   },
@@ -60,12 +67,14 @@
       {
         "talk": "한글에도 수학이 있구나! 수학은 세상을 연결하는 퍼즐이네!",
         "furiImage": "assets/images/common/furiGood.png",
-        "backImage": "assets/images/middle/middleBG456.png"
+        "backImage": "assets/images/middle/middleBG456.png",
+        "voice": "assets/audio/middle/middleConversation7.wav"
       },
       {
         "talk": "수학자는 황금비를 통해 무언가를 숨겼다고 해, 전시된 우표를 통해 숨겨진 수를 발견해 보자.",
         "furiImage": "assets/images/common/furiStanding.png",
-        "backImage": "assets/images/middle/middleBG456.png"
+        "backImage": "assets/images/middle/middleBG456.png",
+        "voice": "assets/audio/middle/middleConversation8.wav"
       }
     ]
   },
@@ -75,12 +84,14 @@
       {
         "talk": "황금비 1.618은 자연에서 많이 볼 수 있어, 수학과 자연의 만남! 정말 흥미로워!",
         "furiImage": "assets/images/common/furiGood.png",
-        "backImage": "assets/images/middle/middleBG456.png"
+        "backImage": "assets/images/middle/middleBG456.png",
+        "voice": "assets/audio/middle/middleConversation9.wav"
       },
       {
         "talk": "수학자의 노트에는 '10개의 손가락으로 수학을 하라' 라는 메시지가 있어. 지문 분류 시스템을 활용해 보자!",
         "furiImage": "assets/images/common/furiStanding.png",
-        "backImage": "assets/images/middle/middleBG456.png"
+        "backImage": "assets/images/middle/middleBG456.png",
+        "voice": "assets/audio/middle/middleConversation10.wav"
       }
     ]
   },
@@ -90,12 +101,14 @@
       {
         "talk": "각 손가락은 0 또는 1의 두 가지 상태여서, $2^{10}$ = 1,024네! 나의 흔적이 남는 지문을 수로 환산할 수도 있구나!",
         "furiImage": "assets/images/common/furiGood.png",
-        "backImage": "assets/images/middle/middleBG456.png"
+        "backImage": "assets/images/middle/middleBG456.png",
+        "voice": "assets/audio/middle/middleConversation11.wav"
       },
       {
         "talk": "수학자가 단면 관찰기를 사용한 흔적이 있어. 어떤 입체도형을 실험했을까?",
         "furiImage": "assets/images/common/furiStanding.png",
-        "backImage": "assets/images/middle/middleBG456.png"
+        "backImage": "assets/images/middle/middleBG456.png",
+        "voice": "assets/audio/middle/middleConversation12.wav"
       }
     ]
   },
@@ -105,12 +118,14 @@
       {
         "talk": "우와! 하나의 도형도 여러 모양이 나올 수 있네!",
         "furiImage": "assets/images/common/furiGood.png",
-        "backImage": "assets/images/middle/middleBG789.png"
+        "backImage": "assets/images/middle/middleBG789.png",
+        "voice": "assets/audio/middle/middleConversation13.wav"
       },
       {
         "talk": "터치모니터에서 정답을 찾으면 수학자의 위치가 나온다고 해!",
         "furiImage": "assets/images/common/furiStanding.png",
-        "backImage": "assets/images/middle/middleBG789.png"
+        "backImage": "assets/images/middle/middleBG789.png",
+        "voice": "assets/audio/middle/middleConversation14.wav"
       }
     ]
   },
@@ -120,12 +135,14 @@
       {
         "talk": "절단된 입체도형은 정삼각형과 정사각형으로 구성되어 있네? 모양은 변해도 규칙은 남는구나!",
         "furiImage": "assets/images/common/furiGood.png",
-        "backImage": "assets/images/middle/middleBG789.png"
+        "backImage": "assets/images/middle/middleBG789.png",
+        "voice": "assets/audio/middle/middleConversation15.wav"
       },
       {
         "talk": "수학자의 노트에는 '가장 빠르게 도달하는 곡선'에 대한 힌트가 남겨져 있어. 이 곡선을 직접 실험으로 확인해 보자!",
         "furiImage": "assets/images/common/furiStanding.png",
-        "backImage": "assets/images/middle/middleBG789.png"
+        "backImage": "assets/images/middle/middleBG789.png",
+        "voice": "assets/audio/middle/middleConversation16.wav"
       }
     ]
   },
@@ -135,27 +152,31 @@
       {
         "talk": "사이클로이드 곡선은 직선 위로 원을 굴렸을 때, 원 위의 정점이 그리는 곡선으로 공을 동시에 떨어뜨렸을 때 가장 먼저 도착한다는 것이 신기해!",
         "furiImage": "assets/images/common/furiGood.png",
-        "backImage": "assets/images/middle/middleBG789.png"
+        "backImage": "assets/images/middle/middleBG789.png",
+        "voice": "assets/audio/middle/middleConversation17.wav"
       },
       {
         "talk": "수학자의 노트에는 진동이 그린 특별한 그림도 있어.",
         "furiImage": "assets/images/common/furiStanding.png",
-        "backImage": "assets/images/middle/middleBG789.png"
+        "backImage": "assets/images/middle/middleBG789.png",
+        "voice": "assets/audio/middle/middleConversation18.wav"
       }
     ]
   },
   {
-    "id": 10,
+    "id": 11,
     "talks": [
       {
         "talk": "우와! 정말 대단해! 모든 미션을 해결하여 수학자의 비밀 노트를 찾았어, 축하해!",
         "furiImage": "assets/images/common/puri_clear.gif",
-        "backImage": "assets/images/middle/middleBG789.png"
+        "backImage": "assets/images/middle/middleBG789.png",
+        "voice": "assets/audio/middle/middleConversation19.wav"
       },
       {
         "talk": "문제를 해결하면서 수학문화관의 이곳저곳을 재밌게 살펴봤니? 선물은 지하 1층 안내 데스크에 계신 선생님께 말씀드리면 주실 거야. 안녕👋",
         "furiImage": "assets/images/common/puri_clear.gif",
-        "backImage": "assets/images/middle/middleBG789.png"
+        "backImage": "assets/images/middle/middleBG789.png",
+        "voice": "assets/audio/middle/middleConversation20.wav"
       }
     ]
   }

@@ -4,6 +4,7 @@ import '../../constants/enum/grade_enums.dart';
 import '../theme/app_colors.dart';
 import '../../core/utils/platform_utils.dart';
 import 'base_main_view_model.dart';
+import '../../core/widgets/sound_control_bottom_sheet.dart';
 
 class BaseMainView extends StatelessWidget {
   const BaseMainView({super.key});
@@ -18,16 +19,37 @@ class BaseMainView extends StatelessWidget {
             body: SafeArea(
               child: Column(
                 children: [
-                  // 상단 로고
+                  // 상단 로고 + 사운드 컨트롤 버튼
                   Padding(
-                    padding: const EdgeInsets.only(top: 20, left: 16),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset(
-                        'assets/images/common/mainLogo.png',
-                        height: 22,
-                        fit: BoxFit.contain,
-                      ),
+                    padding: const EdgeInsets.only(top: 20, left: 16, right: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Image.asset(
+                            'assets/images/common/mainLogo.png',
+                            height: 22,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.white,
+                              showDragHandle: true,
+                              isScrollControlled: false,
+                              builder: (_) => const SoundControlBottomSheet(),
+                            );
+                          },
+                          child: Image.asset(
+                            'assets/images/common/soundControlIcon.png',
+                            height: 24,
+                            width: 24,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 25),

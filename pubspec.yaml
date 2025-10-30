@@ -30,7 +30,7 @@ dependencies:
   flutter_spinkit: ^5.2.1
   url_launcher: 6.2.5
   flutter_math_fork: 0.7.4
-  audioplayers: ^5.2.1
+  just_audio: ^0.10.5
   provider: ^6.1.2
   cupertino_icons: ^1.0.8
   gif: ^2.3.0
@@ -68,6 +68,11 @@ flutter:
     - assets/images/high/
     - assets/video/
     - assets/audio/
+    - assets/audio/bgm/
+    - assets/audio/elemHigh/
+    - assets/audio/elemLow/
+    - assets/audio/middle/
+    - assets/audio/high/
     - assets/fonts/
     - assets/animations/
     - assets/data/elem_high/

@@ -33,6 +33,11 @@ void main() async {
   // 서비스 초기화
   serviceLocator.initialize();
 
+  // 전역 BGM 시작
+  serviceLocator.audioService
+      .playBgm('assets/audio/bgm/mathEscapeBGM.mp3')
+      .catchError((e) => print('BGM 로드 실패: $e'));
+
   runApp(const MyApp());
 }
 
