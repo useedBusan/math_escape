@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../App/theme/app_colors.dart';
 import '../services/audio_service.dart';
 
 class VolumeDropdownPanel extends StatefulWidget {
@@ -65,11 +66,10 @@ class _VolumeDropdownPanelState extends State<VolumeDropdownPanel>
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildCompactVolumeControl(
-                icon: '🎭',
+                icon: Image.asset("assets/images/high/highFuri.png"),
                 label: '캐릭터',
                 value: _characterVolume,
-                color: const Color(0xFF3B82F6),
-                backgroundColor: const Color(0xFFEC4899),
+                color: CustomPink.s500,
                 onChanged: (value) {
                   setState(() => _characterVolume = value);
                   _audioService.setCharacterVolume(value);
@@ -77,11 +77,10 @@ class _VolumeDropdownPanelState extends State<VolumeDropdownPanel>
               ),
               const SizedBox(height: 24),
               _buildCompactVolumeControl(
-                icon: Icons.music_note,
+                icon: Image.asset("assets/images/common/bgmIcon.png"),
                 label: '배경음',
                 value: _bgmVolume,
-                color: const Color(0xFFA855F7),
-                backgroundColor: const Color(0xFFA855F7),
+                color: CustomBlue.s500,
                 onChanged: (value) {
                   setState(() => _bgmVolume = value);
                   _audioService.setBgmVolume(value);
@@ -95,11 +94,10 @@ class _VolumeDropdownPanelState extends State<VolumeDropdownPanel>
   }
 
   Widget _buildCompactVolumeControl({
-    required dynamic icon,
+    required Widget icon,
     required String label,
     required double value,
     required Color color,
-    required Color backgroundColor,
     required ValueChanged<double> onChanged,
   }) {
     return Column(
@@ -113,28 +111,17 @@ class _VolumeDropdownPanelState extends State<VolumeDropdownPanel>
                   width: 36,
                   height: 36,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        backgroundColor,
-                        backgroundColor.withValues(alpha: 0.8),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    color: color.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: backgroundColor.withValues(alpha: 0.3),
+                        color: color.withValues(alpha: 0.3),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),
                     ],
                   ),
-                  child: Center(
-                    child: icon is IconData
-                        ? Icon(icon, color: Colors.white, size: 16)
-                        : Text(icon, style: const TextStyle(fontSize: 18)),
-                  ),
+                  child: Center(child: icon),
                 ),
                 const SizedBox(width: 8),
                 Text(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../app/theme/app_colors.dart';
 import '../services/audio_service.dart';
 
 class VolumeBottomSheet extends StatefulWidget {
@@ -71,11 +72,10 @@ class _VolumeBottomSheetState extends State<VolumeBottomSheet> {
           ),
           const SizedBox(height: 32),
           _buildVolumeControl(
-            icon: '🎭',
+            icon: Image.asset("assets/images/high/highFuri.png"),
             label: '캐릭터',
             value: _characterVolume,
-            color: const Color(0xFF3B82F6),
-            backgroundColor: const Color(0xFFEC4899),
+            color: CustomPink.s500,
             onChanged: (value) {
               setState(() => _characterVolume = value);
               _audioService.setCharacterVolume(value);
@@ -83,11 +83,10 @@ class _VolumeBottomSheetState extends State<VolumeBottomSheet> {
           ),
           const SizedBox(height: 32),
           _buildVolumeControl(
-            icon: Icons.music_note,
+            icon: Image.asset("assets/images/common/bgmIcon.png"),
             label: '배경음',
             value: _bgmVolume,
-            color: const Color(0xFFA855F7),
-            backgroundColor: const Color(0xFFA855F7),
+            color: CustomBlue.s500,
             onChanged: (value) {
               setState(() => _bgmVolume = value);
               _audioService.setBgmVolume(value);
@@ -108,11 +107,10 @@ class _VolumeBottomSheetState extends State<VolumeBottomSheet> {
   }
 
   Widget _buildVolumeControl({
-    required dynamic icon,
+    required Widget icon,
     required String label,
     required double value,
     required Color color,
-    required Color backgroundColor,
     required ValueChanged<double> onChanged,
   }) {
     return Column(
@@ -126,21 +124,10 @@ class _VolumeBottomSheetState extends State<VolumeBottomSheet> {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        backgroundColor,
-                        backgroundColor.withValues(alpha: 0.8),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    color: color.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: Center(
-                    child: icon is IconData
-                        ? Icon(icon, color: Colors.white, size: 20)
-                        : Text(icon, style: const TextStyle(fontSize: 20)),
-                  ),
+                  child: Center(child: icon),
                 ),
                 const SizedBox(width: 8),
                 Text(

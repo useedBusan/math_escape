@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../constants/enum/grade_enums.dart';
+import '../../core/widgets/volume_bottom_sheet.dart';
 import '../theme/app_colors.dart';
 import '../../core/utils/platform_utils.dart';
 import 'base_main_view_model.dart';
-import '../../core/widgets/sound_control_bottom_sheet.dart';
 
 class BaseMainView extends StatelessWidget {
   const BaseMainView({super.key});
@@ -37,10 +37,12 @@ class BaseMainView extends StatelessWidget {
                           onTap: () {
                             showModalBottomSheet(
                               context: context,
-                              backgroundColor: Colors.white,
-                              showDragHandle: true,
-                              isScrollControlled: false,
-                              builder: (_) => const SoundControlBottomSheet(),
+                              backgroundColor: Colors.transparent,
+                              showDragHandle: false,
+                              isScrollControlled: true,
+                              builder: (_) => const FractionallySizedBox(
+                                child: VolumeBottomSheet(),
+                              ),
                             );
                           },
                           child: Image.asset(
