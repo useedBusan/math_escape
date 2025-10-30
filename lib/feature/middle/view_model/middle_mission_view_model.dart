@@ -16,6 +16,7 @@ class MiddleMissionViewModel extends ChangeNotifier {
   int _currentIndex = 0; // 0-based 인덱스
   
   final TextEditingController _answerController = TextEditingController();
+  final FocusNode answerFocusNode = FocusNode();
   int _hintCounter = 0;
   bool _showHint1 = false;
   bool _showHint2 = false;
@@ -167,6 +168,7 @@ class MiddleMissionViewModel extends ChangeNotifier {
   @override
   void dispose() {
     _answerController.dispose();
+    answerFocusNode.dispose();
     super.dispose();
   }
 }

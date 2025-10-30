@@ -70,12 +70,17 @@ class _HighMissionContent extends StatefulWidget {
 class _HighMissionContentState extends State<_HighMissionContent>
     with SingleTickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
+  late FocusNode _answerFocusNode;
   late AnimationController _hintColorController;
   late Animation<double> _hintColorAnimation;
 
   @override
   void initState() {
     super.initState();
+    _answerFocusNode = FocusNode();
+    _answerFocusNode.addListener(() {
+      if (mounted) setState(() {});
+    });
     _hintColorController = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
@@ -100,6 +105,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
   void dispose() {
     _hintColorController.dispose();
     _controller.dispose();
+    _answerFocusNode.dispose();
     super.dispose();
   }
 
@@ -113,7 +119,6 @@ class _HighMissionContentState extends State<_HighMissionContent>
           .map((e) => MissionAnswer.fromJson(e))
           .firstWhere((a) => a.id == id);
     } catch (e) {
-      print('ERROR: Answer not found for id: $id');
       rethrow;
     }
   }
@@ -423,7 +428,12 @@ class _HighMissionContentState extends State<_HighMissionContent>
                       decoration: BoxDecoration(
                         color: const Color(0xFFFFFFFF),
                         borderRadius: BorderRadius.circular(8.0),
-                        border: Border.all(color: const Color(0xffdcdcdc)),
+                        border: Border.all(
+                          color: _answerFocusNode.hasFocus
+                              ? CustomBlue.s500
+                              : const Color(0xffdcdcdc),
+                          width: _answerFocusNode.hasFocus ? 2.0 : 1.0,
+                        ),
                       ),
                       child: Row(
                         children: [
@@ -432,6 +442,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
                             child: TextField(
                               style: TextStyle(fontSize: 15),
                               controller: _controller,
+                              focusNode: _answerFocusNode,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.done,
                               decoration: InputDecoration(
@@ -450,30 +461,37 @@ class _HighMissionContentState extends State<_HighMissionContent>
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: 60,
-                            height: 52,
-                            child: ElevatedButton(
-                              onPressed: () => _submitAnswer(vm),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: mainColor,
-                                foregroundColor: Colors.white,
-                                elevation: 0,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 12,
-                                ),
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(8),
-                                    bottomRight: Radius.circular(8),
+                          InkWell(
+                            onTap: () => _submitAnswer(vm),
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(
+                                _answerFocusNode.hasFocus ? 6.0 : 7.0,
+                              ),
+                              bottomRight: Radius.circular(
+                                _answerFocusNode.hasFocus ? 6.0 : 7.0,
+                              ),
+                            ),
+                            child: Container(
+                              height: 52,
+                              width: _answerFocusNode.hasFocus ? 59.0 : 60.0,
+                              decoration: BoxDecoration(
+                                color: mainColor,
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(
+                                    _answerFocusNode.hasFocus ? 6.0 : 7.0,
+                                  ),
+                                  bottomRight: Radius.circular(
+                                    _answerFocusNode.hasFocus ? 6.0 : 7.0,
                                   ),
                                 ),
                               ),
-                              child: Text(
+                              alignment: Alignment.center,
+                              child: const Text(
                                 '확인',
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w800,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),

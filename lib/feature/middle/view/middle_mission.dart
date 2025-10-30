@@ -32,6 +32,8 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
   late Animation<double> _scrollUpOpacity;
   bool _showFirstOverlay = false; // 처음엔 false로 변경
   bool _hasShownConversation = false; // 대화를 본 적 있는지 추적
+  VoidCallback? _focusListener;
+  MiddleMissionViewModel? _attachedViewModel;
 
   @override
   void initState() {
@@ -72,7 +74,11 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
 
     // 애니메이션 반복 (위로 올라갔다가 다시 원래 위치로)
     _scrollAnimationController.repeat(reverse: true);
+
+    // 포커스 변경 리스너는 Provider 주입 이후에 연결 (didChangeDependencies에서 처리)
   }
+
+  // didChangeDependencies에서 Provider를 접근하지 않습니다 (Provider가 이 위젯 내부에서 생성되기 때문).
 
   void _submitAnswer(
     MiddleMissionCoordinator coordinator,
@@ -135,6 +141,12 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
   void dispose() {
     _hintColorController.dispose();
     _scrollAnimationController.dispose();
+    // 포커스 리스너 해제
+    if (_focusListener != null && _attachedViewModel != null) {
+      _attachedViewModel!.answerFocusNode.removeListener(_focusListener!);
+      _focusListener = null;
+      _attachedViewModel = null;
+    }
     super.dispose();
   }
 
@@ -168,6 +180,15 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
             WidgetsBinding.instance.addPostFrameCallback((_) {
               viewModel.loadMissionData();
             });
+          }
+
+          // answerFocusNode 리스너는 Provider가 생성된 이후(Consumer 내부) 최초 1회만 등록
+          if (_focusListener == null) {
+            _focusListener = () {
+              if (mounted) setState(() {});
+            };
+            viewModel.answerFocusNode.addListener(_focusListener!);
+            _attachedViewModel = viewModel;
           }
 
           return PopScope(
@@ -342,7 +363,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
       return const Scaffold(body: Center(child: Text("현재 미션을 불러올 수 없습니다.")));
     }
 
-    final Color mainColor = const Color(0xFF3F55A7);
+    final Color mainColor = CustomBlue.s500;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -601,7 +622,10 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                               color: const Color(0xFFFFFFFF),
                               borderRadius: BorderRadius.circular(8.0),
                               border: Border.all(
-                                color: const Color(0xffdcdcdc),
+                                color: viewModel.answerFocusNode.hasFocus
+                                    ? CustomBlue.s500  // 포커스 시
+                                    : const Color(0xffdcdcdc),  // 기본 상태
+                                width: viewModel.answerFocusNode.hasFocus ? 2.0 : 1.0,
                               ),
                             ),
                             child: Row(
@@ -611,6 +635,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                   child: TextField(
                                     style: TextStyle(fontSize: 15),
                                     controller: viewModel.answerController,
+                                    focusNode: viewModel.answerFocusNode,  // FocusNode 연결
                                     keyboardType: TextInputType.text,
                                     textInputAction: TextInputAction.done,
                                     decoration: InputDecoration(
@@ -619,42 +644,47 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                         fontSize: 14,
                                         color: const Color(0xffaaaaaa),
                                       ),
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                            horizontal: 12.0,
-                                            vertical: 12.0,
-                                          ),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 12.0,
+                                        vertical: 12.0,
+                                      ),
                                       border: InputBorder.none,
                                       enabledBorder: InputBorder.none,
                                       focusedBorder: InputBorder.none,
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 52,
-                                  width: 60,
-                                  child: ElevatedButton(
-                                    onPressed: () =>
-                                        _submitAnswer(coordinator, viewModel),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: mainColor,
-                                      foregroundColor: Colors.white,
-                                      elevation: 0,
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 12,
-                                      ),
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(8),
-                                          bottomRight: Radius.circular(8),
+                                InkWell(
+                                  onTap: () => _submitAnswer(coordinator, viewModel),
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(
+                                      viewModel.answerFocusNode.hasFocus ? 6.0 : 7.0,
+                                    ),
+                                    bottomRight: Radius.circular(
+                                      viewModel.answerFocusNode.hasFocus ? 6.0 : 7.0,
+                                    ),
+                                  ),
+                                  child: Container(
+                                    height: 52,
+                                    width: viewModel.answerFocusNode.hasFocus ? 59.0 : 60.0,
+                                    decoration: BoxDecoration(
+                                      color: mainColor,
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(
+                                          viewModel.answerFocusNode.hasFocus ? 6.0 : 7.0,  // 8 - border width
+                                        ),
+                                        bottomRight: Radius.circular(
+                                          viewModel.answerFocusNode.hasFocus ? 6.0 : 7.0,
                                         ),
                                       ),
                                     ),
-                                    child: Text(
+                                    alignment: Alignment.center,
+                                    child: const Text(
                                       '제출',
                                       style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w800,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),
