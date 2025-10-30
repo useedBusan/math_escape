@@ -23,7 +23,6 @@ class HighIntroScreen extends StatefulWidget {
 }
 
 class _HighIntroScreenState extends State<HighIntroScreen> {
-  final AudioService _audio = AudioService();
 
   final String introText = '''
 눈을 떴다.
@@ -72,7 +71,8 @@ Paratruth Space, PS라고 불리는 이 공간에서,
   }
 
   Future<void> stopAudio() async {
-    await _audio.stopBgm();
+    // 인트로 전용 BGM을 사용 중일 때만 중단하도록 의도했으나
+    // 현재 전역 BGM을 사용하므로 여기서는 중단하지 않습니다.
   }
 
   Widget buildNarrationText() {
@@ -88,8 +88,7 @@ Paratruth Space, PS라고 불리는 이 공간에서,
 
   @override
   void dispose() {
-    // 화면 종료 시 BGM 정지만 수행 (플레이어는 싱글턴에서 관리)
-    _audio.stopBgm();
+    // 전역 BGM 유지: 인트로 종료 시 BGM을 중단하지 않습니다.
     super.dispose();
   }
 
@@ -157,7 +156,6 @@ Paratruth Space, PS라고 불리는 이 공간에서,
                 child: ElevatedButton(
                   onPressed: () async {
                     final questionList = await loadQuestionList();
-                    stopAudio();
 
                     if (context.mounted) {
                       Navigator.push(
