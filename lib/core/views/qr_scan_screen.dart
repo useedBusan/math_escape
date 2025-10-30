@@ -77,7 +77,7 @@ class _QRScanScreenState extends State<QRScanScreen> {
             opacity: _showHelper ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 500),
             child: Image.asset(
-              'assets/images/common/qrCode.png',
+              'assets/images/common/qrCode.webp',
               width: helperImgW,
             ),
           ),

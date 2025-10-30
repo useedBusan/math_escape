@@ -46,10 +46,10 @@ class HintPopupViewModel extends ChangeNotifier {
     switch (grade) {
       case StudentGrade.elementaryLow:
       case StudentGrade.elementaryHigh:
-        return (icon: 'assets/images/common/hintFuri.png', color: CustomPink.s500);
+        return (icon: 'assets/images/common/hintFuri.webp', color: CustomPink.s500);
       case StudentGrade.middle:
       case StudentGrade.high:
-        return (icon: 'assets/images/middle/middleHint.png', color: CustomBlue.s500);
+        return (icon: 'assets/images/middle/middleHint.webp', color: CustomBlue.s500);
     }
   }
 

@@ -134,7 +134,7 @@ class MissionBackgroundView extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Image.asset(
-                                "assets/images/common/hintIcon.png",
+                                "assets/images/common/hintIcon.webp",
                                 width: 24,
                                 height: 24,
                               ),

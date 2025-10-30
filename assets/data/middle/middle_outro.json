@@ -3,7 +3,7 @@
   "speaker": "푸리",
   "talk": "문제를 해결하면서 수학문화관의 이곳저곳을 재밌게 살펴봤니? 선물은 지하 1층 안내 데스크에 계신 선생님께 말씀드리면 주실 거야. 안녕👋",
   "furiImage": "assets/images/common/puri_clear.gif",
-  "backImage": "assets/images/middle/middleBG789.png",
-  "voice": "assets/audio/middle/middleConversation20.wav",
-  "certificate": "assets/images/common/certificateMiddle.png"
+  "backImage": "assets/images/middle/middleBG789.webp",
+  "voice": "assets/audio/middle/middleConversation20.mp3",
+  "certificate": "assets/images/common/certificateMiddle.webp"
 }

@@ -183,7 +183,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
           children: [
           IntegerPhaseBanner(
             questionNumber: vm.isFromHint ? widget.currentIndex + 1 : widget.currentIndex + 2,
-            furiImagePath: "assets/images/high/highFuri.png",
+            furiImagePath: "assets/images/high/highFuri.webp",
             fontSize: 14,
           ),
           SizedBox(height: screenHeight * 0.025),

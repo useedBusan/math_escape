@@ -32,9 +32,9 @@ class _HighClearViewState extends State<HighClearView> {
           return;
         }
       }
-      final data = await rootBundle.load('assets/images/common/certificateHigh.png');
+      final data = await rootBundle.load('assets/images/common/certificateHigh.webp');
       final bytes = data.buffer.asUint8List();
-      final String name = 'certificate_high_${DateTime.now().millisecondsSinceEpoch}.png';
+      final String name = 'certificate_high_${DateTime.now().millisecondsSinceEpoch}.webp';
       await Gal.putImageBytes(bytes, name: name, album: 'Math Escape');
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -52,7 +52,7 @@ class _HighClearViewState extends State<HighClearView> {
   void initState() {
     super.initState();
     // 클리어 축하 음성 재생
-    _audio.playCharacterAudio('assets/audio/high/highCongratulation.wav');
+    _audio.playCharacterAudio('assets/audio/high/highCongratulation.mp3');
   }
 
   @override
@@ -112,7 +112,7 @@ class _HighClearViewState extends State<HighClearView> {
                     children: [
                       const SizedBox(height: 20),
                       Image.asset(
-                        "assets/images/high/highFuriClear.png",
+                        "assets/images/high/highFuriClear.webp",
                         height: 200,
                         fit: BoxFit.contain,
                       ),

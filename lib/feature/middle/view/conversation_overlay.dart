@@ -53,8 +53,8 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
             talks.add(Talk(
               id: widget.stage * 100 + i,
               speaker: Speaker.puri,
-              speakerImg: talkData['furiImage'] ?? 'assets/images/common/furiStanding.png',
-              backImg: talkData['backImage'] ?? 'assets/images/common/bsbackground.png',
+              speakerImg: talkData['furiImage'] ?? 'assets/images/common/furiStanding.webp',
+              backImg: talkData['backImage'] ?? 'assets/images/common/bsbackground.webp',
               talk: talkData['talk'] ?? '',
               voice: talkData['voice'] as String?,
             ));
