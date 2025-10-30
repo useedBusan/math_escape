@@ -35,7 +35,7 @@ class IntegerPhaseBanner extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 5),
         // 텍스트 (오른쪽)
         Expanded(
           child: RichText(
@@ -50,7 +50,6 @@ class IntegerPhaseBanner extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 20),
       ],
     );
   }

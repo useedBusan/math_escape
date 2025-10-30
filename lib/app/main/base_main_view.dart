@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../constants/enum/grade_enums.dart';
+import '../../core/widgets/volume_bottom_sheet.dart';
 import '../theme/app_colors.dart';
 import '../../core/utils/platform_utils.dart';
 import 'base_main_view_model.dart';
@@ -18,16 +19,39 @@ class BaseMainView extends StatelessWidget {
             body: SafeArea(
               child: Column(
                 children: [
-                  // 상단 로고
+                  // 상단 로고 + 사운드 컨트롤 버튼
                   Padding(
-                    padding: const EdgeInsets.only(top: 20, left: 16),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset(
-                        'assets/images/common/mainLogo.png',
-                        height: 22,
-                        fit: BoxFit.contain,
-                      ),
+                    padding: const EdgeInsets.only(top: 20, left: 16, right: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Image.asset(
+                            'assets/images/common/mainLogo.png',
+                            height: 22,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              showDragHandle: false,
+                              isScrollControlled: true,
+                              builder: (_) => const FractionallySizedBox(
+                                child: VolumeBottomSheet(),
+                              ),
+                            );
+                          },
+                          child: Image.asset(
+                            'assets/images/common/soundControlIcon.png',
+                            height: 24,
+                            width: 24,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 25),
@@ -81,8 +105,9 @@ class BaseMainView extends StatelessWidget {
                             ),
                           ),
 
-                          // 시작하기 버튼
                           const SizedBox(height: 20),
+
+                          // 시작하기 버튼
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: ElevatedButton(

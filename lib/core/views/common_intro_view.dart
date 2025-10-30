@@ -4,6 +4,7 @@ import '../../../app/theme/app_colors.dart';
 import 'home_alert.dart';
 import 'lottie_animation_widget.dart';
 import '../extensions/string_extension.dart';
+import '../widgets/volume_dropdown_panel.dart';
 
 class CommonIntroView extends StatelessWidget {
   final String appBarTitle;
@@ -16,7 +17,6 @@ class CommonIntroView extends StatelessWidget {
   final VoidCallback onBack;
   final StudentGrade? grade; // 학년 정보 추가
   final String? lottieAnimationPath; // 로티 애니메이션 경로 추가
-  final bool showLottieInsteadOfImage; // 로티 애니메이션 표시 여부
   final bool lottieRepeat; // 로티 애니메이션 반복 여부
 
   const CommonIntroView({
@@ -31,7 +31,6 @@ class CommonIntroView extends StatelessWidget {
     required this.onBack,
     this.grade, // 기본값 null로 하위 호환성 유지
     this.lottieAnimationPath, // 로티 애니메이션 경로
-    this.showLottieInsteadOfImage = false, // 기본값 false로 하위 호환성 유지
     this.lottieRepeat = true, // 기본값 true로 하위 호환성 유지
   });
 
@@ -54,46 +53,30 @@ class CommonIntroView extends StatelessWidget {
       },
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            automaticallyImplyLeading: false,
-            flexibleSpace: SafeArea(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Center(
-                    child: Text(
-                      appBarTitle,
-                      style: TextStyle(
-                        color: mainColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 0,
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_back, color: mainColor),
-                      onPressed: onBack,
-                    ),
-                  ),
-                  Positioned(
-                    right: 0,
-                    child: IconButton(
-                      icon: Icon(Icons.home, color: mainColor),
-                      onPressed: () {
-                        HomeAlert.showAndNavigate(context);
-                      },
-                    ),
-                  ),
-                ],
-              ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Text(
+            appBarTitle,
+            style: TextStyle(
+              color: mainColor,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: mainColor, size: 28),
+            onPressed: onBack,
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.home, color: mainColor, size: 28),
+              onPressed: () {
+                HomeAlert.showAndNavigate(context);
+              },
+            ),
+          ],
         ),
         backgroundColor: Colors.white,
         body: Stack(
@@ -119,6 +102,74 @@ class CommonIntroView extends StatelessWidget {
                 ),
               ),
             ),
+            // AppBar 바로 아래, 본문 우상단 BGM 아이콘
+            Positioned(
+              top: 15,
+              right: 15,
+              child: SafeArea(
+                child: Builder(
+                  builder: (iconContext) {
+                    return GestureDetector(
+                      onTap: () {
+                        final RenderBox box =
+                            iconContext.findRenderObject() as RenderBox;
+                        final Offset iconOffset = box.localToGlobal(
+                          Offset.zero,
+                        );
+                        final Size iconSize = box.size;
+                        final Size screenSize = MediaQuery.of(iconContext).size;
+
+                        final double panelTop =
+                            iconOffset.dy + iconSize.height + 10;
+                        final double panelWidth = screenSize.width * 0.93;
+                        final double panelLeft =
+                            (screenSize.width - panelWidth) / 2;
+
+                        showGeneralDialog(
+                          context: iconContext,
+                          barrierLabel: 'volumePanel',
+                          barrierDismissible: true,
+                          barrierColor: Colors.transparent,
+                          transitionDuration: const Duration(milliseconds: 150),
+                          pageBuilder: (context, anim1, anim2) {
+                            return Stack(
+                              children: [
+                                Positioned.fill(
+                                  child: GestureDetector(
+                                    onTap: () => Navigator.of(context).pop(),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: panelTop,
+                                  left: panelLeft,
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: SizedBox(
+                                      width: panelWidth,
+                                      child: VolumeDropdownPanel(
+                                        onClose: () =>
+                                            Navigator.of(context).pop(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Image.asset(
+                        'assets/images/common/soundControlIcon.png',
+                        width: 28,
+                        height: 28,
+                        filterQuality: FilterQuality.high,
+                        isAntiAlias: true,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
             SafeArea(
               child: Column(
                 mainAxisSize: MainAxisSize.max,
@@ -134,7 +185,7 @@ class CommonIntroView extends StatelessWidget {
                         return Center(
                           child: SizedBox(
                             height: characterHeight,
-                            child: showLottieInsteadOfImage && lottieAnimationPath != null
+                            child: lottieAnimationPath != null
                                 ? LottieAnimationWidget(
                                     assetPath: lottieAnimationPath!,
                                     height: characterHeight,
@@ -220,7 +271,7 @@ class CommonIntroView extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: SizedBox(
                       width: size.width * 0.93,
-                      height: 56,
+                      height: 52,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: mainColor,
@@ -233,14 +284,15 @@ class CommonIntroView extends StatelessWidget {
                         child: Text(
                           buttonText,
                           style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Pretendard',
                           ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),

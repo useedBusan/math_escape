@@ -8,6 +8,7 @@ class Talk {
   final String speakerImg;
   final String backImg;
   final String talk;
+  final String? voice; // 보이스 오버 자산 경로 (optional)
 
   Talk({
     required this.id,
@@ -16,6 +17,7 @@ class Talk {
     required this.speakerImg,
     required this.backImg,
     required this.talk,
+    this.voice,
   });
 
   factory Talk.fromJson(Map<String, dynamic> json) {
@@ -52,6 +54,7 @@ class Talk {
       speakerImg: json['speakerImg'] as String? ?? json['furiImage'] as String? ?? ImageAssets.furiStanding.path,
       backImg: json['backImg'] as String? ?? json['backImage'] as String? ?? ImageAssets.background.path,
       talk: json['talk'],
+      voice: json['voice'] as String?,
     );
   }
 }

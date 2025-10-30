@@ -5,11 +5,61 @@ import '../view_model/high_mission_view_model.dart';
 import '../view_model/high_hint_view_model.dart';
 import '../view_model/high_answer_view_model.dart';
 import '../../../core/views/home_alert.dart';
+import '../../../core/services/audio_service.dart';
+import 'package:gal/gal.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
-class HighClearView extends StatelessWidget {
+class HighClearView extends StatefulWidget {
   final DateTime gameStartTime;
 
   const HighClearView({super.key, required this.gameStartTime});
+
+  @override
+  State<HighClearView> createState() => _HighClearViewState();
+}
+
+class _HighClearViewState extends State<HighClearView> {
+  final AudioService _audio = AudioService();
+  Future<void> _saveCertificate() async {
+    try {
+      if (!await Gal.hasAccess()) {
+        await Gal.requestAccess();
+        if (!await Gal.hasAccess()) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('권한이 거부되어 저장할 수 없습니다.')),
+          );
+          return;
+        }
+      }
+      final data = await rootBundle.load('assets/images/common/certificateHigh.png');
+      final bytes = data.buffer.asUint8List();
+      final String name = 'certificate_high_${DateTime.now().millisecondsSinceEpoch}.png';
+      await Gal.putImageBytes(bytes, name: name, album: 'Math Escape');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('수료증이 갤러리에 저장되었습니다.')),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('저장 실패: $e')),
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // 클리어 축하 음성 재생
+    _audio.playCharacterAudio('assets/audio/high/highCongratulation.wav');
+  }
+
+  @override
+  void dispose() {
+    _audio.stopCharacter();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +94,7 @@ class HighClearView extends StatelessWidget {
           ),
           title: const Text(
             "역설, 혹은 모호함",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
         ),
@@ -62,19 +112,18 @@ class HighClearView extends StatelessWidget {
                     children: [
                       const SizedBox(height: 20),
                       Image.asset(
-                        "assets/images/high/highComplete.png",
-                        width: 200,
+                        "assets/images/high/highFuriClear.png",
                         height: 200,
                         fit: BoxFit.contain,
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        "Paratruth Space,\nPS를 탈출하는 데 걸린 시간",
+                        "Paratruth Space,PS를 탈출하는 데 걸린 시간",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 15,
                           fontFamily: "Pretendard",
-                          color: CustomBlue.s700,
+                          color: CustomBlue.s500,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -94,11 +143,11 @@ class HighClearView extends StatelessWidget {
 
                 // 하단 버튼
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: SizedBox(
                     width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton.icon(
+                    height: 52,
+                    child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: CustomBlue.s500,
                         foregroundColor: Colors.white,
@@ -106,15 +155,11 @@ class HighClearView extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed: () {
-                        HighMissionViewModel.instance.disposeAll();
-                        HighHintViewModel.instance.disposeAll();
-                        HighAnswerViewModel.instance.disposeAll();
-                        Navigator.of(
-                          context,
-                        ).popUntil((route) => route.isFirst);
-                      },
-                      label: const Text("메인화면으로"),
+                      onPressed: _saveCertificate,
+                      child: const Text(
+                        "수료증 다운로드",
+                        style: TextStyle(fontWeight: FontWeight.w700),
+                      ),
                     ),
                   ),
                 ),
@@ -156,14 +201,14 @@ class _InfoCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(fontSize: 13, color: Color(0xFF777777)),
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xDD000000)),
           ),
           Text(
             value,
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2E2E2E),
+              color: CustomBlue.s500,
             ),
           ),
         ],

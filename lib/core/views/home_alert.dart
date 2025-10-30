@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../app/theme/app_colors.dart';
 import '../extensions/string_extension.dart';
+import '../services/service_locator.dart';
 
 /// 홈화면 이동 확인을 위한 커스텀 Alert 모듈
 class HomeAlert {
@@ -19,6 +20,10 @@ class HomeAlert {
     final result = await show(context);
     
     if (result == true) {
+      // 메인으로 나갈 때 캐릭터(보이스)만 중단, BGM은 유지
+      try {
+        await serviceLocator.audioService.stopCharacter();
+      } catch (_) {}
       if (onHome != null) {
         onHome();
       } else if (context.mounted) {
@@ -64,10 +69,9 @@ class _CustomHomeAlertDialog extends StatelessWidget {
                       text: TextSpan(
                         style: TextStyle(
                           fontFamily: "Pretendard",
-                          fontSize: 18,
                           height: 1.4,
                         ),
-                        children: "**{#D95276|잠깐!}** 지금 나가면 기록은 사라져.\n그래도 탐험을 중단할 거야?".toStyledSpans(fontSize: 18),
+                        children: "**{#D95276|잠깐!}** 지금 나가면 기록은 사라져.\n그래도 탐험을 중단할 거야?".toStyledSpans(fontSize: 17),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -104,9 +108,9 @@ class _CustomHomeAlertDialog extends StatelessWidget {
                           "탐험 중단",
                           style: TextStyle(
                             color: CustomBlue.s500,
-                            fontFamily: "Pretendard",
-                            fontWeight: FontWeight.w800,
                             fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Pretendard',
                           ),
                         ),
                       ),

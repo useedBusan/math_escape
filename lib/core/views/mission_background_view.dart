@@ -54,7 +54,7 @@ class MissionBackgroundView extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Pretendard',
             color: mainColor,
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -139,7 +139,14 @@ class MissionBackgroundView extends StatelessWidget {
                                 height: 24,
                               ),
                               SizedBox(width: 4),
-                              Text('힌트'),
+                              Text(
+                                '힌트',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'Pretendard',
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -226,7 +233,14 @@ class MissionBackgroundView extends StatelessWidget {
                                 ),
                                 SizedBox(width: 4),
                               ],
-                              Text(isqr ? 'QR 인식' : '정답 제출'),
+                              Text(
+                                isqr ? 'QR 인식' : '정답 제출',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'Pretendard',
+                                ),
+                              ),
                             ],
                           ),
                         ),

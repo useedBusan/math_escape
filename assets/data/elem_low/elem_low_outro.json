@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "speaker": "푸리",
+  "talk": "좋았어! 지하 1층 안내 데스크에 가면 선생님께서 보물을 주신대!",
+  "furiImage": "assets/images/common/furiStanding.png",
+  "backImage": "assets/images/elementary_low/elemBGEnd.png",
+  "voice": "assets/audio/elemLow/elemLowConversation26.wav",
+  "certificate": "assets/images/common/certificateElemLow.png"
+}

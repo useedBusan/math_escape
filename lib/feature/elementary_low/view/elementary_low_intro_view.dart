@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../constants/enum/grade_enums.dart';
+import '../../../core/services/service_locator.dart';
 import '../../../core/views/common_intro_view.dart';
 import '../../../constants/enum/speaker_enums.dart';
 import '../../../core/viewmodels/intro_view_model.dart';
@@ -24,6 +25,12 @@ class _ElementaryLowIntroViewState extends State<ElementaryLowIntroView> {
         isLoading = false;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    // 대화 오버레이 초기 보이스와 경합을 막기 위해 여기서는 보이스 중단을 하지 않습니다.
+    super.dispose();
   }
 
   @override
@@ -59,7 +66,6 @@ class _ElementaryLowIntroViewState extends State<ElementaryLowIntroView> {
       buttonText: "다음",
       grade: StudentGrade.elementaryLow,
       lottieAnimationPath: viewModel.currentIdx == 0 ? 'assets/animations/furiAppearance.json' : null,
-      showLottieInsteadOfImage: viewModel.currentIdx == 0,
       lottieRepeat: false,
       onNext: () {
         if (viewModel.canGoNext()) {
@@ -81,6 +87,8 @@ class _ElementaryLowIntroViewState extends State<ElementaryLowIntroView> {
             viewModel.goToPreviousTalk();
           });
         } else {
+          // 인트로에서 밖으로 나갈 때 보이스 중단
+          serviceLocator.audioService.stopCharacter();
           Navigator.of(context).pop();
         }
       },

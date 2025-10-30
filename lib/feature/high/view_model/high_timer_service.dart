@@ -49,7 +49,7 @@ class HighTimerService extends ChangeNotifier {
     final totalSeconds = thinkElapsed.inSeconds;
     final years = totalSeconds ~/ 60;
     final months = (totalSeconds % 60) ~/ 5;
-    return '$years년, $months개월';
+    return '$years년 $months개월';
   }
 
   /// 게임 시작 (한 번만 호출)
