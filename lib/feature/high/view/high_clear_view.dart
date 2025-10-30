@@ -5,11 +5,32 @@ import '../view_model/high_mission_view_model.dart';
 import '../view_model/high_hint_view_model.dart';
 import '../view_model/high_answer_view_model.dart';
 import '../../../core/views/home_alert.dart';
+import '../../../core/services/audio_service.dart';
 
-class HighClearView extends StatelessWidget {
+class HighClearView extends StatefulWidget {
   final DateTime gameStartTime;
 
   const HighClearView({super.key, required this.gameStartTime});
+
+  @override
+  State<HighClearView> createState() => _HighClearViewState();
+}
+
+class _HighClearViewState extends State<HighClearView> {
+  final AudioService _audio = AudioService();
+
+  @override
+  void initState() {
+    super.initState();
+    // 클리어 축하 음성 재생
+    _audio.playCharacterAudio('assets/audio/high/highCongratulation.wav');
+  }
+
+  @override
+  void dispose() {
+    _audio.stopCharacter();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

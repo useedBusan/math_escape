@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../app/theme/app_colors.dart';
 import '../extensions/string_extension.dart';
+import '../services/service_locator.dart';
 
 /// 홈화면 이동 확인을 위한 커스텀 Alert 모듈
 class HomeAlert {
@@ -19,6 +20,10 @@ class HomeAlert {
     final result = await show(context);
     
     if (result == true) {
+      // 메인으로 나갈 때 캐릭터(보이스)만 중단, BGM은 유지
+      try {
+        await serviceLocator.audioService.stopCharacter();
+      } catch (_) {}
       if (onHome != null) {
         onHome();
       } else if (context.mounted) {

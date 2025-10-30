@@ -7,6 +7,7 @@ import '../../../core/extensions/string_extension.dart';
 import '../../../core/views/home_alert.dart';
 import '../../../feature/high/model/high_mission_question.dart';
 import '../../../feature/high/view/high_mission.dart';
+import '../../../core/services/audio_service.dart';
 
 Future<List<MissionQuestion>> loadQuestionList() async {
   final String jsonString = await rootBundle.loadString('assets/data/high/high_level_question.json');
@@ -22,6 +23,7 @@ class HighIntroScreen extends StatefulWidget {
 }
 
 class _HighIntroScreenState extends State<HighIntroScreen> {
+  final AudioService _audio = AudioService();
 
   final String introText = '''
 눈을 떴다.
@@ -65,13 +67,8 @@ Paratruth Space, PS라고 불리는 이 공간에서,
   @override
   void initState() {
     super.initState();
-    // 필요 시 인트로 BGM 재생 (자산 경로가 준비되었을 때 활성화)
-    // _audio.playBgm('assets/audio/high/intro_bgm.mp3');
-  }
-
-  Future<void> stopAudio() async {
-    // 인트로 전용 BGM을 사용 중일 때만 중단하도록 의도했으나
-    // 현재 전역 BGM을 사용하므로 여기서는 중단하지 않습니다.
+    // 고등 인트로 음성 재생 (BGM 위로)
+    _audio.playCharacterAudio('assets/audio/high/highIntro.mp3');
   }
 
   Widget buildNarrationText() {
@@ -87,7 +84,8 @@ Paratruth Space, PS라고 불리는 이 공간에서,
 
   @override
   void dispose() {
-    // 전역 BGM 유지: 인트로 종료 시 BGM을 중단하지 않습니다.
+    // 인트로 종료 시 캐릭터 음성 중단
+    _audio.stopCharacter();
     super.dispose();
   }
 
@@ -155,6 +153,8 @@ Paratruth Space, PS라고 불리는 이 공간에서,
                 child: ElevatedButton(
                   onPressed: () async {
                     final questionList = await loadQuestionList();
+                    // 미션 진입 전 인트로 음성 중단
+                    await _audio.stopCharacter();
 
                     if (context.mounted) {
                       Navigator.push(
