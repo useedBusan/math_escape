@@ -3,8 +3,8 @@
     "id": 1,
     "talks": [
       {
-        "talk": "수학자의 노트 한 장이 소마큐브 속에 떨어졌다는 제보가 있어. 도형의 특징을 파악하면 다음 장소의 힌트를 얻을 수 있을거야.",
-        "furiImage": "assets/images/common/furiGood.png",
+        "talk": "좋아! 그럼 우리 같이 비밀 노트를 찾아보자.\n수학자의 노트 한 장이 소마큐브 속에 떨어졌다는 제보가 있어. 도형의 특징을 파악하면 다음 장소의 힌트를 얻을 수 있을거야.",
+        "furiImage": "assets/images/middle/noteFuri.png",
         "backImage": "assets/images/middle/middleBG123.png",
         "voice": null
       }

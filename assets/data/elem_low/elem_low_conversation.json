@@ -12,7 +12,7 @@
     "id": 2,
     "stage": 1,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
+    "speakerImg": "assets/images/common/furiPencil.png",
     "backImg": "assets/images/elementary_low/elemBG1.png",
     "talk": "어? 뭔가 이상해. 풍선 속 숫자들 중 몇 개가 빠져 있는 것 같지 않아?",
     "voice": "assets/audio/elemLow/elemLowConversation2.wav"
@@ -84,7 +84,7 @@
     "id": 10,
     "stage": 3,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
+    "speakerImg": "assets/images/elementary_low/elemLowFuriCount.png",
     "backImg": "assets/images/elementary_low/elemBG3.png",
     "talk": "맞아! 그런데 여기 떨어진 종이에 ‘개수를 세어보라’는 글이 있어. 아마 미션인 것 같아!",
     "voice": "assets/audio/elemLow/elemLowConversation10.wav"
@@ -156,7 +156,7 @@
     "id": 18,
     "stage": 5,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
+    "speakerImg": "assets/images/elementary_low/elemLowFuriFibonacci.png",
     "backImg": "assets/images/elementary_low/elemBG5.png",
     "talk": "이건 피보나치 시계야! 네모 칸의 길이와 불빛 색깔을 이용해서 시간을 알려주지.",
     "voice": "assets/audio/elemLow/elemLowConversation18.wav"
@@ -174,7 +174,7 @@
     "id": 20,
     "stage": 6,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
+    "speakerImg": "assets/images/common/furiBlingBling.png",
     "backImg": "assets/images/elementary_low/elemBG6.png",
     "talk": "매매야, 여기가 바로 보물의 방이야! 그런데 상자를 열려면 특별한 퍼즐을 풀어야 해.",
     "voice": "assets/audio/elemLow/elemLowConversation20.wav"

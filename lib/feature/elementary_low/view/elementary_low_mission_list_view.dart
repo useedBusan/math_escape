@@ -78,13 +78,14 @@ class ElementaryLowMissionListView extends StatelessWidget {
               Flexible(
                 child: LayoutBuilder(
                   builder: (context, constraints) {
+                    final screenHeight = MediaQuery.of(context).size.height;
                     return Center(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Image.asset(
                           mission.questionImage!,
                           fit: BoxFit.contain,
-                          width: constraints.maxWidth,
+                          height: screenHeight * 0.3,
                         ),
                       ),
                     );

@@ -28,8 +28,7 @@ class _ElementaryLowIntroViewState extends State<ElementaryLowIntroView> {
 
   @override
   void dispose() {
-    // 보이스 중단 및 뷰모델 정리
-    viewModel.dispose();
+    // 대화 오버레이 초기 보이스와 경합을 막기 위해 여기서는 보이스 중단을 하지 않습니다.
     super.dispose();
   }
 
