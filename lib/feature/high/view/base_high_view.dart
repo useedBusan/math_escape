@@ -101,7 +101,7 @@ class BaseHighView extends StatelessWidget {
                           think: vm.thinkText,
                           body: vm.bodyText,
                           progress: vm.thinkProgress,
-                          hourglassAsset: 'assets/images/high/highHourglass.png',
+                          hourglassAsset: 'assets/images/high/highHourglass.webp',
                         );
                       },
                     ),

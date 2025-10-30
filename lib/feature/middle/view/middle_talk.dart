@@ -134,7 +134,7 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
 
     return CommonIntroView(
       appBarTitle: StudentGrade.middle.appBarTitle,
-      backgroundAssetPath: 'assets/images/common/bsbackground.png',
+      backgroundAssetPath: 'assets/images/common/bsbackground.webp',
       characterImageAssetPath: talk.puriImage,
       speakerName: '푸리',
       talkText: talk.talk,

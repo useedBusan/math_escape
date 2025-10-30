@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
             // 중앙 로고
             Center(
               child: Image.asset(
-                'assets/images/common/mainLogo.png',
+                'assets/images/common/mainLogo.webp',
                 width: 172,
                 height: 28,
                 fit: BoxFit.contain,
@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
               right: 0,
               bottom: 0,
               child: Image.asset(
-                'assets/images/common/launchBottom.png',
+                'assets/images/common/launchBottom.webp',
                 height: 268,
                 fit: BoxFit.cover, // 좌우 꽉 채우기
               ),

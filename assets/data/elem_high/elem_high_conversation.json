@@ -4,89 +4,89 @@
     "stage": 1,
     "talk": "우와! 정말 대단해! 그럼 이제 피자 가게🍕에서 보물에 대한 다음 힌트를 얻자! 반달 모양을 잘 관찰하면 다음 문제 힌트가 열릴 거야!",
     "answer": "반달? 피자 모양인가?",
-    "furiImage": "assets/images/common/furiGood.png",
-    "backImage": "assets/images/elementary_high/elemHigh17.png",
-    "voice": "assets/audio/elemHigh/elemHighConversation1.wav"
+    "furiImage": "assets/images/common/furiGood.webp",
+    "backImage": "assets/images/elementary_high/elemHigh17.webp",
+    "voice": "assets/audio/elemHigh/elemHighConversation1.mp3"
   },
   {
     "id": 2,
     "stage": 2,
     "talk": "좋았어! 다음 문제는 우표 속 수학자와 관련된 거야. 수학문화관에는 여러 장의 멋진 우표가 있어. 그 중 하나는 1707년에 태어나 1788년에 사망한 수학자를 기념하는 우표야.",
     "answer": "이런 우표가 있다니 신기해!",
-    "furiImage": "assets/images/common/furiGood.png",
-    "backImage": "assets/images/elementary_high/elemHigh23.png",
-    "voice": "assets/audio/elemHigh/elemHighConversation2.wav"
+    "furiImage": "assets/images/common/furiGood.webp",
+    "backImage": "assets/images/elementary_high/elemHigh23.webp",
+    "voice": "assets/audio/elemHigh/elemHighConversation2.mp3"
   },
   {
     "id": 3,
     "stage": 3,
     "talk": "대단해! 이제 다음 문제야. 수학문화관에 전시된 그림과 관련된 문제야. 피타고라스와 유클리드가 함께 있는 그림을 찾아서 QR코드를 찍어봐!",
     "answer": "나 그 사람들 알아!",
-    "furiImage": "assets/images/common/furiGood.png",
-    "backImage": "assets/images/elementary_high/elemHigh23.png",
-    "voice": "assets/audio/elemHigh/elemHighConversation3.wav"
+    "furiImage": "assets/images/common/furiGood.webp",
+    "backImage": "assets/images/elementary_high/elemHigh23.webp",
+    "voice": "assets/audio/elemHigh/elemHighConversation3.mp3"
   },
   {
     "id": 4,
     "stage": 4,
     "talk": "좋았어! 너무 잘하고 있어. \"자연은 수학이라는 언어로 쓰여있으며, 수학만큼 우리의 상상력을 자극하는 것은 없다.\" 라는 말을 한 수학자를 찾아봐!",
     "answer": "와, 정말 멋진 말이다!",
-    "furiImage": "assets/images/common/furiGood.png",
-    "backImage": "assets/images/elementary_high/elemHigh49.png",
-    "voice": "assets/audio/elemHigh/elemHighConversation4.wav"
+    "furiImage": "assets/images/common/furiGood.webp",
+    "backImage": "assets/images/elementary_high/elemHigh49.webp",
+    "voice": "assets/audio/elemHigh/elemHighConversation4.mp3"
   },
   {
     "id": 5,
     "stage": 5,
     "talk": "너무 훌륭하잖아! 여기서 잠깐! 우리 잠시 쉬어갈겸 내가 재밌는 퀴즈를 하나 내볼게. 물고기가 싫어하는 물은 무엇일까?",
     "answer": "잡히면 선물 되니까 선물인가?",
-    "furiImage": "assets/images/common/furiGood.png",
-    "backImage": "assets/images/elementary_high/elemHigh5.png",
-    "voice": "assets/audio/elemHigh/elemHighConversation5.wav"
+    "furiImage": "assets/images/common/furiGood.webp",
+    "backImage": "assets/images/elementary_high/elemHigh5.webp",
+    "voice": "assets/audio/elemHigh/elemHighConversation5.mp3"
   },
   {
     "id": 6,
     "stage": 5,
     "talk": "정답은 그물이야!! 어때? 재밌지? 그냥 빨리 보물이나 찾으러 가자고? 알았어...😂 다음은 2층 수학도서관에 있는 책과 관련된 문제야.",
     "answer": "책에서 단서 찾자!",
-    "furiImage": "assets/images/common/furiSurprised.png",
-    "backImage": "assets/images/elementary_high/elemHigh5.png",
-    "voice": "assets/audio/elemHigh/elemHighConversation6.wav"
+    "furiImage": "assets/images/common/furiSurprised.webp",
+    "backImage": "assets/images/elementary_high/elemHigh5.webp",
+    "voice": "assets/audio/elemHigh/elemHighConversation6.mp3"
   },
   {
     "id": 7,
     "stage": 6,
     "talk": "다음으로 그림자 극장 매표소 시간을 알아내야 해. 그림자 극장🎞은 수학놀이관 안에서 본 것 같은데, 그쪽으로 가서 답을 생각해보자.",
     "answer": "그림자 극장? 뭔가 신비한데!",
-    "furiImage": "assets/images/common/furiGood.png",
-    "backImage": "assets/images/elementary_high/elemHigh68.png",
-    "voice": "assets/audio/elemHigh/elemHighConversation7.wav"
+    "furiImage": "assets/images/common/furiGood.webp",
+    "backImage": "assets/images/elementary_high/elemHigh68.webp",
+    "voice": "assets/audio/elemHigh/elemHighConversation7.mp3"
   },
   {
     "id": 8,
     "stage": 7,
     "talk": "이럴 수가, 그림자 극장 매표소 시간까지 잘 찾아냈잖아? 이러다 정말 보물을 찾겠는걸! 다음 문제는 수수께끼야. **\"이 글을 읽는 내가 주인공이 되는 책\"**을 찾아보자!",
     "answer": "내가 주인공이 되는 책? 대박!",
-    "furiImage": "assets/images/common/furiSurprised.png",
-    "backImage": "assets/images/elementary_high/elemHigh17.png",
-    "voice": "assets/audio/elemHigh/elemHighConversation8.wav"
+    "furiImage": "assets/images/common/furiSurprised.webp",
+    "backImage": "assets/images/elementary_high/elemHigh17.webp",
+    "voice": "assets/audio/elemHigh/elemHighConversation8.mp3"
   },
   {
     "id": 9,
     "stage": 8,
     "talk": "이야, 정말 환상적이야! 조금 어려운 문제를 내볼까? 너 혹시 자이언트 판다🐼라고 들어봤니? 중국에 서식하는 자이언트 판다의 무게를 쌀로 재려면 쌀이 몇 개가 필요할까?",
     "answer": "엄청 많이 필요할 것 같다!",
-    "furiImage": "assets/images/elementary_high/elemHighFuriPanda.png",
-    "backImage": "assets/images/elementary_high/elemHigh68.png",
-    "voice": "assets/audio/elemHigh/elemHighConversation9.wav"
+    "furiImage": "assets/images/elementary_high/elemHighFuriPanda.webp",
+    "backImage": "assets/images/elementary_high/elemHigh68.webp",
+    "voice": "assets/audio/elemHigh/elemHighConversation9.mp3"
   },
   {
     "id": 10,
     "stage": 9,
     "talk": "대단해 정말... 이제 마지막 문제야! 한글로 표기가 가능한 글자 수를 수학문화관에서 찾을 수 있다고 하는데, 한 번 찾아봐!",
     "answer": "글자 수? 너무 궁금하다!",
-    "furiImage": "assets/images/common/furiGood.png",
-    "backImage": "assets/images/elementary_high/elemHigh49.png",
-    "voice": "assets/audio/elemHigh/elemHighConversation10.wav"
+    "furiImage": "assets/images/common/furiGood.webp",
+    "backImage": "assets/images/elementary_high/elemHigh49.webp",
+    "voice": "assets/audio/elemHigh/elemHighConversation10.mp3"
   }
 ]

@@ -66,7 +66,7 @@ class _VolumeDropdownPanelState extends State<VolumeDropdownPanel>
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildCompactVolumeControl(
-                icon: Image.asset("assets/images/high/highFuri.png"),
+                icon: Image.asset("assets/images/high/highFuri.webp"),
                 label: '캐릭터',
                 value: _characterVolume,
                 color: CustomPink.s500,
@@ -77,7 +77,7 @@ class _VolumeDropdownPanelState extends State<VolumeDropdownPanel>
               ),
               const SizedBox(height: 10),
               _buildCompactVolumeControl(
-                icon: Image.asset("assets/images/common/bgmIcon.png"),
+                icon: Image.asset("assets/images/common/bgmIcon.webp"),
                 label: '배경음',
                 value: _bgmVolume,
                 color: CustomBlue.s500,

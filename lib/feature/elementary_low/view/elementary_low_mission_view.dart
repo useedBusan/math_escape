@@ -69,11 +69,11 @@ class ElementaryLowMissionView extends StatelessWidget {
                   grade: grade,
                   title: grade.appBarTitle,
                   lottieAssetPath: 'assets/animations/furiClear.json',
-                  backgroundAssetPath: data['backImage'] ?? 'assets/images/common/bsbackground.png',
+                  backgroundAssetPath: data['backImage'] ?? 'assets/images/common/bsbackground.webp',
                   speakerName: data['speaker'] ?? '푸리',
                   talkText: data['talk'] ?? '',
                   voiceAssetPath: data['voice'] as String?,
-                  certificateAssetPath: data['certificate'] ?? 'assets/images/common/certificateElemLow.png',
+                  certificateAssetPath: data['certificate'] ?? 'assets/images/common/certificateElemLow.webp',
                 ),
               ),
             );

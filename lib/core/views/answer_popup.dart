@@ -66,8 +66,8 @@ class UnifiedAnswerDialog extends StatelessWidget {
                     child: Center(
                       child: Image.asset(
                         isCorrect 
-                          ? "assets/images/common/successFuri.png"
-                          : "assets/images/common/failFuri.png",
+                          ? "assets/images/common/successFuri.webp"
+                          : "assets/images/common/failFuri.webp",
                         height: 70,
                         fit: BoxFit.contain,
                       ),

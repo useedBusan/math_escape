@@ -151,7 +151,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
     } else {
       // isHint = false인 경우 공용 HintPopup 표시
       final hintModel = HintModel(
-        hintIcon: 'assets/images/middle/middleHint.png',
+        hintIcon: 'assets/images/middle/middleHint.webp',
         upString: '힌트',
         downString: q.hint,
         hintImg: null,
@@ -310,7 +310,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
           children: [
             IntegerPhaseBanner(
               questionNumber: vm.currentIndex + 1,
-              furiImagePath: "assets/images/high/highFuri.png",
+              furiImagePath: "assets/images/high/highFuri.webp",
               fontSize: 14,
             ),
             const SizedBox(height: 14),
@@ -344,7 +344,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
                                 opacity: opacity,
                                 child: IconButton(
                                   icon: Image.asset(
-                                    "assets/images/high/hintHintIcon.png",
+                                    "assets/images/high/hintHintIcon.webp",
                                     height: 40,
                                   ),
                                   onPressed: () => _showHintDialog(vm),
