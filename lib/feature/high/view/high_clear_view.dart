@@ -6,6 +6,8 @@ import '../view_model/high_hint_view_model.dart';
 import '../view_model/high_answer_view_model.dart';
 import '../../../core/views/home_alert.dart';
 import '../../../core/services/audio_service.dart';
+import 'package:gal/gal.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class HighClearView extends StatefulWidget {
   final DateTime gameStartTime;
@@ -18,6 +20,33 @@ class HighClearView extends StatefulWidget {
 
 class _HighClearViewState extends State<HighClearView> {
   final AudioService _audio = AudioService();
+  Future<void> _saveCertificate() async {
+    try {
+      if (!await Gal.hasAccess()) {
+        await Gal.requestAccess();
+        if (!await Gal.hasAccess()) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('권한이 거부되어 저장할 수 없습니다.')),
+          );
+          return;
+        }
+      }
+      final data = await rootBundle.load('assets/images/common/certificateHigh.png');
+      final bytes = data.buffer.asUint8List();
+      final String name = 'certificate_high_${DateTime.now().millisecondsSinceEpoch}.png';
+      await Gal.putImageBytes(bytes, name: name, album: 'Math Escape');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('수료증이 갤러리에 저장되었습니다.')),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('저장 실패: $e')),
+      );
+    }
+  }
 
   @override
   void initState() {
@@ -118,7 +147,7 @@ class _HighClearViewState extends State<HighClearView> {
                   child: SizedBox(
                     width: double.infinity,
                     height: 52,
-                    child: ElevatedButton.icon(
+                    child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: CustomBlue.s500,
                         foregroundColor: Colors.white,
@@ -126,15 +155,11 @@ class _HighClearViewState extends State<HighClearView> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed: () {
-                        HighMissionViewModel.instance.disposeAll();
-                        HighHintViewModel.instance.disposeAll();
-                        HighAnswerViewModel.instance.disposeAll();
-                        Navigator.of(
-                          context,
-                        ).popUntil((route) => route.isFirst);
-                      },
-                      label: const Text("수료증 다운로드"),
+                      onPressed: _saveCertificate,
+                      child: const Text(
+                        "수료증 다운로드",
+                        style: TextStyle(fontWeight: FontWeight.w700),
+                      ),
                     ),
                   ),
                 ),

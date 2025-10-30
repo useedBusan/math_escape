@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../constants/enum/grade_enums.dart';
-import '../../app/theme/app_colors.dart';
 import '../widgets/volume_dropdown_panel.dart';
 import '../services/audio_service.dart';
 import 'lottie_animation_widget.dart';
