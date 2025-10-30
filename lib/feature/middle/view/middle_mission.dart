@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../App/theme/app_colors.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../core/views/answer_popup.dart';
+import '../../../core/views/outro_view.dart';
 import '../../../core/views/common_intro_view.dart';
 import '../../../core/viewmodels/intro_view_model.dart';
 import '../../../constants/enum/image_enums.dart';
@@ -14,6 +15,8 @@ import '../coordinator/middle_mission_coordinator.dart';
 import '../model/middle_mission_model.dart';
 import '../view_model/middle_mission_view_model.dart';
 import 'conversation_overlay.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
 
 // MiddleMissionScreen
 class MiddleMissionScreen extends StatefulWidget {
@@ -155,7 +158,28 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     MiddleMissionViewModel viewModel,
   ) async {
     try {
+      final bool isLast = viewModel.currentIndex >= viewModel.totalCount - 1;
       viewModel.completeQuestion();
+      if (isLast) {
+        final String jsonString = await rootBundle.loadString('assets/data/middle/middle_outro.json');
+        final Map<String, dynamic> data = json.decode(jsonString);
+        if (!mounted) return;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => OutroView(
+              grade: StudentGrade.middle,
+              title: StudentGrade.middle.appBarTitle,
+              lottieAssetPath: 'assets/animations/furiClear.json',
+              backgroundAssetPath: data['backImage'] ?? 'assets/images/common/bsbackground.png',
+              speakerName: data['speaker'] ?? '푸리',
+              talkText: data['talk'] ?? '',
+              voiceAssetPath: data['voice'] as String?,
+              certificateAssetPath: data['certificate'] ?? 'assets/images/common/certificateMiddle.png',
+            ),
+          ),
+        );
+      }
     } catch (e) {
       if (mounted) {
         Navigator.of(context).pop();

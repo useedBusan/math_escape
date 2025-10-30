@@ -48,7 +48,7 @@
     "id": 4,
     "talks": [
       {
-        "talk": "549,755,813,888이라... 작은 것이 모이면 상상을 초월하는구나!",
+        "talk": "$2^{39}$ = 549,755,813,888이라... 작은 것이 모이면 상상을 초월하는구나!",
         "furiImage": "assets/images/common/furiGood.png",
         "backImage": "assets/images/middle/middleBG123.png",
         "voice": "assets/audio/middle/middleConversation5.wav"
@@ -171,12 +171,6 @@
         "furiImage": "assets/images/common/puri_clear.gif",
         "backImage": "assets/images/middle/middleBG789.png",
         "voice": "assets/audio/middle/middleConversation19.wav"
-      },
-      {
-        "talk": "문제를 해결하면서 수학문화관의 이곳저곳을 재밌게 살펴봤니? 선물은 지하 1층 안내 데스크에 계신 선생님께 말씀드리면 주실 거야. 안녕👋",
-        "furiImage": "assets/images/common/puri_clear.gif",
-        "backImage": "assets/images/middle/middleBG789.png",
-        "voice": "assets/audio/middle/middleConversation20.wav"
       }
     ]
   }

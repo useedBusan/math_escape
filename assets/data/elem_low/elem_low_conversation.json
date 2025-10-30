@@ -223,14 +223,5 @@
     "backImg": "assets/images/elementary_low/elemBGEnd.png",
     "talk": "푸리야, 우리 해냈어! 이제 우리도 진짜 수학 보물탐험가야!",
     "voice": "assets/audio/elemLow/elemLowConversation25.wav"
-  },
-  {
-    "id": 26,
-    "stage": 7,
-    "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
-    "backImg": "assets/images/elementary_low/elemBGEnd.png",
-    "talk": "좋았어! 지하 1층 안내 데스크에 가면 선생님께서 보물을 주신대!",
-    "voice": "assets/audio/elemLow/elemLowConversation26.wav"
   }
 ]

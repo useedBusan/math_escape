@@ -123,18 +123,11 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
                     return CommonIntroView(
                       appBarTitle: StudentGrade.middle.appBarTitle,
                       backgroundAssetPath: talk.backImg,
-                      characterImageAssetPath: widget.isFinalConversation 
-                          ? 'assets/images/common/puri_clear.png' 
-                          : talk.speakerImg,
+                      characterImageAssetPath: talk.speakerImg,
                       speakerName: speakerName(),
                       talkText: talk.talk,
                       buttonText: "다음",
                       grade: StudentGrade.middle,
-                      // 마지막 stage에서만 furiClear 애니메이션 표시
-                      lottieAnimationPath: widget.stage == maxStage 
-                          ? 'assets/animations/furiClear.json' 
-                          : null,
-                      showLottieInsteadOfImage: widget.stage == maxStage,
                       onNext: () {
                         if (vm.canGoNext()) {
                           vm.goToNextTalk();

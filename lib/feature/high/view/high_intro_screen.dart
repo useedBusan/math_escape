@@ -7,6 +7,7 @@ import '../../../core/extensions/string_extension.dart';
 import '../../../core/views/home_alert.dart';
 import '../../../feature/high/model/high_mission_question.dart';
 import '../../../feature/high/view/high_mission.dart';
+import '../../../core/widgets/volume_dropdown_panel.dart';
 import '../../../core/services/audio_service.dart';
 
 Future<List<MissionQuestion>> loadQuestionList() async {
@@ -110,6 +111,8 @@ Paratruth Space, PS라고 불리는 이 공간에서,
           onPressed: () async {
             final alertResult = await HomeAlert.show(context);
             if (alertResult == true && context.mounted) {
+              // 인트로에서 밖으로 나갈 때 보이스 중단
+              await _audio.stopCharacter();
               Navigator.of(context).pop();
             }
           },
@@ -123,76 +126,139 @@ Paratruth Space, PS라고 불리는 이 공간에서,
           ),
         ],
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Intro',
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Intro',
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          buildNarrationText(),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final questionList = await loadQuestionList();
+                        // 미션 진입 전 인트로 음성 중단
+                        await _audio.stopCharacter();
+
+                        if (context.mounted) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              settings: const RouteSettings(name: 'HighMission'),
+                              builder: (_) => HighMission(
+                                questionList: questionList,
+                                currentIndex: 0,
+                                gameStartTime: DateTime.now(),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        backgroundColor: CustomBlue.s500,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        elevation: 2,
+                      ),
+                      child: const Text(
+                        '게임 시작',
                         style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'Pretendard',
                         ),
                       ),
-                      const SizedBox(height: 24),
-                      buildNarrationText(),
-                      const SizedBox(height: 16),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    final questionList = await loadQuestionList();
-                    // 미션 진입 전 인트로 음성 중단
-                    await _audio.stopCharacter();
-
-                    if (context.mounted) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          settings: const RouteSettings(name: 'HighMission'),
-                          builder: (_) => HighMission(
-                            questionList: questionList,
-                            currentIndex: 0,
-                            gameStartTime: DateTime.now(),
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: CustomBlue.s500,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    elevation: 2,
-                  ),
-                  child: const Text(
-                    '게임 시작',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Pretendard',
                     ),
                   ),
-                ),
+                  const SizedBox(height: 4),
+                ],
               ),
-              const SizedBox(height: 4),
-            ],
+            ),
           ),
-        ),
+          Positioned(
+            top: 15,
+            right: 15,
+            child: SafeArea(
+              child: Builder(
+                builder: (iconContext) {
+                  return GestureDetector(
+                    onTap: () {
+                      final RenderBox box = iconContext.findRenderObject() as RenderBox;
+                      final Offset iconOffset = box.localToGlobal(Offset.zero);
+                      final Size iconSize = box.size;
+                      final Size screenSize = MediaQuery.of(iconContext).size;
+
+                      final double panelTop = iconOffset.dy + iconSize.height + 10;
+                      final double panelWidth = screenSize.width * 0.93;
+                      final double panelLeft = (screenSize.width - panelWidth) / 2;
+
+                      showGeneralDialog(
+                        context: iconContext,
+                        barrierLabel: 'volumePanel',
+                        barrierDismissible: true,
+                        barrierColor: Colors.transparent,
+                        transitionDuration: const Duration(milliseconds: 150),
+                        pageBuilder: (context, a1, a2) {
+                          return Stack(
+                            children: [
+                              Positioned.fill(
+                                child: GestureDetector(onTap: () => Navigator.of(context).pop()),
+                              ),
+                              Positioned(
+                                top: panelTop,
+                                left: panelLeft,
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: SizedBox(
+                                    width: panelWidth,
+                                    child: VolumeDropdownPanel(
+                                      onClose: () => Navigator.of(context).pop(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Image.asset(
+                      'assets/images/common/soundControlIcon.png',
+                      width: 28,
+                      height: 28,
+                      filterQuality: FilterQuality.high,
+                      isAntiAlias: true,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

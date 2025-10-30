@@ -9,7 +9,7 @@ class AudioService {
   final AudioPlayer _bgmPlayer = AudioPlayer();
 
   double _characterVolume = 0.7;
-  double _bgmVolume = 0.5;
+  double _bgmVolume = 0.1;
 
   double get characterVolume => _characterVolume;
   double get bgmVolume => _bgmVolume;

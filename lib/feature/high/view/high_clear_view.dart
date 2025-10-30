@@ -83,19 +83,18 @@ class _HighClearViewState extends State<HighClearView> {
                     children: [
                       const SizedBox(height: 20),
                       Image.asset(
-                        "assets/images/high/highComplete.png",
-                        width: 200,
+                        "assets/images/high/highFuriClear.png",
                         height: 200,
                         fit: BoxFit.contain,
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        "Paratruth Space,\nPS를 탈출하는 데 걸린 시간",
+                        "Paratruth Space,PS를 탈출하는 데 걸린 시간",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 15,
                           fontFamily: "Pretendard",
-                          color: CustomBlue.s700,
+                          color: CustomBlue.s500,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -135,7 +134,7 @@ class _HighClearViewState extends State<HighClearView> {
                           context,
                         ).popUntil((route) => route.isFirst);
                       },
-                      label: const Text("메인화면으로"),
+                      label: const Text("수료증 다운로드"),
                     ),
                   ),
                 ),
@@ -177,14 +176,14 @@ class _InfoCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(fontSize: 13, color: Color(0xFF777777)),
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xDD000000)),
           ),
           Text(
             value,
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2E2E2E),
+              color: CustomBlue.s500,
             ),
           ),
         ],

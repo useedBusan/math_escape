@@ -142,13 +142,14 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
       grade: StudentGrade.middle,
       // 첫 번째 화면에만 furiAppearance 애니메이션 표시 (한 번만 재생)
       lottieAnimationPath: currentIndex == 0 ? 'assets/animations/furiAppearance.json' : null,
-      showLottieInsteadOfImage: currentIndex == 0,
       lottieRepeat: false, // furiAppearance는 한 번만 재생
       onNext: goToNext,
       onBack: () {
         if (currentIndex > 0) {
           goToPrevious();
         } else {
+          // 인트로에서 밖으로 나갈 때 보이스 중단
+          serviceLocator.audioService.stopCharacter();
           Navigator.of(context).pop();
         }
       },

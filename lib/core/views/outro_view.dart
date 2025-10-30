@@ -1,54 +1,151 @@
 import 'package:flutter/material.dart';
-import '../../../constants/enum/grade_enums.dart';
-import '../../../app/theme/app_colors.dart';
-import 'home_alert.dart';
-import 'lottie_animation_widget.dart';
-import '../extensions/string_extension.dart';
+import 'package:flutter/services.dart';
+import '../../constants/enum/grade_enums.dart';
+import '../../app/theme/app_colors.dart';
 import '../widgets/volume_dropdown_panel.dart';
+import '../services/audio_service.dart';
+import 'lottie_animation_widget.dart';
+import 'home_alert.dart';
+import '../extensions/string_extension.dart';
+import 'package:gal/gal.dart';
 
-class CommonIntroView extends StatelessWidget {
-  final String appBarTitle;
+class OutroView extends StatefulWidget {
+  final StudentGrade grade;
+  final String lottieAssetPath;
+  final String? voiceAssetPath;
+  final String certificateAssetPath;
+  final String title;
   final String backgroundAssetPath;
-  final String characterImageAssetPath;
   final String speakerName;
   final String talkText;
-  final String buttonText;
-  final VoidCallback onNext;
-  final VoidCallback onBack;
-  final StudentGrade? grade; // 학년 정보 추가
-  final String? lottieAnimationPath; // 로티 애니메이션 경로 추가
-  final bool lottieRepeat; // 로티 애니메이션 반복 여부
 
-  const CommonIntroView({
+  const OutroView({
     super.key,
-    required this.appBarTitle,
+    required this.grade,
+    required this.title,
+    required this.certificateAssetPath,
+    required this.lottieAssetPath,
     required this.backgroundAssetPath,
-    required this.characterImageAssetPath,
     required this.speakerName,
     required this.talkText,
-    required this.buttonText,
-    required this.onNext,
-    required this.onBack,
-    this.grade, // 기본값 null로 하위 호환성 유지
-    this.lottieAnimationPath, // 로티 애니메이션 경로
-    this.lottieRepeat = true, // 기본값 true로 하위 호환성 유지
+    this.voiceAssetPath,
   });
+
+  @override
+  State<OutroView> createState() => _OutroViewState();
+}
+
+class _OutroViewState extends State<OutroView> {
+  final AudioService _audio = AudioService();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.voiceAssetPath != null && widget.voiceAssetPath!.isNotEmpty) {
+      _audio.playCharacterAudio(widget.voiceAssetPath!);
+    }
+  }
+
+  @override
+  void dispose() {
+    _audio.stopCharacter();
+    super.dispose();
+  }
+
+  Future<void> _saveCertificate() async {
+    if (!mounted) return;
+
+    try {
+      // 권한 확인 및 요청
+      if (!await Gal.hasAccess()) {
+        await Gal.requestAccess();
+        if (!mounted) return;
+
+        if (!await Gal.hasAccess()) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('권한이 거부되어 저장할 수 없습니다.')),
+          );
+          return;
+        }
+      }
+
+      final ByteData data = await rootBundle.load(widget.certificateAssetPath);
+      if (!mounted) return;
+
+      final Uint8List bytes = data.buffer.asUint8List();
+      final String name = 'certificate_${DateTime.now().millisecondsSinceEpoch}.png';
+
+      await Gal.putImageBytes(bytes, name: name, album: 'Math Escape');
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('수료증이 갤러리에 저장되었습니다.')),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('저장 실패: $e')),
+      );
+    }
+  }
+
+  void _showVolumePanel(BuildContext iconContext) {
+    final RenderBox? box = iconContext.findRenderObject() as RenderBox?;
+    if (box == null) return;
+
+    final Offset iconOffset = box.localToGlobal(Offset.zero);
+    final Size iconSize = box.size;
+    final Size screenSize = MediaQuery.of(iconContext).size;
+
+    final double panelTop = iconOffset.dy + iconSize.height + 10;
+    final double panelWidth = screenSize.width * 0.93;
+    final double panelLeft = (screenSize.width - panelWidth) / 2;
+
+    showGeneralDialog(
+      context: iconContext,
+      barrierLabel: 'volumePanel',
+      barrierDismissible: true,
+      barrierColor: Colors.transparent,
+      transitionDuration: const Duration(milliseconds: 150),
+      pageBuilder: (context, a1, a2) {
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: GestureDetector(onTap: () => Navigator.of(context).pop()),
+            ),
+            Positioned(
+              top: panelTop,
+              left: panelLeft,
+              child: Material(
+                color: Colors.transparent,
+                child: SizedBox(
+                  width: panelWidth,
+                  child: VolumeDropdownPanel(
+                    onClose: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final mainColor = grade?.mainColor ?? CustomPink.s500;
-    final gradientColors =
-        grade?.gradientColors ??
-        [CustomPink.s500.withValues(alpha: 0.6), const Color(0x99FFFFFF)];
-    final bubbleBorderColor = grade?.bubbleBorderColor ?? CustomPink.s700;
-    final speakerLabelColor = grade?.speakerLabelColor ?? CustomPink.s600;
+    final mainColor = widget.grade.mainColor;
+    final gradientColors = widget.grade.gradientColors;
+    final bubbleBorderColor = widget.grade.bubbleBorderColor;
+    final speakerLabelColor = widget.grade.speakerLabelColor;
 
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
         if (!didPop) {
-          onBack();
+          Navigator.of(context).pop();
         }
       },
       child: Scaffold(
@@ -57,7 +154,7 @@ class CommonIntroView extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0,
           title: Text(
-            appBarTitle,
+            widget.title,
             style: TextStyle(
               color: mainColor,
               fontSize: 18,
@@ -67,7 +164,7 @@ class CommonIntroView extends StatelessWidget {
           centerTitle: true,
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: mainColor, size: 28),
-            onPressed: onBack,
+            onPressed: () => Navigator.of(context).pop(),
           ),
           actions: [
             IconButton(
@@ -83,7 +180,7 @@ class CommonIntroView extends StatelessWidget {
           children: [
             Positioned.fill(
               child: Image.asset(
-                backgroundAssetPath,
+                widget.backgroundAssetPath,
                 fit: BoxFit.cover,
                 alignment: Alignment.center,
                 gaplessPlayback: true,
@@ -102,7 +199,6 @@ class CommonIntroView extends StatelessWidget {
                 ),
               ),
             ),
-            // AppBar 바로 아래, 본문 우상단 BGM 아이콘
             Positioned(
               top: 15,
               right: 15,
@@ -110,54 +206,7 @@ class CommonIntroView extends StatelessWidget {
                 child: Builder(
                   builder: (iconContext) {
                     return GestureDetector(
-                      onTap: () {
-                        final RenderBox box =
-                            iconContext.findRenderObject() as RenderBox;
-                        final Offset iconOffset = box.localToGlobal(
-                          Offset.zero,
-                        );
-                        final Size iconSize = box.size;
-                        final Size screenSize = MediaQuery.of(iconContext).size;
-
-                        final double panelTop =
-                            iconOffset.dy + iconSize.height + 10;
-                        final double panelWidth = screenSize.width * 0.93;
-                        final double panelLeft =
-                            (screenSize.width - panelWidth) / 2;
-
-                        showGeneralDialog(
-                          context: iconContext,
-                          barrierLabel: 'volumePanel',
-                          barrierDismissible: true,
-                          barrierColor: Colors.transparent,
-                          transitionDuration: const Duration(milliseconds: 150),
-                          pageBuilder: (context, anim1, anim2) {
-                            return Stack(
-                              children: [
-                                Positioned.fill(
-                                  child: GestureDetector(
-                                    onTap: () => Navigator.of(context).pop(),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: panelTop,
-                                  left: panelLeft,
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: SizedBox(
-                                      width: panelWidth,
-                                      child: VolumeDropdownPanel(
-                                        onClose: () =>
-                                            Navigator.of(context).pop(),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
+                      onTap: () => _showVolumePanel(iconContext),
                       child: Image.asset(
                         'assets/images/common/soundControlIcon.png',
                         width: 28,
@@ -180,23 +229,16 @@ class CommonIntroView extends StatelessWidget {
                     flex: 6,
                     child: LayoutBuilder(
                       builder: (context, constraints) {
-                        final characterHeight = constraints.maxHeight * 0.6;
+                        final lottieHeight = constraints.maxHeight * 0.6;
 
                         return Center(
                           child: SizedBox(
-                            height: characterHeight,
-                            child: lottieAnimationPath != null
-                                ? LottieAnimationWidget(
-                                    assetPath: lottieAnimationPath!,
-                                    height: characterHeight,
-                                    repeat: lottieRepeat,
-                                  )
-                                : Image.asset(
-                                    characterImageAssetPath,
-                                    fit: BoxFit.contain,
-                                    filterQuality: FilterQuality.high,
-                                    isAntiAlias: true,
-                                  ),
+                            height: lottieHeight,
+                            child: LottieAnimationWidget(
+                              assetPath: widget.lottieAssetPath,
+                              height: lottieHeight,
+                              repeat: true,
+                            ),
                           ),
                         );
                       },
@@ -227,12 +269,12 @@ class CommonIntroView extends StatelessWidget {
                             child: RichText(
                               textAlign: TextAlign.start,
                               text: TextSpan(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 15,
                                   color: Colors.black87,
                                   height: 1.5,
                                 ),
-                                children: talkText.toStyledSpans(fontSize: 18),
+                                children: widget.talkText.toStyledSpans(fontSize: 18),
                               ),
                             ),
                           ),
@@ -254,8 +296,8 @@ class CommonIntroView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(40),
                             ),
                             child: Text(
-                              speakerName,
-                              style: TextStyle(
+                              widget.speakerName,
+                              style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -280,9 +322,9 @@ class CommonIntroView extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        onPressed: onNext,
-                        child: Text(
-                          buttonText,
+                        onPressed: _saveCertificate,
+                        child: const Text(
+                          '수료증 다운로드',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
