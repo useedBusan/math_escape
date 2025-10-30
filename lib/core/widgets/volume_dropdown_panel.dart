@@ -49,9 +49,9 @@ class _VolumeDropdownPanelState extends State<VolumeDropdownPanel>
           end: Offset.zero,
         ).animate(_animation),
         child: Container(
-          width: 288,
+          width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Color(0xDDFFFFFF),
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
@@ -75,7 +75,7 @@ class _VolumeDropdownPanelState extends State<VolumeDropdownPanel>
                   _audioService.setCharacterVolume(value);
                 },
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 10),
               _buildCompactVolumeControl(
                 icon: Image.asset("assets/images/common/bgmIcon.png"),
                 label: '배경음',
@@ -107,34 +107,54 @@ class _VolumeDropdownPanelState extends State<VolumeDropdownPanel>
           children: [
             Row(
               children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.1),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: color.withValues(alpha: 0.3),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Center(child: icon),
-                ),
-                const SizedBox(width: 8),
+                // Container(
+                //   height: 28,
+                //   decoration: BoxDecoration(
+                //     color: color.withValues(alpha: 0.1),
+                //     shape: BoxShape.circle,
+                //     boxShadow: [
+                //       BoxShadow(
+                //         color: color.withValues(alpha: 0.3),
+                //         blurRadius: 4,
+                //         offset: const Offset(0, 2),
+                //       ),
+                //     ],
+                //   ),
+                //   child: Center(child: icon),
+                // ),
+                // const SizedBox(width: 8),
                 Text(
                   label,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF1F2937),
+                    color: Color(0xCC000000),
                   ),
                 ),
               ],
             ),
+            Expanded(
+              child: SliderTheme(
+                data: SliderThemeData(
+                  trackHeight: 6,
+                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 9),
+                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
+                  activeTrackColor: color,
+                  inactiveTrackColor: CustomGray.darkGray,
+                  thumbColor: Colors.white,
+                  overlayColor: color.withValues(alpha: 0.2),
+                ),
+                child: Slider(
+                  value: value,
+                  onChanged: onChanged,
+                  min: 0.0,
+                  max: 1.0,
+                ),
+              ),
+            ),
             Container(
+              width: 56,
+              alignment: Alignment.center,
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
                 color: color.withValues(alpha: 0.1),
@@ -150,24 +170,6 @@ class _VolumeDropdownPanelState extends State<VolumeDropdownPanel>
               ),
             ),
           ],
-        ),
-        const SizedBox(height: 12),
-        SliderTheme(
-          data: SliderThemeData(
-            trackHeight: 6,
-            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 9),
-            overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
-            activeTrackColor: color,
-            inactiveTrackColor: const Color(0xFFE5E7EB),
-            thumbColor: Colors.white,
-            overlayColor: color.withValues(alpha: 0.2),
-          ),
-          child: Slider(
-            value: value,
-            onChanged: onChanged,
-            min: 0.0,
-            max: 1.0,
-          ),
         ),
       ],
     );

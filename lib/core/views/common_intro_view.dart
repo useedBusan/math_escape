@@ -4,6 +4,7 @@ import '../../../app/theme/app_colors.dart';
 import 'home_alert.dart';
 import 'lottie_animation_widget.dart';
 import '../extensions/string_extension.dart';
+import '../widgets/volume_dropdown_panel.dart';
 
 class CommonIntroView extends StatelessWidget {
   final String appBarTitle;
@@ -100,6 +101,66 @@ class CommonIntroView extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   ),
+                ),
+              ),
+            ),
+            // AppBar 바로 아래, 본문 우상단 BGM 아이콘
+            Positioned(
+              top: 15,
+              right: 15,
+              child: SafeArea(
+                child: Builder(
+                  builder: (iconContext) {
+                    return GestureDetector(
+                      onTap: () {
+                        final RenderBox box = iconContext.findRenderObject() as RenderBox;
+                        final Offset iconOffset = box.localToGlobal(Offset.zero);
+                        final Size iconSize = box.size;
+                        final Size screenSize = MediaQuery.of(iconContext).size;
+
+                        final double panelTop = iconOffset.dy + iconSize.height + 10;
+                        final double panelWidth = screenSize.width * 0.93;
+                        final double panelLeft = (screenSize.width - panelWidth) / 2;
+
+                        showGeneralDialog(
+                          context: iconContext,
+                          barrierLabel: 'volumePanel',
+                          barrierDismissible: true,
+                          barrierColor: Colors.transparent,
+                          transitionDuration: const Duration(milliseconds: 150),
+                          pageBuilder: (context, anim1, anim2) {
+                            return Stack(
+                              children: [
+                                Positioned.fill(
+                                  child: GestureDetector(onTap: () => Navigator.of(context).pop()),
+                                ),
+                                Positioned(
+                                  top: panelTop,
+                                  left: panelLeft,
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: SizedBox(
+                                      width: panelWidth,
+                                      child: VolumeDropdownPanel(
+                                        onClose: () => Navigator.of(context).pop(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Image.asset(
+                        'assets/images/common/soundControlIcon.png',
+                        width: 28,
+                        height: 28,
+                        filterQuality: FilterQuality.high,
+                        isAntiAlias: true,
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

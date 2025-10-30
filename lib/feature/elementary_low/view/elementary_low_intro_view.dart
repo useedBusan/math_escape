@@ -27,6 +27,13 @@ class _ElementaryLowIntroViewState extends State<ElementaryLowIntroView> {
   }
 
   @override
+  void dispose() {
+    // 보이스 중단 및 뷰모델 정리
+    viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Properties
     if (isLoading) {

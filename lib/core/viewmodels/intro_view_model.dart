@@ -16,6 +16,8 @@ class IntroViewModel extends ChangeNotifier {
     try {
       final jsonList = await serviceLocator.dataService.loadJsonList(assetJsonPath);
       talks = jsonList.map((json) => Talk.fromJson(json)).toList();
+      // 첫 항목 보이스 재생
+      _playCurrentVoice();
       notifyListeners();
     } catch (e) {
       // 에러 처리
@@ -35,6 +37,7 @@ class IntroViewModel extends ChangeNotifier {
   void goToNextTalk() {
     if (canGoNext()) {
       currentIdx++;
+      _playCurrentVoice();
       notifyListeners();
     }
   }
@@ -42,6 +45,7 @@ class IntroViewModel extends ChangeNotifier {
   void goToPreviousTalk() {
     if (canGoPrevious()) {
       currentIdx--;
+      _playCurrentVoice();
       notifyListeners();
     }
   }
@@ -51,7 +55,26 @@ class IntroViewModel extends ChangeNotifier {
     final originalTalks = List<Talk>.from(talks);
     talks = originalTalks.where((talk) => talk.stage == stage).toList();
     currentIdx = 0;
+    _playCurrentVoice();
     notifyListeners();
+  }
+
+  void _playCurrentVoice() {
+    if (talks.isEmpty) return;
+    final String? voice = talks[currentIdx].voice;
+    if (voice == null || voice.isEmpty) {
+      // 보이스가 없으면 중단
+      serviceLocator.audioService.stopCharacter();
+      return;
+    }
+    serviceLocator.audioService.playCharacterAudio(voice);
+  }
+
+  @override
+  void dispose() {
+    // 화면 종료 시 캐릭터 보이스 중단
+    serviceLocator.audioService.stopCharacter();
+    super.dispose();
   }
 }
 
