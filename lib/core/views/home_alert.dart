@@ -52,7 +52,7 @@ class _CustomHomeAlertDialog extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: Image.asset(
-                  "assets/images/common/mainHigh.png",
+                  "assets/images/common/mainHigh.webp",
                   width: 120,
                   height: 120,
                 ),

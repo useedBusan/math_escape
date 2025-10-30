@@ -28,7 +28,7 @@ class BaseMainView extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Image.asset(
-                            'assets/images/common/mainLogo.png',
+                            'assets/images/common/mainLogo.webp',
                             height: 22,
                             fit: BoxFit.contain,
                           ),
@@ -46,7 +46,7 @@ class BaseMainView extends StatelessWidget {
                             );
                           },
                           child: Image.asset(
-                            'assets/images/common/soundControlIcon.png',
+                            'assets/images/common/soundControlIcon.webp',
                             height: 24,
                             width: 24,
                           ),
@@ -142,7 +142,7 @@ class BaseMainView extends StatelessWidget {
                             child: SizedBox(
                               width: double.infinity,
                               child: Image.asset(
-                                'assets/images/common/bannerMain.png',
+                                'assets/images/common/bannerMain.webp',
                                 fit: BoxFit.cover,
                               ),
                             ),

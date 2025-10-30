@@ -132,7 +132,7 @@ class _HighHintContentState extends State<_HighHintContent>
 
     // HighHintView에서는 항상 공용 HintPopup 표시
     final hintModel = HintModel(
-      hintIcon: 'assets/images/middle/middleHint.png',
+      hintIcon: 'assets/images/middle/middleHint.webp',
       upString: '힌트',
       downString: q.hint,
       hintImg: null,
@@ -268,7 +268,7 @@ class _HighHintContentState extends State<_HighHintContent>
           children: [
             IntegerPhaseBanner(
               questionNumber: widget.currentIndex + 1,
-              furiImagePath: "assets/images/high/highFuri.png",
+              furiImagePath: "assets/images/high/highFuri.webp",
               fontSize: 14,
             ),
         const SizedBox(height: 14),

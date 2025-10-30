@@ -19,7 +19,7 @@ class CustomIntroAlert extends StatelessWidget {
       case StudentGrade.elementaryLow:
         return '';
       case StudentGrade.middle:
-        return 'assets/images/middle/middleDiary.png';
+        return 'assets/images/middle/middleDiary.webp';
       default:
         return '';
     }

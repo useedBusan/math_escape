@@ -72,7 +72,7 @@ class _VolumeBottomSheetState extends State<VolumeBottomSheet> {
           ),
           const SizedBox(height: 32),
           _buildVolumeControl(
-            icon: Image.asset("assets/images/high/highFuri.png"),
+            icon: Image.asset("assets/images/high/highFuri.webp"),
             label: '캐릭터',
             value: _characterVolume,
             color: CustomPink.s500,
@@ -83,7 +83,7 @@ class _VolumeBottomSheetState extends State<VolumeBottomSheet> {
           ),
           const SizedBox(height: 32),
           _buildVolumeControl(
-            icon: Image.asset("assets/images/common/bgmIcon.png"),
+            icon: Image.asset("assets/images/common/bgmIcon.webp"),
             label: '배경음',
             value: _bgmVolume,
             color: CustomBlue.s500,

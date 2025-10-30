@@ -171,11 +171,11 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
               grade: StudentGrade.middle,
               title: StudentGrade.middle.appBarTitle,
               lottieAssetPath: 'assets/animations/furiClear.json',
-              backgroundAssetPath: data['backImage'] ?? 'assets/images/common/bsbackground.png',
+              backgroundAssetPath: data['backImage'] ?? 'assets/images/common/bsbackground.webp',
               speakerName: data['speaker'] ?? '푸리',
               talkText: data['talk'] ?? '',
               voiceAssetPath: data['voice'] as String?,
-              certificateAssetPath: data['certificate'] ?? 'assets/images/common/certificateMiddle.png',
+              certificateAssetPath: data['certificate'] ?? 'assets/images/common/certificateMiddle.webp',
             ),
           ),
         );
@@ -298,7 +298,7 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
                                         _scrollUpAnimation.value,
                                       ),
                                       child: Image.asset(
-                                        "assets/images/common/scrollGesture.png",
+                                        "assets/images/common/scrollGesture.webp",
                                       ),
                                     ),
                                   );

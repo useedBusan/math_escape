@@ -56,9 +56,9 @@ extension GradeTheme on StudentGrade {
   String? get bannerImg {
     switch (this) {
       case StudentGrade.elementaryLow:
-        return 'assets/images/elementary_low/bannerElemLow.png';
+        return 'assets/images/elementary_low/bannerElemLow.webp';
       case StudentGrade.elementaryHigh:
-        return 'assets/images/elementary_high/bannerElemHigh.png';
+        return 'assets/images/elementary_high/bannerElemHigh.webp';
       case StudentGrade.middle:
         return '';
       case StudentGrade.high:
@@ -124,13 +124,13 @@ extension GradeTheme on StudentGrade {
   String get imagePath {
     switch (this) {
       case StudentGrade.elementaryLow:
-        return 'assets/images/common/mainElemLow.png';
+        return 'assets/images/common/mainElemLow.webp';
       case StudentGrade.elementaryHigh:
-        return 'assets/images/common/mainElemHigh.png';
+        return 'assets/images/common/mainElemHigh.webp';
       case StudentGrade.middle:
-        return 'assets/images/common/mainMiddle.png';
+        return 'assets/images/common/mainMiddle.webp';
       case StudentGrade.high:
-        return 'assets/images/common/mainHigh.png';
+        return 'assets/images/common/mainHigh.webp';
     }
   }
 

@@ -73,7 +73,7 @@ class _OutroViewState extends State<OutroView> {
       if (!mounted) return;
 
       final Uint8List bytes = data.buffer.asUint8List();
-      final String name = 'certificate_${DateTime.now().millisecondsSinceEpoch}.png';
+      final String name = 'certificate_${DateTime.now().millisecondsSinceEpoch}.webp';
 
       await Gal.putImageBytes(bytes, name: name, album: 'Math Escape');
       if (!mounted) return;
@@ -207,7 +207,7 @@ class _OutroViewState extends State<OutroView> {
                     return GestureDetector(
                       onTap: () => _showVolumePanel(iconContext),
                       child: Image.asset(
-                        'assets/images/common/soundControlIcon.png',
+                        'assets/images/common/soundControlIcon.webp',
                         width: 28,
                         height: 28,
                         filterQuality: FilterQuality.high,

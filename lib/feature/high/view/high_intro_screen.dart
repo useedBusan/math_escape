@@ -247,7 +247,7 @@ Paratruth Space, PS라고 불리는 이 공간에서,
                       );
                     },
                     child: Image.asset(
-                      'assets/images/common/soundControlIcon.png',
+                      'assets/images/common/soundControlIcon.webp',
                       width: 28,
                       height: 28,
                       filterQuality: FilterQuality.high,

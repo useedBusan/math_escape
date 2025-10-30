@@ -3,7 +3,7 @@
   "speaker": "푸리",
   "talk": "축하해! 모든 문제를 다 풀었어. 정말 대단해. 보물은 지하 1층 안내 데스크에 계신 선생님께 달라고 하면 받을 수 있어. 지금까지 문제 푸느라 고생했어. 안녕👋",
   "furiImage": "assets/images/common/puri_clear.gif",
-  "backImage": "assets/images/elementary_high/elemHighFinish.png",
-  "voice": "assets/audio/elemHigh/elemHighConversation11.wav",
-  "certificate": "assets/images/common/certificateElemHigh.png"
+  "backImage": "assets/images/elementary_high/elemHighFinish.webp",
+  "voice": "assets/audio/elemHigh/elemHighConversation11.mp3",
+  "certificate": "assets/images/common/certificateElemHigh.webp"
 }
