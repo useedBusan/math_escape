@@ -4,6 +4,7 @@ import '../../../constants/enum/grade_enums.dart';
 import '../../../constants/enum/speaker_enums.dart';
 import '../../../core/views/common_intro_view.dart';
 import '../../../core/viewmodels/intro_view_model.dart';
+import '../../../core/services/service_locator.dart';
 
 class ConversationOverlay extends StatefulWidget {
   final int stage;
@@ -43,6 +44,15 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
       setState(() {
         isLoading = false;
       });
+      // 첫 프레임 렌더 후 현재 보이스 재생을 한 번 더 보장
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final voice = viewModel.currentTalk.voice;
+        if (voice == null || voice.isEmpty) {
+          serviceLocator.audioService.stopCharacter();
+        } else {
+          serviceLocator.audioService.playCharacterAudio(voice);
+        }
+      });
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -80,22 +90,17 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
                     return CommonIntroView(
                       appBarTitle: StudentGrade.elementaryLow.appBarTitle,
                       backgroundAssetPath: talk.backImg,
-                      characterImageAssetPath: widget.isFinalConversation 
-                          ? 'assets/images/common/puri_clear.png' 
-                          : talk.speakerImg,
+                      characterImageAssetPath: talk.speakerImg,
                       speakerName: speakerName(),
                       talkText: talk.talk,
                       buttonText: "다음",
                       grade: StudentGrade.elementaryLow,
-                      // 마지막 stage에서만 furiClear 애니메이션 표시
-                      lottieAnimationPath: widget.stage == maxStage 
-                          ? 'assets/animations/furiClear.json' 
-                          : null,
-                      showLottieInsteadOfImage: widget.stage == maxStage,
                       onNext: () {
                         if (vm.canGoNext()) {
                           vm.goToNextTalk();
                         } else {
+                          // 대화 종료 → 보이스 중단 후 완료 콜백
+                          serviceLocator.audioService.stopCharacter();
                           widget.onComplete();
                         }
                       },
@@ -103,6 +108,8 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
                         if (vm.canGoPrevious()) {
                           vm.goToPreviousTalk();
                         } else {
+                          // 대화 닫기 → 보이스 중단 후 종료 콜백
+                          serviceLocator.audioService.stopCharacter();
                           widget.onCloseByBack();
                         }
                       },

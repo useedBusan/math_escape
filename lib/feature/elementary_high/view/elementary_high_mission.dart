@@ -8,6 +8,9 @@ import '../view_model/elementary_high_mission_view_model.dart';
 import 'elementary_high_mission_list_view.dart';
 import 'conversation_overlay.dart';
 import '../coordinator/elementary_high_mission_coordinator.dart';
+import '../../../core/views/outro_view.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:convert';
 
 
 class ElementaryHighMissionScreen extends StatelessWidget {
@@ -58,36 +61,38 @@ class ElementaryHighMissionScreen extends StatelessWidget {
 
   Widget _buildCurrentStep(BuildContext context, ElementaryHighMissionViewModel vm, ElementaryHighMissionCoordinator coordinator, StudentGrade grade) {
     // 최종 대화가 표시되어야 하는 경우
-    if (vm.showFinalConversation) {
-      return ConversationOverlay(
-        stage: 10, // stage 10 (id: 11)에서 애니메이션 표시
-        isFinalConversation: true, // 최종 완료 화면임을 표시
-        onComplete: () {
-          vm.completeFinalConversation();
-          // 최종 대화 완료 후 메인 화면으로 돌아가거나 다른 처리
-          Navigator.of(context).pop();
-        },
-        onCloseByBack: () {
-          vm.completeFinalConversation();
-          Navigator.of(context).pop();
-        },
-      );
-    }
+    // 최종 분기는 대화 onComplete에서 push로 처리
 
     // 현재 단계에 따라 화면 결정
     if (coordinator.isInConversation) {
+      final int lastStage = vm.totalCount; // 총 문제 수 = 마지막 stage
       return ConversationOverlay(
         stage: coordinator.current.stage,
-        isFinalConversation: coordinator.current.stage == 10,
-        onComplete: () {
-          // 대화 종료 후 다음 문제 이동
+        isFinalConversation: coordinator.current.stage == lastStage,
+        onComplete: () async {
           context.read<HintPopupViewModel>().reset();
-          
-          // VM의 nextMission을 호출하여 다음 문제로 이동
-          vm.nextMission();
-          
-          // Coordinator도 다음 문제 stage로 이동
-          coordinator.toQuestion(coordinator.current.stage + 1);
+          if (coordinator.current.stage == lastStage) {
+            final String jsonString = await rootBundle.loadString('assets/data/elem_high/elem_high_outro.json');
+            final Map<String, dynamic> data = json.decode(jsonString);
+            if (!context.mounted) return;
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => OutroView(
+                  grade: grade,
+                  title: grade.appBarTitle,
+                  lottieAssetPath: 'assets/animations/furiClear.json',
+                  backgroundAssetPath: data['backImage'] ?? 'assets/images/common/bsbackground.webp',
+                  speakerName: data['speaker'] ?? '푸리',
+                  talkText: data['talk'] ?? '',
+                  voiceAssetPath: data['voice'] as String?,
+                  certificateAssetPath: data['certificate'] ?? 'assets/images/common/certificateElemHigh.webp',
+                ),
+              ),
+            );
+          } else {
+            vm.nextMission();
+            coordinator.toQuestion(coordinator.current.stage + 1);
+          }
         },
         onCloseByBack: () {
           // 대화에서 뒤로가기할 때는 VM의 문제 인덱스를 건드리지 않음
@@ -156,7 +161,29 @@ class ElementaryHighMissionScreen extends StatelessWidget {
         // 문제1 정답 → conversation(1), 문제2 정답 → conversation(2) 등
         // 코디네이터의 현재 question stage를 사용하여 정확한 대화 stage 계산
         final int currentStage = coordinator.current.stage;
-        coordinator.toConversation(currentStage);
+        final int lastStage = vm.totalCount;
+        if (currentStage == lastStage) {
+          // 마지막 문제면 대화로 가지 않고 Outro로 이동
+          final String jsonString = await rootBundle.loadString('assets/data/elem_high/elem_high_outro.json');
+          final Map<String, dynamic> data = json.decode(jsonString);
+          if (!context.mounted) return;
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => OutroView(
+                grade: grade,
+                title: grade.appBarTitle,
+                lottieAssetPath: 'assets/animations/furiClear.json',
+                backgroundAssetPath: data['backImage'] ?? 'assets/images/common/bsbackground.webp',
+                speakerName: data['speaker'] ?? '푸리',
+                talkText: data['talk'] ?? '',
+                voiceAssetPath: data['voice'] as String?,
+                certificateAssetPath: data['certificate'] ?? 'assets/images/common/certificateElemHigh.webp',
+              ),
+            ),
+          );
+        } else {
+          coordinator.toConversation(currentStage);
+        }
       },
     );
   }

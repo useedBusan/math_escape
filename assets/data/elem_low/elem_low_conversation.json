@@ -3,216 +3,225 @@
     "id": 1,
     "stage": 1,
     "speaker": "Maemae",
-    "speakerImg": "assets/images/common/maemaeStanding.png",
-    "backImg": "assets/images/elementary_low/elemBG1.png",
-    "talk": "저기 책장을 봐! 숫자 모양의 풍선들이 떠 있어. 무슨 뜻일까?"
+    "speakerImg": "assets/images/common/maemaeStanding.webp",
+    "backImg": "assets/images/elementary_low/elemBG1.webp",
+    "talk": "푸리야 저기 책장을 봐! 숫자 모양의 풍선들이 떠 있어. 무슨 뜻일까?",
+    "voice": "assets/audio/elemLow/elemLowConversation1.mp3"
   },
   {
     "id": 2,
     "stage": 1,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
-    "backImg": "assets/images/elementary_low/elemBG1.png",
-    "talk": "어? 뭔가 이상해. 풍선 속 숫자들 중 몇 개가 빠져 있는 것 같지 않아?"
+    "speakerImg": "assets/images/common/furiPencil.webp",
+    "backImg": "assets/images/elementary_low/elemBG1.webp",
+    "talk": "어? 뭔가 이상해. 풍선 속 숫자들 중 몇 개가 빠져 있는 것 같지 않아?",
+    "voice": "assets/audio/elemLow/elemLowConversation2.mp3"
   },
   {
     "id": 3,
     "stage": 2,
     "speaker": "Maemae",
-    "speakerImg": "assets/images/common/maemaeHurray.png",
-    "backImg": "assets/images/elementary_low/elemBG1.png",
-    "talk": "대단해! 7과 8이 빠져 있는 걸 정확히 찾아냈어!"
+    "speakerImg": "assets/images/common/maemaeHurray.webp",
+    "backImg": "assets/images/elementary_low/elemBG1.webp",
+    "talk": "대단해! 7과 8이 빠져 있는 걸 정확히 찾아냈어!",
+    "voice": "assets/audio/elemLow/elemLowConversation3.mp3"
   },
   {
     "id": 4,
     "stage": 2,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
-    "backImg": "assets/images/elementary_low/elemBG1.png",
-    "talk": "좋아, 그럼 다음 방으로 가볼까?"
+    "speakerImg": "assets/images/common/furiStanding.webp",
+    "backImg": "assets/images/elementary_low/elemBG1.webp",
+    "talk": "좋아, 그럼 다음 방으로 가볼까?",
+    "voice": "assets/audio/elemLow/elemLowConversation4.mp3"
   },
   {
     "id": 5,
     "stage": 2,
     "speaker": "Maemae",
-    "speakerImg": "assets/images/common/maemaeHurray.png",
-    "backImg": "assets/images/elementary_low/elemBG2.png",
-    "talk": "푸리야! 여긴 수학놀이관이야! 놀이기구도 많고 사람이 엄청 많아 보여!"
+    "speakerImg": "assets/images/common/maemaeHurray.webp",
+    "backImg": "assets/images/elementary_low/elemBG2.webp",
+    "talk": "푸리야! 여긴 수학놀이관이야! 놀이기구도 많고 사람이 엄청 많아 보여!",
+    "voice": "assets/audio/elemLow/elemLowConversation5.mp3"
   },
   {
     "id": 6,
     "stage": 2,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
-    "backImg": "assets/images/elementary_low/elemBG2.png",
-    "talk": "한 번에 몇 명까지 체험할 수 있는지 알아보자! 우리가 정확히 알아야 미로를 빠져나갈 수 있어!"
+    "speakerImg": "assets/images/common/furiStanding.webp",
+    "backImg": "assets/images/elementary_low/elemBG2.webp",
+    "talk": "한 번에 몇 명까지 체험할 수 있는지 알아보자! 우리가 정확히 알아야 미로를 빠져나갈 수 있어!",
+    "voice": "assets/audio/elemLow/elemLowConversation6.mp3"
   },
   {
     "id": 7,
     "stage": 3,
     "speaker": "Maemae",
-    "speakerImg": "assets/images/common/maemaeHurray.png",
-    "backImg": "assets/images/elementary_low/elemBG2.png",
-    "talk": "우와! 맞췄어! 96명이 들어갈 수 있어! 9와 6이 모두 들어간 숫자였지!"
+    "speakerImg": "assets/images/common/maemaeHurray.webp",
+    "backImg": "assets/images/elementary_low/elemBG2.webp",
+    "talk": "우와! 맞췄어! 96명이 들어갈 수 있어! 9와 6이 모두 들어간 숫자였지!",
+    "voice": "assets/audio/elemLow/elemLowConversation7.mp3"
   },
   {
     "id": 8,
     "stage": 3,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
-    "backImg": "assets/images/elementary_low/elemBG2.png",
-    "talk": "우리가 제대로 관찰해서 맞췄어! 수학자의 미로를 빠져나갈 수 있겠는걸?"
+    "speakerImg": "assets/images/common/furiStanding.webp",
+    "backImg": "assets/images/elementary_low/elemBG2.webp",
+    "talk": "우리가 제대로 관찰해서 맞췄어! 수학자의 미로를 빠져나갈 수 있겠는걸?",
+    "voice": "assets/audio/elemLow/elemLowConversation8.mp3"
   },
   {
     "id": 9,
     "stage": 3,
     "speaker": "Maemae",
-    "speakerImg": "assets/images/common/maemaeHurray.png",
-    "backImg": "assets/images/elementary_low/elemBG3.png",
-    "talk": "와! 수학놀이관 마을에는 정말 재밌는 것들이 가득해! 큰 구조물도 있고, 작은 것도 있어."
+    "speakerImg": "assets/images/common/maemaeHurray.webp",
+    "backImg": "assets/images/elementary_low/elemBG3.webp",
+    "talk": "와! 수학놀이관 마을에는 정말 재밌는 것들이 가득해! 큰 구조물도 있고, 작은 것도 있어.",
+    "voice": "assets/audio/elemLow/elemLowConversation9.mp3"
   },
   {
     "id": 10,
     "stage": 3,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
-    "backImg": "assets/images/elementary_low/elemBG3.png",
-    "talk": "맞아! 그런데 여기 떨어진 종이에 ‘개수를 세어보라’는 글이 있어. 아마 미션인 것 같아!"
+    "speakerImg": "assets/images/elementary_low/elemLowFuriCount.webp",
+    "backImg": "assets/images/elementary_low/elemBG3.webp",
+    "talk": "맞아! 그런데 여기 떨어진 종이에 ‘개수를 세어보라’는 글이 있어. 아마 미션인 것 같아!",
+    "voice": "assets/audio/elemLow/elemLowConversation10.mp3"
   },
   {
     "id": 11,
     "stage": 4,
     "speaker": "Maemae",
-    "speakerImg": "assets/images/common/maemaeHurray.png",
-    "backImg": "assets/images/elementary_low/elemBG3.png",
-    "talk": "정답은 15개야! 직접 세어보니 정확하게 알 수 있었어!"
+    "speakerImg": "assets/images/common/maemaeHurray.webp",
+    "backImg": "assets/images/elementary_low/elemBG3.webp",
+    "talk": "정답은 15개야! 직접 세어보니 정확하게 알 수 있었어!",
+    "voice": "assets/audio/elemLow/elemLowConversation11.mp3"
   },
   {
     "id": 12,
     "stage": 4,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
-    "backImg": "assets/images/elementary_low/elemBG3.png",
-    "talk": "관찰력이 정말 뛰어나! 그럼 이번엔 돔을 만들어볼까?"
+    "speakerImg": "assets/images/common/furiStanding.webp",
+    "backImg": "assets/images/elementary_low/elemBG3.webp",
+    "talk": "관찰력이 정말 뛰어나! 그럼 이번엔 돔을 만들어볼까?",
+    "voice": "assets/audio/elemLow/elemLowConversation12.mp3"
   },
   {
     "id": 13,
     "stage": 4,
     "speaker": "Maemae",
-    "speakerImg": "assets/images/common/maemaeHurray.png",
-    "backImg": "assets/images/elementary_low/elemBG4.png",
-    "talk": "저기 반짝이는 돔을 봐! 다빈치가 만든 거래!"
+    "speakerImg": "assets/images/common/maemaeHurray.webp",
+    "backImg": "assets/images/elementary_low/elemBG4.webp",
+    "talk": "푸리야, 저기 반짝이는 돔을 봐! 다빈치가 만든 거래!",
+    "voice": "assets/audio/elemLow/elemLowConversation13.mp3"
   },
   {
     "id": 14,
     "stage": 4,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
-    "backImg": "assets/images/elementary_low/elemBG4.png",
-    "talk": "이건 여러 도형을 조합해서 만드는 거야. 어떤 도형을 써야 잘 만들어질까?"
+    "speakerImg": "assets/images/common/furiStanding.webp",
+    "backImg": "assets/images/elementary_low/elemBG4.webp",
+    "talk": "이건 여러 도형을 조합해서 만드는 거야. 어떤 도형을 써야 잘 만들어질까?",
+    "voice": "assets/audio/elemLow/elemLowConversation14.mp3"
   },
   {
     "id": 15,
     "stage": 5,
     "speaker": "Maemae",
-    "speakerImg": "assets/images/common/maemaeHurray.png",
-    "backImg": "assets/images/elementary_low/elemBG4.png",
-    "talk": "맞아! 이 돔은 조각들이 서로 꼭 붙잡고 있어서 쉽게 무너지지 않아!"
+    "speakerImg": "assets/images/common/maemaeHurray.webp",
+    "backImg": "assets/images/elementary_low/elemBG4.webp",
+    "talk": "맞아! 이 돔은 조각들이 서로 꼭 붙잡고 있어서 쉽게 무너지지 않아!",
+    "voice": "assets/audio/elemLow/elemLowConversation15.mp3"
   },
   {
     "id": 16,
     "stage": 5,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
-    "backImg": "assets/images/elementary_low/elemBG4.png",
-    "talk": "우리가 만든 걸 보니까, 다빈치처럼 수학을 멋진 작품으로 바꿀 수 있는 것 같아!"
+    "speakerImg": "assets/images/common/furiStanding.webp",
+    "backImg": "assets/images/elementary_low/elemBG4.webp",
+    "talk": "우리가 만든 걸 보니까, 다빈치처럼 수학을 멋진 작품으로 바꿀 수 있는 것 같아!",
+    "voice": "assets/audio/elemLow/elemLowConversation16.mp3"
   },
   {
     "id": 17,
     "stage": 5,
     "speaker": "Maemae",
-    "speakerImg": "assets/images/common/maemaeStanding.png",
-    "backImg": "assets/images/elementary_low/elemBG5.png",
-    "talk": "이 시계는 숫자도 없고, 그냥 네모 칸만 있네? 어떻게 시간을 알 수 있는 걸까?"
+    "speakerImg": "assets/images/common/maemaeStanding.webp",
+    "backImg": "assets/images/elementary_low/elemBG5.webp",
+    "talk": "푸리야, 이 시계는 숫자도 없고, 그냥 네모 칸만 있네? 어떻게 시간을 알 수 있는 걸까?",
+    "voice": "assets/audio/elemLow/elemLowConversation17.mp3"
   },
   {
     "id": 18,
     "stage": 5,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
-    "backImg": "assets/images/elementary_low/elemBG5.png",
-    "talk": "이건 피보나치 시계야! 네모 칸의 길이와 불빛 색깔을 이용해서 시간을 알려주지."
+    "speakerImg": "assets/images/elementary_low/elemLowFuriFibonacci.webp",
+    "backImg": "assets/images/elementary_low/elemBG5.webp",
+    "talk": "이건 피보나치 시계야! 네모 칸의 길이와 불빛 색깔을 이용해서 시간을 알려주지.",
+    "voice": "assets/audio/elemLow/elemLowConversation18.mp3"
   },
   {
     "id": 19,
     "stage": 5,
     "speaker": "Maemae",
-    "speakerImg": "assets/images/common/maemaeJajan.png",
-    "backImg": "assets/images/elementary_low/elemBG5.png",
-    "talk": "그럼, 우리가 이 시계의 시간을 맞혀야 하는 미션이군!"
+    "speakerImg": "assets/images/common/maemaeJajan.webp",
+    "backImg": "assets/images/elementary_low/elemBG5.webp",
+    "talk": "그럼, 우리가 이 시계의 시간을 맞혀야 하는 미션이군!",
+    "voice": "assets/audio/elemLow/elemLowConversation19.mp3"
   },
   {
     "id": 20,
-    "stage": 5,
+    "stage": 6,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
-    "backImg": "assets/images/elementary_low/elemBG5.png",
-    "talk": "현재 불빛 조합을 합쳐서 ‘시’를 읽어 보자."
+    "speakerImg": "assets/images/common/furiBlingBling.webp",
+    "backImg": "assets/images/elementary_low/elemBG6.webp",
+    "talk": "매매야, 여기가 바로 보물의 방이야! 그런데 상자를 열려면 특별한 퍼즐을 풀어야 해.",
+    "voice": "assets/audio/elemLow/elemLowConversation20.mp3"
   },
   {
     "id": 21,
     "stage": 6,
-    "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
-    "backImg": "assets/images/elementary_low/elemBG6.png",
-    "talk": "여기가 바로 보물의 방이야! 그런데 상자를 열려면 특별한 퍼즐을 풀어야 해."
+    "speaker": "Maemae",
+    "speakerImg": "assets/images/common/maemaeJajan.webp",
+    "backImg": "assets/images/elementary_low/elemBG6.webp",
+    "talk": "퍼즐? 어떤 거야?",
+    "voice": "assets/audio/elemLow/elemLowConversation21.mp3"
   },
   {
     "id": 22,
     "stage": 6,
-    "speaker": "Maemae",
-    "speakerImg": "assets/images/common/maemaeJajan.png",
-    "backImg": "assets/images/elementary_low/elemBG6.png",
-    "talk": "퍼즐? 어떤 거야?"
+    "speaker": "Puri",
+    "speakerImg": "assets/images/common/furiStanding.webp",
+    "backImg": "assets/images/elementary_low/elemBG6.webp",
+    "talk": "바닥에 보이는 네모 칸들 보이지? 이런 네모 칸들을 이용해서 하는 놀이를 ‘체스’라고 해. 체스에는 여러 가지 말들이 있는데, 각각 움직이는 방법이 달라.",
+    "voice": "assets/audio/elemLow/elemLowConversation22.mp3"
   },
   {
     "id": 23,
     "stage": 6,
-    "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
-    "backImg": "assets/images/elementary_low/elemBG6.png",
-    "talk": "바닥에 보이는 네모 칸들 보이지? 이런 네모 칸들을 이용해서 하는 놀이를 ‘체스’라고 해. 체스에는 여러 가지 말들이 있는데, 각각 움직이는 방법이 달라."
+    "speaker": "Maemae",
+    "speakerImg": "assets/images/common/maemaeJajan.webp",
+    "backImg": "assets/images/elementary_low/elemBG6.webp",
+    "talk": "오! 그래서 여기에 기사 그림이 있었구나!",
+    "voice": "assets/audio/elemLow/elemLowConversation23.mp3"
   },
   {
     "id": 24,
     "stage": 6,
-    "speaker": "Maemae",
-    "speakerImg": "assets/images/common/maemaeJajan.png",
-    "backImg": "assets/images/elementary_low/elemBG6.png",
-    "talk": "오! 그래서 여기에 기사 그림이 있었구나!"
+    "speaker": "Puri",
+    "speakerImg": "assets/images/common/furiStanding.webp",
+    "backImg": "assets/images/elementary_low/elemBG6.webp",
+    "talk": "맞아! 그 기사 모양 말을 ‘나이트’라고 불러. 나이트는 다른 말과 다르게 똑바로도, 대각선으로도 못 가. 대신 꼭 ‘ㄴ’자로만 움직일 수 있어. 두 칸 가고 옆으로 한 칸, 혹은 옆으로 두 칸 가고 앞뒤로 한 칸이지.",
+    "voice": "assets/audio/elemLow/elemLowConversation24.mp3"
   },
   {
     "id": 25,
-    "stage": 6,
-    "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
-    "backImg": "assets/images/elementary_low/elemBG6.png",
-    "talk": "맞아! 그 기사 모양 말을 ‘나이트’라고 불러. 나이트는 다른 말과 다르게 똑바로도, 대각선으로도 못 가. 대신 꼭 ‘ㄴ’자로만 움직일 수 있어. 두 칸 가고 옆으로 한 칸, 혹은 옆으로 두 칸 가고 앞뒤로 한 칸이지."
-  },
-  {
-    "id": 26,
     "stage": 7,
     "speaker": "Maemae",
-    "speakerImg": "assets/images/common/maemaeHurray.png",
-    "backImg": "assets/images/elementary_low/elemBGEnd.png",
-    "talk": "우리가 해냈어! 이제 우리도 진짜 수학 보물탐험가야!"
-  },
-  {
-    "id": 27,
-    "stage": 7,
-    "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.png",
-    "backImg": "assets/images/elementary_low/elemBGEnd.png",
-    "talk": "좋았어! 지하 1층 안내 데스크에 가면 선생님께서 보물을 주신대!"
+    "speakerImg": "assets/images/common/maemaeHurray.webp",
+    "backImg": "assets/images/elementary_low/elemBGEnd.webp",
+    "talk": "푸리야, 우리 해냈어! 이제 우리도 진짜 수학 보물탐험가야!",
+    "voice": "assets/audio/elemLow/elemLowConversation25.mp3"
   }
 ]

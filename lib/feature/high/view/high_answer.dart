@@ -87,17 +87,19 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
 
 
   void handleNextButton() {
-    print('DEBUG: handleNextButton called - currentIndex: ${widget.currentIndex}, questionListLength: ${widget.questionList.length}');
-    
     HighAnswerViewModel.instance.handleNextButton(
       currentIndex: widget.currentIndex,
       questionListLength: widget.questionList.length,
-      onNavigateToNext: () {
-        print('DEBUG: onNavigateToNext callback called');
-        Navigator.pushReplacement(
+      onNavigateToNext: () async {
+        // Answer를 먼저 닫고
+        Navigator.of(context).pop();
+        if (!context.mounted) return;
+        
+        // 다음 문제의 Mission으로 push (고유한 name으로)
+        Navigator.push(
           context,
           MaterialPageRoute(
-            settings: const RouteSettings(name: 'HighMission'),
+            settings: RouteSettings(name: 'HighMission_${widget.currentIndex + 1}'),
             builder: (_) => HighMission(
               questionList: widget.questionList,
               currentIndex: widget.currentIndex + 1,
@@ -107,12 +109,10 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
         );
       },
       onNavigateBack: () {
-        print('DEBUG: onNavigateBack callback called');
         // HighMission으로 돌아가기
         Navigator.popUntil(context, (route) => route.settings.name == 'HighMission');
       },
       onComplete: () {
-        print('DEBUG: onComplete callback called - navigating to HighClearView');
         // 마지막 문제인 경우 - HighClearView로 이동
         Navigator.pushReplacement(
           context,
@@ -147,9 +147,11 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
           child: BaseHighView(
             title: '역설, 혹은 모호함',
             background: Container(color: Color(0xFFF5F5F5)),
-            onBack: () {
-              // 한 단계만 뒤로가기 또는 HighMission까지 복귀
-              Navigator.popUntil(context, (route) => route.settings.name == 'HighMission');
+            onBack: () async {
+              // 뒤로가기 시 다이얼로그가 열려있으면 먼저 닫기
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              }
             },
             onHome: () async {
               // 홈으로: 확인 후 상태 해제 및 루트로 이동
@@ -180,8 +182,8 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
           mainAxisSize: MainAxisSize.min,
           children: [
           IntegerPhaseBanner(
-            questionNumber: widget.currentIndex + 2, // 다음 문제의 phase 표시
-            furiImagePath: "assets/images/high/highFuri.png",
+            questionNumber: vm.isFromHint ? widget.currentIndex + 1 : widget.currentIndex + 2,
+            furiImagePath: "assets/images/high/highFuri.webp",
             fontSize: 14,
           ),
           SizedBox(height: screenHeight * 0.025),
@@ -283,7 +285,7 @@ class _HighAnswerContentState extends State<_HighAnswerContent> {
           Center(
             child: SizedBox(
               width: double.infinity,
-              height: 48,
+              height: 52,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: CustomBlue.s500,

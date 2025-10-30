@@ -6,6 +6,7 @@ import '../../../constants/enum/grade_enums.dart';
 import '../../../constants/enum/image_enums.dart';
 import 'elementary_high_mission.dart';
 import '../../../core/views/common_intro_view.dart';
+import '../../../core/services/service_locator.dart';
 
 //intro page
 class PuriImage extends StatefulWidget {
@@ -86,6 +87,8 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    // 보이스 중단
+    serviceLocator.audioService.stopCharacter();
     super.dispose();
   }
 
@@ -109,6 +112,8 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen>
           .toList(); //asset내의 json파일 읽어옴
       isLoading = false;
     });
+    // 첫 항목 보이스 재생
+    _playCurrentVoice();
   }
 
   void goToNext() {
@@ -118,7 +123,9 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen>
         currentIndex++;
         imageKey = UniqueKey();
       });
+      _playCurrentVoice();
     } else {
+      serviceLocator.audioService.stopCharacter();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const ElementaryHighMissionScreen()),
@@ -132,9 +139,20 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen>
         currentIndex--;
         imageKey = UniqueKey();
       });
+      _playCurrentVoice();
     } else {
       Navigator.of(context).pop();
     }
+  }
+
+  void _playCurrentVoice() {
+    if (talkList.isEmpty) return;
+    final String? voice = talkList[currentIndex].voice;
+    if (voice == null || voice.isEmpty) {
+      serviceLocator.audioService.stopCharacter();
+      return;
+    }
+    serviceLocator.audioService.playCharacterAudio(voice);
   }
 
   @override
@@ -155,13 +173,14 @@ class _ElementaryHighTalkScreenState extends State<ElementaryHighTalkScreen>
       grade: StudentGrade.elementaryHigh,
       // 첫 번째 화면에만 furiAppearance 애니메이션 표시 (한 번만 재생)
       lottieAnimationPath: currentIndex == 0 ? 'assets/animations/furiAppearance.json' : null,
-      showLottieInsteadOfImage: currentIndex == 0,
       lottieRepeat: false, // furiAppearance는 한 번만 재생
       onNext: goToNext,
       onBack: () {
         if (currentIndex > 0) {
           goToPrevious();
         } else {
+          // 인트로에서 밖으로 나갈 때 보이스 중단
+          serviceLocator.audioService.stopCharacter();
           Navigator.of(context).pop();
         }
       },

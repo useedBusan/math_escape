@@ -55,16 +55,16 @@ class BaseHighView extends StatelessWidget {
           backgroundColor: Colors.white,
           centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: mainColor),
+            icon: Icon(Icons.arrow_back, color: mainColor, size: 28),
             onPressed: onBack ?? () => Navigator.of(context).maybePop(),
           ),
           title: Text(
             title,
-            style: TextStyle(color: mainColor, fontWeight: FontWeight.w700, fontSize: 18),
+            style: TextStyle(color: mainColor, fontWeight: FontWeight.bold, fontSize: 18),
           ),
           actions: [
             if (onHome != null)
-              IconButton(icon: Icon(Icons.home, color: mainColor), onPressed: onHome),
+              IconButton(icon: Icon(Icons.home, color: mainColor, size: 28), onPressed: onHome),
           ],
         );
 
@@ -101,7 +101,7 @@ class BaseHighView extends StatelessWidget {
                           think: vm.thinkText,
                           body: vm.bodyText,
                           progress: vm.thinkProgress,
-                          hourglassAsset: 'assets/images/high/highHourglass.png',
+                          hourglassAsset: 'assets/images/high/highHourglass.webp',
                         );
                       },
                     ),
@@ -134,8 +134,8 @@ class _BottomTimerBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
-    final double circleSize = h * 0.13;
-    final double barHeight  = circleSize * 0.7;
+    final double circleSize = h * 0.1;
+    final double barHeight  = circleSize * 0.65;
 
     return SizedBox(
       width: double.infinity,
@@ -151,7 +151,7 @@ class _BottomTimerBar extends StatelessWidget {
               height: barHeight,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: const BoxDecoration(
-                color: Color(0xFFF5F6FA),
+                color: Color(0xFFFFFFFF),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),

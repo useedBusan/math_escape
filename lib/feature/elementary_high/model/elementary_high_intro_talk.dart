@@ -4,6 +4,7 @@ class IntroTalkItem {
   final String answer;
   final String furiImage;
   final String backImage;
+  final String? voice;
 
   IntroTalkItem({
     required this.id,
@@ -11,6 +12,7 @@ class IntroTalkItem {
     required this.answer,
     required this.furiImage,
     required this.backImage,
+    this.voice,
   });
 
   factory IntroTalkItem.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class IntroTalkItem {
       answer: json['answer'],
       furiImage: json['furiImage'],
       backImage: json['backImage'] ?? '',
+      voice: json['voice'] as String?,
     );
   }
 }

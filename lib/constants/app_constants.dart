@@ -10,11 +10,11 @@ class AppConstants {
   static const String programUrl = 'https://home.pen.go.kr/bmcm/cm/cntnts/cntntsView.do?mi=17599&cntntsId=3826';
   
   // 이미지 경로
-  static const String logoImage = 'assets/images/logo.png';
-  static const String visualImage = 'assets/images/visual03.png';
-  static const String introduceImage = 'assets/images/introduce.png';
-  static const String instaLogoImage = 'assets/images/insta_logo.png';
-  static const String introduceProgramImage = 'assets/images/introduce_program.png';
+  static const String logoImage = 'assets/images/logo.webp';
+  static const String visualImage = 'assets/images/visual03.webp';
+  static const String introduceImage = 'assets/images/introduce.webp';
+  static const String instaLogoImage = 'assets/images/insta_logo.webp';
+  static const String introduceProgramImage = 'assets/images/introduce_program.webp';
   
   // 학년 레벨
   static const List<String> schoolLevels = [

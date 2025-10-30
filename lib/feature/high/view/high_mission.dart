@@ -70,12 +70,17 @@ class _HighMissionContent extends StatefulWidget {
 class _HighMissionContentState extends State<_HighMissionContent>
     with SingleTickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
+  late FocusNode _answerFocusNode;
   late AnimationController _hintColorController;
   late Animation<double> _hintColorAnimation;
 
   @override
   void initState() {
     super.initState();
+    _answerFocusNode = FocusNode();
+    _answerFocusNode.addListener(() {
+      if (mounted) setState(() {});
+    });
     _hintColorController = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
@@ -100,6 +105,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
   void dispose() {
     _hintColorController.dispose();
     _controller.dispose();
+    _answerFocusNode.dispose();
     super.dispose();
   }
 
@@ -113,7 +119,6 @@ class _HighMissionContentState extends State<_HighMissionContent>
           .map((e) => MissionAnswer.fromJson(e))
           .firstWhere((a) => a.id == id);
     } catch (e) {
-      print('ERROR: Answer not found for id: $id');
       rethrow;
     }
   }
@@ -146,7 +151,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
     } else {
       // isHint = false인 경우 공용 HintPopup 표시
       final hintModel = HintModel(
-        hintIcon: 'assets/images/middle/middleHint.png',
+        hintIcon: 'assets/images/middle/middleHint.webp',
         upString: '힌트',
         downString: q.hint,
         hintImg: null,
@@ -197,6 +202,10 @@ class _HighMissionContentState extends State<_HighMissionContent>
       context,
       isCorrect: isCorrect,
       onNext: () async {
+        // 정답 팝업 닫기
+        Navigator.of(context).pop();
+        if (!mounted) return;
+
         if (isCorrect) {
           // 마지막 문제인지 확인 (currentIndex가 0-based이므로 마지막 문제는 questionList.length - 1)
           if (vm.currentIndex == vm.questionList.length - 1) {
@@ -205,9 +214,8 @@ class _HighMissionContentState extends State<_HighMissionContent>
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (_) => HighClearView(
-                  gameStartTime: widget.gameStartTime,
-                ),
+                builder: (_) =>
+                    HighClearView(gameStartTime: widget.gameStartTime),
               ),
             );
           } else {
@@ -228,9 +236,6 @@ class _HighMissionContentState extends State<_HighMissionContent>
               ),
             );
           }
-        } else {
-          if (!mounted) return;
-          Navigator.of(context).pop();
         }
       },
     );
@@ -254,11 +259,22 @@ class _HighMissionContentState extends State<_HighMissionContent>
             }
           },
           child: BaseHighView(
-          title: StudentGrade.high.appBarTitle,
+            title: StudentGrade.high.appBarTitle,
             background: Container(color: const Color(0xFFE8F0FE)),
-            onBack: () {
-              // 한 단계만 뒤로가기
-              Navigator.of(context).pop();
+            onBack: () async {
+              // 첫 번째 미션이 아니면 이전 미션으로
+              if (vm.currentIndex > 0) {
+                vm.goToQuestion(vm.currentIndex - 1);
+              } else {
+                // 첫 번째 미션에서 뒤로가기하면 홈으로
+                final alertResult = await HomeAlert.show(context);
+                if (alertResult == true && context.mounted) {
+                  HighMissionViewModel.instance.disposeAll();
+                  HighHintViewModel.instance.disposeAll();
+                  HighAnswerViewModel.instance.disposeAll();
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                }
+              }
             },
             onHome: () async {
               // 홈으로: 확인 후 상태 해제 및 루트로 이동
@@ -292,10 +308,9 @@ class _HighMissionContentState extends State<_HighMissionContent>
         height: screenHeight * 1.5,
         child: Column(
           children: [
-            const SizedBox(height: 14),
             IntegerPhaseBanner(
-              questionNumber: widget.currentIndex + 1,
-              furiImagePath: "assets/images/high/highFuri.png",
+              questionNumber: vm.currentIndex + 1,
+              furiImagePath: "assets/images/high/highFuri.webp",
               fontSize: 14,
             ),
             const SizedBox(height: 14),
@@ -319,47 +334,72 @@ class _HighMissionContentState extends State<_HighMissionContent>
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          AnimatedBuilder(
+                          q.isHint
+                              ? AnimatedBuilder(
                             animation: _hintColorAnimation,
                             builder: (context, child) {
-                              final color = Color.lerp(
-                                const Color(0xFF3F55A7),
-                                const Color(0xFFB2BBDC),
-                                _hintColorAnimation.value,
-                              )!;
-                              return IconButton(
-                                icon: Icon(
-                                  Icons.help_outline,
-                                  color: color,
-                                ),
-                                onPressed: () => _showHintDialog(vm),
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                                iconSize: 28,
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 4),
-                          AnimatedBuilder(
-                            animation: _hintColorAnimation,
-                            builder: (context, child) {
-                              final color = Color.lerp(
-                                const Color(0xFF3F55A7),
-                                const Color(0xFFB2BBDC),
-                                _hintColorAnimation.value,
-                              )!;
-                              return Transform.translate(
-                                offset: const Offset(0, -15),
-                                child: Text(
-                                  '힌트',
-                                  style: TextStyle(
-                                    color: color,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
+                              // 투명도를 1.0에서 0.1로 변화
+                              final opacity = 1.0 - (_hintColorAnimation.value * 0.9);
+                              return Opacity(
+                                opacity: opacity,
+                                child: IconButton(
+                                  icon: Image.asset(
+                                    "assets/images/high/hintHintIcon.webp",
+                                    height: 40,
                                   ),
+                                  onPressed: () => _showHintDialog(vm),
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
                                 ),
                               );
                             },
+                          )
+                              : Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              AnimatedBuilder(
+                                animation: _hintColorAnimation,
+                                builder: (context, child) {
+                                  // 투명도를 1.0에서 0.1로 변화
+                                  final opacity = 1.0 - (_hintColorAnimation.value * 0.9);
+                                  return Opacity(
+                                    opacity: opacity,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.help_outline,
+                                        color: const Color(0xFF3F55A7),
+                                      ),
+                                      onPressed: () => _showHintDialog(vm),
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                      iconSize: 28,
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 4),
+                              AnimatedBuilder(
+                                animation: _hintColorAnimation,
+                                builder: (context, child) {
+                                  // 투명도를 1.0에서 0.1로 변화
+                                  final opacity = 1.0 - (_hintColorAnimation.value * 0.9);
+                                  return Transform.translate(
+                                    offset: const Offset(0, -15),
+                                    child: Opacity(
+                                      opacity: opacity,
+                                      child: Text(
+                                        '힌트',
+                                        style: TextStyle(
+                                          color: const Color(0xFF3F55A7),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -384,20 +424,25 @@ class _HighMissionContentState extends State<_HighMissionContent>
                   // 답변 입력 영역 (isqr가 false인 경우에만)
                   if (!q.isqr) ...[
                     Container(
+                      height: 52,
                       decoration: BoxDecoration(
                         color: const Color(0xFFFFFFFF),
                         borderRadius: BorderRadius.circular(8.0),
-                        border: Border.all(color: const Color(0xffdcdcdc)),
+                        border: Border.all(
+                          color: _answerFocusNode.hasFocus
+                              ? CustomBlue.s500
+                              : const Color(0xffdcdcdc),
+                          width: _answerFocusNode.hasFocus ? 2.0 : 1.0,
+                        ),
                       ),
                       child: Row(
                         children: [
                           Expanded(
                             flex: 2,
                             child: TextField(
-                              style: TextStyle(
-                                fontSize: 15,
-                              ),
+                              style: TextStyle(fontSize: 15),
                               controller: _controller,
+                              focusNode: _answerFocusNode,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.done,
                               decoration: InputDecoration(
@@ -416,30 +461,37 @@ class _HighMissionContentState extends State<_HighMissionContent>
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: 60,
-                            height: 52,
-                            child: ElevatedButton(
-                              onPressed: () => _submitAnswer(vm),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: mainColor,
-                                foregroundColor: Colors.white,
-                                elevation: 0,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 12,
-                                ),
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(8),
-                                    bottomRight: Radius.circular(8),
+                          InkWell(
+                            onTap: () => _submitAnswer(vm),
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(
+                                _answerFocusNode.hasFocus ? 6.0 : 7.0,
+                              ),
+                              bottomRight: Radius.circular(
+                                _answerFocusNode.hasFocus ? 6.0 : 7.0,
+                              ),
+                            ),
+                            child: Container(
+                              height: 52,
+                              width: _answerFocusNode.hasFocus ? 59.0 : 60.0,
+                              decoration: BoxDecoration(
+                                color: mainColor,
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(
+                                    _answerFocusNode.hasFocus ? 6.0 : 7.0,
+                                  ),
+                                  bottomRight: Radius.circular(
+                                    _answerFocusNode.hasFocus ? 6.0 : 7.0,
                                   ),
                                 ),
                               ),
-                              child: Text(
+                              alignment: Alignment.center,
+                              child: const Text(
                                 '확인',
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w800,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -453,7 +505,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
                     const SizedBox(height: 16),
                     SizedBox(
                       width: double.infinity,
-                      height: 60,
+                      height: 52,
                       child: ElevatedButton(
                         onPressed: () async {
                           final result = await Navigator.push(
@@ -475,7 +527,8 @@ class _HighMissionContentState extends State<_HighMissionContent>
                                   Navigator.pop(context);
                                   if (isCorrect) {
                                     // 마지막 문제인지 확인 (currentIndex가 0-based이므로 마지막 문제는 questionList.length - 1)
-                                    if (vm.currentIndex == vm.questionList.length - 1) {
+                                    if (vm.currentIndex ==
+                                        vm.questionList.length - 1) {
                                       // 마지막 문제인 경우 바로 HighClearView로 이동
                                       if (!mounted) return;
                                       Navigator.pushReplacement(
@@ -534,9 +587,7 @@ class _HighMissionContentState extends State<_HighMissionContent>
                             Text(
                               'QR코드 스캔',
                               style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.width *
-                                    (16 / 360),
+                                fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),

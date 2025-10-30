@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../core/views/hint_popup.dart';
+import '../../../core/views/outro_view.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:convert';
 import '../../../core/views/mission_background_view.dart';
 import '../../../core/viewmodels/hint_popup_view_model.dart';
 import '../view_model/elementary_low_mission_view_model.dart';
@@ -45,37 +48,38 @@ class ElementaryLowMissionView extends StatelessWidget {
       ElementaryLowMissionViewModel vm,
       ElementaryLowMissionCoordinator coordinator,
       StudentGrade grade) {
-    if (vm.showFinalConversation) {
-      return ConversationOverlay(
-        stage: 7,
-        isFinalConversation: true,
-        onComplete: () {
-          vm.completeFinalConversation();
-          Navigator.of(context).pop();
-        },
-        onCloseByBack: () {
-          vm.completeFinalConversation();
-          Navigator.of(context).pop();
-        },
-      );
-    }
+    // vm.showFinalConversation는 더 이상 즉시 Outro를 반환하지 않고,
+    // 마지막 대화 완료(onComplete) 시에 별도 화면으로 push 처리합니다.
 
     // 현재 단계에 따라 화면 결정
     if (coordinator.isInConversation) {
       return ConversationOverlay(
         stage: coordinator.current.stage,
         isFinalConversation: coordinator.current.stage == 7,
-        onComplete: () {
+        onComplete: () async {
           context.read<HintPopupViewModel>().reset();
-
-          if (coordinator.current.stage == 1) {
-            coordinator.toQuestion(1);
+          if (coordinator.current.stage == 7) {
+            // 마지막 대화(stage 7) 후 Outro 데이터 로드 → push
+            final String jsonString = await rootBundle.loadString('assets/data/elem_low/elem_low_outro.json');
+            final Map<String, dynamic> data = json.decode(jsonString);
+            if (!context.mounted) return;
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => OutroView(
+                  grade: grade,
+                  title: grade.appBarTitle,
+                  lottieAssetPath: 'assets/animations/furiClear.json',
+                  backgroundAssetPath: data['backImage'] ?? 'assets/images/common/bsbackground.webp',
+                  speakerName: data['speaker'] ?? '푸리',
+                  talkText: data['talk'] ?? '',
+                  voiceAssetPath: data['voice'] as String?,
+                  certificateAssetPath: data['certificate'] ?? 'assets/images/common/certificateElemLow.webp',
+                ),
+              ),
+            );
           } else {
-            if (coordinator.current.stage == 6) {
-              coordinator.toQuestion(6);
-            } else {
-              coordinator.toQuestion(coordinator.current.stage);
-            }
+            // convN -> missionN 이동
+            coordinator.toQuestion(coordinator.current.stage);
           }
         },
         onCloseByBack: () {

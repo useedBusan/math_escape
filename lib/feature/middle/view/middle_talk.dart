@@ -6,6 +6,7 @@ import '../../../core/views/custom_intro_alert.dart';
 import 'middle_mission.dart';
 import '../../../core/views/common_intro_view.dart';
 import '../model/middle_intro_talk.dart';
+import '../../../core/services/service_locator.dart';
 
 class MiddleIntroScreen extends StatefulWidget {
   const MiddleIntroScreen({super.key});
@@ -32,6 +33,8 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    // 보이스 중단
+    serviceLocator.audioService.stopCharacter();
     super.dispose();
   }
 
@@ -53,6 +56,8 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
       talkList = jsonList.map((e) => IntroTalkItem.fromJson(e)).toList();
       isLoading = false;
     });
+    // 첫 항목 보이스 재생
+    _playCurrentVoice();
   }
 
   void goToNext() {
@@ -64,6 +69,7 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
         currentIndex++;
         imageKey = UniqueKey();
       });
+      _playCurrentVoice();
     } else if (currentIndex == alertIndex) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
@@ -74,6 +80,7 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
             return CustomIntroAlert(
               onConfirm: () {
                 Navigator.of(context).pop();
+                serviceLocator.audioService.stopCharacter();
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -87,6 +94,7 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
         );
       });
     } else {
+      serviceLocator.audioService.stopCharacter();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const MiddleMissionScreen()), // middle_mission.dart에서 import됨
@@ -100,9 +108,20 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
         currentIndex--;
         imageKey = UniqueKey();
       });
+      _playCurrentVoice();
     } else {
       Navigator.of(context).pop();
     }
+  }
+
+  void _playCurrentVoice() {
+    if (talkList.isEmpty) return;
+    final String? voice = talkList[currentIndex].voice;
+    if (voice == null || voice.isEmpty) {
+      serviceLocator.audioService.stopCharacter();
+      return;
+    }
+    serviceLocator.audioService.playCharacterAudio(voice);
   }
 
   @override
@@ -115,7 +134,7 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
 
     return CommonIntroView(
       appBarTitle: StudentGrade.middle.appBarTitle,
-      backgroundAssetPath: 'assets/images/common/bsbackground.png',
+      backgroundAssetPath: 'assets/images/common/bsbackground.webp',
       characterImageAssetPath: talk.puriImage,
       speakerName: '푸리',
       talkText: talk.talk,
@@ -123,13 +142,14 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
       grade: StudentGrade.middle,
       // 첫 번째 화면에만 furiAppearance 애니메이션 표시 (한 번만 재생)
       lottieAnimationPath: currentIndex == 0 ? 'assets/animations/furiAppearance.json' : null,
-      showLottieInsteadOfImage: currentIndex == 0,
       lottieRepeat: false, // furiAppearance는 한 번만 재생
       onNext: goToNext,
       onBack: () {
         if (currentIndex > 0) {
           goToPrevious();
         } else {
+          // 인트로에서 밖으로 나갈 때 보이스 중단
+          serviceLocator.audioService.stopCharacter();
           Navigator.of(context).pop();
         }
       },

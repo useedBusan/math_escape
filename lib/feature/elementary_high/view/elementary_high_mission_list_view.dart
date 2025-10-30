@@ -104,7 +104,7 @@ class ElementaryHighMissionListView extends StatelessWidget {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(4.0),
-                    borderSide: const BorderSide(color: Color(0xffD95276), width: 2.0),
+                    borderSide: const BorderSide(color: CustomPink.s500, width: 2.0),
                   ),
                 ),
               ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../App/theme/app_colors.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../core/views/answer_popup.dart';
+import '../../../core/views/outro_view.dart';
 import '../../../core/views/common_intro_view.dart';
 import '../../../core/viewmodels/intro_view_model.dart';
 import '../../../constants/enum/image_enums.dart';
@@ -13,6 +15,8 @@ import '../coordinator/middle_mission_coordinator.dart';
 import '../model/middle_mission_model.dart';
 import '../view_model/middle_mission_view_model.dart';
 import 'conversation_overlay.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
 
 // MiddleMissionScreen
 class MiddleMissionScreen extends StatefulWidget {
@@ -26,6 +30,13 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     with TickerProviderStateMixin {
   late AnimationController _hintColorController;
   late Animation<double> _hintColorAnimation;
+  late AnimationController _scrollAnimationController;
+  late Animation<double> _scrollUpAnimation;
+  late Animation<double> _scrollUpOpacity;
+  bool _showFirstOverlay = false; // 처음엔 false로 변경
+  bool _hasShownConversation = false; // 대화를 본 적 있는지 추적
+  VoidCallback? _focusListener;
+  MiddleMissionViewModel? _attachedViewModel;
 
   @override
   void initState() {
@@ -41,8 +52,36 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
     );
 
     _hintColorController.repeat(reverse: true);
+
+    // 스크롤 애니메이션 컨트롤러 추가
+    _scrollAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    // 위로 올라가는 애니메이션 반복
+    _scrollUpAnimation = Tween<double>(begin: 0.0, end: -30.0).animate(
+      CurvedAnimation(
+        parent: _scrollAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    // 투명도 애니메이션 (위로 올라가면서 투명해짐)
+    _scrollUpOpacity = Tween<double>(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _scrollAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    // 애니메이션 반복 (위로 올라갔다가 다시 원래 위치로)
+    _scrollAnimationController.repeat(reverse: true);
+
+    // 포커스 변경 리스너는 Provider 주입 이후에 연결 (didChangeDependencies에서 처리)
   }
 
+  // didChangeDependencies에서 Provider를 접근하지 않습니다 (Provider가 이 위젯 내부에서 생성되기 때문).
 
   void _submitAnswer(
     MiddleMissionCoordinator coordinator,
@@ -80,7 +119,6 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
         }
       }
     } else {
-      // 일반 문제일 때는 기존 로직 사용
       final bool correct = await viewModel.submitAnswer();
 
       if (mounted) {
@@ -105,15 +143,43 @@ class _MiddleMissionScreenState extends State<MiddleMissionScreen>
   @override
   void dispose() {
     _hintColorController.dispose();
+    _scrollAnimationController.dispose();
+    // 포커스 리스너 해제
+    if (_focusListener != null && _attachedViewModel != null) {
+      _attachedViewModel!.answerFocusNode.removeListener(_focusListener!);
+      _focusListener = null;
+      _attachedViewModel = null;
+    }
     super.dispose();
   }
 
   void _showCorrectAnswerDialog(
-MiddleMissionCoordinator coordinator,
+    MiddleMissionCoordinator coordinator,
     MiddleMissionViewModel viewModel,
   ) async {
     try {
+      final bool isLast = viewModel.currentIndex >= viewModel.totalCount - 1;
       viewModel.completeQuestion();
+      if (isLast) {
+        final String jsonString = await rootBundle.loadString('assets/data/middle/middle_outro.json');
+        final Map<String, dynamic> data = json.decode(jsonString);
+        if (!mounted) return;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => OutroView(
+              grade: StudentGrade.middle,
+              title: StudentGrade.middle.appBarTitle,
+              lottieAssetPath: 'assets/animations/furiClear.json',
+              backgroundAssetPath: data['backImage'] ?? 'assets/images/common/bsbackground.webp',
+              speakerName: data['speaker'] ?? '푸리',
+              talkText: data['talk'] ?? '',
+              voiceAssetPath: data['voice'] as String?,
+              certificateAssetPath: data['certificate'] ?? 'assets/images/common/certificateMiddle.webp',
+            ),
+          ),
+        );
+      }
     } catch (e) {
       if (mounted) {
         Navigator.of(context).pop();
@@ -140,6 +206,15 @@ MiddleMissionCoordinator coordinator,
             });
           }
 
+          // answerFocusNode 리스너는 Provider가 생성된 이후(Consumer 내부) 최초 1회만 등록
+          if (_focusListener == null) {
+            _focusListener = () {
+              if (mounted) setState(() {});
+            };
+            viewModel.answerFocusNode.addListener(_focusListener!);
+            _attachedViewModel = viewModel;
+          }
+
           return PopScope(
             canPop: false,
             onPopInvokedWithResult: (didPop, result) async {
@@ -155,8 +230,103 @@ MiddleMissionCoordinator coordinator,
                 }
               }
             },
-            child: _buildCurrentStep(context, coordinator, viewModel),
-          );
+            child: Stack(
+              children: [
+                _buildCurrentStep(context, coordinator, viewModel),
+                // 첫 진입 오버레이
+                if (_showFirstOverlay)
+                  Positioned.fill(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _showFirstOverlay = false;
+                        });
+                      },
+                      child: Container(
+                        color: Color(0xCC000000),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 16),
+                            RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black87,
+                                  height: 1.5,
+                                ),
+                                children: [
+                                  const TextSpan(
+                                    text: '문제나 힌트가 보이지 않는다면,\n화면을 ',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '스크롤해서',
+                                    style: TextStyle(
+                                      color: CustomBlue.s300,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  const TextSpan(
+                                    text: ' 전부 확인할 수 있어요!',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 50),
+                            SizedBox(
+                              height: 80,
+                              child: AnimatedBuilder(
+                                animation: _scrollAnimationController,
+                                builder: (context, child) {
+                                  return Opacity(
+                                    opacity: _scrollUpOpacity.value,
+                                    child: Transform.translate(
+                                      offset: Offset(
+                                        0,
+                                        _scrollUpAnimation.value,
+                                      ),
+                                      child: Image.asset(
+                                        "assets/images/common/scrollGesture.webp",
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 50),
+                            Material(
+                              type: MaterialType.transparency,
+                              child: Text(
+                                '화면을 터치하여 진행',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
         },
       ),
     );
@@ -167,23 +337,33 @@ MiddleMissionCoordinator coordinator,
     MiddleMissionCoordinator coordinator,
     MiddleMissionViewModel viewModel,
   ) {
+    if (!viewModel.isInConversation &&
+        !_hasShownConversation &&
+        !_showFirstOverlay) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            _showFirstOverlay = true;
+            _hasShownConversation = true;
+          });
+        }
+      });
+    }
+
     // 현재 상태에 따라 화면 결정
     if (viewModel.isInConversation) {
       return ConversationOverlay(
-        stage: viewModel.currentIndex + 1, // 0-based → 1-based 변환
+        stage: viewModel.currentIndex + 1,
         isFinalConversation: false,
         onComplete: () {
-          // 대화 종료 후 같은 인덱스의 문제로 이동
           viewModel.goToQuestion(viewModel.currentIndex);
         },
         onCloseByBack: () {
-          // 대화에서 뒤로가기할 때는 코디네이터의 handleBack 호출
           coordinator.handleBack();
         },
       );
     }
 
-    // 기본: 질문 화면 (question 단계)
     return _buildQuestionScreen(context, coordinator, viewModel);
   }
 
@@ -207,7 +387,7 @@ MiddleMissionCoordinator coordinator,
       return const Scaffold(body: Center(child: Text("현재 미션을 불러올 수 없습니다.")));
     }
 
-    final Color mainColor = const Color(0xFF3F55A7);
+    final Color mainColor = CustomBlue.s500;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -216,7 +396,11 @@ MiddleMissionCoordinator coordinator,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF3F55A7)),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Color(0xFF3F55A7),
+            size: 28,
+          ),
           onPressed: () {
             coordinator.handleBack();
           },
@@ -225,14 +409,14 @@ MiddleMissionCoordinator coordinator,
           StudentGrade.middle.appBarTitle,
           style: TextStyle(
             color: const Color(0xFF3F55A7),
-            fontSize: 16,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.home, color: Color(0xFF3F55A7)),
+            icon: const Icon(Icons.home, color: Color(0xFF3F55A7), size: 28),
             onPressed: () {
               HomeAlert.showAndNavigate(context);
             },
@@ -364,7 +548,6 @@ MiddleMissionCoordinator coordinator,
                             ),
                           ],
                         ),
-                        SizedBox(height: mission.questionImage.isEmpty ? 4 : 8),
                         // 문제 영역
                         RichText(
                           textAlign: TextAlign.start,
@@ -376,7 +559,9 @@ MiddleMissionCoordinator coordinator,
                               height: 1.4,
                               color: Colors.black87,
                             ),
-                            children: mission.question.toStyledSpans(fontSize: 18),
+                            children: mission.question.toStyledSpans(
+                              fontSize: 18,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -391,19 +576,22 @@ MiddleMissionCoordinator coordinator,
                                 style: TextStyle(
                                   fontFamily: "Pretendard",
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 15,
+                                  fontSize: 17,
                                   color: Colors.black87,
                                 ),
                               ),
                             ),
                           ),
-                          const SizedBox(height: 16),
                         ],
+                        const SizedBox(height: 16),
                         // 이미지 영역 (이미지가 있을때만) - 가운데 정렬 및 유동적 높이
                         if (mission.questionImage.isNotEmpty)
-                          SizedBox(
-                            height: 200, // 고정 높이로 설정하여 비율 유지
-                            child: Center(
+                          Center(
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.7,
+                              ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
                                 child: Image.asset(
@@ -418,7 +606,7 @@ MiddleMissionCoordinator coordinator,
                         if (mission.isqr) ...[
                           SizedBox(
                             width: double.infinity,
-                            height: 60,
+                            height: 52,
                             child: ElevatedButton(
                               onPressed: () =>
                                   _submitAnswer(coordinator, viewModel),
@@ -453,11 +641,15 @@ MiddleMissionCoordinator coordinator,
                         ] else ...[
                           // 일반 문제일 때 텍스트필드 표시
                           Container(
+                            height: 52,
                             decoration: BoxDecoration(
                               color: const Color(0xFFFFFFFF),
                               borderRadius: BorderRadius.circular(8.0),
                               border: Border.all(
-                                color: const Color(0xffdcdcdc),
+                                color: viewModel.answerFocusNode.hasFocus
+                                    ? CustomBlue.s500  // 포커스 시
+                                    : const Color(0xffdcdcdc),  // 기본 상태
+                                width: viewModel.answerFocusNode.hasFocus ? 2.0 : 1.0,
                               ),
                             ),
                             child: Row(
@@ -467,6 +659,7 @@ MiddleMissionCoordinator coordinator,
                                   child: TextField(
                                     style: TextStyle(fontSize: 15),
                                     controller: viewModel.answerController,
+                                    focusNode: viewModel.answerFocusNode,  // FocusNode 연결
                                     keyboardType: TextInputType.text,
                                     textInputAction: TextInputAction.done,
                                     decoration: InputDecoration(
@@ -475,42 +668,47 @@ MiddleMissionCoordinator coordinator,
                                         fontSize: 14,
                                         color: const Color(0xffaaaaaa),
                                       ),
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                            horizontal: 12.0,
-                                            vertical: 12.0,
-                                          ),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 12.0,
+                                        vertical: 12.0,
+                                      ),
                                       border: InputBorder.none,
                                       enabledBorder: InputBorder.none,
                                       focusedBorder: InputBorder.none,
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 60,
-                                  height: 52,
-                                  child: ElevatedButton(
-                                    onPressed: () =>
-                                        _submitAnswer(coordinator, viewModel),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: mainColor,
-                                      foregroundColor: Colors.white,
-                                      elevation: 0,
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 12,
-                                      ),
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(8),
-                                          bottomRight: Radius.circular(8),
+                                InkWell(
+                                  onTap: () => _submitAnswer(coordinator, viewModel),
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(
+                                      viewModel.answerFocusNode.hasFocus ? 6.0 : 7.0,
+                                    ),
+                                    bottomRight: Radius.circular(
+                                      viewModel.answerFocusNode.hasFocus ? 6.0 : 7.0,
+                                    ),
+                                  ),
+                                  child: Container(
+                                    height: 52,
+                                    width: viewModel.answerFocusNode.hasFocus ? 59.0 : 60.0,
+                                    decoration: BoxDecoration(
+                                      color: mainColor,
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(
+                                          viewModel.answerFocusNode.hasFocus ? 6.0 : 7.0,  // 8 - border width
+                                        ),
+                                        bottomRight: Radius.circular(
+                                          viewModel.answerFocusNode.hasFocus ? 6.0 : 7.0,
                                         ),
                                       ),
                                     ),
-                                    child: Text(
+                                    alignment: Alignment.center,
+                                    child: const Text(
                                       '제출',
                                       style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w800,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),
@@ -564,8 +762,7 @@ MiddleMissionCoordinator coordinator,
                                 Text(
                                   '단서#1 : 목적지의 비밀',
                                   style: TextStyle(
-                                    fontSize:
-                                        16,
+                                    fontSize: 16,
                                     fontFamily: "SBAggroM",
                                     fontWeight: FontWeight.w400,
                                     color: const Color(0xFF101351),
@@ -581,8 +778,7 @@ MiddleMissionCoordinator coordinator,
                                   style: TextStyle(
                                     fontFamily: "Pretendard",
                                     fontWeight: FontWeight.w400,
-                                    fontSize:
-                                        16,
+                                    fontSize: 16,
                                     color: Colors.black87,
                                     height: 1.4,
                                   ),

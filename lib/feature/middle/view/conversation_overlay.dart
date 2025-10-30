@@ -7,6 +7,7 @@ import '../../../constants/enum/speaker_enums.dart';
 import '../../../core/views/common_intro_view.dart';
 import '../../../core/viewmodels/intro_view_model.dart';
 import '../../../core/models/talk_model.dart';
+import '../../../core/services/service_locator.dart';
 
 class ConversationOverlay extends StatefulWidget {
   final int stage;
@@ -52,9 +53,10 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
             talks.add(Talk(
               id: widget.stage * 100 + i,
               speaker: Speaker.puri,
-              speakerImg: talkData['furiImage'] ?? 'assets/images/common/furiStanding.png',
-              backImg: talkData['backImage'] ?? 'assets/images/common/bsbackground.png',
+              speakerImg: talkData['furiImage'] ?? 'assets/images/common/furiStanding.webp',
+              backImg: talkData['backImage'] ?? 'assets/images/common/bsbackground.webp',
               talk: talkData['talk'] ?? '',
+              voice: talkData['voice'] as String?,
             ));
           }
           break;
@@ -67,11 +69,28 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
       setState(() {
         isLoading = false;
       });
+
+      // 첫 항목 보이스 재생 (IntroViewModel을 수동 세팅했으므로 직접 호출)
+      if (viewModel.talks.isNotEmpty) {
+        final String? firstVoice = viewModel.talks.first.voice;
+        if (firstVoice == null || firstVoice.isEmpty) {
+          serviceLocator.audioService.stopCharacter();
+        } else {
+          serviceLocator.audioService.playCharacterAudio(firstVoice);
+        }
+      }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    // 대화 종료 시 보이스 중단 및 뷰모델 정리
+    viewModel.dispose();
+    super.dispose();
   }
 
   @override
@@ -104,18 +123,11 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
                     return CommonIntroView(
                       appBarTitle: StudentGrade.middle.appBarTitle,
                       backgroundAssetPath: talk.backImg,
-                      characterImageAssetPath: widget.isFinalConversation 
-                          ? 'assets/images/common/puri_clear.png' 
-                          : talk.speakerImg,
+                      characterImageAssetPath: talk.speakerImg,
                       speakerName: speakerName(),
                       talkText: talk.talk,
                       buttonText: "다음",
                       grade: StudentGrade.middle,
-                      // 마지막 stage에서만 furiClear 애니메이션 표시
-                      lottieAnimationPath: widget.stage == maxStage 
-                          ? 'assets/animations/furiClear.json' 
-                          : null,
-                      showLottieInsteadOfImage: widget.stage == maxStage,
                       onNext: () {
                         if (vm.canGoNext()) {
                           vm.goToNextTalk();
