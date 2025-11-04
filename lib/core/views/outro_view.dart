@@ -235,6 +235,7 @@ class _OutroViewState extends State<OutroView> {
               ),
             ),
             SafeArea(
+              bottom: false, // 하단 버튼이 따로 SafeArea 처리
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -326,30 +327,55 @@ class _OutroViewState extends State<OutroView> {
                   const SizedBox(height: 12),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: SizedBox(
-                      width: size.width * 0.93,
-                      height: 52,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: mainColor,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                    child: Platform.isAndroid
+                        ? SafeArea(
+                            child: SizedBox(
+                              width: size.width * 0.93,
+                              height: 52,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: mainColor,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                onPressed: _saveCertificate,
+                                child: const Text(
+                                  '수료증 다운로드',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'Pretendard',
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : SizedBox(
+                            width: size.width * 0.93,
+                            height: 52,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: mainColor,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              onPressed: _saveCertificate,
+                              child: const Text(
+                                '수료증 다운로드',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'Pretendard',
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                        onPressed: _saveCertificate,
-                        child: const Text(
-                          '수료증 다운로드',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'Pretendard',
-                          ),
-                        ),
-                      ),
-                    ),
                   ),
-                  const SizedBox(height: 20),
+                  // const SizedBox(height: 20),
                 ],
               ),
             ),

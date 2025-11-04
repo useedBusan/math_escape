@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
 import '../view_model/base_high_view_model.dart';
 import '../../../app/theme/app_colors.dart';
 
@@ -89,22 +90,36 @@ class BaseHighView extends StatelessWidget {
                     ),
                   ),
 
-                  // 하단바: 화면 좌우/아래 딱 붙게 (타이머만 별도 Consumer로 분리)
+                  // 하단바: Android에서만 SafeArea 적용
                   Positioned(
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    child: Consumer<BaseHighViewModel>(
-                      builder: (context, vm, child) {
-                        return _BottomTimerBar(
-                          mainColor: vm.progressColor,
-                          think: vm.thinkText,
-                          body: vm.bodyText,
-                          progress: vm.thinkProgress,
-                          hourglassAsset: 'assets/images/high/highHourglass.webp',
-                        );
-                      },
-                    ),
+                    child: Platform.isAndroid
+                        ? SafeArea(
+                            child: Consumer<BaseHighViewModel>(
+                              builder: (context, vm, child) {
+                                return _BottomTimerBar(
+                                  mainColor: vm.progressColor,
+                                  think: vm.thinkText,
+                                  body: vm.bodyText,
+                                  progress: vm.thinkProgress,
+                                  hourglassAsset: 'assets/images/high/highHourglass.webp',
+                                );
+                              },
+                            ),
+                          )
+                        : Consumer<BaseHighViewModel>(
+                            builder: (context, vm, child) {
+                              return _BottomTimerBar(
+                                mainColor: vm.progressColor,
+                                think: vm.thinkText,
+                                body: vm.bodyText,
+                                progress: vm.thinkProgress,
+                                hourglassAsset: 'assets/images/high/highHourglass.webp',
+                              );
+                            },
+                          ),
                   ),
                 ],
               ),

@@ -16,12 +16,7 @@ void main() async {
   ]);
   
   // 플랫폼별 시스템 UI 설정
-  if (Platform.isAndroid) {
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.manual,
-      overlays: [SystemUiOverlay.top],
-    );
-  } else if (Platform.isIOS) {
+  if (Platform.isIOS) {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.light,
