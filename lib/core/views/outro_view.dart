@@ -75,7 +75,7 @@ class _OutroViewState extends State<OutroView> {
       final Uint8List bytes = data.buffer.asUint8List();
       final String name = 'certificate_${DateTime.now().millisecondsSinceEpoch}.webp';
 
-      await Gal.putImageBytes(bytes, name: name, album: 'Math Escape');
+      await Gal.putImageBytes(bytes, name: name);
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(

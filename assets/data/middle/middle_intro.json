@@ -19,12 +19,5 @@
     "furiImage": "assets/images/common/furiExplaining.webp",
     "backImage": "assets/images/common/bsbackground.webp",
     "voice": "assets/audio/middle/middleIntro3.mp3"
-  },
-  {
-    "id": 4,
-    "talk": "좋아! 그럼 우리 같이 비밀 노트를 찾아보자. 첫 단서는 소마큐브 안에 떨어진 노트 한 장이야, 도형의 특징을 잘 살펴보면 다음 장소로 가는 힌트를 얻을 수 있어!",
-    "furiImage": "assets/images/common/furiHurray.webp",
-    "backImage": "assets/images/common/bsbackground.webp",
-    "voice": "assets/audio/middle/middleIntro4.mp3"
   }
 ]

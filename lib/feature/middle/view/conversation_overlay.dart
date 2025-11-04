@@ -70,15 +70,21 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
         isLoading = false;
       });
 
-      // 첫 항목 보이스 재생 (IntroViewModel을 수동 세팅했으므로 직접 호출)
-      if (viewModel.talks.isNotEmpty) {
-        final String? firstVoice = viewModel.talks.first.voice;
-        if (firstVoice == null || firstVoice.isEmpty) {
-          serviceLocator.audioService.stopCharacter();
-        } else {
-          serviceLocator.audioService.playCharacterAudio(firstVoice);
+      // 첫 프레임 렌더 후 현재 보이스 재생을 한 번 더 보장
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        // 오디오 플레이어가 준비될 때까지 짧은 딜레이 추가
+        await Future.delayed(const Duration(milliseconds: 200));
+        if (!mounted) return;
+        if (viewModel.talks.isNotEmpty) {
+          final String? firstVoice = viewModel.talks.first.voice;
+          if (firstVoice == null || firstVoice.isEmpty) {
+            serviceLocator.audioService.stopCharacter();
+          } else {
+            // audio_service에서 자동으로 재시도 처리함
+            await serviceLocator.audioService.playCharacterAudio(firstVoice);
+          }
         }
-      }
+      });
     } catch (e) {
       setState(() {
         isLoading = false;
