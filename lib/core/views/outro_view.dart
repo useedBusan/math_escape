@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../constants/enum/grade_enums.dart';
@@ -7,6 +9,7 @@ import 'lottie_animation_widget.dart';
 import 'home_alert.dart';
 import '../extensions/string_extension.dart';
 import 'package:gal/gal.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 
 class OutroView extends StatefulWidget {
   final StudentGrade grade;
@@ -55,32 +58,45 @@ class _OutroViewState extends State<OutroView> {
     if (!mounted) return;
 
     try {
-      // 권한 확인 및 요청
-      if (!await Gal.hasAccess()) {
-        await Gal.requestAccess();
-        if (!mounted) return;
-
-        if (!await Gal.hasAccess()) {
-          if (!mounted) return;
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('권한이 거부되어 저장할 수 없습니다.')),
-          );
-          return;
-        }
-      }
-
+      // 에셋 로드
       final ByteData data = await rootBundle.load(widget.certificateAssetPath);
-      if (!mounted) return;
-
       final Uint8List bytes = data.buffer.asUint8List();
-      final String name = 'certificate_${DateTime.now().millisecondsSinceEpoch}.webp';
 
-      await Gal.putImageBytes(bytes, name: name);
-      if (!mounted) return;
+      if (Platform.isAndroid) {
+        // 안드로이드: image_gallery_saver_plus 사용
+        final result = await ImageGallerySaverPlus.saveImage(bytes);
+        if (!mounted) return;
+        if (result['isSuccess'] == true) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('수료증이 갤러리에 저장되었습니다.')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('저장 실패: ${result['errorMessage'] ?? '알 수 없는 오류'}')),
+          );
+        }
+      } else {
+        // iOS: Gal 패키지 사용
+        if (!await Gal.hasAccess()) {
+          await Gal.requestAccess();
+          if (!await Gal.hasAccess()) {
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('권한이 거부되어 저장할 수 없습니다.')),
+            );
+            return;
+          }
+        }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('수료증이 갤러리에 저장되었습니다.')),
-      );
+        final String ext = 'webp';
+        final String name = 'certificate_${DateTime.now().millisecondsSinceEpoch}.$ext';
+        await Gal.putImageBytes(bytes, name: name, album: 'Math_Escape');
+
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('수료증이 갤러리에 저장되었습니다.')),
+        );
+      }
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
