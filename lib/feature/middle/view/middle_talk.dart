@@ -73,19 +73,20 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
     } else if (currentIndex == alertIndex) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
+        // 위젯의 context를 미리 저장
+        final navigatorContext = Navigator.of(context);
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (BuildContext context) {
+          builder: (BuildContext dialogContext) {
             return CustomIntroAlert(
               onConfirm: () async {
-                Navigator.of(context).pop();
+                Navigator.of(dialogContext).pop();
                 await serviceLocator.audioService.stopCharacter();
                 // 오디오 플레이어가 완전히 정리될 때까지 잠시 대기
                 await Future.delayed(const Duration(milliseconds: 100));
                 if (mounted) {
-                  Navigator.pushReplacement(
-                    context,
+                  navigatorContext.pushReplacement(
                     MaterialPageRoute(
                       builder: (_) => const MiddleMissionScreen(), // middle_mission.dart에서 import됨
                     ),
