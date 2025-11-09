@@ -6,7 +6,7 @@
         "talk": "좋아! 그럼 우리 같이 비밀 노트를 찾아보자.\n수학자의 노트 한 장이 소마큐브 속에 떨어졌다는 제보가 있어. 도형의 특징을 파악하면 다음 장소의 힌트를 얻을 수 있을거야.",
         "furiImage": "assets/images/middle/noteFuri.webp",
         "backImage": "assets/images/middle/middleBG123.webp",
-        "voice": null
+        "voice": "assets/audio/middle/middleIntro4.mp3"
       }
     ]
   },
@@ -133,7 +133,7 @@
     "id": 9,
     "talks": [
       {
-        "talk": "절단된 입체도형은 정삼각형과 정사각형으로 구성되어 있네? 모양은 변해도 규칙은 남는구나!",
+        "talk": "절단된 입체도형은 정삼각형과 정사각형으로 구성되어 있네. 모양은 변해도 규칙은 남는구나!",
         "furiImage": "assets/images/common/furiGood.webp",
         "backImage": "assets/images/middle/middleBG789.webp",
         "voice": "assets/audio/middle/middleConversation15.mp3"

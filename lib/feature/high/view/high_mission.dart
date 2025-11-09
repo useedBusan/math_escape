@@ -346,6 +346,8 @@ class _HighMissionContentState extends State<_HighMissionContent>
                                   icon: Image.asset(
                                     "assets/images/high/hintHintIcon.webp",
                                     height: 40,
+                                    width: 40,
+                                    fit: BoxFit.contain
                                   ),
                                   onPressed: () => _showHintDialog(vm),
                                   padding: EdgeInsets.zero,

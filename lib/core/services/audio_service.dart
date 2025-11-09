@@ -25,10 +25,23 @@ class AudioService {
   }
 
   Future<void> playCharacterAudio(String assetPath) async {
-    await _characterPlayer.stop();
-    await _characterPlayer.setAudioSource(AudioSource.asset(assetPath));
-    await _characterPlayer.setVolume(_characterVolume);
-    await _characterPlayer.play();
+    try {
+      await _characterPlayer.stop();
+      await _characterPlayer.setAudioSource(AudioSource.asset(assetPath));
+      await _characterPlayer.setVolume(_characterVolume);
+      await _characterPlayer.play();
+    } catch (e) {
+      // Loading interrupted 등 에러 발생 시 재시도
+      try {
+        await Future.delayed(const Duration(milliseconds: 100));
+        await _characterPlayer.stop();
+        await _characterPlayer.setAudioSource(AudioSource.asset(assetPath));
+        await _characterPlayer.setVolume(_characterVolume);
+        await _characterPlayer.play();
+      } catch (_) {
+        // 재시도 실패 시 무시
+      }
+    }
   }
 
   Future<void> playBgm(String assetPath) async {

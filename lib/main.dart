@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
-import 'package:math_escape/app/splash_screen.dart';
+import 'app/splash_screen.dart';
 import 'app/theme/app_theme.dart';
 import 'core/services/service_locator.dart';
 import 'constants/app_constants.dart';
@@ -16,12 +16,7 @@ void main() async {
   ]);
   
   // 플랫폼별 시스템 UI 설정
-  if (Platform.isAndroid) {
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.manual,
-      overlays: [SystemUiOverlay.top],
-    );
-  } else if (Platform.isIOS) {
+  if (Platform.isIOS) {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.light,
