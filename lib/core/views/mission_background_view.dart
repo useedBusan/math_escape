@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'dart:io';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../core/views/answer_popup.dart';
 import '../../../core/views/home_alert.dart';
@@ -74,10 +75,10 @@ class MissionBackgroundView extends StatelessWidget {
           ),
         ],
       ),
-      body: Stack(
+      body: Column(
         children: [
           // Scrollable content area
-          Positioned.fill(
+          Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -99,120 +100,93 @@ class MissionBackgroundView extends StatelessWidget {
             ),
           ),
 
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: SafeArea(
-              bottom: false,
-              child: Container(
-                color: Colors.white,
-                padding: const EdgeInsets.all(24),
-                child: SizedBox(
-                  height: 60,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            minimumSize: const Size(0, 52),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+          SafeArea(
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+              child: SizedBox(
+                height: 60,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: const Size(0, 52),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          side: BorderSide(color: mainColor),
+                          foregroundColor: mainColor,
+                          backgroundColor: Color(0xffFFEDFA),
+                        ),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: hintDialogueBuilder,
+                          );
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.asset(
+                              "assets/images/common/hintIcon.webp",
+                              width: 24,
+                              height: 24,
                             ),
-                            side: BorderSide(color: mainColor),
-                            foregroundColor: mainColor,
-                            backgroundColor: Color(0xffFFEDFA),
-                          ),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: hintDialogueBuilder,
-                            );
-                          },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Image.asset(
-                                "assets/images/common/hintIcon.webp",
-                                width: 24,
-                                height: 24,
+                            SizedBox(width: 4),
+                            Text(
+                              '힌트',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Pretendard',
                               ),
-                              SizedBox(width: 4),
-                              Text(
-                                '힌트',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'Pretendard',
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            minimumSize: const Size(0, 52),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            side: BorderSide(color: mainColor),
-                            foregroundColor: Colors.white,
-                            backgroundColor: mainColor,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: const Size(0, 52),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          onPressed: () async {
-                            final nav = Navigator.of(context);
-                            final dialogContext = context;
+                          side: BorderSide(color: mainColor),
+                          foregroundColor: Colors.white,
+                          backgroundColor: mainColor,
+                        ),
+                        onPressed: () async {
+                          final nav = Navigator.of(context);
+                          final dialogContext = context;
 
-                            if (isqr) {
-                              // QR 문제일 때
-                              final result = await nav.push(
-                                MaterialPageRoute(
-                                  builder: (_) => const QRScanScreen(),
-                                ),
-                              );
+                          if (isqr) {
+                            // QR 문제일 때
+                            final result = await nav.push(
+                              MaterialPageRoute(
+                                builder: (_) => const QRScanScreen(),
+                              ),
+                            );
 
-                              if (result != null &&
-                                  result is String &&
-                                  onQRScanned != null) {
-                                final isCorrect = await onQRScanned!(result);
+                            if (result != null &&
+                                result is String &&
+                                onQRScanned != null) {
+                              final isCorrect = await onQRScanned!(result);
 
-                                if (!dialogContext.mounted) return;
-
-                                showDialog(
-                                  context: dialogContext,
-                                  barrierDismissible: false,
-                                  builder: (_) => AnswerPopup(
-                                    isCorrect: isCorrect,
-                                    grade: grade,
-                                    onNext: () {
-                                      Navigator.of(dialogContext).pop();
-                                      if (isCorrect) {
-                                        onCorrect?.call();
-                                      } else {
-                                        onWrong?.call();
-                                      }
-                                    },
-                                  ),
-                                );
-                              }
-                            } else {
-                              // 일반 문제일 때
-                              final ok = await onSubmitAnswer(dialogContext);
                               if (!dialogContext.mounted) return;
 
                               showDialog(
                                 context: dialogContext,
                                 barrierDismissible: false,
                                 builder: (_) => AnswerPopup(
-                                  isCorrect: ok,
+                                  isCorrect: isCorrect,
                                   grade: grade,
                                   onNext: () {
                                     Navigator.of(dialogContext).pop();
-                                    if (ok) {
+                                    if (isCorrect) {
                                       onCorrect?.call();
                                     } else {
                                       onWrong?.call();
@@ -221,32 +195,53 @@ class MissionBackgroundView extends StatelessWidget {
                                 ),
                               );
                             }
-                          },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (isqr) ...[
-                                Icon(
-                                  Icons.qr_code_scanner,
-                                  size: 20,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(width: 4),
-                              ],
-                              Text(
-                                isqr ? 'QR 인식' : '정답 제출',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'Pretendard',
-                                ),
+                          } else {
+                            // 일반 문제일 때
+                            final ok = await onSubmitAnswer(dialogContext);
+                            if (!dialogContext.mounted) return;
+
+                            showDialog(
+                              context: dialogContext,
+                              barrierDismissible: false,
+                              builder: (_) => AnswerPopup(
+                                isCorrect: ok,
+                                grade: grade,
+                                onNext: () {
+                                  Navigator.of(dialogContext).pop();
+                                  if (ok) {
+                                    onCorrect?.call();
+                                  } else {
+                                    onWrong?.call();
+                                  }
+                                },
                               ),
+                            );
+                          }
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (isqr) ...[
+                              Icon(
+                                Icons.qr_code_scanner,
+                                size: 20,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 4),
                             ],
-                          ),
+                            Text(
+                              isqr ? 'QR 인식' : '정답 제출',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Pretendard',
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

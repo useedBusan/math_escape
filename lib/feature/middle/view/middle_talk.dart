@@ -62,7 +62,7 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
 
   void goToNext() {
     final int lastIndex = talkList.length - 1;
-    final int alertIndex = lastIndex - 1; // 마지막 바로 전 대화에서 안내 후 이동
+    final int alertIndex = lastIndex;
 
     if (currentIndex < alertIndex) {
       setState(() {
@@ -73,20 +73,25 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
     } else if (currentIndex == alertIndex) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
+        // 위젯의 context를 미리 저장
+        final navigatorContext = Navigator.of(context);
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (BuildContext context) {
+          builder: (BuildContext dialogContext) {
             return CustomIntroAlert(
-              onConfirm: () {
-                Navigator.of(context).pop();
-                serviceLocator.audioService.stopCharacter();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const MiddleMissionScreen(), // middle_mission.dart에서 import됨
-                  ),
-                );
+              onConfirm: () async {
+                Navigator.of(dialogContext).pop();
+                await serviceLocator.audioService.stopCharacter();
+                // 오디오 플레이어가 완전히 정리될 때까지 잠시 대기
+                await Future.delayed(const Duration(milliseconds: 100));
+                if (mounted) {
+                  navigatorContext.pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => const MiddleMissionScreen(), // middle_mission.dart에서 import됨
+                    ),
+                  );
+                }
               },
               grade: StudentGrade.middle,
             );

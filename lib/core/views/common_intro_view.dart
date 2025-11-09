@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../app/theme/app_colors.dart';
 import 'home_alert.dart';
@@ -171,6 +172,7 @@ class CommonIntroView extends StatelessWidget {
               ),
             ),
             SafeArea(
+              bottom: false, // 하단 버튼이 따로 SafeArea 처리
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -269,30 +271,32 @@ class CommonIntroView extends StatelessWidget {
                   const SizedBox(height: 12),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: SizedBox(
-                      width: size.width * 0.93,
-                      height: 52,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: mainColor,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                    child: SafeArea(
+                      child: SizedBox(
+                        width: size.width * 0.93,
+                        height: 52,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: mainColor,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
-                        ),
-                        onPressed: onNext,
-                        child: Text(
-                          buttonText,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'Pretendard',
+                          onPressed: onNext,
+                          child: Text(
+                            buttonText,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Pretendard',
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                 ],
               ),
             ),
