@@ -16,8 +16,7 @@ class IntroViewModel extends ChangeNotifier {
     try {
       final jsonList = await serviceLocator.dataService.loadJsonList(assetJsonPath);
       talks = jsonList.map((json) => Talk.fromJson(json)).toList();
-      // 첫 항목 보이스 재생
-      _playCurrentVoice();
+      // 자동 재생 제거 - setStageTalks()에서만 재생하도록
       notifyListeners();
     } catch (e) {
       // 에러 처리
@@ -60,7 +59,9 @@ class IntroViewModel extends ChangeNotifier {
   }
 
   void _playCurrentVoice() {
-    if (talks.isEmpty) return;
+    if (talks.isEmpty) {
+      return;
+    }
     final String? voice = talks[currentIdx].voice;
     if (voice == null || voice.isEmpty) {
       // 보이스가 없으면 중단

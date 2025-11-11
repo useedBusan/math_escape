@@ -33,8 +33,6 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    // 보이스 중단
-    serviceLocator.audioService.stopCharacter();
     super.dispose();
   }
 
@@ -82,9 +80,6 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
             return CustomIntroAlert(
               onConfirm: () async {
                 Navigator.of(dialogContext).pop();
-                await serviceLocator.audioService.stopCharacter();
-                // 오디오 플레이어가 완전히 정리될 때까지 잠시 대기
-                await Future.delayed(const Duration(milliseconds: 100));
                 if (mounted) {
                   navigatorContext.pushReplacement(
                     MaterialPageRoute(
@@ -99,7 +94,6 @@ class _MiddleIntroScreenState extends State<MiddleIntroScreen>
         );
       });
     } else {
-      serviceLocator.audioService.stopCharacter();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const MiddleMissionScreen()), // middle_mission.dart에서 import됨

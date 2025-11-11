@@ -327,8 +327,7 @@ class _OutroViewState extends State<OutroView> {
                   const SizedBox(height: 12),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Platform.isAndroid
-                        ? SafeArea(
+                    child: SafeArea(
                             child: SizedBox(
                               width: size.width * 0.93,
                               height: 52,
@@ -352,28 +351,7 @@ class _OutroViewState extends State<OutroView> {
                               ),
                             ),
                           )
-                        : SizedBox(
-                            width: size.width * 0.93,
-                            height: 52,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: mainColor,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              onPressed: _saveCertificate,
-                              child: const Text(
-                                '수료증 다운로드',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'Pretendard',
-                                ),
-                              ),
-                            ),
-                          ),
+                  
                   ),
                   // const SizedBox(height: 20),
                 ],
