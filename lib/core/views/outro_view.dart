@@ -351,7 +351,6 @@ class _OutroViewState extends State<OutroView> {
                               ),
                             ),
                           )
-                  
                   ),
                   // const SizedBox(height: 20),
                 ],
