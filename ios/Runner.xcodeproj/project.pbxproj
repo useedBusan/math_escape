@@ -301,7 +301,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export FLUTTER_BUILD_DIR=build\n/bin/sh \"/opt/homebrew/Caskroom/flutter/3.35.6/flutter/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin\n";
+			shellScript = "export FLUTTER_BUILD_DIR=build\n/bin/sh \"/Users/aebgaebal/Documents/development/flutter/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin\n";
 		};
 		6B66BCCF7690089B67C2741E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -333,7 +333,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export FLUTTER_BUILD_DIR=build\n/bin/sh \"/opt/homebrew/Caskroom/flutter/3.35.6/flutter/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
+			shellScript = "export FLUTTER_BUILD_DIR=build\n/bin/sh \"/Users/aebgaebal/Documents/development/flutter/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
 		};
 		999A5EB3F608C5B1259A7BF8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
