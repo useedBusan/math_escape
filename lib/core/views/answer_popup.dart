@@ -39,12 +39,17 @@ class UnifiedAnswerDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.transparent,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: 420,
         ),
-        child: Column(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             // 상단 이미지 + 배경 컬러 박스
@@ -139,6 +144,7 @@ class UnifiedAnswerDialog extends StatelessWidget {
               ),
             ),
           ],
+        ),
         ),
       ),
     );

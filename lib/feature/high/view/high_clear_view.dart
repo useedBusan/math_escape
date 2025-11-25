@@ -89,7 +89,6 @@ class _HighClearViewState extends State<HighClearView> {
         if (!didPop) {
           final alertResult = await HomeAlert.show(context);
           if (alertResult == true && context.mounted) {
-            // 모든 상태 해제
             HighMissionViewModel.instance.disposeAll();
             HighHintViewModel.instance.disposeAll();
             HighAnswerViewModel.instance.disposeAll();
@@ -99,24 +98,32 @@ class _HighClearViewState extends State<HighClearView> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.home),
-            onPressed: () async {
-              final result = await HomeAlert.show(context);
-              if (result == true && context.mounted) {
-                // 모든 상태 해제
-                HighMissionViewModel.instance.disposeAll();
-                HighHintViewModel.instance.disposeAll();
-                HighAnswerViewModel.instance.disposeAll();
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              }
-            },
-          ),
-          title: const Text(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          title: Text(
             "역설, 혹은 모호함",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: CustomBlue.s500,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           centerTitle: true,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.home, color: CustomBlue.s500, size: 28),
+              onPressed: () async {
+                final alertResult = await HomeAlert.show(context);
+                if (alertResult == true && context.mounted) {
+                  HighMissionViewModel.instance.disposeAll();
+                  HighHintViewModel.instance.disposeAll();
+                  HighAnswerViewModel.instance.disposeAll();
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                }
+              },
+            ),
+          ],
         ),
         body: SafeArea(
           child: Container(
@@ -125,10 +132,9 @@ class _HighClearViewState extends State<HighClearView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // 상단 콘텐츠 영역
                 Expanded(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center, // 화면 중간에 위치
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 20),
                       Image.asset(

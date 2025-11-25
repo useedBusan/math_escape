@@ -62,16 +62,7 @@ class HintPopup extends StatelessWidget {
                       fit: BoxFit.contain,
                     ),
                     const SizedBox(height: 15),
-                    Text(
-                      model.upString,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: headerSize,
-                        fontWeight: FontWeight.w700,
-                        color: const Color(0xff202020),
-                        height: 1.25,
-                      ),
-                    ),
+                    _buildUpString(model.upString, headerSize),
                     const SizedBox(height: 2),
                     Text(
                       model.downString,
@@ -119,6 +110,51 @@ class HintPopup extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildUpString(String upString, double headerSize) {
+    // "/ 숫자" 패턴을 찾아서 분리
+    final match = RegExp(r' (/\s*\d+)$').firstMatch(upString);
+    
+    if (match != null) {
+      // "/ 숫자" 부분이 있는 경우
+      final beforePart = upString.substring(0, match.start);
+      final afterPart = match.group(0)!; // " / 숫자" 부분
+      
+      return RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          style: TextStyle(
+            fontSize: headerSize,
+            fontWeight: FontWeight.w700,
+            color: const Color(0xff202020),
+            height: 1.25,
+          ),
+          children: [
+            TextSpan(text: beforePart),
+            TextSpan(
+              text: afterPart,
+              style: TextStyle(
+                fontSize: headerSize * 0.75, // 75% 크기
+                color: const Color(0xFFA0A0A0), // 회색
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      // "/ 숫자" 부분이 없는 경우 (예: "힌트" 또는 "푸리 힌트")
+      return Text(
+        upString,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: headerSize,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xff202020),
+          height: 1.25,
+        ),
+      );
+    }
   }
 }
 
