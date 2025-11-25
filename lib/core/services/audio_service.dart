@@ -60,6 +60,15 @@ class AudioService {
     await _characterPlayer.stop();
   }
 
+  Future<void> goToBackground() async {
+    await _bgmPlayer.pause();
+    await _characterPlayer.stop();
+  }
+
+  Future<void> backToApp() async {
+    await _bgmPlayer.play();
+  }
+
   void dispose() {
     _characterPlayer.dispose();
     _bgmPlayer.dispose();

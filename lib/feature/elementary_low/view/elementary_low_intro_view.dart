@@ -24,6 +24,13 @@ class _ElementaryLowIntroViewState extends State<ElementaryLowIntroView> {
       setState(() {
         isLoading = false;
       });
+
+      if (viewModel.talks.isNotEmpty) {
+        final firstVoice = viewModel.talks[0].voice;
+        if (firstVoice != null && firstVoice.isNotEmpty) {
+          serviceLocator.audioService.playCharacterAudio(firstVoice);
+        }
+      }
     });
   }
 
