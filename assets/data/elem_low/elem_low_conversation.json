@@ -30,7 +30,7 @@
     "id": 4,
     "stage": 2,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.webp",
+    "speakerImg": "assets/images/common/furiGood.webp",
     "backImg": "assets/images/elementary_low/elemBG1.webp",
     "talk": "좋아, 그럼 다음 방으로 가볼까?",
     "voice": "assets/audio/elemLow/elemLowConversation4.mp3"
@@ -48,7 +48,7 @@
     "id": 6,
     "stage": 2,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.webp",
+    "speakerImg": "assets/images/common/furiExplaining.webp",
     "backImg": "assets/images/elementary_low/elemBG2.webp",
     "talk": "한 번에 몇 명까지 체험할 수 있는지 알아보자! 우리가 정확히 알아야 미로를 빠져나갈 수 있어!",
     "voice": "assets/audio/elemLow/elemLowConversation6.mp3"
@@ -66,7 +66,7 @@
     "id": 8,
     "stage": 3,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.webp",
+    "speakerImg": "assets/images/common/furiGood.webp",
     "backImg": "assets/images/elementary_low/elemBG2.webp",
     "talk": "우리가 제대로 관찰해서 맞췄어! 수학자의 미로를 빠져나갈 수 있겠는걸?",
     "voice": "assets/audio/elemLow/elemLowConversation8.mp3"
@@ -102,7 +102,7 @@
     "id": 12,
     "stage": 4,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.webp",
+    "speakerImg": "assets/images/common/furiGood.webp",
     "backImg": "assets/images/elementary_low/elemBG3.webp",
     "talk": "관찰력이 정말 뛰어나! 그럼 이번엔 돔을 만들어볼까?",
     "voice": "assets/audio/elemLow/elemLowConversation12.mp3"
@@ -138,7 +138,7 @@
     "id": 16,
     "stage": 5,
     "speaker": "Puri",
-    "speakerImg": "assets/images/common/furiStanding.webp",
+    "speakerImg": "assets/images/common/furiGood.webp",
     "backImg": "assets/images/elementary_low/elemBG4.webp",
     "talk": "우리가 만든 걸 보니까, 다빈치처럼 수학을 멋진 작품으로 바꿀 수 있는 것 같아!",
     "voice": "assets/audio/elemLow/elemLowConversation16.mp3"

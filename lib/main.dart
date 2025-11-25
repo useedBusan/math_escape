@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
-import 'package:math_escape/app/splash_screen.dart';
+import 'app/splash_screen.dart';
 import 'app/theme/app_theme.dart';
 import 'core/services/service_locator.dart';
 import 'constants/app_constants.dart';
@@ -16,12 +16,7 @@ void main() async {
   ]);
   
   // 플랫폼별 시스템 UI 설정
-  if (Platform.isAndroid) {
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.manual,
-      overlays: [SystemUiOverlay.top],
-    );
-  } else if (Platform.isIOS) {
+  if (Platform.isIOS) {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.light,
@@ -41,8 +36,47 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget{
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.paused:
+      // iOS와 Android 모두 백그라운드 진입 시
+        serviceLocator.audioService.goToBackground();
+        break;
+      case AppLifecycleState.resumed:
+      // 다시 포그라운드로 돌아올 때
+        serviceLocator.audioService.backToApp();
+        break;
+      case AppLifecycleState.inactive:
+      // Android에서 전환 중일 때도 일시정지하려면 여기 추가
+        break;
+      default:
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

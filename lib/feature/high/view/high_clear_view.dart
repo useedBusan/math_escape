@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:math_escape/App/theme/app_colors.dart';
 import '../view_model/high_timer_service.dart';
@@ -8,6 +10,7 @@ import '../../../core/views/home_alert.dart';
 import '../../../core/services/audio_service.dart';
 import 'package:gal/gal.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 
 class HighClearView extends StatefulWidget {
   final DateTime gameStartTime;
@@ -22,24 +25,41 @@ class _HighClearViewState extends State<HighClearView> {
   final AudioService _audio = AudioService();
   Future<void> _saveCertificate() async {
     try {
-      if (!await Gal.hasAccess()) {
-        await Gal.requestAccess();
-        if (!await Gal.hasAccess()) {
-          if (!mounted) return;
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('권한이 거부되어 저장할 수 없습니다.')),
-          );
-          return;
-        }
-      }
       final data = await rootBundle.load('assets/images/common/certificateHigh.webp');
       final bytes = data.buffer.asUint8List();
-      final String name = 'certificate_high_${DateTime.now().millisecondsSinceEpoch}.webp';
-      await Gal.putImageBytes(bytes, name: name, album: 'Math Escape');
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('수료증이 갤러리에 저장되었습니다.')),
-      );
+
+      if (Platform.isAndroid) {
+        // 안드로이드: image_gallery_saver_plus 사용
+        final result = await ImageGallerySaverPlus.saveImage(bytes);
+        if (!mounted) return;
+        if (result['isSuccess'] == true) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('수료증이 갤러리에 저장되었습니다.')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('저장 실패: ${result['errorMessage'] ?? '알 수 없는 오류'}')),
+          );
+        }
+      } else {
+        // iOS: Gal 패키지 사용
+        if (!await Gal.hasAccess()) {
+          await Gal.requestAccess();
+          if (!await Gal.hasAccess()) {
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('권한이 거부되어 저장할 수 없습니다.')),
+            );
+            return;
+          }
+        }
+        final String name = 'certificate_high_${DateTime.now().millisecondsSinceEpoch}.webp';
+        await Gal.putImageBytes(bytes, name: name, album: 'Math Escape');
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('수료증이 갤러리에 저장되었습니다.')),
+        );
+      }
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -69,7 +89,6 @@ class _HighClearViewState extends State<HighClearView> {
         if (!didPop) {
           final alertResult = await HomeAlert.show(context);
           if (alertResult == true && context.mounted) {
-            // 모든 상태 해제
             HighMissionViewModel.instance.disposeAll();
             HighHintViewModel.instance.disposeAll();
             HighAnswerViewModel.instance.disposeAll();
@@ -79,24 +98,32 @@ class _HighClearViewState extends State<HighClearView> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.home),
-            onPressed: () async {
-              final result = await HomeAlert.show(context);
-              if (result == true && context.mounted) {
-                // 모든 상태 해제
-                HighMissionViewModel.instance.disposeAll();
-                HighHintViewModel.instance.disposeAll();
-                HighAnswerViewModel.instance.disposeAll();
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              }
-            },
-          ),
-          title: const Text(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          title: Text(
             "역설, 혹은 모호함",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: CustomBlue.s500,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           centerTitle: true,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.home, color: CustomBlue.s500, size: 28),
+              onPressed: () async {
+                final alertResult = await HomeAlert.show(context);
+                if (alertResult == true && context.mounted) {
+                  HighMissionViewModel.instance.disposeAll();
+                  HighHintViewModel.instance.disposeAll();
+                  HighAnswerViewModel.instance.disposeAll();
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                }
+              },
+            ),
+          ],
         ),
         body: SafeArea(
           child: Container(
@@ -105,10 +132,9 @@ class _HighClearViewState extends State<HighClearView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // 상단 콘텐츠 영역
                 Expanded(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center, // 화면 중간에 위치
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 20),
                       Image.asset(

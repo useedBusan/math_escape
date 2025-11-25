@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:convert';
 import 'package:provider/provider.dart';
 import '../../../constants/enum/grade_enums.dart';
 import '../../../constants/enum/speaker_enums.dart';
 import '../../../core/views/common_intro_view.dart';
 import '../../../core/viewmodels/intro_view_model.dart';
-import '../../../core/models/talk_model.dart';
 import '../../../core/services/service_locator.dart';
 
 class ConversationOverlay extends StatefulWidget {
@@ -41,44 +38,12 @@ class _ConversationOverlayState extends State<ConversationOverlay> {
   Future<void> _loadConversation() async {
     try {
       viewModel = IntroViewModel();
-      final String jsonString = await rootBundle.loadString('assets/data/middle/middle_conversation.json');
-      final List<dynamic> jsonList = json.decode(jsonString);
-
-      final List<Talk> talks = [];
-      for (final item in jsonList) {
-        if (item['id'] == widget.stage && item['talks'] != null) {
-          final List<dynamic> stageTalks = item['talks'];
-          for (int i = 0; i < stageTalks.length; i++) {
-            final talkData = stageTalks[i];
-            talks.add(Talk(
-              id: widget.stage * 100 + i,
-              speaker: Speaker.puri,
-              speakerImg: talkData['furiImage'] ?? 'assets/images/common/furiStanding.webp',
-              backImg: talkData['backImage'] ?? 'assets/images/common/bsbackground.webp',
-              talk: talkData['talk'] ?? '',
-              voice: talkData['voice'] as String?,
-            ));
-          }
-          break;
-        }
-      }
-      
-      viewModel.talks = talks;
-      viewModel.currentIdx = 0;
-      
+      await viewModel.loadTalks('assets/data/middle/middle_conversation.json');
+      maxStage = viewModel.getMaxStage(); // 최대 stage 번호 가져오기
+      viewModel.setStageTalks(widget.stage);
       setState(() {
         isLoading = false;
       });
-
-      // 첫 항목 보이스 재생 (IntroViewModel을 수동 세팅했으므로 직접 호출)
-      if (viewModel.talks.isNotEmpty) {
-        final String? firstVoice = viewModel.talks.first.voice;
-        if (firstVoice == null || firstVoice.isEmpty) {
-          serviceLocator.audioService.stopCharacter();
-        } else {
-          serviceLocator.audioService.playCharacterAudio(firstVoice);
-        }
-      }
     } catch (e) {
       setState(() {
         isLoading = false;

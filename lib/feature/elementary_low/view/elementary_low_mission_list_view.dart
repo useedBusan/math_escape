@@ -23,6 +23,7 @@ class ElementaryLowMissionListView extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ClipRRect(
@@ -75,22 +76,20 @@ class ElementaryLowMissionListView extends StatelessWidget {
           if (!mission.isqr) ...[
             if (mission.questionImage != null) ...[
               const SizedBox(height: 12),
-              Flexible(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final screenHeight = MediaQuery.of(context).size.height;
-                    return Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          mission.questionImage!,
-                          fit: BoxFit.contain,
-                          height: screenHeight * 0.3,
-                        ),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final screenHeight = MediaQuery.of(context).size.height;
+                  return Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(
+                        mission.questionImage!,
+                        fit: BoxFit.contain,
+                        height: screenHeight * 0.3,
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 20),
             ],

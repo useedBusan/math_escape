@@ -53,13 +53,17 @@ class CustomIntroAlert extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
       ),
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.93,
-        decoration: BoxDecoration(
-          color: const Color(0xffffffff),
-          borderRadius: BorderRadius.circular(8.0),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: 420,
         ),
-        child: Column(
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xffffffff),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
@@ -118,6 +122,7 @@ class CustomIntroAlert extends StatelessWidget {
               ),
             ),
           ],
+        ),
         ),
       ),
     );
