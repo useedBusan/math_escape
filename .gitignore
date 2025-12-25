@@ -71,6 +71,7 @@ lib/generated_plugin_registrant.dart
 **/ios/**/Icon?
 **/ios/**/Pods/
 **/ios/**/.symlinks/
+**/.DS_Store
 **/ios/**/profile
 **/ios/**/xcuserdata
 **/ios/.generated/
